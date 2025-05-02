@@ -13,7 +13,16 @@ const port = 3000;
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 
+let cachedToken = null;
+let tokenExpiresAt = 0;
+
 const getAccessToken = async () => {
+  const now = Date.now();
+
+  if (cachedToken && now < tokenExpiresAt) {
+    return cachedToken;
+  }
+
   const token = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
 
   const response = await axios.post(
@@ -29,13 +38,33 @@ const getAccessToken = async () => {
     }
   );
 
-  return response.data.access_token;
+  cachedToken = response.data.access_token;
+  tokenExpiresAt = now + response.data.expires_in * 1000 - 5000;
+  return cachedToken;
 };
 
-app.get("/api/token", async (req, res) => {
+const getPopularTracks = async () => {
   try {
     const accessToken = await getAccessToken();
-    res.json({ accessToken });
+
+    const response = await axios.get(
+      "https://api.spotify.com/v1/playlists/7iFPfffm9ntC7LVqVt4O6f",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.tracks.items;
+  } catch (error) {
+    console.error("Error fetching popular tracks:", error);
+  }
+};
+
+app.get("/api/popular-tracks", async (_, res) => {
+  try {
+    const tracks = await getPopularTracks();
+    res.json({ tracks });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
