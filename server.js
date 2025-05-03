@@ -81,10 +81,95 @@ const getPopularTracks = async () => {
   }
 };
 
+const getPopularArtists = async () => {
+  try {
+    const cached = await redisClient.get("popular-artists");
+
+    if (cached) {
+      return JSON.parse(cached);
+    }
+
+    const accessToken = await getAccessToken();
+    const tracks = await getPopularTracks();
+
+    const artistIds = tracks.map((track) => track.track.artists[0].id);
+
+    const uniqueArtistIds = [...new Set(artistIds)];
+
+    const response = await axios.get(
+      `https://api.spotify.com/v1/artists?ids=${uniqueArtistIds.join(",")}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    const artists = response.data.artists;
+
+    await redisClient.set("popular-artists", JSON.stringify(artists), {
+      EX: 86400,
+    });
+
+    return artists;
+  } catch (error) {
+    console.error("Error fetching popular artists:", error);
+  }
+};
+
+const getNewRealeses = async () => {
+  try {
+    const cached = await redisClient.get("new-releases");
+
+    if (cached) {
+      return JSON.parse(cached);
+    }
+
+    const accessToken = await getAccessToken();
+
+    const response = await axios.get(
+      "https://api.spotify.com/v1/browse/new-releases",
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    const releases = response.data.albums.items;
+
+    await redisClient.set("new-releases", JSON.stringify(releases), {
+      EX: 86400,
+    });
+
+    return releases;
+  } catch (error) {
+    console.error("Error fetching new releases:", error);
+  }
+};
+
 app.get("/api/popular-tracks", async (_, res) => {
   try {
     const tracks = await getPopularTracks();
     res.json({ tracks });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/popular-artists", async (_, res) => {
+  try {
+    const artists = await getPopularArtists();
+    res.json({ artists });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/new-releases", async (_, res) => {
+  try {
+    const releases = await getNewRealeses();
+    res.json({ releases });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

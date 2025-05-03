@@ -1,24 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Image } from "../../../shared/types/types";
 
-interface TrackImage {
-  url: string;
-  width: number;
-  height: number;
-}
-
-export type Track = {
+interface Track {
   track: {
     name: string;
     album: {
       images: {
-        0: TrackImage;
-        1: TrackImage;
-        2: TrackImage;
+        0: Image;
+        1: Image;
+        2: Image;
       };
     };
   };
-};
+}
 
 export const usePopularTracks = () => {
   const [list, setList] = useState([] as Track[]);
@@ -28,10 +23,8 @@ export const usePopularTracks = () => {
       const tracksRes = await axios.get(
         `http://localhost:3000/api/popular-tracks`
       );
-
       setList(tracksRes.data.tracks);
     };
-
     fetch();
   }, []);
 
