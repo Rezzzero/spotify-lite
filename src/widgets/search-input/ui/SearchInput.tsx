@@ -1,21 +1,7 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useSearchInput } from "../model/useSearchInput";
 
 export const SearchInput = () => {
-  const [value, setValue] = useState("");
-  const navigate = useNavigate();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    setValue(query);
-
-    if (query) {
-      navigate(`/search/${query}`);
-    } else {
-      navigate("/search");
-    }
-  };
-
+  const { value, handleChange } = useSearchInput();
   return (
     <input
       type="text"

@@ -1,15 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Image } from "../../../shared/types/types";
-
-interface Artist {
-  name: string;
-  images: {
-    0: Image;
-    1: Image;
-    2: Image;
-  };
-}
+import { Artist } from "../../../shared/types/types";
 
 export const usePopularArtists = () => {
   const [list, setList] = useState([] as Artist[]);

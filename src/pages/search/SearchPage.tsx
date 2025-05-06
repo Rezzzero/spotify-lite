@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { SearchResults } from "../../widgets/search-results/ui/SearchResults";
 
 export const SearchPage = () => {
   const { value } = useParams();
@@ -14,6 +15,7 @@ export const SearchPage = () => {
   return (
     <div className="p-4">
       <h1 className="text-xl font-bold mb-4">Search results for "{value}"</h1>
+      <SearchResults />
     </div>
   );
 };

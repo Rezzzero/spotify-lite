@@ -148,6 +148,30 @@ const getNewRealeses = async () => {
   }
 };
 
+const getSearchResults = async (query) => {
+  try {
+    if (!query || typeof query !== "string") {
+      throw new Error("Query must be a non-empty string");
+    }
+    const accessToken = await getAccessToken();
+
+    const response = await axios.get(
+      `https://api.spotify.com/v1/search?q=${encodeURIComponent(
+        query
+      )}&type=track,artist,album,playlist`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching search results:", error);
+  }
+};
+
 app.get("/api/popular-tracks", async (_, res) => {
   try {
     const tracks = await getPopularTracks();
@@ -170,6 +194,19 @@ app.get("/api/new-releases", async (_, res) => {
   try {
     const releases = await getNewRealeses();
     res.json({ releases });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/search", async (req, res) => {
+  const query = req.query.q;
+  if (!query) {
+    return res.status(400).json({ error: "Missing query parameter" });
+  }
+  try {
+    const results = await getSearchResults(query);
+    res.json(results);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

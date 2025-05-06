@@ -1,22 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Image } from "../../../shared/types/types";
+import { Track } from "../../../shared/types/types";
 
-interface Track {
-  track: {
-    name: string;
-    album: {
-      images: {
-        0: Image;
-        1: Image;
-        2: Image;
-      };
-    };
-  };
+interface TrackList {
+  track: Track;
 }
 
 export const usePopularTracks = () => {
-  const [list, setList] = useState([] as Track[]);
+  const [list, setList] = useState([] as TrackList[]);
 
   useEffect(() => {
     const fetch = async () => {
