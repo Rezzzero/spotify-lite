@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Logo } from "../../../shared/ui/Logo/Logo";
+import { Logo } from "../../../shared/ui/logo/Logo";
 import HomeIcon from "../assets/icons/home-icon.svg";
 import { Route } from "../../../shared/constants/constants";
 import { SearchInput } from "../../search-input/ui/SearchInput";

@@ -5,7 +5,7 @@ import { PopularTracksList } from "../../widgets/popular-tracks/ui/PopularTracks
 export const HomePage = () => {
   return (
     <>
-      <div className="bg-gradient-to-b from-zinc-800 via-zinc-900 to-neutral-900 flex flex-col px-12 py-5 rounded-xl">
+      <div className="bg-gradient-to-b from-[#1d1e1f] via-[#080808] to-[#080808] flex flex-col py-5 gap-8 h-[85vh] overflow-y-auto [&::-webkit-scrollbar]:hidden w-[80%] ml-auto rounded-xl">
         <PopularTracksList />
         <PopularArtistsList />
         <NewReleasesList />
