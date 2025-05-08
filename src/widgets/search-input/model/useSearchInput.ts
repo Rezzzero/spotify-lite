@@ -10,6 +10,9 @@ export const useSearchInput = () => {
   const { setSearchResults } = useSearchResults();
   const [results, setResults] = useState({} as SearchResults);
   const navigate = useNavigate();
+  const [isInputFocused, setIsInputFocused] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const [isBrowseHovering, setIsBrowseHovering] = useState(false);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -51,6 +54,13 @@ export const useSearchInput = () => {
   return {
     value,
     handleChange,
+    setValue,
     results,
+    isInputFocused,
+    setIsInputFocused,
+    isHovering,
+    setIsHovering,
+    isBrowseHovering,
+    setIsBrowseHovering,
   };
 };
