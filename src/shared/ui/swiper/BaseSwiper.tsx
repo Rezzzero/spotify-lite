@@ -20,11 +20,11 @@ export const BaseSwiper = ({ children }: { children: React.ReactNode }) => {
       className="relative"
     >
       <Swiper
-        spaceBetween={-165}
+        spaceBetween={-135}
         slidesPerView={7}
         slidesPerGroup={3}
-        slidesOffsetBefore={22}
-        slidesOffsetAfter={-130}
+        slidesOffsetBefore={25}
+        slidesOffsetAfter={-100}
         allowTouchMove={false}
       >
         {children}

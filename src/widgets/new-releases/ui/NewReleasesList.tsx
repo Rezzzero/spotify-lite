@@ -7,7 +7,7 @@ export const NewReleasesList = () => {
   const { releases } = useNewReleases();
   return (
     <div>
-      <h2 className="font-bold text-2xl hover:underline cursor-pointer px-8 mb-5">
+      <h2 className="font-bold text-2xl hover:underline cursor-pointer px-9 mb-2">
         Новые релизы
       </h2>
       <BaseSwiper>
@@ -15,7 +15,7 @@ export const NewReleasesList = () => {
           <SwiperSlide key={index}>
             <div
               key={index}
-              className="flex flex-col gap-3 rounded-xl cursor-pointer p-3 w-[192px] h-[255px] hover:bg-zinc-700"
+              className="flex flex-col gap-3 rounded-md cursor-pointer p-3 w-[192px] h-[255px] hover:bg-zinc-700"
             >
               <img
                 src={release.images[0].url}
