@@ -20,22 +20,26 @@ export const MediaLibrary = () => {
           <img src={isHovering ? PlusHoverIcon : PlusIcon} alt="plus icon" />
         </button>
       </div>
-      <div className="flex flex-col items-start gap-1 bg-[#1f1f1f] rounded-xl py-3 px-5">
-        <h2 className="font-bold">Создай свой первый плейлист</h2>
-        <p className="text-sm mb-4">Это совсем не сложно! Мы поможем.</p>
+      <div className="flex flex-col items-start font-bold gap-1 bg-[#1f1f1f] rounded-xl py-3 px-5">
+        <h2>Создай свой первый плейлист</h2>
+        <p className="text-sm font-normal mb-4">
+          Это совсем не сложно! Мы поможем.
+        </p>
         <button
           type="button"
-          className="bg-white rounded-full text-black text-sm font-bold py-1 px-3"
+          className="bg-white rounded-full text-black text-sm py-2 px-4 hover:bg-gray-100 hover:scale-103 cursor-pointer"
         >
           Создать плейлист
         </button>
       </div>
-      <div className="flex flex-col items-start gap-1 bg-[#1f1f1f] rounded-xl py-3 px-5 mb-auto">
-        <h2 className="font-bold">Подпишись на интересные подкасты</h2>
-        <p className="text-sm mb-4">Ты будешь узнавать о новых выпусках.</p>
+      <div className="flex flex-col items-start font-bold gap-1 bg-[#1f1f1f] rounded-xl py-3 px-5 mb-auto">
+        <h2>Подпишись на интересные подкасты</h2>
+        <p className="text-sm font-normal mb-4">
+          Ты будешь узнавать о новых выпусках.
+        </p>
         <button
           type="button"
-          className="bg-white rounded-full text-black text-sm font-bold py-1 px-3"
+          className="bg-white rounded-full text-black text-sm py-2 px-4 hover:bg-gray-100 hover:scale-103 cursor-pointer"
         >
           Обзор
         </button>
