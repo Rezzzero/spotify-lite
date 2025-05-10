@@ -6,15 +6,14 @@ export const SearchPage = () => {
 
   if (!value) {
     return (
-      <div className="p-4">
+      <div className="py-4 px-9 bg-[#141414] w-[80%]">
         <h1 className="text-xl font-bold mb-4">Категории и подборки</h1>
       </div>
     );
   }
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Search results for "{value}"</h1>
+    <div className="py-4 px-9 bg-[#141414] w-[80%]">
       <SearchResults />
     </div>
   );

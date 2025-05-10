@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { SearchResults } from "../../../shared/types/types";
-import { useSearchResults } from "../../../app/store/useSearchResults";
+import { useSearchStore } from "../../../app/store/useSearchStore";
 
 export const useSearchInput = () => {
   const [value, setValue] = useState("");
   const [debouncedValue, setDebouncedValue] = useState("");
-  const { setSearchResults } = useSearchResults();
+  const { setSearchResults } = useSearchStore();
   const [results, setResults] = useState({} as SearchResults);
   const navigate = useNavigate();
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -36,16 +36,15 @@ export const useSearchInput = () => {
         }
       };
       fetch();
+      navigate(`/search/${encodeURIComponent(debouncedValue)}`);
     }
-  }, [debouncedValue, setSearchResults]);
+  }, [debouncedValue, setSearchResults, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     setValue(query);
 
-    if (query) {
-      navigate(`/search/${encodeURIComponent(query)}`);
-    } else {
+    if (!query) {
       navigate("/search");
       setResults({} as SearchResults);
     }

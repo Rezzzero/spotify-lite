@@ -2,10 +2,10 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { router } from "./app/routes/router";
 import { RouterProvider } from "react-router-dom";
-import { SearchResultsProvider } from "./app/store/SearchResultsProvider";
+import { SearchStoreProvider } from "./app/store/SearchStoreProvider";
 
 createRoot(document.getElementById("root")!).render(
-  <SearchResultsProvider>
+  <SearchStoreProvider>
     <RouterProvider router={router} />
-  </SearchResultsProvider>
+  </SearchStoreProvider>
 );

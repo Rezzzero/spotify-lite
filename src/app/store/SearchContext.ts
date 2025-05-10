@@ -1,11 +1,9 @@
 import { createContext } from "react";
 import { SearchResults } from "../../shared/types/types";
 
-export type SearchResultsContextType = {
+export type SearchContextType = {
   searchResults: SearchResults;
   setSearchResults: React.Dispatch<React.SetStateAction<SearchResults>>;
 };
 
-export const SearchResultsContext = createContext(
-  {} as SearchResultsContextType
-);
+export const SearchContext = createContext({} as SearchContextType);

@@ -32,3 +32,16 @@ export const MediaLibraryLinks = [
     path: "#",
   },
 ];
+
+export const FiltersList = {
+  ALL: "Все",
+  TRACKS: "Треки",
+  ARTISTS: "Исполнители",
+  PLAYLISTS: "Плейлисты",
+  ALBUMS: "Альбомы",
+  PODCASTS: "Подкасты и шоу",
+  GENRES: "Жанры и настроения",
+  PROFILES: "Профили",
+} as {
+  [key: string]: string;
+};
