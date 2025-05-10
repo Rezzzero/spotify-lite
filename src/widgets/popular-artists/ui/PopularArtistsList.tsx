@@ -1,7 +1,7 @@
 import { SwiperSlide } from "swiper/react";
 import { usePopularArtists } from "../model/usePopularArtists";
 import { BaseSwiper } from "../../../shared/ui/swiper/BaseSwiper";
-import { Link } from "react-router-dom";
+import { Card } from "../../../shared/ui/card/Card";
 
 export const PopularArtistsList = () => {
   const { list } = usePopularArtists();
@@ -13,19 +13,12 @@ export const PopularArtistsList = () => {
       <BaseSwiper>
         {list.slice(0, 20).map((artist, index) => (
           <SwiperSlide key={index}>
-            <div
-              key={index}
-              className="flex flex-col gap-3 rounded-md cursor-pointer p-3 w-[192px] h-[255px] hover:bg-zinc-800"
-            >
-              <img
-                src={artist.images[0].url}
-                alt={`${artist.name} image`}
-                className="rounded-full w-42 h-42"
-              />
-              <Link to={`/artist/${artist.id}`} className="hover:underline">
-                {artist.name}
-              </Link>
-            </div>
+            <Card
+              image={artist.images[0].url}
+              name={artist.name}
+              link={`/artist/${artist.id}`}
+              isRoundedFull={true}
+            />
           </SwiperSlide>
         ))}
       </BaseSwiper>

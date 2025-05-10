@@ -1,7 +1,7 @@
 import { SwiperSlide } from "swiper/react";
 import { usePopularTracks } from "../model/usePopularTracks";
 import { BaseSwiper } from "../../../shared/ui/swiper/BaseSwiper";
-import { Link } from "react-router-dom";
+import { Card } from "../../../shared/ui/card/Card";
 
 export const PopularTracksList = () => {
   const { list } = usePopularTracks();
@@ -13,19 +13,11 @@ export const PopularTracksList = () => {
       <BaseSwiper>
         {list.slice(0, 20).map((track, index) => (
           <SwiperSlide key={index}>
-            <div
-              key={index}
-              className="flex flex-col gap-3 rounded-md cursor-pointer p-3 w-[192px] h-[255px] hover:bg-[#1d1e1f]"
-            >
-              <img
-                src={track.track.album.images[0].url}
-                alt={`${track.track.name} image`}
-                className="rounded-xl w-42 h-42"
-              />
-              <Link to={`/track/${track.track.id}`} className="hover:underline">
-                {track.track.name}
-              </Link>
-            </div>
+            <Card
+              image={track.track.album.images[0].url}
+              name={track.track.name}
+              link={`/track/${track.track.id}`}
+            />
           </SwiperSlide>
         ))}
       </BaseSwiper>
