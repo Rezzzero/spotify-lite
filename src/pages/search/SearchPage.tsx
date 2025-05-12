@@ -13,7 +13,7 @@ export const SearchPage = () => {
   }
 
   return (
-    <div className="py-4 px-9 bg-[#141414] w-[80%]">
+    <div className="pb-4 pl-3 pr-5 bg-[#141414] w-[80%] h-[85vh] overflow-y-auto [&::-webkit-scrollbar]:hidden rounded-xl relative">
       <SearchResults />
     </div>
   );

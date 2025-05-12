@@ -49,6 +49,23 @@ export interface Track {
   name: string;
 }
 
+export interface Show {
+  id: string;
+  name: string;
+  images: Image[];
+  publisher: string;
+  description: string;
+}
+
+export interface Episode {
+  id: string;
+  name: string;
+  images: Image[];
+  duration_ms: number;
+  description: string;
+  release_date: string;
+}
+
 export interface SearchResults {
   albums: {
     items: Album[];
@@ -61,5 +78,11 @@ export interface SearchResults {
   };
   tracks: {
     items: Track[];
+  };
+  shows: {
+    items: Show[];
+  };
+  episodes: {
+    items: Episode[];
   };
 }
