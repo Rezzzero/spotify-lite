@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { SearchResults } from "../../widgets/search-results/ui/SearchResults";
+import { Footer } from "../../widgets/footer/ui/Footer";
 
 export const SearchPage = () => {
   const { value } = useParams();
@@ -13,8 +14,9 @@ export const SearchPage = () => {
   }
 
   return (
-    <div className="pb-4 pl-3 pr-5 bg-[#141414] w-[80%] h-[85vh] overflow-y-auto [&::-webkit-scrollbar]:hidden rounded-xl relative">
+    <div className="flex flex-col gap-20 pb-4 pl-3 pr-5 bg-[#141414] w-[80%] h-[85vh] overflow-y-auto [&::-webkit-scrollbar]:hidden rounded-xl relative">
       <SearchResults />
+      <Footer />
     </div>
   );
 };
