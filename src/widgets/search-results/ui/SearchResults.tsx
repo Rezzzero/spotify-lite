@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useSearchResults } from "../model/useSearchResults";
 import { formatMsToMinutesAndSeconds } from "../../../shared/lib/format/msToMinutes";
-import { Card } from "../../../shared/ui/card/Card";
+import { CardList } from "../../../shared/ui/card-list/CardList";
 
 export const SearchResults = () => {
   const { searchResults, FiltersList, selectedFilter, handleSelectFilter } =
@@ -94,90 +94,44 @@ export const SearchResults = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-3">
-        <Link to={"/"} className="text-2xl font-bold px-3 hover:underline">
-          Исполнители
-        </Link>
-        <div className="flex">
-          {searchResults?.artists?.items?.slice(0, 8).map((artist, index) => (
-            <Card
-              key={index}
-              image={artist.images[0].url}
-              name={artist.name}
-              link={`/artist/${artist.id}`}
-              isRoundedFull={true}
-              isSearchPage={true}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="flex flex-col gap-3">
-        <Link to={"/"} className="text-2xl font-bold px-3 hover:underline">
-          Альбомы
-        </Link>
-        <div className="flex">
-          {searchResults?.albums?.items?.slice(0, 8).map((album, index) => (
-            <Card
-              key={index}
-              image={album.images[0].url}
-              name={album.name}
-              link={`/album/${album.id}`}
-              isSearchPage={true}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="flex flex-col gap-3">
-        <Link to={"/"} className="text-2xl font-bold px-3 hover:underline">
-          Плейлисты
-        </Link>
-        <div className="flex">
-          {searchResults?.playlists?.items
-            .filter((playlist) => playlist !== null)
-            .slice(0, 8)
-            .map((playlist, index) => (
-              <Card
-                key={index}
-                image={playlist.images[0].url}
-                name={playlist.name}
-                link={`/playlist/${playlist.id}`}
-                isSearchPage={true}
-              />
-            ))}
-        </div>
-      </div>
-      <div className="flex flex-col gap-3">
-        <Link to={"/"} className="text-2xl font-bold px-3 hover:underline">
-          Подкасты
-        </Link>
-        <div className="flex">
-          {searchResults?.shows?.items?.slice(0, 8).map((show, index) => (
-            <Card
-              key={index}
-              image={show.images[0].url}
-              name={show.name}
-              link={`/show/${show.id}`}
-              isSearchPage={true}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="flex flex-col gap-3">
-        <Link to={"/"} className="text-2xl font-bold px-3 hover:underline">
-          Выпуски
-        </Link>
-        <div className="flex">
-          {searchResults?.episodes?.items?.slice(0, 8).map((episode, index) => (
-            <Card
-              key={index}
-              image={episode.images[0].url}
-              name={episode.name}
-              link={`/episode/${episode.id}`}
-              isSearchPage={true}
-            />
-          ))}
-        </div>
-      </div>
+      <CardList
+        title={"Исполнители"}
+        titleLink={"/"}
+        items={searchResults.artists.items.slice(0, 8)}
+        itemType={"artist"}
+        isSearchPage={true}
+        isRoundedFull={true}
+      />
+      <CardList
+        title={"Альбомы"}
+        titleLink={"/"}
+        items={searchResults.albums.items.slice(0, 8)}
+        itemType={"album"}
+        isSearchPage={true}
+      />
+      <CardList
+        title={"Плейлисты"}
+        titleLink={"/"}
+        items={searchResults.playlists.items
+          .filter((playlist) => playlist !== null)
+          .slice(0, 8)}
+        itemType={"playlist"}
+        isSearchPage={true}
+      />
+      <CardList
+        title={"Подкасты"}
+        titleLink={"/"}
+        items={searchResults.shows.items.slice(0, 8)}
+        itemType={"show"}
+        isSearchPage={true}
+      />
+      <CardList
+        title={"Выпуски"}
+        titleLink={"/"}
+        items={searchResults.episodes.items.slice(0, 8)}
+        itemType={"episode"}
+        isSearchPage={true}
+      />
     </div>
   );
 };
