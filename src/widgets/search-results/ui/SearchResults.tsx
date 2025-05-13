@@ -4,8 +4,7 @@ import { formatMsToMinutesAndSeconds } from "../../../shared/lib/format/msToMinu
 import { CardList } from "../../../shared/ui/card-list/CardList";
 
 export const SearchResults = () => {
-  const { searchResults, FiltersList, selectedFilter, handleSelectFilter } =
-    useSearchResults();
+  const { searchResults } = useSearchResults();
   const bestResult = searchResults?.tracks?.items?.[0];
 
   if (!bestResult) {
@@ -13,22 +12,7 @@ export const SearchResults = () => {
   }
 
   return (
-    <div className="flex flex-col gap-10 w-full">
-      <div className="sticky top-0 left-0 bg-[#141414] flex gap-3 px-4 py-3 rounded-t-xl">
-        {Object.keys(FiltersList).map((filter) => (
-          <button
-            key={filter}
-            onClick={() => handleSelectFilter(filter)}
-            className={`px-3 py-[6px] text-sm font-semibold rounded-full ${
-              selectedFilter === filter
-                ? "bg-white text-black"
-                : "bg-[#29292b] hover:bg-[#333336]"
-            } cursor-pointer`}
-          >
-            {FiltersList[filter]}
-          </button>
-        ))}
-      </div>
+    <div className="flex flex-col gap-10 w-full mb-10">
       <div className="flex gap-1 w-full">
         <div className=" flex flex-col gap-2 px-3">
           <h2 className="text-2xl font-bold">Лучший результат</h2>
