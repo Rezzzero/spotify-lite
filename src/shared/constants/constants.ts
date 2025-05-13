@@ -2,6 +2,7 @@ export const Route = {
   HOME: "/",
   SEARCH: "/search/:value?",
   SEARCH_EMPTY: "/search",
+  SEARCH_BY_CATEGORY: "/search/:value/:category",
   ALBUM: "/album/:albumId",
   ARTIST: "/artist/:artistId",
 };
@@ -33,15 +34,33 @@ export const MediaLibraryLinks = [
   },
 ];
 
-export const FiltersList = {
-  ALL: "Все",
-  TRACKS: "Треки",
-  ARTISTS: "Исполнители",
-  PLAYLISTS: "Плейлисты",
-  ALBUMS: "Альбомы",
-  PODCASTS: "Подкасты и шоу",
+export const CategoriesList = {
+  ALL: {
+    name: "Все",
+    path: "",
+  },
+  TRACKS: {
+    name: "Треки",
+    path: "tracks",
+  },
+  ARTISTS: {
+    name: "Исполнители",
+    path: "artists",
+  },
+  PLAYLISTS: {
+    name: "Плейлисты",
+    path: "playlists",
+  },
+  ALBUMS: {
+    name: "Альбомы",
+    path: "albums",
+  },
+  PODCASTS: {
+    name: "Подкасты",
+    path: "shows",
+  },
 } as {
-  [key: string]: string;
+  [key: string]: { name: string; path: string };
 };
 
 export const FooterLinks = {

@@ -18,6 +18,10 @@ export const router = createBrowserRouter([
         element: <SearchPage />,
       },
       {
+        path: Route.SEARCH_BY_CATEGORY,
+        element: <SearchPage />,
+      },
+      {
         path: Route.ALBUM,
         element: <h1>Album</h1>,
       },

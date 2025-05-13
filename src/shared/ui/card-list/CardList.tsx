@@ -1,12 +1,6 @@
 import { Link } from "react-router-dom";
 import { Card } from "../card/Card";
-import { Image } from "../../types/types";
-
-interface ListItem {
-  id: string;
-  name: string;
-  images: Image[];
-}
+import { Album, Artist, Episode, Playlist, Show } from "../../types/types";
 
 export const CardList = ({
   title,
@@ -15,20 +9,27 @@ export const CardList = ({
   itemType,
   isSearchPage,
   isRoundedFull,
+  isCategoryPage,
 }: {
-  title: string;
-  titleLink: string;
-  items: ListItem[];
+  title?: string;
+  titleLink?: string;
+  items: Album[] | Artist[] | Playlist[] | Show[] | Episode[];
   itemType: string;
   isSearchPage?: boolean;
   isRoundedFull?: boolean;
+  isCategoryPage?: boolean;
 }) => {
   return (
     <div className="flex flex-col gap-3">
-      <Link to={titleLink} className="text-2xl font-bold px-3 hover:underline">
-        {title}
-      </Link>
-      <div className="flex">
+      {title && titleLink && (
+        <Link
+          to={titleLink}
+          className="text-2xl font-bold px-3 hover:underline"
+        >
+          {title}
+        </Link>
+      )}
+      <div className={`flex ${isCategoryPage ? "flex-wrap" : ""}`}>
         {items.map((item, index) => (
           <Card
             key={index}

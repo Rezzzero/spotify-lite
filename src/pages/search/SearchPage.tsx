@@ -1,10 +1,11 @@
 import { useParams } from "react-router-dom";
 import { SearchResults } from "../../widgets/search-results/ui/SearchResults";
 import { Footer } from "../../widgets/footer/ui/Footer";
-import { SearchFilter } from "../../widgets/search-filter/ui/SearchFilter";
+import { CategoryList } from "../../widgets/category-list/ui/CategoryList";
+import { SearchCategoryResults } from "../../widgets/search-category-results/ui/SearchCategoryResults";
 
 export const SearchPage = () => {
-  const { value } = useParams();
+  const { value, category } = useParams();
 
   if (!value) {
     return (
@@ -16,8 +17,9 @@ export const SearchPage = () => {
 
   return (
     <div className="flex flex-col gap-10 pb-4 pl-3 pr-5 bg-[#141414] w-[80%] h-[85vh] overflow-y-auto [&::-webkit-scrollbar]:hidden rounded-xl relative">
-      <SearchFilter />
-      <SearchResults />
+      <CategoryList />
+      {!category && <SearchResults />}
+      {category && <SearchCategoryResults />}
       <Footer />
     </div>
   );

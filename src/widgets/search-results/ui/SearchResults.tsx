@@ -83,15 +83,15 @@ export const SearchResults = () => {
         titleLink={"/"}
         items={searchResults.artists.items.slice(0, 8)}
         itemType={"artist"}
-        isSearchPage={true}
-        isRoundedFull={true}
+        isSearchPage
+        isRoundedFull
       />
       <CardList
         title={"Альбомы"}
         titleLink={"/"}
         items={searchResults.albums.items.slice(0, 8)}
         itemType={"album"}
-        isSearchPage={true}
+        isSearchPage
       />
       <CardList
         title={"Плейлисты"}
@@ -100,21 +100,21 @@ export const SearchResults = () => {
           .filter((playlist) => playlist !== null)
           .slice(0, 8)}
         itemType={"playlist"}
-        isSearchPage={true}
+        isSearchPage
       />
       <CardList
         title={"Подкасты"}
         titleLink={"/"}
         items={searchResults.shows.items.slice(0, 8)}
         itemType={"show"}
-        isSearchPage={true}
+        isSearchPage
       />
       <CardList
         title={"Выпуски"}
         titleLink={"/"}
         items={searchResults.episodes.items.slice(0, 8)}
         itemType={"episode"}
-        isSearchPage={true}
+        isSearchPage
       />
     </div>
   );
