@@ -17,17 +17,25 @@ export const useSearchCategoryResults = () => {
     return { items: [] };
   }
 
-  const filteredItems = searchResults[category].items.filter((item) => {
-    return (
-      item &&
-      typeof item === "object" &&
-      "images" in item &&
-      Array.isArray(
-        (item as Artist | Album | Playlist | Show | Episode).images
-      ) &&
-      (item as Artist | Album | Playlist | Show | Episode).images.length > 0
+  let filteredItems;
+
+  if (category === "tracks") {
+    filteredItems = searchResults[category].items.filter(
+      (item) => item.album.images.length > 0
     );
-  });
+  } else {
+    filteredItems = searchResults[category].items.filter((item) => {
+      return (
+        item &&
+        typeof item === "object" &&
+        "images" in item &&
+        Array.isArray(
+          (item as Artist | Album | Playlist | Show | Episode).images
+        ) &&
+        (item as Artist | Album | Playlist | Show | Episode).images.length > 0
+      );
+    });
+  }
 
   return {
     items: filteredItems,

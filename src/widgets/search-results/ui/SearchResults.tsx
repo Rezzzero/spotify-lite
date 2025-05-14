@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useSearchResults } from "../model/useSearchResults";
-import { formatMsToMinutesAndSeconds } from "../../../shared/lib/format/msToMinutes";
 import { CardList } from "../../../shared/ui/card-list/CardList";
+import { TrackCard } from "../../../shared/ui/track-card/TrackCard";
 
 export const SearchResults = () => {
   const { searchResults } = useSearchResults();
@@ -41,39 +41,7 @@ export const SearchResults = () => {
           </Link>
           <div className="flex flex-col">
             {searchResults?.tracks?.items?.slice(0, 4).map((track, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-3 px-2 py-[6px] pr-6 rounded-md hover:bg-[#333336]"
-              >
-                <img
-                  src={track.album.images[0].url}
-                  alt={`${track.name} image`}
-                  className="w-10 h-10 rounded-md"
-                />
-                <div>
-                  <Link to={`/track/${track.id}`} className="hover:underline">
-                    {track.name}
-                  </Link>
-                  <div className="flex text-gray-400 flex-wrap">
-                    {track.artists.map((artist, index) => (
-                      <div key={artist.id} className="flex items-center">
-                        <Link
-                          to={`/artist/${artist.id}`}
-                          className="text-sm font-semibold hover:underline"
-                        >
-                          {artist.name}
-                        </Link>
-                        {index < track.artists.length - 1 && (
-                          <span>,&nbsp;</span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <p className="text-gray-400 ml-auto">
-                  {formatMsToMinutesAndSeconds(track.duration_ms)}
-                </p>
-              </div>
+              <TrackCard key={index} track={track} />
             ))}
           </div>
         </div>

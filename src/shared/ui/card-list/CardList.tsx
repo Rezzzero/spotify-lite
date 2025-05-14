@@ -29,7 +29,7 @@ export const CardList = ({
           {title}
         </Link>
       )}
-      <div className={`flex ${isCategoryPage ? "flex-wrap" : ""}`}>
+      <div className={`flex ${isCategoryPage ? "grid grid-cols-7" : ""}`}>
         {items.map((item, index) => (
           <Card
             key={index}

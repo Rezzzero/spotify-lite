@@ -16,7 +16,11 @@ export const SearchPage = () => {
   }
 
   return (
-    <div className="flex flex-col gap-10 pb-4 pl-3 pr-5 bg-[#141414] w-[80%] h-[85vh] overflow-y-auto [&::-webkit-scrollbar]:hidden rounded-xl relative">
+    <div
+      className={`flex flex-col ${
+        category ? "" : "gap-10"
+      } pb-4 pl-3 pr-5 bg-[#141414] w-[80%] h-[85vh] overflow-y-auto [&::-webkit-scrollbar]:hidden rounded-xl relative`}
+    >
       <CategoryList />
       {!category && <SearchResults />}
       {category && <SearchCategoryResults />}
