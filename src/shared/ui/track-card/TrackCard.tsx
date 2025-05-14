@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Track } from "../../types/types";
-import { formatMsToMinutesAndSeconds } from "../../lib/format/msToMinutes";
+import { formatMsToMinutesAndSeconds } from "../../lib/format/msToMinutesAndSeconds";
 
 export const TrackCard = ({
   track,

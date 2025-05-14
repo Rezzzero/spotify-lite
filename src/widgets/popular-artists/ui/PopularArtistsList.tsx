@@ -14,10 +14,10 @@ export const PopularArtistsList = () => {
         {list.slice(0, 20).map((artist, index) => (
           <SwiperSlide key={index}>
             <Card
-              image={artist.images[0].url}
-              name={artist.name}
+              item={artist}
               link={`/artist/${artist.id}`}
               isRoundedFull={true}
+              cardType="artist"
             />
           </SwiperSlide>
         ))}

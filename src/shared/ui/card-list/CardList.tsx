@@ -33,11 +33,11 @@ export const CardList = ({
         {items.map((item, index) => (
           <Card
             key={index}
-            image={item.images[0].url}
-            name={item.name}
+            item={item}
             link={`/${itemType}/${item.id}`}
             isSearchPage={isSearchPage}
             isRoundedFull={isRoundedFull}
+            cardType={itemType}
           />
         ))}
       </div>

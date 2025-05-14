@@ -66,6 +66,11 @@ export interface Episode {
   release_date: string;
 }
 
+export interface Release {
+  name: string;
+  images: Image[];
+}
+
 export interface SearchResults {
   albums: {
     items: Album[];

@@ -13,11 +13,7 @@ export const NewReleasesList = () => {
       <BaseSwiper>
         {releases.slice(0, 20).map((release, index) => (
           <SwiperSlide key={index}>
-            <Card
-              image={release.images[0].url}
-              name={release.name}
-              link={`/`}
-            />
+            <Card item={release} link={`/`} />
           </SwiperSlide>
         ))}
       </BaseSwiper>

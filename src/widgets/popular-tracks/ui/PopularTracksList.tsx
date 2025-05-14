@@ -14,9 +14,12 @@ export const PopularTracksList = () => {
         {list.slice(0, 20).map((track, index) => (
           <SwiperSlide key={index}>
             <Card
-              image={track.track.album.images[0].url}
-              name={track.track.name}
+              item={{
+                name: track.track.name,
+                images: track.track.album.images,
+              }}
               link={`/track/${track.track.id}`}
+              cardType="track"
             />
           </SwiperSlide>
         ))}

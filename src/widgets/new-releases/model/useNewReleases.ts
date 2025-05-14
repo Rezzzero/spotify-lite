@@ -1,15 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Image } from "../../../shared/types/types";
-
-interface Release {
-  name: string;
-  images: {
-    0: Image;
-    1: Image;
-    2: Image;
-  };
-}
+import { Release } from "../../../shared/types/types";
 
 export const useNewReleases = () => {
   const [releases, setReleases] = useState([] as Release[]);
