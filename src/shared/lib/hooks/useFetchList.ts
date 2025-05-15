@@ -19,7 +19,6 @@ const dataKeyMap = {
 export const useFetchList = <T extends SectionName>(sectionName: T) => {
   const [list, setList] = useState<SectionDataMap[T]>([] as SectionDataMap[T]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<null | string>(null);
 
   const dataKey = dataKeyMap[sectionName];
 
@@ -35,8 +34,8 @@ export const useFetchList = <T extends SectionName>(sectionName: T) => {
         } else {
           setList(rawData[dataKey]);
         }
-      } catch (error: any) {
-        setError(error.message || "Unknown error");
+      } catch (error) {
+        console.error(error);
       } finally {
         setLoading(false);
       }
@@ -44,5 +43,5 @@ export const useFetchList = <T extends SectionName>(sectionName: T) => {
     fetch();
   }, [sectionName, dataKey]);
 
-  return { list, loading, error };
+  return { list, loading };
 };
