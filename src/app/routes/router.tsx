@@ -3,6 +3,7 @@ import { Route } from "../../shared/constants/constants";
 import App from "../App";
 import { HomePage } from "../../pages/home/HomePage";
 import { SearchPage } from "../../pages/search/SearchPage";
+import { SectionPage } from "../../pages/section/SectionPage";
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
       {
         path: Route.SEARCH_BY_CATEGORY,
         element: <SearchPage />,
+      },
+      {
+        path: Route.SECTION,
+        element: <SectionPage />,
       },
       {
         path: Route.ALBUM,

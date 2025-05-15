@@ -3,6 +3,7 @@ export const Route = {
   SEARCH: "/search/:value?",
   SEARCH_EMPTY: "/search",
   SEARCH_BY_CATEGORY: "/search/:value/:category",
+  SECTION: "/section/:name",
   ALBUM: "/album/:albumId",
   ARTIST: "/artist/:artistId",
 };

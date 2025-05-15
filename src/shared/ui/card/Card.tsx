@@ -1,46 +1,48 @@
 import { Link } from "react-router-dom";
-import { Artist, Image } from "../../types/types";
+import { CardItem } from "../../types/types";
 import { formatMsToMinutes } from "../../lib/format/msToMinutes";
 import { formatReleaseDate } from "../../lib/format/releaseDate";
-
-interface CardItem {
-  name: string;
-  images: Image[];
-  artists?: Artist[];
-  release_date?: string;
-  owner?: {
-    display_name: string;
-  };
-  publisher?: string;
-  duration_ms?: number;
-}
 
 export const Card = ({
   item,
   link,
-  isRoundedFull,
   isSearchPage,
   cardType,
 }: {
   item: CardItem;
   link: string;
-  isRoundedFull?: boolean;
   isSearchPage?: boolean;
   cardType?: string;
 }) => {
   const year = item.release_date?.slice(0, 4);
   return (
-    <div className="flex flex-col gap-3 rounded-md cursor-pointer p-3 w-[192px] h-[255px] hover:bg-[#1d1e1f]">
+    <div className="flex flex-col gap-3 rounded-md cursor-pointer p-3 w-[192px] h-[310px] hover:bg-[#1d1e1f]">
       <img
         src={item.images[0].url}
         alt={`${item.name} image`}
-        className={`${isRoundedFull ? "rounded-full" : "rounded-xl"} ${
+        className={`${cardType === "artist" ? "rounded-full" : "rounded-xl"} ${
           isSearchPage ? "w-39 h-39" : "w-42 h-42"
         }`}
       />
       <Link to={link} className="hover:underline">
         {item.name}
       </Link>
+
+      {cardType === "track" && item.artists && (
+        <div className="flex flex-wrap gap-x-1">
+          {item.artists!.map((artist, index) => (
+            <span key={artist.id}>
+              <Link
+                to={`/artist/${artist.id}`}
+                className="text-sm font-semibold hover:underline"
+              >
+                {artist.name}
+              </Link>
+              {index < item.artists!.length - 1 && <span>,&nbsp;</span>}
+            </span>
+          ))}
+        </div>
+      )}
 
       {cardType === "artist" && (
         <p className="text-sm text-gray-400">Исполнитель</p>
@@ -49,7 +51,12 @@ export const Card = ({
         <div className="flex gap-1 text-gray-400">
           <p>{year}</p>
           <p className="font-bold">·</p>
-          <p>{item.artists?.[0].name}</p>
+          <Link
+            to={`/artist/${item.artists?.[0].id}`}
+            className="hover:underline"
+          >
+            {item.artists?.[0].name}
+          </Link>
         </div>
       )}
       {cardType === "playlist" && (

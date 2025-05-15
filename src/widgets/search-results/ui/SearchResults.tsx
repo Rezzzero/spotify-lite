@@ -52,7 +52,6 @@ export const SearchResults = () => {
         items={searchResults.artists.items.slice(0, 8)}
         itemType={"artist"}
         isSearchPage
-        isRoundedFull
       />
       <CardList
         title={"Альбомы"}

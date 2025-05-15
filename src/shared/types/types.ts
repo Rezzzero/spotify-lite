@@ -1,3 +1,16 @@
+export interface CardItem {
+  name: string;
+  images: Image[];
+  artists?: Artist[];
+  release_date?: string;
+  owner?: {
+    display_name: string;
+  };
+  publisher?: string;
+  duration_ms?: number;
+  id?: string;
+}
+
 export interface Image {
   url: string;
   width: number;

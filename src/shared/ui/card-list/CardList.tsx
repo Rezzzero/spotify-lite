@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Card } from "../card/Card";
-import { Album, Artist, Episode, Playlist, Show } from "../../types/types";
+import { CardItem } from "../../types/types";
 
 export const CardList = ({
   title,
@@ -8,16 +8,16 @@ export const CardList = ({
   items,
   itemType,
   isSearchPage,
-  isRoundedFull,
   isCategoryPage,
+  isSectionPage,
 }: {
   title?: string;
   titleLink?: string;
-  items: Album[] | Artist[] | Playlist[] | Show[] | Episode[];
+  items: CardItem[];
   itemType: string;
   isSearchPage?: boolean;
-  isRoundedFull?: boolean;
   isCategoryPage?: boolean;
+  isSectionPage?: boolean;
 }) => {
   return (
     <div className="flex flex-col gap-3">
@@ -29,14 +29,17 @@ export const CardList = ({
           {title}
         </Link>
       )}
-      <div className={`flex ${isCategoryPage ? "grid grid-cols-7" : ""}`}>
+      <div
+        className={`flex ${isCategoryPage ? "grid grid-cols-7" : ""} ${
+          isSectionPage ? "grid grid-cols-8" : ""
+        }`}
+      >
         {items.map((item, index) => (
           <Card
             key={index}
             item={item}
             link={`/${itemType}/${item.id}`}
             isSearchPage={isSearchPage}
-            isRoundedFull={isRoundedFull}
             cardType={itemType}
           />
         ))}

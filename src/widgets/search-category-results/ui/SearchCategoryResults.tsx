@@ -1,11 +1,4 @@
-import {
-  Album,
-  Artist,
-  Episode,
-  Playlist,
-  Show,
-  Track,
-} from "../../../shared/types/types";
+import { CardItem, Track } from "../../../shared/types/types";
 import { CardList } from "../../../shared/ui/card-list/CardList";
 import { TrackCard } from "../../../shared/ui/track-card/TrackCard";
 import { useSearchCategoryResults } from "../model/useSearchCategoryResults";
@@ -37,9 +30,8 @@ export const SearchCategoryResults = () => {
   return (
     <div className="py-5 px-3 mb-10">
       <CardList
-        items={items as Album[] | Artist[] | Playlist[] | Show[] | Episode[]}
+        items={items as CardItem[]}
         itemType={category as string}
-        isRoundedFull={category === "artists"}
         isCategoryPage
       />
     </div>

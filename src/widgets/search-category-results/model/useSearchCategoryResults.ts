@@ -1,13 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useSearchStore } from "../../../app/store/useSearchStore";
-import {
-  Album,
-  Artist,
-  Episode,
-  Playlist,
-  SearchResults,
-  Show,
-} from "../../../shared/types/types";
+import { CardItem, SearchResults } from "../../../shared/types/types";
 
 export const useSearchCategoryResults = () => {
   const { searchResults } = useSearchStore();
@@ -29,10 +22,8 @@ export const useSearchCategoryResults = () => {
         item &&
         typeof item === "object" &&
         "images" in item &&
-        Array.isArray(
-          (item as Artist | Album | Playlist | Show | Episode).images
-        ) &&
-        (item as Artist | Album | Playlist | Show | Episode).images.length > 0
+        Array.isArray((item as CardItem).images) &&
+        (item as CardItem).images.length > 0
       );
     });
   }
