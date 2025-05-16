@@ -5,7 +5,7 @@ export const Route = {
   SEARCH_BY_CATEGORY: "/search/:value/:category",
   SECTION: "/section/:name",
   ALBUM: "/album/:albumId",
-  ARTIST: "/artist/:artistId",
+  ARTIST: "/artist/:id",
 };
 
 export const MediaLibraryLinks = [

@@ -172,6 +172,57 @@ const getSearchResults = async (query) => {
   }
 };
 
+const getArtist = async (id) => {
+  try {
+    const accessToken = await getAccessToken();
+    const response = await axios.get(
+      `https://api.spotify.com/v1/artists/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching artist:", error);
+  }
+};
+
+const getArtistTopTracks = async (id) => {
+  try {
+    const accessToken = await getAccessToken();
+    const response = await axios.get(
+      `https://api.spotify.com/v1/artists/${id}/top-tracks?market=UA`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.tracks;
+  } catch (error) {
+    console.error("Error fetching artist's top tracks:", error);
+  }
+};
+
+const getArtistAlbums = async (id) => {
+  try {
+    const accessToken = await getAccessToken();
+    const response = await axios.get(
+      `https://api.spotify.com/v1/artists/${id}/albums`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.items;
+  } catch (error) {
+    console.error("Error fetching artist's albums:", error);
+  }
+};
+
 app.get("/api/popular-tracks", async (_, res) => {
   try {
     const tracks = await getPopularTracks();
@@ -207,6 +258,18 @@ app.get("/api/search", async (req, res) => {
   try {
     const results = await getSearchResults(query);
     res.json(results);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/artist/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    const artist = await getArtist(id);
+    const topTracks = await getArtistTopTracks(id);
+    const albums = await getArtistAlbums(id);
+    res.json({ artist, topTracks, albums });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

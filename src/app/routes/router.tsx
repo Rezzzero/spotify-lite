@@ -4,6 +4,7 @@ import App from "../App";
 import { HomePage } from "../../pages/home/HomePage";
 import { SearchPage } from "../../pages/search/SearchPage";
 import { SectionPage } from "../../pages/section/SectionPage";
+import { ArtistPage } from "../../pages/artist/ArtistPage";
 
 export const router = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ export const router = createBrowserRouter([
       },
       {
         path: Route.ARTIST,
-        element: <h1>Artist</h1>,
+        element: <ArtistPage />,
       },
     ],
   },
