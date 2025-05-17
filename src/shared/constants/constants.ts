@@ -6,6 +6,7 @@ export const Route = {
   SECTION: "/section/:name",
   ALBUM: "/album/:albumId",
   ARTIST: "/artist/:id",
+  TEST: "/test",
 };
 
 export const MediaLibraryLinks = [

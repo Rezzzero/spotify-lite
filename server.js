@@ -20,6 +20,7 @@ await redisClient.connect();
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
+const soundCloudClientId = process.env.SOUND_CLOUD_CLIENT_ID;
 
 let cachedToken = null;
 let tokenExpiresAt = 0;
@@ -172,6 +173,28 @@ const getSearchResults = async (query) => {
   }
 };
 
+const getSoundCloudSearchResults = async (query) => {
+  try {
+    const response = await axios.get(
+      `https://api-v2.soundcloud.com/search/tracks?q=${encodeURIComponent(
+        query
+      )}&client_id=${soundCloudClientId}&limit=10`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching SoundCloud search results:", error);
+  }
+};
+
+const getSoundCloudStream = async (url) => {
+  try {
+    const response = await axios.get(`${url}?client_id=${soundCloudClientId}`);
+    return response.data.url;
+  } catch (error) {
+    console.error("Error fetching SoundCloud stream:", error);
+  }
+};
+
 const getArtist = async (id) => {
   try {
     const accessToken = await getAccessToken();
@@ -270,6 +293,32 @@ app.get("/api/artist/:id", async (req, res) => {
     const topTracks = await getArtistTopTracks(id);
     const albums = await getArtistAlbums(id);
     res.json({ artist, topTracks, albums });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/soundcloud-search", async (req, res) => {
+  const query = req.query.q;
+  if (!query) {
+    return res.status(400).json({ error: "Missing query parameter" });
+  }
+  try {
+    const results = await getSoundCloudSearchResults(query);
+    res.json(results);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/soundcloud-stream", async (req, res) => {
+  const url = req.query.url;
+  if (!url) {
+    return res.status(400).json({ error: "Missing url parameter" });
+  }
+  try {
+    const stream = await getSoundCloudStream(url);
+    res.json(stream);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
