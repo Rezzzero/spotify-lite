@@ -167,3 +167,23 @@ export const FooterLinks = {
     ],
   },
 };
+
+export const artistMusicFilterList = {
+  all: {
+    name: "Все",
+    path: "all",
+  },
+  albums: {
+    name: "Альбомы",
+    path: "album",
+  },
+  singles: {
+    name: "Синглы",
+    path: "single",
+  },
+} as {
+  [key: string]: {
+    name: string;
+    path: string;
+  };
+};

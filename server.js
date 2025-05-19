@@ -5,6 +5,20 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { createClient } from "redis";
 
+function getArtistIdsFromAlbums(albums) {
+  const ids = [];
+  const mainArtistId = albums[0].artists[0].id;
+  albums.forEach((album) => {
+    album.artists.forEach((artist) => {
+      if (artist.id !== mainArtistId && !ids.includes(artist.id)) {
+        ids.push(artist.id);
+      }
+    });
+  });
+
+  return ids;
+}
+
 dotenv.config();
 
 const app = express();
@@ -229,11 +243,11 @@ const getArtistTopTracks = async (id) => {
   }
 };
 
-const getArtistAlbums = async (id) => {
+const getArtistAlbumsAndSingles = async (id) => {
   try {
     const accessToken = await getAccessToken();
     const response = await axios.get(
-      `https://api.spotify.com/v1/artists/${id}/albums`,
+      `https://api.spotify.com/v1/artists/${id}/albums?include_groups=album,single&limit=50`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -243,6 +257,57 @@ const getArtistAlbums = async (id) => {
     return response.data.items;
   } catch (error) {
     console.error("Error fetching artist's albums:", error);
+  }
+};
+
+const getSeveralArtists = async (ids) => {
+  try {
+    const accessToken = await getAccessToken();
+    const response = await axios.get(
+      `https://api.spotify.com/v1/artists?ids=${ids.join(",")}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.artists;
+  } catch (error) {
+    console.error("Error fetching several artists:", error);
+  }
+};
+
+const getMoreWithArtist = async (artistId) => {
+  try {
+    const accessToken = await getAccessToken();
+    const response = await axios.get(
+      `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=appears_on`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.items;
+  } catch (error) {
+    console.error("Error fetching playlist with artist:", error);
+  }
+};
+
+const getPlaylistsWithArtist = async (artist) => {
+  try {
+    const accessToken = await getAccessToken();
+    const response = await axios.get(
+      `https://api.spotify.com/v1/search?q=${artist}&type=playlist`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data.playlists.items;
+  } catch (error) {
+    console.error("Error fetching playlist with artist:", error);
   }
 };
 
@@ -291,8 +356,19 @@ app.get("/api/artist/:id", async (req, res) => {
   try {
     const artist = await getArtist(id);
     const topTracks = await getArtistTopTracks(id);
-    const albums = await getArtistAlbums(id);
-    res.json({ artist, topTracks, albums });
+    const albumsAndSingles = await getArtistAlbumsAndSingles(id);
+    const ids = getArtistIdsFromAlbums(albumsAndSingles);
+    const otherArtists = await getSeveralArtists(ids);
+    const moreWithArtist = await getMoreWithArtist(id);
+    const playlists = await getPlaylistsWithArtist(artist.name);
+    res.json({
+      artist,
+      topTracks,
+      albumsAndSingles,
+      otherArtists,
+      moreWithArtist,
+      playlists,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
