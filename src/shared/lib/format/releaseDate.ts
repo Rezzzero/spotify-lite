@@ -1,6 +1,6 @@
 import { MONTHS_GENITIVE } from "../../constants/constants";
 
-export const formatReleaseDate = (date: string, isAlbum: boolean) => {
+export const formatReleaseDate = (date: string, isAlbum?: boolean) => {
   const currentYear = new Date().getFullYear();
   const parsedDate = new Date(date);
   let releaseDay;
