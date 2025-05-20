@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CardItem } from "../../types/types";
 import { formatMsToMinutes } from "../../lib/format/msToMinutes";
 import { formatReleaseDate } from "../../lib/format/releaseDate";
@@ -14,9 +14,13 @@ export const Card = ({
   isSearchPage?: boolean;
   cardType?: string;
 }) => {
+  const navigate = useNavigate();
   const year = item.release_date?.slice(0, 4);
   return (
-    <div className="flex flex-col gap-3 rounded-md cursor-pointer p-3 w-[192px] h-[310px] hover:bg-[#1d1e1f]">
+    <div
+      onClick={() => navigate(link)}
+      className="flex flex-col gap-3 rounded-md cursor-pointer p-3 w-[192px] h-[310px] hover:bg-[#1d1e1f]"
+    >
       <img
         src={item.images[0].url}
         alt={`${item.name} image`}
@@ -24,7 +28,11 @@ export const Card = ({
           isSearchPage ? "w-39 h-39" : "w-42 h-42"
         }`}
       />
-      <Link to={link} className="hover:underline">
+      <Link
+        to={link}
+        onClick={(e) => e.stopPropagation()}
+        className="hover:underline"
+      >
         {item.name}
       </Link>
 
@@ -34,6 +42,7 @@ export const Card = ({
             <span key={artist.id}>
               <Link
                 to={`/artist/${artist.id}`}
+                onClick={(e) => e.stopPropagation()}
                 className="text-sm font-semibold hover:underline"
               >
                 {artist.name}
@@ -53,6 +62,7 @@ export const Card = ({
           <p className="font-bold">·</p>
           <Link
             to={`/artist/${item.artists?.[0].id}`}
+            onClick={(e) => e.stopPropagation()}
             className="hover:underline"
           >
             {item.artists?.[0].name}

@@ -52,6 +52,11 @@ export interface Album {
   release_date: string;
   total_tracks: number;
   type: string;
+  tracks: {
+    items: Track[];
+    total: number;
+  };
+  label: string;
 }
 
 export interface Track {

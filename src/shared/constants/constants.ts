@@ -4,7 +4,7 @@ export const Route = {
   SEARCH_EMPTY: "/search",
   SEARCH_BY_CATEGORY: "/search/:value/:category",
   SECTION: "/section/:name",
-  ALBUM: "/album/:albumId",
+  ALBUM: "/album/:id",
   ARTIST: "/artist/:id",
   TEST: "/test",
 };
@@ -187,3 +187,18 @@ export const artistMusicFilterList = {
     path: string;
   };
 };
+
+export const MONTHS_GENITIVE = [
+  "января",
+  "февраля",
+  "марта",
+  "апреля",
+  "мая",
+  "июня",
+  "июля",
+  "августа",
+  "сентября",
+  "октября",
+  "ноября",
+  "декабря",
+];

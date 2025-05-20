@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Album, Artist, Playlist, Track } from "../../../shared/types/types";
-import { useExtractColors } from "react-extract-colors";
 import { artistMusicFilterList } from "../../../shared/constants/constants";
+import { useGetColors } from "../../../shared/lib/hooks/useGetColors";
 
 interface artistInfoType {
   artist: Artist;
@@ -17,7 +17,7 @@ interface artistInfoType {
 export const useArtistInfo = () => {
   const [artistInfo, setArtistInfo] = useState<artistInfoType | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [imageColors, setImageColors] = useState<string[] | null>(null);
+  const { imageColors } = useGetColors(imageUrl);
   const { id } = useParams();
   const [selectedFilter, setSelectedFilter] = useState(
     artistMusicFilterList.all.path
@@ -44,17 +44,6 @@ export const useArtistInfo = () => {
     };
     fetch();
   }, [id]);
-
-  const { dominantColor, lighterColor } = useExtractColors(imageUrl || "", {
-    format: "hex",
-    maxSize: 200,
-  });
-
-  useEffect(() => {
-    if (dominantColor && lighterColor) {
-      setImageColors([lighterColor, dominantColor]);
-    }
-  }, [dominantColor, lighterColor]);
 
   const handleChangeFilter = (filter: string) => {
     setSelectedFilter(filter);

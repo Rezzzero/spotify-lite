@@ -243,11 +243,11 @@ const getArtistTopTracks = async (id) => {
   }
 };
 
-const getArtistAlbumsAndSingles = async (id) => {
+const getArtistAlbumsAndSingles = async (id, include) => {
   try {
     const accessToken = await getAccessToken();
     const response = await axios.get(
-      `https://api.spotify.com/v1/artists/${id}/albums?include_groups=album,single&limit=50`,
+      `https://api.spotify.com/v1/artists/${id}/albums?include_groups=${include}&limit=50`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -311,6 +311,23 @@ const getPlaylistsWithArtist = async (artist) => {
   }
 };
 
+const getAlbum = async (id) => {
+  try {
+    const accessToken = await getAccessToken();
+    const response = await axios.get(
+      `https://api.spotify.com/v1/albums/${id}?market=RU`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching album:", error);
+  }
+};
+
 app.get("/api/popular-tracks", async (_, res) => {
   try {
     const tracks = await getPopularTracks();
@@ -356,7 +373,10 @@ app.get("/api/artist/:id", async (req, res) => {
   try {
     const artist = await getArtist(id);
     const topTracks = await getArtistTopTracks(id);
-    const albumsAndSingles = await getArtistAlbumsAndSingles(id);
+    const albumsAndSingles = await getArtistAlbumsAndSingles(
+      id,
+      "album,single"
+    );
     const ids = getArtistIdsFromAlbums(albumsAndSingles);
     const otherArtists = await getSeveralArtists(ids);
     const moreWithArtist = await getMoreWithArtist(id);
@@ -369,6 +389,21 @@ app.get("/api/artist/:id", async (req, res) => {
       moreWithArtist,
       playlists,
     });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/album/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    const album = await getAlbum(id);
+    const artist = await getArtist(album.artists[0].id);
+    const otherAlbums = await getArtistAlbumsAndSingles(
+      album.artists[0].id,
+      "album,single"
+    );
+    res.json({ album, artist, otherAlbums });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

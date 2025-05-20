@@ -28,7 +28,7 @@ export const PopularTracksList = () => {
                 images: track.album.images,
                 artists: track.artists,
               }}
-              link={`/track/${track.id}`}
+              link={`/album/${track.album.id}`}
               cardType="track"
             />
           </SwiperSlide>

@@ -32,7 +32,14 @@ export const ArtistInfo = () => {
         <h2 className="text-2xl font-bold">Популярные треки</h2>
         <div className="flex flex-col w-[70%]">
           {artistInfo.topTracks.map((track, index) => (
-            <TrackCard key={track.id} track={track} index={index} />
+            <TrackCard
+              key={track.id}
+              track={track}
+              index={index}
+              grid
+              withNum
+              withImage
+            />
           ))}
         </div>
       </div>

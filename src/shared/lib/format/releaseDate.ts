@@ -1,15 +1,23 @@
-export const formatReleaseDate = (date: string) => {
+import { MONTHS_GENITIVE } from "../../constants/constants";
+
+export const formatReleaseDate = (date: string, isAlbum: boolean) => {
   const currentYear = new Date().getFullYear();
+  const parsedDate = new Date(date);
   let releaseDay;
-  const releaseMonth = new Date(date).toLocaleString("ru", { month: "short" });
-  const releaseYear = new Date(date).getFullYear();
+  const monthIndex = parsedDate.getMonth();
+  const releaseMonth = isAlbum
+    ? MONTHS_GENITIVE[monthIndex]
+    : parsedDate.toLocaleString("ru", {
+        month: "short",
+      });
+  const releaseYear = parsedDate.getFullYear();
   let year;
   if (releaseYear === currentYear) {
     year = ``;
-    releaseDay = new Date(date).getDate();
+    releaseDay = parsedDate.getDate();
   } else {
     year = `${releaseYear}г.`;
-    releaseDay = ``;
+    releaseDay = isAlbum ? parsedDate.getDate() : ``;
   }
   return `${releaseDay} ${releaseMonth} ${year}`;
 };
