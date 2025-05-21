@@ -276,6 +276,35 @@ const getSeveralArtists = async (ids) => {
     console.error("Error fetching several artists:", error);
   }
 };
+const getSeveralAlbums = async (ids) => {
+  const accessToken = await getAccessToken();
+  const chunkSize = 20;
+  const result = [];
+
+  for (let i = 0; i < ids.length; i += chunkSize) {
+    const chunk = ids.slice(i, i + chunkSize);
+
+    try {
+      const response = await axios.get(
+        `https://api.spotify.com/v1/albums?ids=${chunk.join(",")}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      result.push(...response.data.albums);
+    } catch (error) {
+      console.error(
+        `Error fetching albums for chunk [${chunk.join(",")}]:`,
+        error
+      );
+    }
+  }
+
+  return result;
+};
 
 const getMoreWithArtist = async (artistId) => {
   try {
@@ -437,6 +466,22 @@ app.get("/api/track/:id", async (req, res) => {
       "album,single"
     );
     res.json({ track, artist, topTracks, albumsAndSingles });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/discography/:artistId", async (req, res) => {
+  const artistId = req.params.artistId;
+  try {
+    const albumsAndSingles = await getArtistAlbumsAndSingles(
+      artistId,
+      "album,single"
+    );
+    const albumIds = albumsAndSingles.map((album) => album.id);
+    const discography = await getSeveralAlbums(albumIds);
+
+    res.json({ discography });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

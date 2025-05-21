@@ -7,6 +7,7 @@ export const Route = {
   ALBUM: "/album/:id",
   ARTIST: "/artist/:id",
   TRACK: "/track/:id",
+  DISCOGRAPHY: "/artist/:id/discography/:filter",
   TEST: "/test",
 };
 
