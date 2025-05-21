@@ -12,7 +12,7 @@ export const TrackCard = ({
 }: {
   track: Track;
   index: number;
-  withNum: boolean;
+  withNum?: boolean;
   withAlbumName?: boolean;
   withImage?: boolean;
   grid?: boolean;

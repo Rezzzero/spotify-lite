@@ -45,7 +45,12 @@ export const ArtistInfo = () => {
       </div>
       <div className="flex flex-col gap-3 px-3">
         <div className="flex justify-between pl-2 px-3">
-          <h2 className="text-2xl font-bold">Музыка</h2>
+          <Link
+            to={`/artist/${artistInfo.artist.id}/discography/${selectedFilter}`}
+            className="text-2xl font-bold hover:underline"
+          >
+            Музыка
+          </Link>
           <Link
             to={`/artist/${artistInfo.artist.id}/discography/${selectedFilter}`}
             className="text-[#bababa] font-bold text-sm hover:underline"

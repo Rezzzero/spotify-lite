@@ -328,6 +328,23 @@ const getAlbum = async (id) => {
   }
 };
 
+const getTrack = async (id) => {
+  try {
+    const accessToken = await getAccessToken();
+    const response = await axios.get(
+      `https://api.spotify.com/v1/tracks/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching track:", error);
+  }
+};
+
 app.get("/api/popular-tracks", async (_, res) => {
   try {
     const tracks = await getPopularTracks();
@@ -404,6 +421,22 @@ app.get("/api/album/:id", async (req, res) => {
       "album,single"
     );
     res.json({ album, artist, otherAlbums });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/api/track/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    const track = await getTrack(id);
+    const artist = await getArtist(track.artists[0].id);
+    const topTracks = await getArtistTopTracks(artist.id);
+    const albumsAndSingles = await getArtistAlbumsAndSingles(
+      artist.id,
+      "album,single"
+    );
+    res.json({ track, artist, topTracks, albumsAndSingles });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

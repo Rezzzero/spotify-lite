@@ -13,7 +13,7 @@ export const formatReleaseDate = (date: string, isAlbum?: boolean) => {
   const releaseYear = parsedDate.getFullYear();
   let year;
   if (releaseYear === currentYear) {
-    year = ``;
+    year = isAlbum ? `${releaseYear}г.` : ``;
     releaseDay = parsedDate.getDate();
   } else {
     year = `${releaseYear}г.`;

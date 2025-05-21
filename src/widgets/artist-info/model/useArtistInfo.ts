@@ -5,7 +5,7 @@ import { Album, Artist, Playlist, Track } from "../../../shared/types/types";
 import { artistMusicFilterList } from "../../../shared/constants/constants";
 import { useGetColors } from "../../../shared/lib/hooks/useGetColors";
 
-interface artistInfoType {
+interface ArtistInfoType {
   artist: Artist;
   topTracks: Track[];
   albumsAndSingles: Album[];
@@ -15,7 +15,7 @@ interface artistInfoType {
 }
 
 export const useArtistInfo = () => {
-  const [artistInfo, setArtistInfo] = useState<artistInfoType | null>(null);
+  const [artistInfo, setArtistInfo] = useState<ArtistInfoType | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const { imageColors } = useGetColors(imageUrl);
   const { id } = useParams();
@@ -32,10 +32,10 @@ export const useArtistInfo = () => {
         const response = await axios.get(
           `http://localhost:3000/api/artist/${id}`
         );
-        const data: artistInfoType = response.data;
+        const data: ArtistInfoType = response.data;
         setArtistInfo(data);
         setFiltredAlbumsAndSingles(data.albumsAndSingles);
-        if (data?.artist?.images?.[1]?.url) {
+        if (data.artist.images[1].url) {
           setImageUrl(data.artist.images[1].url);
         }
       } catch (error) {

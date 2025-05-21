@@ -4,14 +4,14 @@ import { Album, Artist } from "../../../shared/types/types";
 import { useParams } from "react-router-dom";
 import { useGetColors } from "../../../shared/lib/hooks/useGetColors";
 
-interface albumDataType {
+interface AlbumDataType {
   album: Album;
   artist: Artist;
   otherAlbums: Album[];
 }
 
 export const useAlbumInfo = () => {
-  const [albumData, setAlbumData] = useState<albumDataType | null>(null);
+  const [albumData, setAlbumData] = useState<AlbumDataType | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const { imageColors } = useGetColors(imageUrl);
   const { id } = useParams();
@@ -22,9 +22,9 @@ export const useAlbumInfo = () => {
         const response = await axios.get(
           `http://localhost:3000/api/album/${id}`
         );
-        const data: albumDataType = response.data;
+        const data: AlbumDataType = response.data;
         setAlbumData(data);
-        if (data?.album?.images?.[1]?.url) {
+        if (data.album.images[1].url) {
           setImageUrl(data.album.images[1].url);
         }
       } catch (error) {

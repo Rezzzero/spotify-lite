@@ -6,6 +6,7 @@ export const Route = {
   SECTION: "/section/:name",
   ALBUM: "/album/:id",
   ARTIST: "/artist/:id",
+  TRACK: "/track/:id",
   TEST: "/test",
 };
 

@@ -32,7 +32,7 @@ export const AlbumInfo = () => {
           className="rounded-md w-[232px] h-[232px] shadow-2xl"
         />
         <div className="flex flex-col gap-2">
-          <p>Альбом</p>
+          <p>{albumData.album.album_type === "album" ? "Альбом" : "Сингл"}</p>
           <h2 className="text-[100px] font-bold leading-none">
             {albumData.album.name}
           </h2>

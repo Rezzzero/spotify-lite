@@ -7,6 +7,7 @@ import { SectionPage } from "../../pages/section/SectionPage";
 import { ArtistPage } from "../../pages/artist/ArtistPage";
 import { TestPage } from "../../pages/test/TestPage";
 import { AlbumPage } from "../../pages/album/AlbumPage";
+import { TrackPage } from "../../pages/track/TrackPage";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
       {
         path: Route.ARTIST,
         element: <ArtistPage />,
+      },
+      {
+        path: Route.TRACK,
+        element: <TrackPage />,
       },
       {
         path: Route.TEST,
