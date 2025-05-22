@@ -1,32 +1,42 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Album } from "../../../shared/types/types";
-export const useDiscography = () => {
-  const [discography, setDiscography] = useState<Album[]>([]);
+import { useDiscographyData } from "../../../features/discography/hooks/useDiscographyData";
+import { useDropdown } from "../../../shared/lib/hooks/useDropDown";
+
+export const useDiscography = ({
+  setIsFilterDropDownOpen,
+  setIsSortDropDownOpen,
+}: {
+  setIsFilterDropDownOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsSortDropDownOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const { id, filter } = useParams();
+  const {
+    filteredDiscography,
+    selectedFilterByType,
+    sorting,
+    handleChangeFilter,
+    sortDiscography,
+  } = useDiscographyData({ filterFromUrl: filter, id });
+  const filterDropdown = useDropdown(setIsFilterDropDownOpen);
+  const sortDropdown = useDropdown(setIsSortDropDownOpen);
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3000/api/discography/${id}`
-        );
-        const data: Album[] = response.data.discography;
-        if (filter === "all") {
-          setDiscography(data);
-        } else {
-          setDiscography(
-            data.filter((album: Album) => album.album_type === filter)
-          );
-        }
-      } catch (error) {
-        console.error("Error fetching discography:", error);
-      }
-    };
+  return {
+    filteredDiscography,
+    selectedFilterByType,
+    handleChangeFilter,
+    sorting,
+    sortDiscography,
 
-    fetch();
-  }, [id, filter]);
+    filterDropDownRef: filterDropdown.dropDownRef,
+    filterButtonRef: filterDropdown.buttonRef,
+    showFilterDropDown: filterDropdown.open,
+    handleShowFilterDropDown: filterDropdown.show,
+    handleHideFilterDropDown: filterDropdown.hide,
 
-  return { discography };
+    sortDropDownRef: sortDropdown.dropDownRef,
+    sortButtonRef: sortDropdown.buttonRef,
+    showSortDropDown: sortDropdown.open,
+    handleShowSortDropDown: sortDropdown.show,
+    handleHideSortDropDown: sortDropdown.hide,
+  };
 };

@@ -1,3 +1,5 @@
+import { Album } from "../types/types";
+
 export const Route = {
   HOME: "/",
   SEARCH: "/search/:value?",
@@ -175,11 +177,11 @@ export const artistMusicFilterList = {
     name: "Все",
     path: "all",
   },
-  albums: {
+  album: {
     name: "Альбомы",
     path: "album",
   },
-  singles: {
+  single: {
     name: "Синглы",
     path: "single",
   },
@@ -187,6 +189,25 @@ export const artistMusicFilterList = {
   [key: string]: {
     name: string;
     path: string;
+  };
+};
+
+export const artistMusicSortList = {
+  releaseDate: {
+    name: "Дата выпуска",
+    path: "release_date",
+    ascOrder: false,
+  },
+  name: {
+    name: "Имя",
+    path: "name",
+    ascOrder: false,
+  },
+} as {
+  [key: string]: {
+    name: string;
+    path: keyof Album;
+    ascOrder: boolean;
   };
 };
 
