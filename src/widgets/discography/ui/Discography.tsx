@@ -14,13 +14,16 @@ import DropDownIcon from "../../../shared/assets/drop-down/drop-down-arrow.svg?r
 import ListIcon from "../../../shared/assets/drop-down/list-icon.svg?react";
 import GridIcon from "../../../shared/assets/drop-down/grid-icon.svg?react";
 import { CardList } from "../../../shared/ui/card-list/CardList";
+import playIcon from "../../../shared/assets/play-icon.svg";
 
 export const Discography = ({
   setIsFilterDropDownOpen,
   setIsSortDropDownOpen,
+  scrollContainerRef,
 }: {
   setIsFilterDropDownOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSortDropDownOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  scrollContainerRef: React.RefObject<HTMLDivElement | null>;
 }) => {
   const {
     filteredDiscography: discography,
@@ -30,6 +33,8 @@ export const Discography = ({
     sortDiscography,
     discographyFormat,
     setDiscographyFormat,
+    albumRefs,
+    activeAlbum,
 
     filterDropDownRef,
     filterButtonRef,
@@ -41,56 +46,77 @@ export const Discography = ({
     showSortDropDown,
     handleShowSortDropDown,
     handleHideSortDropDown,
-  } = useDiscography({ setIsFilterDropDownOpen, setIsSortDropDownOpen });
+  } = useDiscography({
+    setIsFilterDropDownOpen,
+    setIsSortDropDownOpen,
+    scrollContainerRef,
+  });
 
   if (discography.length === 0) return <div>Загрузка...</div>;
   return (
     <>
-      <div className="sticky top-0 left-0 w-full flex px-5 py-3 bg-[#141414] z-10 gap-7 text-white">
-        <Link
-          to={`/artist/${discography[0].artists[0].id}`}
-          className="font-bold text-xl mr-auto hover:underline"
-        >
-          {discography[0].artists[0].name}
-        </Link>
-        <button
-          type="button"
-          ref={filterButtonRef}
-          onClick={
-            showFilterDropDown
-              ? handleHideFilterDropDown
-              : handleShowFilterDropDown
-          }
-          className="flex gap-2 text-zinc-400 items-center hover:text-white group cursor-pointer"
-        >
-          {artistMusicFilterList[selectedFilterByType].name}
-          <DropDownIcon
-            className={`w-4 h-4 ${
-              showFilterDropDown && "rotate-180"
-            } group-hover:fill-white`}
-          />
-        </button>
-        <button
-          type="button"
-          ref={sortButtonRef}
-          onClick={
-            showSortDropDown ? handleHideSortDropDown : handleShowSortDropDown
-          }
-          className="flex gap-2 text-zinc-400 text-sm items-center hover:text-white cursor-pointer hover:scale-105 transition-all"
-        >
-          {sorting.name}
-          {discographyFormat === "list" ? (
-            <ListIcon className="w-4 h-4" />
-          ) : (
-            <GridIcon className="w-4 h-4" />
+      <div className="sticky top-0 left-0 w-full flex flex-col px-5 py-3 bg-[#141414] z-10 text-white">
+        <div className="flex gap-2 font-bold text-xl h-16 items-center">
+          {activeAlbum && (
+            <button type="button">
+              <img src={playIcon} alt="play icon" className="w-12 h-12" />
+            </button>
           )}
-        </button>
+          {activeAlbum}
+        </div>
+        <div className="flex gap-7 w-full">
+          <Link
+            to={`/artist/${discography[0].artists[0].id}`}
+            className="font-bold text-xl mr-auto hover:underline"
+          >
+            {discography[0].artists[0].name}
+          </Link>
+          <button
+            type="button"
+            ref={filterButtonRef}
+            onClick={
+              showFilterDropDown
+                ? handleHideFilterDropDown
+                : handleShowFilterDropDown
+            }
+            className="flex gap-2 text-zinc-400 items-center hover:text-white group cursor-pointer"
+          >
+            {artistMusicFilterList[selectedFilterByType].name}
+            <DropDownIcon
+              className={`w-4 h-4 ${
+                showFilterDropDown && "rotate-180"
+              } group-hover:fill-white`}
+            />
+          </button>
+          <button
+            type="button"
+            ref={sortButtonRef}
+            onClick={
+              showSortDropDown ? handleHideSortDropDown : handleShowSortDropDown
+            }
+            className="flex gap-2 text-zinc-400 text-sm items-center hover:text-white cursor-pointer hover:scale-105 transition-all"
+          >
+            {sorting.name}
+            {discographyFormat === "list" ? (
+              <ListIcon className="w-4 h-4" />
+            ) : (
+              <GridIcon className="w-4 h-4" />
+            )}
+          </button>
+        </div>
       </div>
 
       {discographyFormat === "list" && (
         <div className="flex flex-col gap-10 px-5">
-          {discography.map((album) => (
-            <div key={album.id} className="flex flex-col gap-5">
+          {discography.map((album, index) => (
+            <div
+              key={album.id}
+              ref={(el) => {
+                albumRefs.current[index] = el;
+              }}
+              data-name={album.name}
+              className="flex flex-col gap-5"
+            >
               <div className="flex gap-5 px-7">
                 <img
                   src={album.images[0].url}
