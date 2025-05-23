@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useDiscographyData } from "../../../features/discography/hooks/useDiscographyData";
 import { useDropdown } from "../../../shared/lib/hooks/useDropDown";
+import { useState } from "react";
 
 export const useDiscography = ({
   setIsFilterDropDownOpen,
@@ -19,6 +20,7 @@ export const useDiscography = ({
   } = useDiscographyData({ filterFromUrl: filter, id });
   const filterDropdown = useDropdown(setIsFilterDropDownOpen);
   const sortDropdown = useDropdown(setIsSortDropDownOpen);
+  const [discographyFormat, setDiscographyFormat] = useState("list");
 
   return {
     filteredDiscography,
@@ -26,6 +28,8 @@ export const useDiscography = ({
     handleChangeFilter,
     sorting,
     sortDiscography,
+    discographyFormat,
+    setDiscographyFormat,
 
     filterDropDownRef: filterDropdown.dropDownRef,
     filterButtonRef: filterDropdown.buttonRef,

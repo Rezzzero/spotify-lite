@@ -10,6 +10,7 @@ export const CardList = ({
   isSearchPage,
   isCategoryPage,
   isSectionPage,
+  grid,
 }: {
   title?: string;
   titleLink?: string;
@@ -18,6 +19,7 @@ export const CardList = ({
   isSearchPage?: boolean;
   isCategoryPage?: boolean;
   isSectionPage?: boolean;
+  grid?: boolean;
 }) => {
   return (
     <div className="flex flex-col gap-3">
@@ -30,7 +32,7 @@ export const CardList = ({
         </Link>
       )}
       <div
-        className={`flex ${isCategoryPage ? "grid grid-cols-7" : ""} ${
+        className={`flex ${grid || isCategoryPage ? "grid grid-cols-7" : ""} ${
           isSectionPage ? "grid grid-cols-8" : ""
         }`}
       >
