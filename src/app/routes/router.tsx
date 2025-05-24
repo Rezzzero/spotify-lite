@@ -9,6 +9,8 @@ import { TestPage } from "../../pages/test/TestPage";
 import { AlbumPage } from "../../pages/album/AlbumPage";
 import { TrackPage } from "../../pages/track/TrackPage";
 import { DiscographyPage } from "../../pages/discography/DiscographyPage";
+import { LoginPage } from "../../pages/login/LoginPage";
+import { RegistationPage } from "../../pages/registration/RegistationPage";
 
 export const router = createBrowserRouter([
   {
@@ -52,5 +54,13 @@ export const router = createBrowserRouter([
         element: <TestPage />,
       },
     ],
+  },
+  {
+    path: Route.LOGIN,
+    element: <LoginPage />,
+  },
+  {
+    path: Route.REGISTRATION,
+    element: <RegistationPage />,
   },
 ]);

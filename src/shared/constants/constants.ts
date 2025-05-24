@@ -10,6 +10,8 @@ export const Route = {
   ARTIST: "/artist/:id",
   TRACK: "/track/:id",
   DISCOGRAPHY: "/artist/:id/discography/:filter",
+  LOGIN: "/login",
+  REGISTRATION: "/registration",
   TEST: "/test",
 };
 

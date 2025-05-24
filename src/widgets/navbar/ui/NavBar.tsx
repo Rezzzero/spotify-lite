@@ -11,7 +11,7 @@ export const NavBar = () => {
   const [isHovering, setIsHovering] = useState(false);
   const location = useLocation();
   return (
-    <div className="bg-black flex items-center gap-5 py-2 pl-5">
+    <div className="bg-black flex items-center gap-5 p-2 pl-5">
       <Logo />
       {location.pathname === Route.HOME && (
         <Link
@@ -35,6 +35,20 @@ export const NavBar = () => {
         </Link>
       )}
       <SearchInput />
+      <div className="flex items-center gap-3 ml-auto">
+        <Link
+          to={Route.REGISTRATION}
+          className="text-zinc-400 text-sm font-bold hover:text-white hover:scale-105"
+        >
+          Зарегистрироваться
+        </Link>
+        <Link
+          to={Route.LOGIN}
+          className="bg-white rounded-full text-black font-bold py-3 px-7 hover:bg-gray-100 hover:scale-105 cursor-pointer"
+        >
+          Войти
+        </Link>
+      </div>
     </div>
   );
 };
