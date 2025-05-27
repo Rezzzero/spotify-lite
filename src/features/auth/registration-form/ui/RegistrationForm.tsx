@@ -18,31 +18,35 @@ import { LinearProgress } from "@mui/material";
 import PrevArrowIcon from "../../../../shared/assets/auth/arrow-prev.svg?react";
 import { CustomInput } from "../../../../shared/ui/custom-input/CustomInput";
 import { isValidEmail } from "../../../../shared/lib/validators/IsValidEmail";
+import errorIcon from "../../../../shared/assets/auth/error-icon.svg";
 
 export const RegistrationForm = () => {
   const {
-    email,
+    userInfo,
+    userInfoBlur,
+    userInfoErrors,
+    stepErrors,
     handleChangeEmail,
-    password,
     handleChangePassword,
     handleNextStep,
     handlePrevStep,
     handleShowPassword,
     showPassword,
     step,
-    passwordErrors,
-    passwordInputBlur,
     onPasswordInputBlur,
-    emailInputBlur,
-    setEmailInputBlur,
+    onEmailInputBlur,
+    handleChangeUserName,
+    onUserNameInputBlur,
   } = useRegistration();
 
   const passwordInvalid =
-    !hasLetter(password) ||
-    !hasNumberOrSpecial(password) ||
-    password.length < 10;
+    !hasLetter(userInfo.password) ||
+    !hasNumberOrSpecial(userInfo.password) ||
+    userInfo.password.length < 10;
 
-  const emailInvalid = !isValidEmail(email);
+  const emailInvalid = !isValidEmail(userInfo.email);
+
+  const userNameInvalid = userInfo.userName.length < 1;
 
   return (
     <div
@@ -87,7 +91,7 @@ export const RegistrationForm = () => {
       <form
         action=""
         onSubmit={(e) => e.preventDefault()}
-        className={`flex flex-col gap-2 items-left ${
+        className={`flex flex-col gap-3 items-left ${
           step === 0 ? "border-b border-zinc-500" : "px-15"
         } pb-10 text-left w-full relative`}
       >
@@ -95,44 +99,54 @@ export const RegistrationForm = () => {
           <>
             <label htmlFor="email" className="font-bold">
               Электронная почта
+              <CustomInput
+                type="email"
+                id="email"
+                value={userInfo.email}
+                onChange={handleChangeEmail}
+                onInputBlur={onEmailInputBlur}
+                placeholder="name@domain.com"
+                inputBlured={userInfoBlur.email}
+                valueInvalid={emailInvalid}
+                stepError={stepErrors.email}
+              />
             </label>
-            <CustomInput
-              type="email"
-              id="email"
-              value={email}
-              onChange={handleChangeEmail}
-              onInputBlur={setEmailInputBlur}
-              placeholder="name@domain.com"
-              inputBlured={emailInputBlur}
-              valueInvalid={emailInvalid}
-            />
+            {userInfoErrors.email.status && (
+              <div className="flex items-start gap-1 mb-3">
+                <img src={errorIcon} alt="error icon" className="mt-[2px]" />
+                <p className="text-sm font-semibold text-rose-400">
+                  {userInfoErrors.email.message}
+                </p>
+              </div>
+            )}
           </>
         )}
         {step === 1 && (
           <>
             <label htmlFor="password" className="font-bold">
               Пароль
+              <CustomInput
+                type="password"
+                id="password"
+                value={userInfo.password}
+                onChange={handleChangePassword}
+                onInputBlur={onPasswordInputBlur}
+                placeholder=""
+                inputBlured={userInfoBlur.password}
+                valueInvalid={passwordInvalid}
+                showPassword={showPassword}
+                stepError={stepErrors.password}
+              />
             </label>
-            <CustomInput
-              type="password"
-              id="password"
-              value={password}
-              onChange={handleChangePassword}
-              onInputBlur={onPasswordInputBlur}
-              placeholder=""
-              inputBlured={passwordInputBlur}
-              valueInvalid={passwordInvalid}
-              showPassword={showPassword}
-            />
             {showPassword && (
               <ShowPasswordIcon
-                className="w-6 h-6 text-zinc-400 hover:text-white hover:scale-105 absolute right-18 top-11 cursor-pointer"
+                className="w-6 h-6 text-zinc-400 hover:text-white hover:scale-105 absolute right-18 top-10 cursor-pointer"
                 onClick={handleShowPassword}
               />
             )}
             {!showPassword && (
               <HidePasswordIcon
-                className="w-6 h-6 text-zinc-400 hover:text-white hover:scale-105 absolute right-18 top-11 cursor-pointer"
+                className="w-6 h-6 text-zinc-400 hover:text-white hover:scale-105 absolute right-18 top-10 cursor-pointer"
                 onClick={handleShowPassword}
               />
             )}
@@ -141,30 +155,34 @@ export const RegistrationForm = () => {
                 Пароль должен содержать как минимум:
               </h2>
               <div className="flex gap-1 items-start">
-                <RoundedCheckbox checked={hasLetter(password)} />
+                <RoundedCheckbox checked={hasLetter(userInfo.password)} />
                 <p
                   className={`text-sm leading-none ${
-                    passwordErrors.noLetter ? "text-rose-400" : ""
+                    userInfoErrors.password.noLetter ? "text-rose-400" : ""
                   } `}
                 >
                   1 букву
                 </p>
               </div>
               <div className="flex gap-1 items-start">
-                <RoundedCheckbox checked={hasNumberOrSpecial(password)} />
+                <RoundedCheckbox
+                  checked={hasNumberOrSpecial(userInfo.password)}
+                />
                 <p
                   className={`text-sm leading-none ${
-                    passwordErrors.noNumberOrSpecial ? "text-rose-400" : ""
+                    userInfoErrors.password.noNumberOrSpecial
+                      ? "text-rose-400"
+                      : ""
                   }`}
                 >
                   1 цифру или специальный символ (например, # ? ! &)
                 </p>
               </div>
               <div className="flex gap-1 items-start">
-                <RoundedCheckbox checked={password.length >= 10} />
+                <RoundedCheckbox checked={userInfo.password.length >= 10} />
                 <p
                   className={`text-sm leading-none ${
-                    passwordErrors.tooShort ? "text-rose-400" : ""
+                    userInfoErrors.password.tooShort ? "text-rose-400" : ""
                   }`}
                 >
                   10 символов
@@ -173,6 +191,38 @@ export const RegistrationForm = () => {
             </div>
           </>
         )}
+        {step === 2 && (
+          <>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="name" className="font-bold text-sm leading-none">
+                Название
+                <p className="text-sm font-normal text-zinc-400">
+                  Ваше имя появится в профиле.
+                </p>
+                <CustomInput
+                  type="text"
+                  id="name"
+                  value={userInfo.userName}
+                  onChange={handleChangeUserName}
+                  onInputBlur={onUserNameInputBlur}
+                  placeholder=""
+                  inputBlured={userInfoBlur.userName}
+                  valueInvalid={userNameInvalid}
+                  stepError={stepErrors.userName}
+                />
+              </label>
+              {userInfoErrors.userName.status && (
+                <div className="flex items-start gap-1 mb-3">
+                  <img src={errorIcon} alt="error icon" className="mt-[2px]" />
+                  <p className="text-sm font-semibold text-rose-400">
+                    {userInfoErrors.userName.message}
+                  </p>
+                </div>
+              )}
+            </div>
+          </>
+        )}
+
         <button
           type="button"
           onClick={handleNextStep}
