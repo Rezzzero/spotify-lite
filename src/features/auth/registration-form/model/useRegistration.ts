@@ -1,12 +1,27 @@
 import { useState } from "react";
 import { isValidEmail } from "../../../../shared/lib/validators/IsValidEmail";
+import {
+  hasLetter,
+  hasNumberOrSpecial,
+} from "../../../../shared/lib/validators/isValidPassword";
 
 export const useRegistration = () => {
-  const [emailError, setEmailError] = useState<{
+  const [emailInvalidError, setEmailInvalidError] = useState<{
     status: boolean;
     message: string;
   }>({ status: false, message: "" });
+  const [emailInputBlur, setEmailInputBlur] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
+  const [passwordErrors, setPasswordErrors] = useState<{
+    noLetter: boolean;
+    noNumberOrSpecial: boolean;
+    tooShort: boolean;
+  }>({
+    noLetter: false,
+    noNumberOrSpecial: false,
+    tooShort: false,
+  });
+  const [passwordInputBlur, setPasswordInputBlur] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [step, setStep] = useState<number>(0);
@@ -16,17 +31,42 @@ export const useRegistration = () => {
   };
 
   const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+
+    if (passwordInputBlur) {
+      setPasswordErrors({
+        noLetter: !hasLetter(newPassword),
+        noNumberOrSpecial: !hasNumberOrSpecial(newPassword),
+        tooShort: newPassword.length < 10,
+      });
+    }
   };
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
+  const onPasswordInputBlur = (blurred: boolean) => {
+    if (blurred) {
+      setPasswordInputBlur(true);
+      setPasswordErrors({
+        noLetter: !hasLetter(password),
+        noNumberOrSpecial: !hasNumberOrSpecial(password),
+        tooShort: password.length < 10,
+      });
+    }
+  };
+
+  const isValidPassword =
+    password.length >= 10 &&
+    hasLetter(password) &&
+    hasNumberOrSpecial(password);
+
   const handleNextStep = () => {
     if (step === 0) {
       if (!isValidEmail(email)) {
-        setEmailError({
+        setEmailInvalidError({
           status: true,
           message:
             "Адрес электронной почты недействителен. Убедитесь, что он указан в таком формате: example@email.com.",
@@ -35,10 +75,23 @@ export const useRegistration = () => {
         setStep(1);
       }
     }
+    if (step === 1) {
+      if (isValidPassword) {
+        setStep(2);
+      }
+    }
   };
 
   const handlePrevStep = () => {
     setStep((prev) => prev - 1);
+    if (step === 1) {
+      setPasswordErrors({
+        noLetter: false,
+        noNumberOrSpecial: false,
+        tooShort: false,
+      });
+      setPasswordInputBlur(false);
+    }
   };
 
   return {
@@ -49,8 +102,13 @@ export const useRegistration = () => {
     step,
     handleNextStep,
     handlePrevStep,
-    emailError,
+    emailInvalidError,
     showPassword,
     handleShowPassword,
+    passwordErrors,
+    passwordInputBlur,
+    onPasswordInputBlur,
+    emailInputBlur,
+    setEmailInputBlur,
   };
 };

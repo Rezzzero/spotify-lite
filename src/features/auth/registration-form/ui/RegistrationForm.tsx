@@ -16,6 +16,8 @@ import {
 } from "../../../../shared/lib/validators/isValidPassword";
 import { LinearProgress } from "@mui/material";
 import PrevArrowIcon from "../../../../shared/assets/auth/arrow-prev.svg?react";
+import { CustomInput } from "../../../../shared/ui/custom-input/CustomInput";
+import { isValidEmail } from "../../../../shared/lib/validators/IsValidEmail";
 
 export const RegistrationForm = () => {
   const {
@@ -28,7 +30,20 @@ export const RegistrationForm = () => {
     handleShowPassword,
     showPassword,
     step,
+    passwordErrors,
+    passwordInputBlur,
+    onPasswordInputBlur,
+    emailInputBlur,
+    setEmailInputBlur,
   } = useRegistration();
+
+  const passwordInvalid =
+    !hasLetter(password) ||
+    !hasNumberOrSpecial(password) ||
+    password.length < 10;
+
+  const emailInvalid = !isValidEmail(email);
+
   return (
     <div
       className={`flex flex-col items-center text-center w-[435px] ${
@@ -81,13 +96,15 @@ export const RegistrationForm = () => {
             <label htmlFor="email" className="font-bold">
               Электронная почта
             </label>
-            <input
+            <CustomInput
               type="email"
               id="email"
               value={email}
               onChange={handleChangeEmail}
+              onInputBlur={setEmailInputBlur}
               placeholder="name@domain.com"
-              className="rounded-sm w-full py-3 px-4 outline-none border border-zinc-500 hover:border-white mb-5"
+              inputBlured={emailInputBlur}
+              valueInvalid={emailInvalid}
             />
           </>
         )}
@@ -96,13 +113,16 @@ export const RegistrationForm = () => {
             <label htmlFor="password" className="font-bold">
               Пароль
             </label>
-            <input
-              type={showPassword ? "text" : "password"}
+            <CustomInput
+              type="password"
               id="password"
               value={password}
               onChange={handleChangePassword}
+              onInputBlur={onPasswordInputBlur}
               placeholder=""
-              className="rounded-sm w-full py-3 px-4 outline-none border border-zinc-500 hover:border-white mb-5"
+              inputBlured={passwordInputBlur}
+              valueInvalid={passwordInvalid}
+              showPassword={showPassword}
             />
             {showPassword && (
               <ShowPasswordIcon
@@ -122,17 +142,33 @@ export const RegistrationForm = () => {
               </h2>
               <div className="flex gap-1 items-start">
                 <RoundedCheckbox checked={hasLetter(password)} />
-                <p className="text-sm leading-none">1 букву</p>
+                <p
+                  className={`text-sm leading-none ${
+                    passwordErrors.noLetter ? "text-rose-400" : ""
+                  } `}
+                >
+                  1 букву
+                </p>
               </div>
               <div className="flex gap-1 items-start">
                 <RoundedCheckbox checked={hasNumberOrSpecial(password)} />
-                <p className="text-sm leading-none">
+                <p
+                  className={`text-sm leading-none ${
+                    passwordErrors.noNumberOrSpecial ? "text-rose-400" : ""
+                  }`}
+                >
                   1 цифру или специальный символ (например, # ? ! &)
                 </p>
               </div>
               <div className="flex gap-1 items-start">
                 <RoundedCheckbox checked={password.length >= 10} />
-                <p className="text-sm leading-none">10 символов</p>
+                <p
+                  className={`text-sm leading-none ${
+                    passwordErrors.tooShort ? "text-rose-400" : ""
+                  }`}
+                >
+                  10 символов
+                </p>
               </div>
             </div>
           </>
