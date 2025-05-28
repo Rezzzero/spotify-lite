@@ -13,17 +13,29 @@ import {
 
 const emailErrorMessage =
   "Адрес электронной почты недействителен. Убедитесь, что он указан в таком формате: example@email.com.";
+const userNameErrorMessage = "Укажите имя для своего профиля.";
+const birthdayErrorMessage = "Укажите дату рождения.";
+const monthErrorMessage = "Выберите месяц.";
+const yearErrorMessage =
+  "Год рождения должен состоять из четырех цифр (например, 1990)";
 
 export const useRegistration = () => {
   const [userInfo, setUserInfo] = useState<UserInfo>({
-    userName: "",
     email: "",
     password: "",
+    userName: "",
+    birthday: null,
+    monthOfBirthday: null,
+    yearOfBirthday: null,
+    gender: "",
   });
   const [userInfoBlur, setUserInfoBlur] = useState<UserInfoBlur>({
-    userName: false,
     email: false,
     password: false,
+    userName: false,
+    birthday: false,
+    monthOfBirthday: false,
+    yearOfBirthday: false,
   });
   const [userInfoErrors, setUserInfoErrors] = useState<UserInfoErrors>({
     email: {
@@ -39,11 +51,33 @@ export const useRegistration = () => {
       status: false,
       message: "",
     },
+    birthday: {
+      status: false,
+      message: "",
+    },
+    monthOfBirthday: {
+      status: false,
+      message: "",
+    },
+    yearOfBirthday: {
+      status: false,
+      message: "",
+    },
+    gender: {
+      status: false,
+      message: "",
+    },
   });
   const [stepErrors, setStepErrors] = useState<StepErrors>({
     email: false,
     password: false,
-    userName: false,
+    additionalInfo: {
+      userName: false,
+      birthday: false,
+      monthOfBirthday: false,
+      yearOfBirthday: false,
+      gender: false,
+    },
   });
   const [showPassword, setShowPassword] = useState(false);
   const [step, setStep] = useState(0);
@@ -124,14 +158,20 @@ export const useRegistration = () => {
   const handleChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newUserName = e.target.value;
     setUserInfo({ ...userInfo, userName: newUserName });
-    setStepErrors({ ...stepErrors, userName: false });
+    setStepErrors((prev) => ({
+      ...prev,
+      additionalInfo: {
+        ...prev.additionalInfo,
+        userName: false,
+      },
+    }));
 
     if (userInfoBlur.userName) {
       setUserInfoErrors({
         ...userInfoErrors,
         userName: {
           status: !newUserName,
-          message: newUserName ? "" : "Укажите имя для своего профиля.",
+          message: newUserName ? "" : userNameErrorMessage,
         },
       });
     }
@@ -144,7 +184,113 @@ export const useRegistration = () => {
         ...userInfoErrors,
         userName: {
           status: true,
-          message: "Укажите имя для своего профиля.",
+          message: userNameErrorMessage,
+        },
+      });
+    }
+  };
+
+  const handleChangeBirthday = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newBirthday = e.target.value;
+    setUserInfo({ ...userInfo, birthday: Number(newBirthday) });
+    setStepErrors((prev) => ({
+      ...prev,
+      additionalInfo: {
+        ...prev.additionalInfo,
+        birthday: false,
+      },
+    }));
+
+    if (userInfoBlur.birthday) {
+      setUserInfoErrors({
+        ...userInfoErrors,
+        birthday: {
+          status: !newBirthday,
+          message: newBirthday ? "" : birthdayErrorMessage,
+        },
+      });
+    }
+  };
+
+  const onBirthdayInputBlur = () => {
+    if (!userInfo.birthday) {
+      setUserInfoErrors({
+        ...userInfoErrors,
+        birthday: {
+          status: true,
+          message: birthdayErrorMessage,
+        },
+      });
+    }
+  };
+
+  const handleChangeYearOfBirthday = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newYearOfBirthday = e.target.value;
+    setUserInfo({ ...userInfo, yearOfBirthday: Number(newYearOfBirthday) });
+    setStepErrors((prev) => ({
+      ...prev,
+      additionalInfo: {
+        ...prev.additionalInfo,
+        yearOfBirthday: false,
+      },
+    }));
+
+    if (userInfoBlur.yearOfBirthday) {
+      setUserInfoErrors({
+        ...userInfoErrors,
+        yearOfBirthday: {
+          status: !newYearOfBirthday,
+          message: newYearOfBirthday ? "" : yearErrorMessage,
+        },
+      });
+    }
+  };
+
+  const onYearOfBirthdayInputBlur = () => {
+    if (!userInfo.yearOfBirthday) {
+      setUserInfoErrors({
+        ...userInfoErrors,
+        yearOfBirthday: {
+          status: true,
+          message: yearErrorMessage,
+        },
+      });
+    }
+  };
+
+  const handleChangeMonthOfBirthday = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const newMonthOfBirthday = e.target.value;
+    setUserInfo({ ...userInfo, monthOfBirthday: Number(newMonthOfBirthday) });
+    setStepErrors((prev) => ({
+      ...prev,
+      additionalInfo: {
+        ...prev.additionalInfo,
+        monthOfBirthday: false,
+      },
+    }));
+
+    if (userInfoBlur.monthOfBirthday) {
+      setUserInfoErrors({
+        ...userInfoErrors,
+        monthOfBirthday: {
+          status: !newMonthOfBirthday,
+          message: newMonthOfBirthday ? "" : monthErrorMessage,
+        },
+      });
+    }
+  };
+
+  const onMonthOfBirthdayInputBlur = () => {
+    if (!userInfo.monthOfBirthday) {
+      setUserInfoErrors({
+        ...userInfoErrors,
+        monthOfBirthday: {
+          status: true,
+          message: monthErrorMessage,
         },
       });
     }
@@ -206,7 +352,13 @@ export const useRegistration = () => {
           message: "",
         },
       });
-      setStepErrors({ ...stepErrors, userName: false });
+      setStepErrors((prev) => ({
+        ...prev,
+        additionalInfo: {
+          ...prev.additionalInfo,
+          userName: false,
+        },
+      }));
     }
   };
 
@@ -226,5 +378,11 @@ export const useRegistration = () => {
     onEmailInputBlur,
     handleChangeUserName,
     onUserNameInputBlur,
+    handleChangeBirthday,
+    onBirthdayInputBlur,
+    handleChangeMonthOfBirthday,
+    onMonthOfBirthdayInputBlur,
+    handleChangeYearOfBirthday,
+    onYearOfBirthdayInputBlur,
   };
 };

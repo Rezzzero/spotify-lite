@@ -1,7 +1,11 @@
 export interface UserInfo {
-  userName: string;
   email: string;
   password: string;
+  userName: string;
+  birthday: number | null;
+  monthOfBirthday: number | null;
+  yearOfBirthday: number | null;
+  gender: string;
 }
 
 export interface UserInfoErrors {
@@ -18,16 +22,41 @@ export interface UserInfoErrors {
     status: boolean;
     message: string;
   };
+  birthday: {
+    status: boolean;
+    message: string;
+  };
+  monthOfBirthday: {
+    status: boolean;
+    message: string;
+  };
+  yearOfBirthday: {
+    status: boolean;
+    message: string;
+  };
+  gender: {
+    status: boolean;
+    message: string;
+  };
 }
 
 export interface UserInfoBlur {
-  userName: boolean;
   email: boolean;
   password: boolean;
+  userName: boolean;
+  birthday: boolean;
+  monthOfBirthday: boolean;
+  yearOfBirthday: boolean;
 }
 
 export interface StepErrors {
   email: boolean;
   password: boolean;
-  userName: boolean;
+  additionalInfo: {
+    userName: boolean;
+    birthday: boolean;
+    monthOfBirthday: boolean;
+    yearOfBirthday: boolean;
+    gender: boolean;
+  };
 }

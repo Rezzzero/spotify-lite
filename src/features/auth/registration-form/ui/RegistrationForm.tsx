@@ -19,6 +19,7 @@ import PrevArrowIcon from "../../../../shared/assets/auth/arrow-prev.svg?react";
 import { CustomInput } from "../../../../shared/ui/custom-input/CustomInput";
 import { isValidEmail } from "../../../../shared/lib/validators/IsValidEmail";
 import errorIcon from "../../../../shared/assets/auth/error-icon.svg";
+import { SelectMonth } from "../../../../shared/ui/month-select/SelectMonth";
 
 export const RegistrationForm = () => {
   const {
@@ -37,6 +38,12 @@ export const RegistrationForm = () => {
     onEmailInputBlur,
     handleChangeUserName,
     onUserNameInputBlur,
+    handleChangeBirthday,
+    onBirthdayInputBlur,
+    handleChangeMonthOfBirthday,
+    onMonthOfBirthdayInputBlur,
+    handleChangeYearOfBirthday,
+    onYearOfBirthdayInputBlur,
   } = useRegistration();
 
   const passwordInvalid =
@@ -47,6 +54,15 @@ export const RegistrationForm = () => {
   const emailInvalid = !isValidEmail(userInfo.email);
 
   const userNameInvalid = userInfo.userName.length < 1;
+
+  const dayInvalid =
+    userInfo.birthday === null ||
+    (userInfo.birthday < 1 && userInfo.birthday > 31);
+
+  const yearInvalid =
+    userInfo.yearOfBirthday === null ||
+    (userInfo.yearOfBirthday < 1900 &&
+      userInfo.yearOfBirthday > new Date().getFullYear());
 
   return (
     <div
@@ -194,21 +210,24 @@ export const RegistrationForm = () => {
         {step === 2 && (
           <>
             <div className="flex flex-col gap-2">
-              <label htmlFor="name" className="font-bold text-sm leading-none">
+              <label
+                htmlFor="username"
+                className="font-bold text-sm leading-none"
+              >
                 Название
                 <p className="text-sm font-normal text-zinc-400">
                   Ваше имя появится в профиле.
                 </p>
                 <CustomInput
                   type="text"
-                  id="name"
+                  id="username"
                   value={userInfo.userName}
                   onChange={handleChangeUserName}
                   onInputBlur={onUserNameInputBlur}
                   placeholder=""
                   inputBlured={userInfoBlur.userName}
                   valueInvalid={userNameInvalid}
-                  stepError={stepErrors.userName}
+                  stepError={stepErrors.additionalInfo.userName}
                 />
               </label>
               {userInfoErrors.userName.status && (
@@ -216,6 +235,67 @@ export const RegistrationForm = () => {
                   <img src={errorIcon} alt="error icon" className="mt-[2px]" />
                   <p className="text-sm font-semibold text-rose-400">
                     {userInfoErrors.userName.message}
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="birthdate"
+                className="font-bold text-sm leading-none"
+              >
+                Дата рождения
+                <p className="text-sm font-normal text-zinc-400">
+                  Зачем указывать дату рождения?
+                </p>
+              </label>
+              <div className="flex gap-2">
+                <CustomInput
+                  type="number"
+                  id="birthdate"
+                  value={userInfo.birthday === null ? "" : userInfo.birthday}
+                  onChange={handleChangeBirthday}
+                  onInputBlur={onBirthdayInputBlur}
+                  placeholder="дд"
+                  inputBlured={userInfoBlur.birthday}
+                  valueInvalid={dayInvalid}
+                  stepError={stepErrors.additionalInfo.birthday}
+                />
+                <SelectMonth
+                  selectMonth={handleChangeMonthOfBirthday}
+                  onBlur={onMonthOfBirthdayInputBlur}
+                />
+                <CustomInput
+                  type="number"
+                  id="yearOfBirthday"
+                  value={
+                    userInfo.yearOfBirthday === null
+                      ? ""
+                      : userInfo.yearOfBirthday
+                  }
+                  onChange={handleChangeYearOfBirthday}
+                  onInputBlur={onYearOfBirthdayInputBlur}
+                  placeholder="гггг"
+                  inputBlured={userInfoBlur.yearOfBirthday}
+                  valueInvalid={yearInvalid}
+                  stepError={stepErrors.additionalInfo.yearOfBirthday}
+                />
+              </div>
+            </div>
+            <div>
+              {userInfoErrors.birthday.status && (
+                <div className="flex items-start gap-1 mb-3">
+                  <img src={errorIcon} alt="error icon" className="mt-[2px]" />
+                  <p className="text-sm font-semibold text-rose-400">
+                    {userInfoErrors.birthday.message}
+                  </p>
+                </div>
+              )}
+              {userInfoErrors.yearOfBirthday.status && (
+                <div className="flex items-start gap-1 mb-3">
+                  <img src={errorIcon} alt="error icon" className="mt-[2px]" />
+                  <p className="text-sm font-semibold text-rose-400">
+                    {userInfoErrors.yearOfBirthday.message}
                   </p>
                 </div>
               )}
