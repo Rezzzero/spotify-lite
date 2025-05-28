@@ -296,6 +296,17 @@ export const useRegistration = () => {
     }
   };
 
+  const handleChangeGender = (gender: string) => {
+    setUserInfo({ ...userInfo, gender });
+    setStepErrors((prev) => ({
+      ...prev,
+      additionalInfo: {
+        ...prev.additionalInfo,
+        gender: false,
+      },
+    }));
+  };
+
   const handleNextStep = () => {
     if (step === 0) {
       if (!isValidEmail(userInfo.email)) {
@@ -384,5 +395,6 @@ export const useRegistration = () => {
     onMonthOfBirthdayInputBlur,
     handleChangeYearOfBirthday,
     onYearOfBirthdayInputBlur,
+    handleChangeGender,
   };
 };

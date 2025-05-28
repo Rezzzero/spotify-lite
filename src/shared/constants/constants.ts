@@ -242,3 +242,26 @@ export const MONTHS = [
   "Ноябрь",
   "Декабрь",
 ];
+
+export const GENDERS = {
+  MALE: {
+    name: "Мужщина",
+    value: "male",
+  },
+  FEMALE: {
+    name: "Женщина",
+    value: "female",
+  },
+  ANOTHER_VARIANT: {
+    name: "Другой вариант",
+    value: "another variant",
+  },
+  ANOTHER: {
+    name: "Другое",
+    value: "another",
+  },
+  DONT_WANT_TO_SAY: {
+    name: "Не хочу отвечать",
+    value: "dont want to say",
+  },
+};

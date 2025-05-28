@@ -5,7 +5,7 @@ import googleLogo from "/google-auth-logo.svg";
 import facebookLogo from "/facebook-auth-logo.svg";
 import appleLogo from "/apple-auth-logo.svg";
 import { Link } from "react-router-dom";
-import { Route } from "../../../../shared/constants/constants";
+import { GENDERS, Route } from "../../../../shared/constants/constants";
 import { useRegistration } from "../model/useRegistration";
 import ShowPasswordIcon from "../../../../shared/assets/auth/password-show-icon.svg?react";
 import HidePasswordIcon from "../../../../shared/assets/auth/password-hide-icon.svg?react";
@@ -20,6 +20,7 @@ import { CustomInput } from "../../../../shared/ui/custom-input/CustomInput";
 import { isValidEmail } from "../../../../shared/lib/validators/IsValidEmail";
 import errorIcon from "../../../../shared/assets/auth/error-icon.svg";
 import { SelectMonth } from "../../../../shared/ui/month-select/SelectMonth";
+import { GenderCheckbox } from "../../../../shared/ui/gender-checkbox/GenderCheckbox";
 
 export const RegistrationForm = () => {
   const {
@@ -44,6 +45,7 @@ export const RegistrationForm = () => {
     onMonthOfBirthdayInputBlur,
     handleChangeYearOfBirthday,
     onYearOfBirthdayInputBlur,
+    handleChangeGender,
   } = useRegistration();
 
   const passwordInvalid =
@@ -299,6 +301,28 @@ export const RegistrationForm = () => {
                   </p>
                 </div>
               )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <p className="font-bold text-sm leading-none">Пол</p>
+              <p className="text-sm font-normal text-zinc-400">
+                Мы учитываем пол при подборе персональных рекомендаций и
+                рекламы.
+              </p>
+              <div className="flex flex-wrap">
+                {Object.values(GENDERS).map((gender) => (
+                  <button
+                    key={gender.value}
+                    type="button"
+                    onClick={() => handleChangeGender(gender.value)}
+                    className="flex gap-2 items-center mr-5"
+                  >
+                    <GenderCheckbox
+                      checked={gender.value === userInfo.gender}
+                    />
+                    {gender.name}
+                  </button>
+                ))}
+              </div>
             </div>
           </>
         )}
