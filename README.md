@@ -1,54 +1,62 @@
-# React + TypeScript + Vite
+# 🎧 Spotify Lite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Небольшой, но мощный клон Spotify. Здесь уже есть поиск, страницы артистов, треков, альбомов и дискографий. Работает быстро, выглядит аккуратно и с каждым коммитом всё больше похож на настоящий музыкальный сервис.
 
-Currently, two official plugins are available:
+## 🚀 Технологии
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ⚛️ React + Vite + TypeScript
+- 🎨 TailwindCSS + Material UI
+- 🌐 React Router DOM
+- 🎧 Swiper JS (для слайдеров)
+- 🎨 react-extract-colors (генерация палитры из обложек)
+- 📡 Axios
+- ⚡ Redis
+- 🔀 concurrently (одновременный запуск клиента и сервера)
 
-## Expanding the ESLint configuration
+## 🔗 Используемые API
+- [Spotify API](https://developer.spotify.com/documentation/web-api/) — данные о треках, артистах, плейлистах, альбомах, поиск и т.д.
+- [Upstash Redis](https://upstash.com/) — кеширование данных (популярные артисты, треки и новые релизы)
+- [SoundCloud (в планах)](https://developers.soundcloud.com/) — получение mp3 треков для плеера
+- [Supabase (в планах)](https://supabase.com/) — авторизация, ведение плейлистов и тд.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ Скрипты
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+# Запуск клиента
+npm run client
+
+# Запуск сервера
+npm run server
+
+# Одновременный запуск клиента и сервера
+npm run dev
+
+# Сборка проекта
+npm run build
+
+# Предпросмотр production-сборки
+npm run preview
+
+# Линтинг
+npm run lint
+
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📦 Установка
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash 
+git clone https://github.com/Rezzzero/spotify-lite.git
+cd spotify-lite
+npm install
+npm run dev
 ```
+
+## 💡 Возможности
+- 🔎 Поиск треков, артистов и альбомов
+- 👤 Страницы артистов с дискографией
+- 🎵 Просмотр треков и альбомов
+
+## 📌 Планы
+- 🎧 Аудиоплеер
+- ❤️ Ведение плейлистов и добавление треков в избранные
+
