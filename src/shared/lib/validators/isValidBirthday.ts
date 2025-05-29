@@ -7,3 +7,7 @@ export const isValidDate = (day: number, month: number, year: number) => {
     date.getDate() === day
   );
 };
+
+export const isValidDay = (day: number) => {
+  return day > 0 && day <= 31;
+};

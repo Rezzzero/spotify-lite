@@ -49,8 +49,8 @@ export const RegistrationForm = () => {
   const userNameInvalid = userInfo.userName.length < 1;
 
   const dayInvalid =
-    userInfo.birthday === null ||
-    (userInfo.birthday < 1 && userInfo.birthday > 31);
+    userInfo.birthday !== null &&
+    (userInfo.birthday < 1 || userInfo.birthday > 31);
 
   const yearInvalid =
     userInfo.yearOfBirthday === null ||

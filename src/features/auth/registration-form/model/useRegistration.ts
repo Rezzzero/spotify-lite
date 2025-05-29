@@ -4,6 +4,7 @@ import {
   hasLetter,
   hasNumberOrSpecial,
 } from "../../../../shared/lib/validators/isValidPassword";
+import { isValidDay } from "../../../../shared/lib/validators/isValidBirthday";
 import { UserInfoKey } from "./types/NewUser";
 import { ERROR_MESSAGES } from "../../../../shared/constants/errors";
 import {
@@ -62,7 +63,11 @@ export const useRegistration = () => {
       }
 
       const isValid =
-        field === "email" ? isValidEmail(newValue) : Boolean(newValue);
+        field === "email"
+          ? isValidEmail(newValue)
+          : field === "birthday"
+          ? isValidDay(Number(newValue))
+          : Boolean(newValue);
 
       setUserInfoErrors((prev) => ({
         ...prev,
@@ -91,10 +96,12 @@ export const useRegistration = () => {
     if (field === "email") checkEmailErrors();
     if (field === "password") checkPasswordErrors();
     if (field === "monthOfBirthday") checkMonthError();
+    if (field === "birthday") checkBirthdayError();
     if (
       field !== "email" &&
       field !== "password" &&
-      field !== "monthOfBirthday"
+      field !== "monthOfBirthday" &&
+      field !== "birthday"
     ) {
       if (!value) {
         setUserInfoErrors({
@@ -127,6 +134,23 @@ export const useRegistration = () => {
         tooShort: userInfo.password.length < 10,
       },
     });
+  };
+
+  const dayNeedToBeSelected =
+    userInfo.birthday === null &&
+    userInfo.yearOfBirthday !== null &&
+    userInfo.monthOfBirthday !== 0;
+
+  const checkBirthdayError = () => {
+    if (dayNeedToBeSelected) {
+      setUserInfoErrors({
+        ...userInfoErrors,
+        birthday: {
+          status: true,
+          message: ERROR_MESSAGES.birthday,
+        },
+      });
+    }
   };
 
   const checkMonthError = () => {
@@ -194,12 +218,14 @@ export const useRegistration = () => {
       setUserInfoErrors({
         ...userInfoErrors,
         userName: initialUserInfoErrors.userName,
+        birthday: initialUserInfoErrors.birthday,
       });
       setStepErrors((prev) => ({
         ...prev,
         additionalInfo: {
           ...prev.additionalInfo,
           userName: false,
+          birthday: false,
         },
       }));
     }
