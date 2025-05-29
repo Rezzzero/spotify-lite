@@ -21,6 +21,10 @@ export const useRegistration = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [step, setStep] = useState(0);
 
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleChangeUserInfo = (
     eOrValue: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | string,
     field: UserInfoKey,
@@ -86,7 +90,12 @@ export const useRegistration = () => {
     const value = userInfo[field];
     if (field === "email") checkEmailErrors();
     if (field === "password") checkPasswordErrors();
-    if (field !== "email" && field !== "password") {
+    if (field === "monthOfBirthday") checkMonthError();
+    if (
+      field !== "email" &&
+      field !== "password" &&
+      field !== "monthOfBirthday"
+    ) {
       if (!value) {
         setUserInfoErrors({
           ...userInfoErrors,
@@ -109,10 +118,6 @@ export const useRegistration = () => {
     });
   };
 
-  const handleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
   const checkPasswordErrors = () => {
     setUserInfoErrors({
       ...userInfoErrors,
@@ -122,6 +127,22 @@ export const useRegistration = () => {
         tooShort: userInfo.password.length < 10,
       },
     });
+  };
+
+  const checkMonthError = () => {
+    if (
+      userInfo.monthOfBirthday === 0 &&
+      userInfo.yearOfBirthday !== null &&
+      userInfo.birthday !== null
+    ) {
+      setUserInfoErrors({
+        ...userInfoErrors,
+        monthOfBirthday: {
+          status: true,
+          message: ERROR_MESSAGES.month,
+        },
+      });
+    }
   };
 
   const isValidPassword =

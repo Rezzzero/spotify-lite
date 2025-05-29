@@ -10,7 +10,7 @@ export const initialUserInfo: UserInfo = {
   password: "",
   userName: "",
   birthday: null,
-  monthOfBirthday: null,
+  monthOfBirthday: 0,
   yearOfBirthday: null,
   gender: "",
 };

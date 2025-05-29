@@ -57,6 +57,11 @@ export const RegistrationForm = () => {
     (userInfo.yearOfBirthday < 1900 &&
       userInfo.yearOfBirthday > new Date().getFullYear());
 
+  const monthNeedToBeSelected =
+    userInfo.monthOfBirthday === 0 &&
+    userInfo.birthday !== null &&
+    userInfo.yearOfBirthday !== null;
+
   return (
     <div
       className={`flex flex-col items-center text-center w-[435px] ${
@@ -282,9 +287,12 @@ export const RegistrationForm = () => {
                     ERROR_MESSAGES.month,
                     true
                   )}
+                  selectBlured={userInfoBlur.monthOfBirthday}
+                  needToSelect={monthNeedToBeSelected}
                   onBlur={() =>
                     onUserInfoBlur("monthOfBirthday", ERROR_MESSAGES.month)
                   }
+                  stepError={stepErrors.additionalInfo.monthOfBirthday}
                 />
                 <CustomInput
                   type="number"
@@ -316,6 +324,14 @@ export const RegistrationForm = () => {
                   <img src={errorIcon} alt="error icon" className="mt-[2px]" />
                   <p className="text-sm font-semibold text-rose-400">
                     {userInfoErrors.birthday.message}
+                  </p>
+                </div>
+              )}
+              {userInfoErrors.monthOfBirthday.status && (
+                <div className="flex items-start gap-1 mb-3">
+                  <img src={errorIcon} alt="error icon" className="mt-[2px]" />
+                  <p className="text-sm font-semibold text-rose-400">
+                    {userInfoErrors.monthOfBirthday.message}
                   </p>
                 </div>
               )}
