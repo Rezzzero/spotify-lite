@@ -21,6 +21,7 @@ import { isValidEmail } from "../../../../shared/lib/validators/IsValidEmail";
 import errorIcon from "../../../../shared/assets/auth/error-icon.svg";
 import { SelectMonth } from "../../../../shared/ui/month-select/SelectMonth";
 import { GenderCheckbox } from "../../../../shared/ui/gender-checkbox/GenderCheckbox";
+import { ERROR_MESSAGES } from "../../../../shared/constants/errors";
 
 export const RegistrationForm = () => {
   const {
@@ -28,24 +29,14 @@ export const RegistrationForm = () => {
     userInfoBlur,
     userInfoErrors,
     stepErrors,
-    handleChangeEmail,
-    handleChangePassword,
+    showPassword,
+    step,
     handleNextStep,
     handlePrevStep,
     handleShowPassword,
-    showPassword,
-    step,
-    onPasswordInputBlur,
-    onEmailInputBlur,
-    handleChangeUserName,
-    onUserNameInputBlur,
-    handleChangeBirthday,
-    onBirthdayInputBlur,
-    handleChangeMonthOfBirthday,
-    onMonthOfBirthdayInputBlur,
-    handleChangeYearOfBirthday,
-    onYearOfBirthdayInputBlur,
-    handleChangeGender,
+    onUserInfoBlur,
+    handleChangeUserInfo,
+    createHandleChange,
   } = useRegistration();
 
   const passwordInvalid =
@@ -121,8 +112,15 @@ export const RegistrationForm = () => {
                 type="email"
                 id="email"
                 value={userInfo.email}
-                onChange={handleChangeEmail}
-                onInputBlur={onEmailInputBlur}
+                onChange={createHandleChange(
+                  "email",
+                  false,
+                  ERROR_MESSAGES.email,
+                  true
+                )}
+                onInputBlur={() =>
+                  onUserInfoBlur("email", ERROR_MESSAGES.email)
+                }
                 placeholder="name@domain.com"
                 inputBlured={userInfoBlur.email}
                 valueInvalid={emailInvalid}
@@ -147,8 +145,8 @@ export const RegistrationForm = () => {
                 type="password"
                 id="password"
                 value={userInfo.password}
-                onChange={handleChangePassword}
-                onInputBlur={onPasswordInputBlur}
+                onChange={createHandleChange("password", false, "", true)}
+                onInputBlur={() => onUserInfoBlur("password")}
                 placeholder=""
                 inputBlured={userInfoBlur.password}
                 valueInvalid={passwordInvalid}
@@ -224,8 +222,15 @@ export const RegistrationForm = () => {
                   type="text"
                   id="username"
                   value={userInfo.userName}
-                  onChange={handleChangeUserName}
-                  onInputBlur={onUserNameInputBlur}
+                  onChange={createHandleChange(
+                    "userName",
+                    false,
+                    ERROR_MESSAGES.userName,
+                    true
+                  )}
+                  onInputBlur={() =>
+                    onUserInfoBlur("userName", ERROR_MESSAGES.userName)
+                  }
                   placeholder=""
                   inputBlured={userInfoBlur.userName}
                   valueInvalid={userNameInvalid}
@@ -251,21 +256,35 @@ export const RegistrationForm = () => {
                   Зачем указывать дату рождения?
                 </p>
               </label>
-              <div className="flex gap-2">
+              <div className="grid grid-cols-[60px_auto_80px] items-center gap-2">
                 <CustomInput
                   type="number"
                   id="birthdate"
                   value={userInfo.birthday === null ? "" : userInfo.birthday}
-                  onChange={handleChangeBirthday}
-                  onInputBlur={onBirthdayInputBlur}
+                  onChange={createHandleChange(
+                    "birthday",
+                    true,
+                    ERROR_MESSAGES.birthday,
+                    true
+                  )}
+                  onInputBlur={() =>
+                    onUserInfoBlur("birthday", ERROR_MESSAGES.birthday)
+                  }
                   placeholder="дд"
                   inputBlured={userInfoBlur.birthday}
                   valueInvalid={dayInvalid}
                   stepError={stepErrors.additionalInfo.birthday}
                 />
                 <SelectMonth
-                  selectMonth={handleChangeMonthOfBirthday}
-                  onBlur={onMonthOfBirthdayInputBlur}
+                  selectMonth={createHandleChange(
+                    "monthOfBirthday",
+                    true,
+                    ERROR_MESSAGES.month,
+                    true
+                  )}
+                  onBlur={() =>
+                    onUserInfoBlur("monthOfBirthday", ERROR_MESSAGES.month)
+                  }
                 />
                 <CustomInput
                   type="number"
@@ -275,8 +294,15 @@ export const RegistrationForm = () => {
                       ? ""
                       : userInfo.yearOfBirthday
                   }
-                  onChange={handleChangeYearOfBirthday}
-                  onInputBlur={onYearOfBirthdayInputBlur}
+                  onChange={createHandleChange(
+                    "yearOfBirthday",
+                    true,
+                    ERROR_MESSAGES.year,
+                    true
+                  )}
+                  onInputBlur={() =>
+                    onUserInfoBlur("yearOfBirthday", ERROR_MESSAGES.year)
+                  }
                   placeholder="гггг"
                   inputBlured={userInfoBlur.yearOfBirthday}
                   valueInvalid={yearInvalid}
@@ -302,19 +328,27 @@ export const RegistrationForm = () => {
                 </div>
               )}
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 mb-7">
               <p className="font-bold text-sm leading-none">Пол</p>
               <p className="text-sm font-normal text-zinc-400">
                 Мы учитываем пол при подборе персональных рекомендаций и
                 рекламы.
               </p>
-              <div className="flex flex-wrap">
+              <div className="flex flex-wrap gap-3">
                 {Object.values(GENDERS).map((gender) => (
                   <button
                     key={gender.value}
                     type="button"
-                    onClick={() => handleChangeGender(gender.value)}
-                    className="flex gap-2 items-center mr-5"
+                    onClick={() =>
+                      handleChangeUserInfo(
+                        gender.value,
+                        "gender",
+                        true,
+                        "",
+                        false
+                      )
+                    }
+                    className="flex gap-3 items-center text-sm mr-5 group"
                   >
                     <GenderCheckbox
                       checked={gender.value === userInfo.gender}

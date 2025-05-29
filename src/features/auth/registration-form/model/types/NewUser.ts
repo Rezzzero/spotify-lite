@@ -47,6 +47,7 @@ export interface UserInfoBlur {
   birthday: boolean;
   monthOfBirthday: boolean;
   yearOfBirthday: boolean;
+  gender: boolean;
 }
 
 export interface StepErrors {
@@ -60,3 +61,5 @@ export interface StepErrors {
     gender: boolean;
   };
 }
+
+export type UserInfoKey = keyof UserInfo;

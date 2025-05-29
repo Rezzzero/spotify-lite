@@ -232,7 +232,7 @@ export const MONTHS = [
   "Январь",
   "Февраль",
   "Март",
-  "Фпрель",
+  "Апрель",
   "Май",
   "Июнь",
   "Июль",
@@ -245,7 +245,7 @@ export const MONTHS = [
 
 export const GENDERS = {
   MALE: {
-    name: "Мужщина",
+    name: "Мужчина",
     value: "male",
   },
   FEMALE: {
