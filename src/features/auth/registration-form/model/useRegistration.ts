@@ -1,204 +1,75 @@
 import { useState } from "react";
-import { isValidEmail } from "../../../../shared/lib/validators/IsValidEmail";
-import {
-  hasLetter,
-  hasNumberOrSpecial,
-} from "../../../../shared/lib/validators/isValidPassword";
-import { isValidDay } from "../../../../shared/lib/validators/isValidBirthday";
+import { useForm } from "react-hook-form";
+import { initialUserInfoBlur } from "./state/InitialStates";
 import { UserInfoKey } from "./types/NewUser";
-import { ERROR_MESSAGES } from "../../../../shared/constants/errors";
-import {
-  initialStepErrors,
-  initialUserInfo,
-  initialUserInfoBlur,
-  initialUserInfoErrors,
-} from "./state/InitialStates";
 
-export const useRegistration = () => {
-  const [userInfo, setUserInfo] = useState(initialUserInfo);
-  const [userInfoBlur, setUserInfoBlur] = useState(initialUserInfoBlur);
-  const [userInfoErrors, setUserInfoErrors] = useState(initialUserInfoErrors);
-  const [stepErrors, setStepErrors] = useState(initialStepErrors);
-  const [showPassword, setShowPassword] = useState(false);
+export type FormValues = {
+  email: string;
+  password: string;
+  userName: string;
+  birthday: number;
+  monthOfBirthday: number;
+  yearOfBirthday: number;
+  gender: string;
+};
+
+export const useRegistrationForm = () => {
   const [step, setStep] = useState(0);
+  const [userInfoBlur, setUserInfoBlur] = useState(initialUserInfoBlur);
+  const [showPassword, setShowPassword] = useState(false);
+  const {
+    register,
+    trigger,
+    setValue,
+    watch,
+    clearErrors,
+    formState: { errors },
+  } = useForm<FormValues>();
+
+  const passwordValue = watch("password", "");
+
+  const currentGender = watch("gender", "");
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleChangeUserInfo = (
-    eOrValue: React.ChangeEvent<HTMLInputElement | HTMLSelectElement> | string,
-    field: UserInfoKey,
-    additional: boolean,
-    errorMessage: string,
-    blur: boolean
-  ) => {
-    const newValue =
-      typeof eOrValue === "string" ? eOrValue : eOrValue.target.value;
-    setUserInfo((prev) => ({ ...prev, [field]: newValue }));
-
-    if (additional) {
-      setStepErrors((prev) => ({
-        ...prev,
-        additionalInfo: {
-          ...prev.additionalInfo,
-          [field]: false,
-        },
-      }));
-    } else {
-      setStepErrors({ ...stepErrors, [field]: false });
-    }
-
-    if (userInfoBlur[field] && blur) {
-      if (field === "password") {
-        setUserInfoErrors((prev) => ({
-          ...prev,
-          password: {
-            noLetter: !hasLetter(newValue),
-            noNumberOrSpecial: !hasNumberOrSpecial(newValue),
-            tooShort: newValue.length < 10,
-          },
-        }));
-        return;
-      }
-
-      const isValid =
-        field === "email"
-          ? isValidEmail(newValue)
-          : field === "birthday"
-          ? isValidDay(Number(newValue))
-          : Boolean(newValue);
-
-      setUserInfoErrors((prev) => ({
-        ...prev,
-        [field]: {
-          status: !isValid,
-          message: isValid ? "" : errorMessage,
-        },
-      }));
+  const createOnChange = (field: UserInfoKey) => () => {
+    if (userInfoBlur[field]) {
+      trigger(field);
     }
   };
 
-  const createHandleChange =
-    (
-      field: UserInfoKey,
-      additional: boolean,
-      errorMessage: string,
-      blur: boolean
-    ) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      handleChangeUserInfo(e, field, additional, errorMessage, blur);
-    };
-
-  const onUserInfoBlur = (field: UserInfoKey, errorMessage?: string) => {
+  const createOnBlur = (field: UserInfoKey) => async () => {
     setUserInfoBlur((prev) => ({ ...prev, [field]: true }));
-    const value = userInfo[field];
-    if (field === "email") checkEmailErrors();
-    if (field === "password") checkPasswordErrors();
-    if (field === "monthOfBirthday") checkMonthError();
-    if (field === "birthday") checkBirthdayError();
-    if (
-      field !== "email" &&
-      field !== "password" &&
-      field !== "monthOfBirthday" &&
-      field !== "birthday"
-    ) {
-      if (!value) {
-        setUserInfoErrors({
-          ...userInfoErrors,
-          [field]: {
-            status: true,
-            message: errorMessage,
-          },
-        });
-      }
-    }
+
+    await trigger(field);
   };
 
-  const checkEmailErrors = () => {
-    setUserInfoErrors({
-      ...userInfoErrors,
-      email: {
-        status: !isValidEmail(userInfo.email),
-        message: isValidEmail(userInfo.email) ? "" : ERROR_MESSAGES.email,
-      },
-    });
+  const handleGenderSelect = (value: string) => {
+    setValue("gender", value, { shouldValidate: true });
+    trigger("gender");
   };
 
-  const checkPasswordErrors = () => {
-    setUserInfoErrors({
-      ...userInfoErrors,
-      password: {
-        noLetter: !hasLetter(userInfo.password),
-        noNumberOrSpecial: !hasNumberOrSpecial(userInfo.password),
-        tooShort: userInfo.password.length < 10,
-      },
-    });
-  };
-
-  const dayNeedToBeSelected =
-    userInfo.birthday === null &&
-    userInfo.yearOfBirthday !== null &&
-    userInfo.monthOfBirthday !== 0;
-
-  const checkBirthdayError = () => {
-    if (dayNeedToBeSelected) {
-      setUserInfoErrors({
-        ...userInfoErrors,
-        birthday: {
-          status: true,
-          message: ERROR_MESSAGES.birthday,
-        },
-      });
-    }
-  };
-
-  const checkMonthError = () => {
-    if (
-      userInfo.monthOfBirthday === 0 &&
-      userInfo.yearOfBirthday !== null &&
-      userInfo.birthday !== null
-    ) {
-      setUserInfoErrors({
-        ...userInfoErrors,
-        monthOfBirthday: {
-          status: true,
-          message: ERROR_MESSAGES.month,
-        },
-      });
-    }
-  };
-
-  const isValidPassword =
-    userInfo.password.length >= 10 &&
-    hasLetter(userInfo.password) &&
-    hasNumberOrSpecial(userInfo.password);
-
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     if (step === 0) {
-      if (!isValidEmail(userInfo.email)) {
-        checkEmailErrors();
-        setStepErrors({ ...stepErrors, email: true });
-      } else {
-        setUserInfoErrors({
-          ...userInfoErrors,
-          email: initialUserInfoErrors.email,
-        });
+      const isValid = await trigger("email");
+
+      if (isValid) {
+        clearErrors("email");
         setStep(1);
-        setStepErrors({ ...stepErrors, email: false });
+      } else {
+        setStep(0);
       }
     }
     if (step === 1) {
-      if (!isValidPassword) {
-        checkPasswordErrors();
-        setStepErrors({ ...stepErrors, password: true });
-      } else {
-        setUserInfoErrors({
-          ...userInfoErrors,
-          password: initialUserInfoErrors.password,
-        });
+      const isValid = await trigger("password");
+
+      if (isValid) {
+        clearErrors("password");
         setStep(2);
-        setStepErrors({ ...stepErrors, password: false });
+      } else {
+        setStep(1);
       }
     }
   };
@@ -206,43 +77,25 @@ export const useRegistration = () => {
   const handlePrevStep = () => {
     setStep((prev) => prev - 1);
     if (step === 1) {
-      setUserInfoErrors({
-        ...userInfoErrors,
-        password: initialUserInfoErrors.password,
-      });
+      clearErrors("password");
       setUserInfoBlur({ ...userInfoBlur, password: false });
-      setStepErrors({ ...stepErrors, password: false });
-    }
-    if (step === 2) {
-      setUserInfoBlur({ ...userInfoBlur, userName: false });
-      setUserInfoErrors({
-        ...userInfoErrors,
-        userName: initialUserInfoErrors.userName,
-        birthday: initialUserInfoErrors.birthday,
-      });
-      setStepErrors((prev) => ({
-        ...prev,
-        additionalInfo: {
-          ...prev.additionalInfo,
-          userName: false,
-          birthday: false,
-        },
-      }));
     }
   };
 
   return {
-    userInfo,
-    userInfoBlur,
-    userInfoErrors,
-    stepErrors,
     step,
-    showPassword,
+    setStep,
+    register,
+    createOnChange,
+    createOnBlur,
     handleNextStep,
     handlePrevStep,
+    showPassword,
     handleShowPassword,
-    onUserInfoBlur,
-    handleChangeUserInfo,
-    createHandleChange,
+    handleGenderSelect,
+    errors,
+    passwordValue,
+    userInfoBlur,
+    currentGender,
   };
 };

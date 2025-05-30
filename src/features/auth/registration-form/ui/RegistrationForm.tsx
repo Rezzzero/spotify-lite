@@ -1,67 +1,42 @@
-/// <reference types="vite-plugin-svgr/client" />
-
 import spotifyLogo from "/spotify-logo.svg";
 import googleLogo from "/google-auth-logo.svg";
 import facebookLogo from "/facebook-auth-logo.svg";
 import appleLogo from "/apple-auth-logo.svg";
-import { Link } from "react-router-dom";
-import { GENDERS, Route } from "../../../../shared/constants/constants";
-import { useRegistration } from "../model/useRegistration";
+import errorIcon from "../../../../shared/assets/auth/error-icon.svg";
+import PrevArrowIcon from "../../../../shared/assets/auth/arrow-prev.svg?react";
 import ShowPasswordIcon from "../../../../shared/assets/auth/password-show-icon.svg?react";
 import HidePasswordIcon from "../../../../shared/assets/auth/password-hide-icon.svg?react";
+import { ERROR_MESSAGES } from "../../../../shared/constants/errors";
+import { LinearProgress } from "@mui/material";
+import { Link } from "react-router-dom";
+import { GENDERS, Route } from "../../../../shared/constants/constants";
 import { RoundedCheckbox } from "../../../../shared/ui/rounded-checkbox/RoundedCheckbox";
 import {
   hasLetter,
   hasNumberOrSpecial,
+  isLongEnough,
 } from "../../../../shared/lib/validators/isValidPassword";
-import { LinearProgress } from "@mui/material";
-import PrevArrowIcon from "../../../../shared/assets/auth/arrow-prev.svg?react";
-import { CustomInput } from "../../../../shared/ui/custom-input/CustomInput";
-import { isValidEmail } from "../../../../shared/lib/validators/IsValidEmail";
-import errorIcon from "../../../../shared/assets/auth/error-icon.svg";
-import { SelectMonth } from "../../../../shared/ui/month-select/SelectMonth";
 import { GenderCheckbox } from "../../../../shared/ui/gender-checkbox/GenderCheckbox";
-import { ERROR_MESSAGES } from "../../../../shared/constants/errors";
+import { useRegistrationForm } from "../model/useRegistration";
+import { CustomInput } from "../../../../shared/ui/custom-input/CustomInput";
+import { SelectMonth } from "../../../../shared/ui/month-select/SelectMonth";
 
 export const RegistrationForm = () => {
   const {
-    userInfo,
-    userInfoBlur,
-    userInfoErrors,
-    stepErrors,
-    showPassword,
     step,
+    register,
+    createOnChange,
+    createOnBlur,
+    errors,
     handleNextStep,
     handlePrevStep,
+    showPassword,
     handleShowPassword,
-    onUserInfoBlur,
-    handleChangeUserInfo,
-    createHandleChange,
-  } = useRegistration();
-
-  const passwordInvalid =
-    !hasLetter(userInfo.password) ||
-    !hasNumberOrSpecial(userInfo.password) ||
-    userInfo.password.length < 10;
-
-  const emailInvalid = !isValidEmail(userInfo.email);
-
-  const userNameInvalid = userInfo.userName.length < 1;
-
-  const dayInvalid =
-    userInfo.birthday !== null &&
-    (userInfo.birthday < 1 || userInfo.birthday > 31);
-
-  const yearInvalid =
-    userInfo.yearOfBirthday === null ||
-    (userInfo.yearOfBirthday < 1900 &&
-      userInfo.yearOfBirthday > new Date().getFullYear());
-
-  const monthNeedToBeSelected =
-    userInfo.monthOfBirthday === 0 &&
-    userInfo.birthday !== null &&
-    userInfo.yearOfBirthday !== null;
-
+    passwordValue,
+    userInfoBlur,
+    currentGender,
+    handleGenderSelect,
+  } = useRegistrationForm();
   return (
     <div
       className={`flex flex-col items-center text-center w-[435px] ${
@@ -98,6 +73,7 @@ export const RegistrationForm = () => {
                 Шаг {step} из 3
               </h2>
               {step === 1 && <p className="font-bold">Придумайте пароль</p>}
+              {step === 2 && <p className="font-bold">Расскажите о себе</p>}
             </div>
           </div>
         </>
@@ -110,38 +86,38 @@ export const RegistrationForm = () => {
         } pb-10 text-left w-full relative`}
       >
         {step === 0 && (
-          <>
-            <label htmlFor="email" className="font-bold">
-              Электронная почта
-              <CustomInput
-                type="email"
-                id="email"
-                value={userInfo.email}
-                onChange={createHandleChange(
-                  "email",
-                  false,
-                  ERROR_MESSAGES.email,
-                  true
-                )}
-                onInputBlur={() =>
-                  onUserInfoBlur("email", ERROR_MESSAGES.email)
-                }
-                placeholder="name@domain.com"
-                inputBlured={userInfoBlur.email}
-                valueInvalid={emailInvalid}
-                stepError={stepErrors.email}
-              />
-            </label>
-            {userInfoErrors.email.status && (
-              <div className="flex items-start gap-1 mb-3">
+          <label htmlFor="email" className="font-bold">
+            Электронная почта
+            <CustomInput
+              type="email"
+              id="email"
+              error={errors.email}
+              placeholder="name@domain.com"
+              register={register("email", {
+                required: ERROR_MESSAGES.email,
+                pattern: {
+                  value: /^\S+@\S+\.\S+$/,
+                  message: ERROR_MESSAGES.email,
+                },
+                onChange: () => {
+                  createOnChange("email")();
+                },
+                onBlur: () => {
+                  createOnBlur("email")();
+                },
+              })}
+            />
+            {errors.email && (
+              <div className="flex items-start mt-2 gap-1 mb-3">
                 <img src={errorIcon} alt="error icon" className="mt-[2px]" />
                 <p className="text-sm font-semibold text-rose-400">
-                  {userInfoErrors.email.message}
+                  {errors.email.message}
                 </p>
               </div>
             )}
-          </>
+          </label>
         )}
+
         {step === 1 && (
           <>
             <label htmlFor="password" className="font-bold">
@@ -149,14 +125,23 @@ export const RegistrationForm = () => {
               <CustomInput
                 type="password"
                 id="password"
-                value={userInfo.password}
-                onChange={createHandleChange("password", false, "", true)}
-                onInputBlur={() => onUserInfoBlur("password")}
+                error={errors.password}
                 placeholder=""
-                inputBlured={userInfoBlur.password}
-                valueInvalid={passwordInvalid}
                 showPassword={showPassword}
-                stepError={stepErrors.password}
+                register={register("password", {
+                  required: "Пароль обязателен",
+                  pattern: {
+                    value: /^(?=.*[a-zA-Z])(?=.*[\d#?!&]).{10,}$/,
+                    message:
+                      "Пароль должен содержать как минимум: 1 букву, 1 цифру или спецсимвол, минимум 10 символов",
+                  },
+                  onChange: () => {
+                    createOnChange("password")();
+                  },
+                  onBlur: () => {
+                    createOnBlur("password")();
+                  },
+                })}
               />
             </label>
             {showPassword && (
@@ -176,22 +161,22 @@ export const RegistrationForm = () => {
                 Пароль должен содержать как минимум:
               </h2>
               <div className="flex gap-1 items-start">
-                <RoundedCheckbox checked={hasLetter(userInfo.password)} />
+                <RoundedCheckbox checked={hasLetter(passwordValue)} />
                 <p
                   className={`text-sm leading-none ${
-                    userInfoErrors.password.noLetter ? "text-rose-400" : ""
+                    !hasLetter(passwordValue) && userInfoBlur.password
+                      ? "text-rose-400"
+                      : ""
                   } `}
                 >
                   1 букву
                 </p>
               </div>
               <div className="flex gap-1 items-start">
-                <RoundedCheckbox
-                  checked={hasNumberOrSpecial(userInfo.password)}
-                />
+                <RoundedCheckbox checked={hasNumberOrSpecial(passwordValue)} />
                 <p
                   className={`text-sm leading-none ${
-                    userInfoErrors.password.noNumberOrSpecial
+                    !hasNumberOrSpecial(passwordValue) && userInfoBlur.password
                       ? "text-rose-400"
                       : ""
                   }`}
@@ -200,10 +185,12 @@ export const RegistrationForm = () => {
                 </p>
               </div>
               <div className="flex gap-1 items-start">
-                <RoundedCheckbox checked={userInfo.password.length >= 10} />
+                <RoundedCheckbox checked={isLongEnough(passwordValue)} />
                 <p
                   className={`text-sm leading-none ${
-                    userInfoErrors.password.tooShort ? "text-rose-400" : ""
+                    !isLongEnough(passwordValue) && userInfoBlur.password
+                      ? "text-rose-400"
+                      : ""
                   }`}
                 >
                   10 символов
@@ -212,6 +199,7 @@ export const RegistrationForm = () => {
             </div>
           </>
         )}
+
         {step === 2 && (
           <>
             <div className="flex flex-col gap-2">
@@ -226,34 +214,35 @@ export const RegistrationForm = () => {
                 <CustomInput
                   type="text"
                   id="username"
-                  value={userInfo.userName}
-                  onChange={createHandleChange(
-                    "userName",
-                    false,
-                    ERROR_MESSAGES.userName,
-                    true
-                  )}
-                  onInputBlur={() =>
-                    onUserInfoBlur("userName", ERROR_MESSAGES.userName)
-                  }
+                  error={errors.userName}
                   placeholder=""
-                  inputBlured={userInfoBlur.userName}
-                  valueInvalid={userNameInvalid}
-                  stepError={stepErrors.additionalInfo.userName}
+                  register={register("userName", {
+                    required: ERROR_MESSAGES.userName,
+                    onChange: () => {
+                      createOnChange("userName")();
+                    },
+                    onBlur: () => {
+                      createOnBlur("userName")();
+                    },
+                  })}
                 />
+                {errors.userName && (
+                  <div className="flex items-start mt-2 gap-1 mb-3">
+                    <img
+                      src={errorIcon}
+                      alt="error icon"
+                      className="mt-[2px]"
+                    />
+                    <p className="text-sm font-semibold text-rose-400">
+                      {errors.userName.message}
+                    </p>
+                  </div>
+                )}
               </label>
-              {userInfoErrors.userName.status && (
-                <div className="flex items-start gap-1 mb-3">
-                  <img src={errorIcon} alt="error icon" className="mt-[2px]" />
-                  <p className="text-sm font-semibold text-rose-400">
-                    {userInfoErrors.userName.message}
-                  </p>
-                </div>
-              )}
             </div>
             <div className="flex flex-col gap-2">
               <label
-                htmlFor="birthdate"
+                htmlFor="birthday"
                 className="font-bold text-sm leading-none"
               >
                 Дата рождения
@@ -264,82 +253,104 @@ export const RegistrationForm = () => {
               <div className="grid grid-cols-[60px_auto_80px] items-center gap-2">
                 <CustomInput
                   type="number"
-                  id="birthdate"
-                  value={userInfo.birthday === null ? "" : userInfo.birthday}
-                  onChange={createHandleChange(
-                    "birthday",
-                    true,
-                    ERROR_MESSAGES.birthday,
-                    true
-                  )}
-                  onInputBlur={() =>
-                    onUserInfoBlur("birthday", ERROR_MESSAGES.birthday)
-                  }
+                  id="birthday"
+                  error={errors.birthday}
                   placeholder="дд"
-                  inputBlured={userInfoBlur.birthday}
-                  valueInvalid={dayInvalid}
-                  stepError={stepErrors.additionalInfo.birthday}
+                  register={register("birthday", {
+                    required: "Укажите дату рождения.",
+                    onChange: (e) => {
+                      const raw = e.target.value;
+                      const onlyDigits = raw.replace(/\D/g, "").slice(0, 2);
+                      e.target.value = onlyDigits;
+
+                      createOnChange("birthday")();
+                    },
+                    onBlur: () => {
+                      createOnBlur("birthday")();
+                    },
+                    validate: (value) => {
+                      const num = Number(value);
+                      if (num < 1 || num > 31) return ERROR_MESSAGES.birthday;
+                      return true;
+                    },
+                  })}
                 />
                 <SelectMonth
-                  selectMonth={createHandleChange(
-                    "monthOfBirthday",
-                    true,
-                    ERROR_MESSAGES.month,
-                    true
-                  )}
-                  selectBlured={userInfoBlur.monthOfBirthday}
-                  needToSelect={monthNeedToBeSelected}
-                  onBlur={() =>
-                    onUserInfoBlur("monthOfBirthday", ERROR_MESSAGES.month)
-                  }
-                  stepError={stepErrors.additionalInfo.monthOfBirthday}
+                  error={errors.monthOfBirthday}
+                  register={register("monthOfBirthday", {
+                    required: "Укажите месяц рождения.",
+                    onChange: () => {
+                      createOnChange("monthOfBirthday")();
+                    },
+                    onBlur: () => {
+                      createOnBlur("monthOfBirthday")();
+                    },
+                    validate: (value) => {
+                      const num = Number(value);
+                      if (num < 1 || num > 12) return ERROR_MESSAGES.month;
+                      return true;
+                    },
+                  })}
                 />
                 <CustomInput
                   type="number"
                   id="yearOfBirthday"
-                  value={
-                    userInfo.yearOfBirthday === null
-                      ? ""
-                      : userInfo.yearOfBirthday
-                  }
-                  onChange={createHandleChange(
-                    "yearOfBirthday",
-                    true,
-                    ERROR_MESSAGES.year,
-                    true
-                  )}
-                  onInputBlur={() =>
-                    onUserInfoBlur("yearOfBirthday", ERROR_MESSAGES.year)
-                  }
+                  error={errors.yearOfBirthday}
                   placeholder="гггг"
-                  inputBlured={userInfoBlur.yearOfBirthday}
-                  valueInvalid={yearInvalid}
-                  stepError={stepErrors.additionalInfo.yearOfBirthday}
+                  register={register("yearOfBirthday", {
+                    required:
+                      "Год рождения должен состоять из четырех цифр (например, 1990)",
+                    onChange: (e) => {
+                      const raw = e.target.value;
+                      const onlyDigits = raw.replace(/\D/g, "").slice(0, 4);
+                      e.target.value = onlyDigits;
+
+                      createOnChange("yearOfBirthday")();
+                    },
+                    onBlur: () => {
+                      createOnBlur("yearOfBirthday")();
+                    },
+                    validate: (value) => {
+                      const year = Number(value);
+                      const currentYear = new Date().getFullYear();
+
+                      if (year < 1900)
+                        return "Год рождения должен быть не ранее 1900 г.";
+                      if (year > currentYear)
+                        return "Год рождения не может быть в будущем";
+
+                      const age = currentYear - year;
+                      if (age < 14)
+                        return "Вы еще не достигли возраста, позволяющего создать аккаунт Spotify.";
+
+                      return true;
+                    },
+                  })}
                 />
               </div>
             </div>
             <div>
-              {userInfoErrors.birthday.status && (
+              {errors.birthday && (
                 <div className="flex items-start gap-1 mb-3">
                   <img src={errorIcon} alt="error icon" className="mt-[2px]" />
                   <p className="text-sm font-semibold text-rose-400">
-                    {userInfoErrors.birthday.message}
+                    {errors.birthday.message}
                   </p>
                 </div>
               )}
-              {userInfoErrors.monthOfBirthday.status && (
+              {errors.monthOfBirthday && (
                 <div className="flex items-start gap-1 mb-3">
                   <img src={errorIcon} alt="error icon" className="mt-[2px]" />
                   <p className="text-sm font-semibold text-rose-400">
-                    {userInfoErrors.monthOfBirthday.message}
+                    {errors.monthOfBirthday.message}
                   </p>
                 </div>
               )}
-              {userInfoErrors.yearOfBirthday.status && (
+              {errors.yearOfBirthday && (
                 <div className="flex items-start gap-1 mb-3">
                   <img src={errorIcon} alt="error icon" className="mt-[2px]" />
                   <p className="text-sm font-semibold text-rose-400">
-                    {userInfoErrors.yearOfBirthday.message}
+                    {errors.yearOfBirthday.message}
                   </p>
                 </div>
               )}
@@ -350,25 +361,21 @@ export const RegistrationForm = () => {
                 Мы учитываем пол при подборе персональных рекомендаций и
                 рекламы.
               </p>
+
+              <input
+                type="hidden"
+                {...register("gender", { required: "Укажите пол." })}
+              />
+
               <div className="flex flex-wrap gap-3">
                 {Object.values(GENDERS).map((gender) => (
                   <button
                     key={gender.value}
                     type="button"
-                    onClick={() =>
-                      handleChangeUserInfo(
-                        gender.value,
-                        "gender",
-                        true,
-                        "",
-                        false
-                      )
-                    }
+                    onClick={() => handleGenderSelect(gender.value)}
                     className="flex gap-3 items-center text-sm mr-5 group"
                   >
-                    <GenderCheckbox
-                      checked={gender.value === userInfo.gender}
-                    />
+                    <GenderCheckbox checked={gender.value === currentGender} />
                     {gender.name}
                   </button>
                 ))}

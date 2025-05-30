@@ -1,26 +1,20 @@
 import { MONTHS } from "../../constants/constants";
 import selectIcon from "../../assets/select-icon.svg";
+import { FieldError, UseFormRegisterReturn } from "react-hook-form";
 
 export const SelectMonth = ({
-  selectMonth,
-  selectBlured,
-  needToSelect,
-  onBlur,
-  stepError,
+  error,
+  register,
 }: {
-  selectMonth: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  selectBlured: boolean;
-  needToSelect: boolean;
-  onBlur: () => void;
-  stepError: boolean;
+  error: FieldError | undefined;
+  register: UseFormRegisterReturn;
 }) => {
   return (
     <div className="flex w-full relative">
       <select
-        onBlur={onBlur}
-        onChange={selectMonth}
+        {...register}
         className={`appearance-none w-full pl-3 pr-5 mt-1 h-[50px] rounded-sm border ${
-          (selectBlured && needToSelect) || stepError
+          error
             ? "border-red-500"
             : "border-zinc-500 hover:border-white focus:border-white focus:shadow-[0_0_0_1px_white]"
         }`}
