@@ -3,6 +3,7 @@ import googleLogo from "/google-auth-logo.svg";
 import facebookLogo from "/facebook-auth-logo.svg";
 import appleLogo from "/apple-auth-logo.svg";
 import errorIcon from "../../../../shared/assets/auth/error-icon.svg";
+import emailExistsErrorIcon from "../../../../shared/assets/auth/email-exists-error-icon.svg";
 import PrevArrowIcon from "../../../../shared/assets/auth/arrow-prev.svg?react";
 import ShowPasswordIcon from "../../../../shared/assets/auth/password-show-icon.svg?react";
 import HidePasswordIcon from "../../../../shared/assets/auth/password-hide-icon.svg?react";
@@ -20,6 +21,8 @@ import { GenderCheckbox } from "../../../../shared/ui/gender-checkbox/GenderChec
 import { useRegistrationForm } from "../model/useRegistration";
 import { CustomInput } from "../../../../shared/ui/custom-input/CustomInput";
 import { SelectMonth } from "../../../../shared/ui/month-select/SelectMonth";
+import { CustomCheckbox } from "../../../../shared/ui/custom-checkbox/CustomCheckbox";
+import { Controller } from "react-hook-form";
 
 export const RegistrationForm = () => {
   const {
@@ -36,6 +39,16 @@ export const RegistrationForm = () => {
     userInfoBlur,
     currentGender,
     handleGenderSelect,
+    birthdayValue,
+    monthOfBirthdayValue,
+    yearOfBirthdayValue,
+    adsDisabled,
+    setAdsDisabled,
+    shareData,
+    setShareData,
+    control,
+    emailValue,
+    emailExists,
   } = useRegistrationForm();
   return (
     <div
@@ -74,6 +87,7 @@ export const RegistrationForm = () => {
               </h2>
               {step === 1 && <p className="font-bold">Придумайте пароль</p>}
               {step === 2 && <p className="font-bold">Расскажите о себе</p>}
+              {step === 3 && <p className="font-bold">Условия использования</p>}
             </div>
           </div>
         </>
@@ -112,6 +126,19 @@ export const RegistrationForm = () => {
                 <img src={errorIcon} alt="error icon" className="mt-[2px]" />
                 <p className="text-sm font-semibold text-rose-400">
                   {errors.email.message}
+                </p>
+              </div>
+            )}
+            {(emailExists.status ||
+              (emailExists.email === emailValue && emailValue !== "")) && (
+              <div className="flex items-start rounded-md py-3 pl-5 mt-2 gap-3 mb-3 bg-[#e3a124] text-sm font-normal text-black">
+                <img src={emailExistsErrorIcon} alt="email exists icon" />
+                <p>
+                  Уже есть аккаунт с этой электронной почтой. Чтобы продолжить,{" "}
+                  <Link to={Route.LOGIN} className="underline">
+                    войдите в аккаунт
+                  </Link>
+                  .
                 </p>
               </div>
             )}
@@ -266,7 +293,8 @@ export const RegistrationForm = () => {
                       createOnChange("birthday")();
                     },
                     onBlur: () => {
-                      createOnBlur("birthday")();
+                      if (monthOfBirthdayValue && yearOfBirthdayValue)
+                        createOnBlur("birthday")();
                     },
                     validate: (value) => {
                       const num = Number(value);
@@ -283,7 +311,8 @@ export const RegistrationForm = () => {
                       createOnChange("monthOfBirthday")();
                     },
                     onBlur: () => {
-                      createOnBlur("monthOfBirthday")();
+                      if (birthdayValue && yearOfBirthdayValue)
+                        createOnBlur("monthOfBirthday")();
                     },
                     validate: (value) => {
                       const num = Number(value);
@@ -308,7 +337,8 @@ export const RegistrationForm = () => {
                       createOnChange("yearOfBirthday")();
                     },
                     onBlur: () => {
-                      createOnBlur("yearOfBirthday")();
+                      if (birthdayValue && monthOfBirthdayValue)
+                        createOnBlur("yearOfBirthday")();
                     },
                     validate: (value) => {
                       const year = Number(value);
@@ -364,24 +394,90 @@ export const RegistrationForm = () => {
 
               <input
                 type="hidden"
-                {...register("gender", { required: "Укажите пол." })}
+                {...register("gender", { required: ERROR_MESSAGES.gender })}
               />
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2">
                 {Object.values(GENDERS).map((gender) => (
                   <button
                     key={gender.value}
                     type="button"
                     onClick={() => handleGenderSelect(gender.value)}
-                    className="flex gap-3 items-center text-sm mr-5 group"
+                    className="flex gap-3 items-center text-sm mr-3 group"
                   >
                     <GenderCheckbox checked={gender.value === currentGender} />
                     {gender.name}
                   </button>
                 ))}
+                {errors.gender && (
+                  <div className="flex text-center ml-1 mt-1 gap-1">
+                    <img
+                      src={errorIcon}
+                      alt="error icon"
+                      className="mt-[2px]"
+                    />
+                    <p className="text-sm font-semibold text-rose-400">
+                      {errors.gender.message}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </>
+        )}
+
+        {step === 3 && (
+          <div className="flex flex-col text-sm gap-2 mb-7 cursor-default">
+            <div className="flex gap-3 group py-4 pl-4 pr-5 rounded-md bg-zinc-800">
+              <CustomCheckbox
+                checked={adsDisabled}
+                onChange={() => setAdsDisabled(!adsDisabled)}
+              />
+              <p>Я не хочу получать рекламные сообщения от Spotify Lite.</p>
+            </div>
+            <div className="flex gap-3 group py-4 pl-4 pr-5 rounded-md bg-zinc-800">
+              <CustomCheckbox
+                checked={shareData}
+                onChange={() => setShareData(!shareData)}
+              />
+              <p>
+                Я разрешаю сообщить мои регистрационные данные партнерам Spotify
+                Lite в целях рекламы.
+              </p>
+            </div>
+            <div className="flex gap-3 group py-4 pl-4 pr-5 rounded-md bg-zinc-800">
+              <Controller
+                name="termsOfUse"
+                control={control}
+                rules={{ required: ERROR_MESSAGES.termsOfUse }}
+                render={({ field }) => (
+                  <CustomCheckbox
+                    checked={field.value}
+                    onChange={() => field.onChange(!field.value)}
+                  />
+                )}
+              />
+              <p>
+                Я принимаю{" "}
+                <Link to={Route.HOME} className="text-green-500 underline">
+                  Условия использования
+                </Link>{" "}
+                и{" "}
+                <Link to={Route.HOME} className="text-green-500 underline">
+                  Политику конфиденциальности
+                </Link>{" "}
+                Spotify Lite.
+              </p>
+            </div>
+            {errors.termsOfUse && (
+              <div className="flex items-start gap-1 mb-3">
+                <img src={errorIcon} alt="error icon" className="mt-[2px]" />
+                <p className="text-sm font-semibold text-rose-400">
+                  {errors.termsOfUse.message}
+                </p>
+              </div>
+            )}
+          </div>
         )}
 
         <button
@@ -389,7 +485,7 @@ export const RegistrationForm = () => {
           onClick={handleNextStep}
           className="text-black font-bold rounded-full bg-green-400 hover:bg-[#74eda0] py-3 px-10 cursor-pointer"
         >
-          Далее
+          {step === 3 ? "Зарегистрироваться" : "Далее"}
         </button>
         {step === 0 && (
           <p className="absolute bottom-[-18px] right-1/2 translate-x-1/2 bg-black rounded-full py-2 px-3">

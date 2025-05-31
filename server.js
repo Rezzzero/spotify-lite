@@ -4,6 +4,7 @@ import qs from "qs";
 import dotenv from "dotenv";
 import cors from "cors";
 import { createClient } from "redis";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
 function getArtistIdsFromAlbums(albums) {
   const ids = [];
@@ -23,6 +24,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 const port = 3000;
 
 const redisClient = createClient({
@@ -35,6 +37,12 @@ await redisClient.connect();
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const soundCloudClientId = process.env.SOUND_CLOUD_CLIENT_ID;
+const supabaseUrl = process.env.VITE_SUPABASE_URL;
+const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
+const supabaseServiceRoleKey = process.env.VITE_SUPABASE_SERVICE_ROLE_KEY;
+
+const supabaseAdmin = createSupabaseClient(supabaseUrl, supabaseServiceRoleKey);
+const supabase = createSupabaseClient(supabaseUrl, supabaseKey);
 
 let cachedToken = null;
 let tokenExpiresAt = 0;
@@ -374,6 +382,39 @@ const getTrack = async (id) => {
   }
 };
 
+const checkEmail = async (email) => {
+  const { data, error } = await supabaseAdmin.rpc("check_email_exists", {
+    email_param: email,
+  });
+
+  if (error) {
+    console.error("Ошибка проверки email:", error.message);
+  }
+  return data;
+};
+
+const signUp = async (userData) => {
+  const { data, error } = await supabase.auth.signUp({
+    email: userData.email,
+    password: userData.password,
+    options: {
+      data: {
+        userName: userData.userName,
+        gender: userData.gender,
+        birthday: userData.birthday,
+        monthOfBirthday: userData.monthOfBirthday,
+        yearOfBirthday: userData.yearOfBirthday,
+      },
+    },
+  });
+
+  if (error) {
+    console.error("Ошибка регистрации:", error.message);
+  }
+
+  return data;
+};
+
 app.get("/api/popular-tracks", async (_, res) => {
   try {
     const tracks = await getPopularTracks();
@@ -508,6 +549,31 @@ app.get("/api/soundcloud-stream", async (req, res) => {
   try {
     const stream = await getSoundCloudStream(url);
     res.json(stream);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/check-email", async (req, res) => {
+  const email = req.query.email;
+
+  if (!email) {
+    return res.status(400).json({ error: "Email is required" });
+  }
+
+  try {
+    const data = await checkEmail(email);
+    res.json({ exists: !!data });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/signup", async (req, res) => {
+  try {
+    const userData = req.body;
+    const data = await signUp(userData);
+    res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
