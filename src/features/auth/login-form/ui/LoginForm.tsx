@@ -7,13 +7,17 @@ import { Route } from "../../../../shared/constants/constants";
 import { useLogin } from "../model/useLogin";
 import ShowPasswordIcon from "../../../../shared/assets/auth/password-show-icon.svg?react";
 import HidePasswordIcon from "../../../../shared/assets/auth/password-hide-icon.svg?react";
+import { OTPInput } from "../../../../shared/ui/otp-input/OTPInput";
 
 export const LoginForm = () => {
   const {
     email,
     handleChangeEmail,
     otp,
+    inputRefs,
     handleChangeOtp,
+    handleOtpKeyDown,
+    handleOtpPaste,
     sendOtp,
     verifyStep,
     setVerifyStep,
@@ -26,6 +30,7 @@ export const LoginForm = () => {
     showPassword,
     handleShowPassword,
     signInWithPassword,
+    coveredEmail,
   } = useLogin();
   return (
     <div className="flex flex-col items-center bg-[#121212] rounded-md gap-5 pt-10 pb-15 px-26">
@@ -131,17 +136,18 @@ export const LoginForm = () => {
       ) : (
         <div className="flex flex-col max-w-[300px]">
           <h1 className="text-xl font-bold mb-4">
-            Введите 6-значный код, который мы отправили на адрес {email}
+            Введите 6-значный код, который мы отправили на адрес {coveredEmail}
           </h1>
           <form
             onSubmit={(e) => e.preventDefault()}
             className="flex flex-col items-center gap-5 mb-10"
           >
-            <input
-              value={otp}
-              onChange={handleChangeOtp}
-              placeholder="Код из почты"
-              className="rounded-sm w-full py-2 px-4 outline-none border border-zinc-500 hover:border-white focus:border-white focus:shadow-[0_0_0_1px_white]"
+            <OTPInput
+              otp={otp}
+              inputRefs={inputRefs}
+              handleChangeOtp={handleChangeOtp}
+              handleOtpKeyDown={handleOtpKeyDown}
+              handleOtpPaste={handleOtpPaste}
             />
             <button
               type="submit"

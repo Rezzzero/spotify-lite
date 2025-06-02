@@ -1,13 +1,15 @@
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../../../../app/store/user/useUSer";
 
 export const useLogin = () => {
   const [email, setEmail] = useState<string>("");
+  const [coveredEmail, setCoveredEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [otp, setOtp] = useState<string>("");
+  const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+  const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
   const [verifyStep, setVerifyStep] = useState<boolean>(false);
   const [withPassword, setWithPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -22,12 +24,33 @@ export const useLogin = () => {
     setPassword(e.target.value);
   };
 
-  const handleChangeOtp = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setOtp(e.target.value);
+  const handleChangeOtp = (index: number, value: string) => {
+    if (!/^[0-9]?$/.test(value)) return;
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
   };
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleOtpPaste = (e: React.ClipboardEvent) => {
+    const pasted = e.clipboardData.getData("text").slice(0, 6).split("");
+    const newOtp = otp.map((_, i) => pasted[i] || "");
+    setOtp(newOtp);
+    inputRefs.current[pasted.length - 1]?.focus();
+    verifyOtp();
   };
 
   const sendOtp = async () => {
@@ -37,8 +60,7 @@ export const useLogin = () => {
         email,
       });
 
-      console.log(res.data);
-
+      setCoveredEmail(res.data.coveredEmail);
       setVerifyStep(true);
       setLoading(false);
     } catch (error) {
@@ -57,7 +79,7 @@ export const useLogin = () => {
     try {
       const res = await axios.post("http://localhost:3000/auth/verify-otp", {
         email,
-        otp,
+        otp: otp.join(""),
       });
       setLoading(false);
 
@@ -103,7 +125,10 @@ export const useLogin = () => {
     email,
     handleChangeEmail,
     otp,
+    inputRefs,
     handleChangeOtp,
+    handleOtpKeyDown,
+    handleOtpPaste,
     sendOtp,
     verifyStep,
     verifyOtp,
@@ -116,5 +141,6 @@ export const useLogin = () => {
     showPassword,
     handleShowPassword,
     signInWithPassword,
+    coveredEmail,
   };
 };
