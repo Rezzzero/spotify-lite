@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { SearchResults } from "../../shared/types/types";
+import { SearchResults } from "../../../shared/types/types";
 
 export type SearchContextType = {
   searchResults: SearchResults;

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "../../../../app/store/user/useUSer";
 
 export const useLogin = () => {
   const [email, setEmail] = useState<string>("");
@@ -11,6 +12,7 @@ export const useLogin = () => {
   const [withPassword, setWithPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const { setUser } = useUserStore();
 
   const handleChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -57,9 +59,9 @@ export const useLogin = () => {
         email,
         otp,
       });
-      console.log(res.data);
-
       setLoading(false);
+
+      setUser(res.data);
 
       navigate("/");
     } catch (error) {
@@ -80,9 +82,10 @@ export const useLogin = () => {
         email,
         password,
       });
-      console.log(res.data);
 
       setLoading(false);
+
+      setUser(res.data);
 
       navigate("/");
     } catch (error) {

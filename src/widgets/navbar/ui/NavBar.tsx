@@ -6,10 +6,13 @@ import HomeLeftHoverIcon from "../assets/icons/home-left-hover-icon.svg";
 import { Route } from "../../../shared/constants/constants";
 import { SearchInput } from "../../search-input/ui/SearchInput";
 import { useState } from "react";
+import { useUserStore } from "../../../app/store/user/useUSer";
 
 export const NavBar = () => {
   const [isHovering, setIsHovering] = useState(false);
+  const { user } = useUserStore();
   const location = useLocation();
+  console.log(user);
   return (
     <div className="bg-black flex items-center gap-5 p-2 pl-5">
       <Logo />

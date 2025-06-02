@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useSearchStore } from "../../../app/store/useSearchStore";
+import { useSearchStore } from "../../../app/store/search/useSearchStore";
 import { CardItem, SearchResults } from "../../../shared/types/types";
 
 export const useSearchCategoryResults = () => {

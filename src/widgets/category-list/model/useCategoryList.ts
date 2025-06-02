@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useSearchStore } from "../../../app/store/useSearchStore";
+import { useSearchStore } from "../../../app/store/search/useSearchStore";
 import { CategoriesList } from "../../../shared/constants/constants";
 import { useLocation, useParams } from "react-router-dom";
 
