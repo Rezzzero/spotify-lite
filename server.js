@@ -415,6 +415,80 @@ const signUp = async (userData) => {
   return data;
 };
 
+const signIn = async (userData) => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: userData.email,
+    password: userData.password,
+  });
+
+  if (error) {
+    throw new Error("Неверный email или пароль");
+  }
+
+  return data;
+};
+
+const sendOtp = async (email) => {
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: {
+      shouldCreateUser: false,
+    },
+  });
+
+  if (error) {
+    if (error.message.includes("User not found")) {
+      const customError = new Error(
+        "Адрес электронной почты или имя пользователя не привязаны к учетной записи Spotify"
+      );
+      customError.status = 400;
+      throw customError;
+    }
+
+    const customError = new Error(
+      "Ошибка при отправке кода. Попробуйте позже."
+    );
+    customError.status = 500;
+    throw customError;
+  }
+
+  return { success: true, message: "Код отправлен на вашу почту" };
+};
+
+const signInWithOtp = async (email, otp) => {
+  const { data, error } = await supabase.auth.verifyOtp({
+    email,
+    token: otp,
+    type: "email",
+  });
+
+  if (error) {
+    const msg = error.message.toLowerCase();
+
+    if (msg.includes("invalid login")) {
+      const err = new Error("Неверный код. Попробуйте снова.");
+      err.status = 400;
+      throw err;
+    }
+
+    if (msg.includes("token has expired")) {
+      const err = new Error("Код истёк. Запросите новый код.");
+      err.status = 400;
+      throw err;
+    }
+
+    const err = new Error("Не удалось подтвердить код. Попробуйте позже.");
+    err.status = 500;
+    throw err;
+  }
+
+  return {
+    success: true,
+    message: "Код успешно подтверждён",
+    session: data.session,
+  };
+};
+
 app.get("/api/popular-tracks", async (_, res) => {
   try {
     const tracks = await getPopularTracks();
@@ -576,6 +650,48 @@ app.post("/signup", async (req, res) => {
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/signin", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email и пароль обязательны" });
+    }
+    const data = await signIn({ email, password });
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/auth/send-otp", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        error:
+          "Введите имя пользователя или адрес электронной почты из аккаунта Spotify.",
+      });
+    }
+
+    const result = await sendOtp(email);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(error.status || 500).json({ error: error.message });
+  }
+});
+
+app.post("/auth/verify-otp", async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    const result = await signInWithOtp(email, otp);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(error.status || 500).json({ error: error.message });
   }
 });
 
