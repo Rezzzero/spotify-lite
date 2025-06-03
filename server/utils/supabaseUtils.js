@@ -1,0 +1,132 @@
+import { supabase, supabaseAdmin } from "../supabase/supabaseClient.js";
+
+function maskEmail(email) {
+  const [localPart, domainPart] = email.split("@");
+
+  const firstChar = localPart[0];
+  const lastChar = localPart[localPart.length - 1];
+  const maskedLocal = `${firstChar}${"*".repeat(
+    Math.max(0, localPart.length - 2)
+  )}${lastChar}`;
+
+  const domainName = domainPart.split(".")[0];
+  const domainFirstChar = domainName[0];
+  const maskedDomain = `${domainFirstChar}${"*".repeat(
+    Math.max(0, domainName.length - 1)
+  )}`;
+  const domainSuffix = domainPart.slice(domainName.length);
+
+  return `${maskedLocal}@${maskedDomain}${domainSuffix}`;
+}
+
+export const checkEmail = async (email) => {
+  const { data, error } = await supabaseAdmin.rpc("check_email_exists", {
+    email_param: email,
+  });
+
+  if (error) {
+    console.error("Ошибка проверки email:", error.message);
+  }
+  return data;
+};
+
+export const signUp = async (userData) => {
+  const { data, error } = await supabase.auth.signUp({
+    email: userData.email,
+    password: userData.password,
+    options: {
+      data: {
+        userName: userData.userName,
+        gender: userData.gender,
+        birthday: userData.birthday,
+        monthOfBirthday: userData.monthOfBirthday,
+        yearOfBirthday: userData.yearOfBirthday,
+      },
+    },
+  });
+
+  if (error) {
+    console.error("Ошибка регистрации:", error.message);
+  }
+
+  return data;
+};
+
+export const signIn = async (userData) => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: userData.email,
+    password: userData.password,
+  });
+
+  if (error) {
+    throw new Error("Неверный email или пароль");
+  }
+
+  return data;
+};
+
+export const sendOtp = async (email) => {
+  const exists = await checkEmail(email);
+
+  if (!exists) {
+    const customError = new Error(
+      "Адрес электронной почты или имя пользователя не привязаны к учетной записи Spotify Lite"
+    );
+    customError.status = 400;
+    throw customError;
+  } else {
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        shouldCreateUser: false,
+      },
+    });
+
+    if (error) {
+      const customError = new Error(
+        "Ошибка при отправке кода. Попробуйте позже."
+      );
+      customError.status = 500;
+      throw customError;
+    }
+
+    return {
+      success: true,
+      message: "Код отправлен на вашу почту",
+      coveredEmail: maskEmail(email),
+    };
+  }
+};
+
+export const signInWithOtp = async (email, otp) => {
+  const { data, error } = await supabase.auth.verifyOtp({
+    email,
+    token: otp,
+    type: "email",
+  });
+
+  if (error) {
+    const msg = error.message.toLowerCase();
+    if (msg.includes("invalid login")) {
+      const err = new Error("Недействительный код");
+      err.status = 400;
+      throw err;
+    }
+
+    if (msg.includes("token has expired")) {
+      const err = new Error("Код истёк. Запросите новый код.");
+      err.status = 400;
+      throw err;
+    }
+
+    const err = new Error("Не удалось подтвердить код. Попробуйте позже.");
+    err.status = 500;
+    throw err;
+  }
+
+  return {
+    success: true,
+    message: "Код успешно подтверждён",
+    session: data.session,
+  };
+};
