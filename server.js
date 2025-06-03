@@ -448,34 +448,36 @@ const signIn = async (userData) => {
 };
 
 const sendOtp = async (email) => {
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      shouldCreateUser: false,
-    },
-  });
+  const exists = await checkEmail(email);
 
-  if (error) {
-    if (error.message.includes("User not found")) {
+  if (!exists) {
+    const customError = new Error(
+      "Адрес электронной почты или имя пользователя не привязаны к учетной записи Spotify Lite"
+    );
+    customError.status = 400;
+    throw customError;
+  } else {
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        shouldCreateUser: false,
+      },
+    });
+
+    if (error) {
       const customError = new Error(
-        "Адрес электронной почты или имя пользователя не привязаны к учетной записи Spotify"
+        "Ошибка при отправке кода. Попробуйте позже."
       );
-      customError.status = 400;
+      customError.status = 500;
       throw customError;
     }
 
-    const customError = new Error(
-      "Ошибка при отправке кода. Попробуйте позже."
-    );
-    customError.status = 500;
-    throw customError;
+    return {
+      success: true,
+      message: "Код отправлен на вашу почту",
+      coveredEmail: maskEmail(email),
+    };
   }
-
-  return {
-    success: true,
-    message: "Код отправлен на вашу почту",
-    coveredEmail: maskEmail(email),
-  };
 };
 
 const signInWithOtp = async (email, otp) => {
@@ -487,9 +489,8 @@ const signInWithOtp = async (email, otp) => {
 
   if (error) {
     const msg = error.message.toLowerCase();
-
     if (msg.includes("invalid login")) {
-      const err = new Error("Неверный код. Попробуйте снова.");
+      const err = new Error("Недействительный код");
       err.status = 400;
       throw err;
     }
@@ -697,7 +698,7 @@ app.post("/auth/send-otp", async (req, res) => {
     if (!email) {
       return res.status(400).json({
         error:
-          "Введите имя пользователя или адрес электронной почты из аккаунта Spotify.",
+          "Введите имя пользователя или адрес электронной почты из аккаунта Spotify Lite.",
       });
     }
 
