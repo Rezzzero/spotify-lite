@@ -1,4 +1,4 @@
-import { CardList } from "../../../shared/ui/card-list/CardList";
+import { CardList } from "@shared/ui/card-list/CardList";
 import { useSectionList } from "../model/useSectionList";
 
 export const SectionList = () => {

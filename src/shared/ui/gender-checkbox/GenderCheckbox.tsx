@@ -1,6 +1,6 @@
 import Checkbox from "@mui/material/Checkbox";
-import GenderCheckedIcon from "../../../shared/assets/auth/gender-checked-icon.svg?react";
-import GenderUncheckedIcon from "../../../shared/assets/auth/gender-unchecked-icon.svg?react";
+import GenderCheckedIcon from "@shared/assets/auth/gender-checked-icon.svg?react";
+import GenderUncheckedIcon from "@shared/assets/auth/gender-unchecked-icon.svg?react";
 
 export const GenderCheckbox = ({ checked }: { checked: boolean }) => {
   return (

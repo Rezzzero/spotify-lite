@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useSearchResults } from "../model/useSearchResults";
-import { CardList } from "../../../shared/ui/card-list/CardList";
-import { TrackCard } from "../../../shared/ui/track-card/TrackCard";
+import { CardList } from "@shared/ui/card-list/CardList";
+import { TrackCard } from "@shared/ui/track-card/TrackCard";
 
 export const SearchResults = () => {
   const { searchResults } = useSearchResults();

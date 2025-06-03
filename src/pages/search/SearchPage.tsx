@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
-import { SearchResults } from "../../widgets/search-results/ui/SearchResults";
-import { Footer } from "../../widgets/footer/ui/Footer";
-import { CategoryList } from "../../widgets/category-list/ui/CategoryList";
-import { SearchCategoryResults } from "../../widgets/search-category-results/ui/SearchCategoryResults";
+import { SearchResults } from "@widgets/search-results/ui/SearchResults";
+import { Footer } from "@widgets/footer/ui/Footer";
+import { CategoryList } from "@widgets/category-list/ui/CategoryList";
+import { SearchCategoryResults } from "@widgets/search-category-results/ui/SearchCategoryResults";
 
 export const SearchPage = () => {
   const { value, category } = useParams();

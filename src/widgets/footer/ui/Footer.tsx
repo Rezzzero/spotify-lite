@@ -1,4 +1,4 @@
-import { FooterLinks } from "../../../shared/constants/constants";
+import { FooterLinks } from "@shared/constants/constants";
 import { LinksList } from "./LinksList";
 import { Link } from "react-router-dom";
 

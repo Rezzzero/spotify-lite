@@ -6,7 +6,7 @@ import BrowseHoverIcon from "../assets/browse-hover-icon.svg";
 import BrowseSelectedIcon from "../assets/browse-selected-icon.svg";
 import CrossIcon from "../assets/cross-icon.svg";
 import { Link, useLocation } from "react-router-dom";
-import { Route } from "../../../shared/constants/constants";
+import { Route } from "@shared/constants/constants";
 
 export const SearchInput = () => {
   const {

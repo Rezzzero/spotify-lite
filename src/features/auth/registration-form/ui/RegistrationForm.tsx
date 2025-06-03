@@ -2,26 +2,26 @@ import spotifyLogo from "/spotify-logo.svg";
 import googleLogo from "/google-auth-logo.svg";
 import facebookLogo from "/facebook-auth-logo.svg";
 import appleLogo from "/apple-auth-logo.svg";
-import errorIcon from "../../../../shared/assets/auth/error-icon.svg";
-import emailExistsErrorIcon from "../../../../shared/assets/auth/email-exists-error-icon.svg";
-import PrevArrowIcon from "../../../../shared/assets/auth/arrow-prev.svg?react";
-import ShowPasswordIcon from "../../../../shared/assets/auth/password-show-icon.svg?react";
-import HidePasswordIcon from "../../../../shared/assets/auth/password-hide-icon.svg?react";
-import { ERROR_MESSAGES } from "../../../../shared/constants/errors";
+import errorIcon from "@shared/assets/auth/error-icon.svg";
+import emailExistsErrorIcon from "@shared/assets/auth/email-exists-error-icon.svg";
+import PrevArrowIcon from "@shared/assets/auth/arrow-prev.svg?react";
+import ShowPasswordIcon from "@shared/assets/auth/password-show-icon.svg?react";
+import HidePasswordIcon from "@shared/assets/auth/password-hide-icon.svg?react";
+import { ERROR_MESSAGES } from "@shared/constants/errors";
 import { LinearProgress } from "@mui/material";
 import { Link } from "react-router-dom";
-import { GENDERS, Route } from "../../../../shared/constants/constants";
-import { RoundedCheckbox } from "../../../../shared/ui/rounded-checkbox/RoundedCheckbox";
+import { GENDERS, Route } from "@shared/constants/constants";
+import { RoundedCheckbox } from "@shared/ui/rounded-checkbox/RoundedCheckbox";
 import {
   hasLetter,
   hasNumberOrSpecial,
   isLongEnough,
-} from "../../../../shared/lib/validators/isValidPassword";
-import { GenderCheckbox } from "../../../../shared/ui/gender-checkbox/GenderCheckbox";
+} from "@shared/lib/validators/isValidPassword";
+import { GenderCheckbox } from "@shared/ui/gender-checkbox/GenderCheckbox";
 import { useRegistrationForm } from "../model/useRegistration";
-import { CustomInput } from "../../../../shared/ui/custom-input/CustomInput";
-import { SelectMonth } from "../../../../shared/ui/month-select/SelectMonth";
-import { CustomCheckbox } from "../../../../shared/ui/custom-checkbox/CustomCheckbox";
+import { CustomInput } from "@shared/ui/custom-input/CustomInput";
+import { SelectMonth } from "@shared/ui/month-select/SelectMonth";
+import { CustomCheckbox } from "@shared/ui/custom-checkbox/CustomCheckbox";
 import { Controller } from "react-hook-form";
 
 export const RegistrationForm = () => {

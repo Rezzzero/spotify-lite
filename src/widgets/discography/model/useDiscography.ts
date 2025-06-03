@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import { useDiscographyData } from "../../../features/discography/hooks/useDiscographyData";
-import { useDropdown } from "../../../shared/lib/hooks/useDropDown";
+import { useDiscographyData } from "@features/discography/hooks/useDiscographyData";
+import { useDropdown } from "@shared/lib/hooks/useDropDown";
 import { useEffect, useRef, useState } from "react";
 
 export const useDiscography = ({

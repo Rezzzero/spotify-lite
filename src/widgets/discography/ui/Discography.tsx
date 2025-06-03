@@ -1,20 +1,20 @@
 /// <reference types="vite-plugin-svgr/client" />
 
-import { TrackCard } from "../../../shared/ui/track-card/TrackCard";
+import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import { useDiscography } from "../model/useDiscography";
 import { Link } from "react-router-dom";
-import clockIcon from "../../../shared/assets/clock-icon.svg";
+import clockIcon from "@shared/assets/clock-icon.svg";
 import {
   artistMusicFilterList,
   artistMusicSortList,
-} from "../../../shared/constants/constants";
-import checkmark from "../../../shared/assets/checkmark-icon.svg";
-import orderIcon from "../../../shared/assets/drop-down/order-icon.svg";
-import DropDownIcon from "../../../shared/assets/drop-down/drop-down-arrow.svg?react";
-import ListIcon from "../../../shared/assets/drop-down/list-icon.svg?react";
-import GridIcon from "../../../shared/assets/drop-down/grid-icon.svg?react";
-import { CardList } from "../../../shared/ui/card-list/CardList";
-import playIcon from "../../../shared/assets/play-icon.svg";
+} from "@shared/constants/constants";
+import checkmark from "@shared/assets/checkmark-icon.svg";
+import orderIcon from "@shared/assets/drop-down/order-icon.svg";
+import DropDownIcon from "@shared/assets/drop-down/drop-down-arrow.svg?react";
+import ListIcon from "@shared/assets/drop-down/list-icon.svg?react";
+import GridIcon from "@shared/assets/drop-down/grid-icon.svg?react";
+import { CardList } from "@shared/ui/card-list/CardList";
+import playIcon from "@shared/assets/play-icon.svg";
 
 export const Discography = ({
   setIsFilterDropDownOpen,

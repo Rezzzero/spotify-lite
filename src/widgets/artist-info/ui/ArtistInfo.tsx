@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { CardList } from "../../../shared/ui/card-list/CardList";
-import { TrackCard } from "../../../shared/ui/track-card/TrackCard";
+import { CardList } from "@shared/ui/card-list/CardList";
+import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import { useArtistInfo } from "../model/useArtistInfo";
-import { artistMusicFilterList } from "../../../shared/constants/constants";
+import { artistMusicFilterList } from "@shared/constants/constants";
 
 export const ArtistInfo = () => {
   const {

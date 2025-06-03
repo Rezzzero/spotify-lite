@@ -1,16 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Route } from "../../shared/constants/constants";
+import { Route } from "@shared/constants/constants";
 import App from "../App";
-import { HomePage } from "../../pages/home/HomePage";
-import { SearchPage } from "../../pages/search/SearchPage";
-import { SectionPage } from "../../pages/section/SectionPage";
-import { ArtistPage } from "../../pages/artist/ArtistPage";
-import { TestPage } from "../../pages/test/TestPage";
-import { AlbumPage } from "../../pages/album/AlbumPage";
-import { TrackPage } from "../../pages/track/TrackPage";
-import { DiscographyPage } from "../../pages/discography/DiscographyPage";
-import { LoginPage } from "../../pages/login/LoginPage";
-import { RegistationPage } from "../../pages/registration/RegistationPage";
+import { HomePage } from "@pages/home/HomePage";
+import { SearchPage } from "@pages/search/SearchPage";
+import { SectionPage } from "@pages/section/SectionPage";
+import { ArtistPage } from "@pages/artist/ArtistPage";
+import { TestPage } from "@pages/test/TestPage";
+import { AlbumPage } from "@pages/album/AlbumPage";
+import { TrackPage } from "@pages/track/TrackPage";
+import { DiscographyPage } from "@pages/discography/DiscographyPage";
+import { LoginPage } from "@pages/login/LoginPage";
+import { RegistationPage } from "@pages/registration/RegistationPage";
 
 export const router = createBrowserRouter([
   {

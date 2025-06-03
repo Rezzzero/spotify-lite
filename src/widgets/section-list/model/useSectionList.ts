@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import { useFetchList } from "../../../shared/lib/hooks/useFetchList";
-import { CardItem, Track } from "../../../shared/types/types";
+import { useFetchList } from "@shared/lib/hooks/useFetchList";
+import { CardItem, Track } from "@shared/types/types";
 type SectionName = "popular-artists" | "popular-tracks" | "new-releases";
 
 const titleList = {

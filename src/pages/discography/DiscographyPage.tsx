@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import { Discography } from "../../widgets/discography/ui/Discography";
-import { Footer } from "../../widgets/footer/ui/Footer";
+import { Discography } from "@widgets/discography/ui/Discography";
+import { Footer } from "@widgets/footer/ui/Footer";
 
 export const DiscographyPage = () => {
   const [isFilterDropDownOpen, setIsFilterDropDownOpen] = useState(false);

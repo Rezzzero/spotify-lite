@@ -3,14 +3,14 @@ import spotifyLogo from "/spotify-logo.svg";
 import googleLogo from "/google-auth-logo.svg";
 import facebookLogo from "/facebook-auth-logo.svg";
 import appleLogo from "/apple-auth-logo.svg";
-import errorIcon from "../../../../shared/assets/auth/error-icon.svg";
-import wrongEmailOrPasswordIcon from "../../../../shared/assets/auth/wrong-email-or-password-icon.svg";
-import { Route } from "../../../../shared/constants/constants";
+import errorIcon from "@shared/assets/auth/error-icon.svg";
+import wrongEmailOrPasswordIcon from "@shared/assets/auth/wrong-email-or-password-icon.svg";
+import { Route } from "@shared/constants/constants";
 import { useLogin } from "../model/useLogin";
-import ShowPasswordIcon from "../../../../shared/assets/auth/password-show-icon.svg?react";
-import HidePasswordIcon from "../../../../shared/assets/auth/password-hide-icon.svg?react";
-import { OTPInput } from "../../../../shared/ui/otp-input/OTPInput";
-import { CustomInput } from "../../../../shared/ui/custom-input/CustomInput";
+import ShowPasswordIcon from "@shared/assets/auth/password-show-icon.svg?react";
+import HidePasswordIcon from "@shared/assets/auth/password-hide-icon.svg?react";
+import { OTPInput } from "@shared/ui/otp-input/OTPInput";
+import { CustomInput } from "@shared/ui/custom-input/CustomInput";
 
 export const LoginForm = () => {
   const {

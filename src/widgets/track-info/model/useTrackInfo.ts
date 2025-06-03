@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { useGetColors } from "../../../shared/lib/hooks/useGetColors";
-import { Album, Artist, Track } from "../../../shared/types/types";
+import { useGetColors } from "@shared/lib/hooks/useGetColors";
+import { Album, Artist, Track } from "@shared/types/types";
 
 interface TrackDataType {
   track: Track;

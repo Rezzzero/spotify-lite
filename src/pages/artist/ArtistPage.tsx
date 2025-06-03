@@ -1,5 +1,5 @@
-import { ArtistInfo } from "../../widgets/artist-info/ui/ArtistInfo";
-import { Footer } from "../../widgets/footer/ui/Footer";
+import { ArtistInfo } from "@widgets/artist-info/ui/ArtistInfo";
+import { Footer } from "@widgets/footer/ui/Footer";
 
 export const ArtistPage = () => {
   return (

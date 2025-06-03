@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Album, Artist, Playlist, Track } from "../../../shared/types/types";
-import { artistMusicFilterList } from "../../../shared/constants/constants";
-import { useGetColors } from "../../../shared/lib/hooks/useGetColors";
+import { Album, Artist, Playlist, Track } from "@shared/types/types";
+import { artistMusicFilterList } from "@shared/constants/constants";
+import { useGetColors } from "@shared/lib/hooks/useGetColors";
 
 interface ArtistInfoType {
   artist: Artist;

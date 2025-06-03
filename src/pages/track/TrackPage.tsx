@@ -1,5 +1,5 @@
-import { Footer } from "../../widgets/footer/ui/Footer";
-import { TrackInfo } from "../../widgets/track-info/ui/TrackInfo";
+import { Footer } from "@widgets/footer/ui/Footer";
+import { TrackInfo } from "@widgets/track-info/ui/TrackInfo";
 
 export const TrackPage = () => {
   return (

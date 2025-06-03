@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSearchStore } from "../../../app/store/search/useSearchStore";
-import { CategoriesList } from "../../../shared/constants/constants";
+import { CategoriesList } from "@shared/constants/constants";
 import { useLocation, useParams } from "react-router-dom";
 
 export const useCategoryList = () => {

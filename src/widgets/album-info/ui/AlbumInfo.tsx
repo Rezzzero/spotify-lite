@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import { formatMsToMinutesAndSeconds } from "../../../shared/lib/format/msToMinutesAndSeconds";
+import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
 import { useAlbumInfo } from "../model/useAlbumInfo";
-import clockIcon from "../../../shared/assets/clock-icon.svg";
-import { TrackCard } from "../../../shared/ui/track-card/TrackCard";
-import { formatReleaseDate } from "../../../shared/lib/format/releaseDate";
-import { CardList } from "../../../shared/ui/card-list/CardList";
+import clockIcon from "@shared/assets/clock-icon.svg";
+import { TrackCard } from "@shared/ui/track-card/TrackCard";
+import { formatReleaseDate } from "@shared/lib/format/releaseDate";
+import { CardList } from "@shared/ui/card-list/CardList";
 
 export const AlbumInfo = () => {
   const { albumData, imageColors } = useAlbumInfo();

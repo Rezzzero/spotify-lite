@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import { NavBar } from "../widgets/navbar/ui/NavBar";
-import { MediaLibrary } from "../widgets/media-library/ui/MediaLibrary";
+import { NavBar } from "@widgets/navbar/ui/NavBar";
+import { MediaLibrary } from "@widgets/media-library/ui/MediaLibrary";
 
 function App() {
   return (

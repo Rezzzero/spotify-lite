@@ -1,8 +1,8 @@
-import { CardItem, Track } from "../../../shared/types/types";
-import { CardList } from "../../../shared/ui/card-list/CardList";
-import { TrackCard } from "../../../shared/ui/track-card/TrackCard";
+import { CardItem, Track } from "@shared/types/types";
+import { CardList } from "@shared/ui/card-list/CardList";
+import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import { useSearchCategoryResults } from "../model/useSearchCategoryResults";
-import clockIcon from "../../../shared/assets/clock-icon.svg";
+import clockIcon from "@shared/assets/clock-icon.svg";
 
 export const SearchCategoryResults = () => {
   const { items, category } = useSearchCategoryResults();

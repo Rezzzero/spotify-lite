@@ -1,5 +1,5 @@
-import { Footer } from "../../widgets/footer/ui/Footer";
-import { SectionList } from "../../widgets/section-list/ui/SectionList";
+import { Footer } from "@widgets/footer/ui/Footer";
+import { SectionList } from "@widgets/section-list/ui/SectionList";
 
 export const SectionPage = () => {
   return (

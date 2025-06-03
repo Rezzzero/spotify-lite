@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Album } from "../../../shared/types/types";
+import { Album } from "@shared/types/types";
 import axios from "axios";
 
 export const useDiscographyData = ({

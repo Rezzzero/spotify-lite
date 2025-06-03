@@ -1,9 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { Logo } from "../../../shared/ui/logo/Logo";
+import { Logo } from "@shared/ui/logo/Logo";
 import HomeIcon from "../assets/icons/home-icon.svg";
 import HomeLeftIcon from "../assets/icons/home-left-icon.svg";
 import HomeLeftHoverIcon from "../assets/icons/home-left-hover-icon.svg";
-import { Route } from "../../../shared/constants/constants";
+import { Route } from "@shared/constants/constants";
 import { SearchInput } from "../../search-input/ui/SearchInput";
 import { useState } from "react";
 import { useUserStore } from "../../../app/store/user/useUSer";

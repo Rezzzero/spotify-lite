@@ -1,6 +1,6 @@
 import Checkbox from "@mui/material/Checkbox";
-import CheckedIcon from "../../../shared/assets/auth/square-checked-icon.svg?react";
-import UncheckedIcon from "../../../shared/assets/auth/square-unchecked-icon.svg?react";
+import CheckedIcon from "@shared/assets/auth/square-checked-icon.svg?react";
+import UncheckedIcon from "@shared/assets/auth/square-unchecked-icon.svg?react";
 
 export const CustomCheckbox = ({
   checked,

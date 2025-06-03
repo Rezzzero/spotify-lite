@@ -1,6 +1,6 @@
 import Checkbox from "@mui/material/Checkbox";
-import CheckedIcon from "../../../shared/assets/auth/checked-icon.svg?react";
-import UncheckedIcon from "../../../shared/assets/auth/unchecked-icon.svg?react";
+import CheckedIcon from "@shared/assets/auth/checked-icon.svg?react";
+import UncheckedIcon from "@shared/assets/auth/unchecked-icon.svg?react";
 
 export const RoundedCheckbox = ({ checked }: { checked: boolean }) => {
   return (

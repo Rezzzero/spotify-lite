@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Album, Artist } from "../../../shared/types/types";
+import { Album, Artist } from "@shared/types/types";
 import { useParams } from "react-router-dom";
-import { useGetColors } from "../../../shared/lib/hooks/useGetColors";
+import { useGetColors } from "@shared/lib/hooks/useGetColors";
 
 interface AlbumDataType {
   album: Album;

@@ -1,5 +1,5 @@
-import { AlbumInfo } from "../../widgets/album-info/ui/AlbumInfo";
-import { Footer } from "../../widgets/footer/ui/Footer";
+import { AlbumInfo } from "@widgets/album-info/ui/AlbumInfo";
+import { Footer } from "@widgets/footer/ui/Footer";
 
 export const AlbumPage = () => {
   return (

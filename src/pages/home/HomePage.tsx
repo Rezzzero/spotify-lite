@@ -1,7 +1,7 @@
-import { Footer } from "../../widgets/footer/ui/Footer";
-import { NewReleasesList } from "../../widgets/new-releases/ui/NewReleasesList";
-import { PopularArtistsList } from "../../widgets/popular-artists/ui/PopularArtistsList";
-import { PopularTracksList } from "../../widgets/popular-tracks/ui/PopularTracksList";
+import { Footer } from "@widgets/footer/ui/Footer";
+import { NewReleasesList } from "@widgets/new-releases/ui/NewReleasesList";
+import { PopularArtistsList } from "@widgets/popular-artists/ui/PopularArtistsList";
+import { PopularTracksList } from "@widgets/popular-tracks/ui/PopularTracksList";
 
 export const HomePage = () => {
   return (

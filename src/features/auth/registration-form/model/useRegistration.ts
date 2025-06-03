@@ -4,7 +4,7 @@ import { initialUserInfoBlur } from "./state/InitialStates";
 import { UserInfoKey } from "./types/NewUser";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Route } from "../../../../shared/constants/constants";
+import { Route } from "@shared/constants/constants";
 
 export type FormValues = {
   email: string;

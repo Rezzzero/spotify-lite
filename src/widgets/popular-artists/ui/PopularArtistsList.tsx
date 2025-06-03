@@ -1,7 +1,7 @@
 import { SwiperSlide } from "swiper/react";
 import { usePopularArtists } from "../model/usePopularArtists";
-import { BaseSwiper } from "../../../shared/ui/swiper/BaseSwiper";
-import { Card } from "../../../shared/ui/card/Card";
+import { BaseSwiper } from "@shared/ui/swiper/BaseSwiper";
+import { Card } from "@shared/ui/card/Card";
 import { Link } from "react-router-dom";
 
 export const PopularArtistsList = () => {

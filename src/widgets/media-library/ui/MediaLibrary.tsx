@@ -2,7 +2,7 @@ import PlusIcon from "../assets/plus-icon.svg";
 import PlusHoverIcon from "../assets/plus-hover-icon.svg";
 import GlobalIcon from "../assets/global-icon.svg";
 import { useState } from "react";
-import { MediaLibraryLinks } from "../../../shared/constants/constants";
+import { MediaLibraryLinks } from "@shared/constants/constants";
 import { Link } from "react-router-dom";
 
 export const MediaLibrary = () => {

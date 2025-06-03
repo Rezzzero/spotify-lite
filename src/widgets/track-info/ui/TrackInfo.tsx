@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { formatMsToMinutesAndSeconds } from "../../../shared/lib/format/msToMinutesAndSeconds";
+import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
 import { useTrackInfo } from "../model/useTrackInfo";
-import { TrackCard } from "../../../shared/ui/track-card/TrackCard";
-import { CardList } from "../../../shared/ui/card-list/CardList";
+import { TrackCard } from "@shared/ui/track-card/TrackCard";
+import { CardList } from "@shared/ui/card-list/CardList";
 
 export const TrackInfo = () => {
   const { trackData, albums, singles, imageColors } = useTrackInfo();
