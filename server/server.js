@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import popularTracksRoutes from "./routes/spotify/popularTracks.js";
 import popularArtistsRoutes from "./routes/spotify/popularArtists.js";
 import newReleasesRoutes from "./routes/spotify/newReleases.js";
@@ -16,11 +17,19 @@ import signUpRoutes from "./routes/supabase/signUp.js";
 import signInRoutes from "./routes/supabase/signIn.js";
 import sendOtpRoutes from "./routes/supabase/sendOtp.js";
 import singInWithOtpRoutes from "./routes/supabase/signInWithOtp.js";
+import initialUserRoutes from "./routes/supabase/initialUser.js";
 
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
 const port = 3000;
 
@@ -53,6 +62,8 @@ app.use("/signin", signInRoutes);
 app.use("/auth/send-otp", sendOtpRoutes);
 
 app.use("/auth/verify-otp", singInWithOtpRoutes);
+
+app.use("/auth/me", initialUserRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

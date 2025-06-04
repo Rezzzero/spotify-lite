@@ -138,7 +138,7 @@ export const LoginForm = () => {
                   {loading ? "Загрузка..." : "Войти"}
                 </button>
                 <button
-                  type="submit"
+                  type="button"
                   onClick={sendOtp}
                   className="underline cursor-pointer hover:text-green-400"
                 >
@@ -147,7 +147,7 @@ export const LoginForm = () => {
               </>
             ) : (
               <button
-                type="submit"
+                type="button"
                 onClick={sendOtp}
                 className="text-black font-bold rounded-full bg-green-400 hover:bg-[#74eda0] hover:scale-105 py-3 px-10 cursor-pointer"
               >
@@ -191,7 +191,7 @@ export const LoginForm = () => {
               </div>
             )}
             <button
-              type="submit"
+              type="button"
               onClick={sendOtp}
               className="font-bold border border-zinc-500 hover:border-white py-1 px-3 rounded-full hover:scale-105 cursor-pointer mb-3"
             >

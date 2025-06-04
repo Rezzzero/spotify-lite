@@ -1,8 +1,9 @@
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "../../../../app/store/user/useUSer";
+import { useUserStore } from "../../../../app/store/user/useUser";
 import { useForm } from "react-hook-form";
+import { maskEmail } from "@shared/lib/mask/maskEmail";
 
 type FormValues = {
   email: string;
@@ -36,6 +37,11 @@ export const useLogin = () => {
   const { setUser } = useUserStore();
   const emailValue = watch("email", "");
   const passwordValue = watch("password", "");
+  const withPasswordRef = useRef(false);
+
+  useEffect(() => {
+    withPasswordRef.current = withPassword;
+  }, [withPassword]);
 
   const createOnChange = (field: SignInKey) => () => {
     trigger(field);
@@ -75,24 +81,30 @@ export const useLogin = () => {
 
   const sendOtp = async () => {
     trigger("email");
-    setLoading(true);
-    try {
-      const res = await axios.post("http://localhost:3000/auth/send-otp", {
-        email: emailValue,
-      });
 
-      setCoveredEmail(res.data.coveredEmail);
-      setVerifyStep(true);
-      setLoading(false);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const message =
-          error.response?.data?.error ||
-          "Что-то пошло не так. Попробуйте позже.";
-        setError("email", { message });
-        setLoading(false);
+    setVerifyStep(true);
+    setWithPassword(false);
+    setCoveredEmail(maskEmail(emailValue));
+
+    setTimeout(async () => {
+      if (withPasswordRef.current) {
+        return;
       }
-    }
+
+      try {
+        const res = await axios.post("http://localhost:3000/auth/send-otp", {
+          email: emailValue,
+        });
+        console.log(res);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const message =
+            error.response?.data?.error ||
+            "Что-то пошло не так. Попробуйте позже.";
+          setError("email", { message });
+        }
+      }
+    }, 30000);
   };
 
   const verifyOtp = async () => {
@@ -116,13 +128,19 @@ export const useLogin = () => {
     }
 
     try {
-      const res = await axios.post("http://localhost:3000/auth/verify-otp", {
-        email: emailValue,
-        otp: otp.join(""),
-      });
+      const res = await axios.post(
+        "http://localhost:3000/auth/verify-otp",
+        {
+          email: emailValue,
+          otp: otp.join(""),
+        },
+        {
+          withCredentials: true,
+        }
+      );
       setLoading(false);
 
-      setUser(res.data);
+      setUser(res.data.session);
 
       navigate("/");
     } catch (error) {
@@ -142,15 +160,21 @@ export const useLogin = () => {
   const signInWithPassword = async () => {
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:3000/signin", {
-        email: emailValue,
-        password: passwordValue,
-      });
+      const res = await axios.post(
+        "http://localhost:3000/signin",
+        {
+          email: emailValue,
+          password: passwordValue,
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
       setLoading(false);
       setSignInError({ status: false, message: "" });
 
-      setUser(res.data);
+      setUser(res.data.session);
 
       navigate("/");
     } catch (error) {

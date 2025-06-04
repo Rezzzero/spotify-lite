@@ -1,24 +1,5 @@
 import { supabase, supabaseAdmin } from "../supabase/supabaseClient.js";
 
-function maskEmail(email) {
-  const [localPart, domainPart] = email.split("@");
-
-  const firstChar = localPart[0];
-  const lastChar = localPart[localPart.length - 1];
-  const maskedLocal = `${firstChar}${"*".repeat(
-    Math.max(0, localPart.length - 2)
-  )}${lastChar}`;
-
-  const domainName = domainPart.split(".")[0];
-  const domainFirstChar = domainName[0];
-  const maskedDomain = `${domainFirstChar}${"*".repeat(
-    Math.max(0, domainName.length - 1)
-  )}`;
-  const domainSuffix = domainPart.slice(domainName.length);
-
-  return `${maskedLocal}@${maskedDomain}${domainSuffix}`;
-}
-
 export const checkEmail = async (email) => {
   const { data, error } = await supabaseAdmin.rpc("check_email_exists", {
     email_param: email,
@@ -93,7 +74,6 @@ export const sendOtp = async (email) => {
     return {
       success: true,
       message: "Код отправлен на вашу почту",
-      coveredEmail: maskEmail(email),
     };
   }
 };
@@ -129,4 +109,21 @@ export const signInWithOtp = async (email, otp) => {
     message: "Код успешно подтверждён",
     session: data.session,
   };
+};
+
+export const getUserByAccessToken = async (accessToken) => {
+  if (!accessToken) {
+    throw new Error("Не авторизован");
+  }
+
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser(accessToken);
+
+  if (error || !user) {
+    throw new Error("Неверный токен");
+  }
+
+  return user;
 };

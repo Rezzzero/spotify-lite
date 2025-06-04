@@ -6,7 +6,7 @@ import HomeLeftHoverIcon from "../assets/icons/home-left-hover-icon.svg";
 import { Route } from "@shared/constants/constants";
 import { SearchInput } from "../../search-input/ui/SearchInput";
 import { useState } from "react";
-import { useUserStore } from "../../../app/store/user/useUSer";
+import { useUserStore } from "../../../app/store/user/useUser";
 
 export const NavBar = () => {
   const [isHovering, setIsHovering] = useState(false);
