@@ -5,6 +5,7 @@ import HomeLeftIcon from "../assets/icons/home-left-icon.svg?react";
 import { Route } from "@shared/constants/constants";
 import { SearchInput } from "../../search-input/ui/SearchInput";
 import { useNavbar } from "../model/useNavBar";
+import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 
 export const NavBar = () => {
   const { user, location, handleSignOut } = useNavbar();
@@ -14,20 +15,24 @@ export const NavBar = () => {
       <Logo />
       <div className={`flex items-center gap-5 ${user && "mx-auto"}`}>
         {location.pathname === Route.HOME && (
-          <Link
-            to={Route.HOME}
-            className="bg-[#262729] rounded-full p-3 hover:bg-[#3b3b3d] hover:scale-102 duration-200"
-          >
-            <img src={HomeIcon} alt="home icon" />
-          </Link>
+          <CustomTooltip title="Главная">
+            <Link
+              to={Route.HOME}
+              className="bg-[#262729] rounded-full p-3 hover:bg-[#3b3b3d] hover:scale-102 duration-200"
+            >
+              <img src={HomeIcon} alt="home icon" />
+            </Link>
+          </CustomTooltip>
         )}
         {location.pathname !== Route.HOME && (
-          <Link
-            to={Route.HOME}
-            className="bg-[#262729] rounded-full p-3 hover:bg-[#3b3b3d] group hover:scale-102 duration-200"
-          >
-            <HomeLeftIcon className="text-[#BABABA] group-hover:text-white" />
-          </Link>
+          <CustomTooltip title="Главная">
+            <Link
+              to={Route.HOME}
+              className="bg-[#262729] rounded-full p-3 hover:bg-[#3b3b3d] group hover:scale-102 duration-200"
+            >
+              <HomeLeftIcon className="text-[#BABABA] group-hover:text-white" />
+            </Link>
+          </CustomTooltip>
         )}
         <SearchInput />
       </div>

@@ -21,7 +21,16 @@ export const SearchCategoryResults = () => {
         </div>
         <div className="flex flex-col">
           {(items as Track[]).map((track, index) => (
-            <TrackCard key={track.id} track={track} withNum index={index} />
+            <TrackCard
+              key={track.id}
+              track={track}
+              withNum
+              index={index}
+              withArtists
+              grid
+              withAlbumName
+              withImage
+            />
           ))}
         </div>
       </div>

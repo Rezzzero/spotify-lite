@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Track } from "../../types/types";
 import { formatMsToMinutesAndSeconds } from "../../lib/format/msToMinutesAndSeconds";
+import { CustomTooltip } from "../tooltip/CustomTooltip";
 
 export const TrackCard = ({
   track,
@@ -8,6 +9,7 @@ export const TrackCard = ({
   withNum,
   withAlbumName,
   withImage,
+  withArtists,
   grid,
 }: {
   track: Track;
@@ -15,6 +17,7 @@ export const TrackCard = ({
   withNum?: boolean;
   withAlbumName?: boolean;
   withImage?: boolean;
+  withArtists?: boolean;
   grid?: boolean;
 }) => {
   return (
@@ -35,22 +38,31 @@ export const TrackCard = ({
           />
         )}
         <div>
-          <Link to={`/track/${track.id}`} className="hover:underline">
-            {track.name}
-          </Link>
-          <div className="flex text-gray-400 flex-wrap">
-            {track.artists.map((artist, index) => (
-              <div key={artist.id} className="flex items-center">
-                <Link
-                  to={`/artist/${artist.id}`}
-                  className="text-sm font-semibold hover:underline"
-                >
-                  {artist.name}
-                </Link>
-                {index < track.artists.length - 1 && <span>,&nbsp;</span>}
+          <CustomTooltip title={track.name} placement="top">
+            <Link to={`/track/${track.id}`} className="hover:underline">
+              {track.name}
+            </Link>
+          </CustomTooltip>
+          {withArtists && (
+            <CustomTooltip
+              title={track.artists.map((artist) => artist.name).join(", ")}
+              placement="top"
+            >
+              <div className="flex text-gray-400 flex-wrap">
+                {track.artists.map((artist, index) => (
+                  <div key={artist.id} className="flex items-center">
+                    <Link
+                      to={`/artist/${artist.id}`}
+                      className="text-sm font-semibold hover:underline"
+                    >
+                      {artist.name}
+                    </Link>
+                    {index < track.artists.length - 1 && <span>,&nbsp;</span>}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </CustomTooltip>
+          )}
         </div>
       </div>
       {withAlbumName && (

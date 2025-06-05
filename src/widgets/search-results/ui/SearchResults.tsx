@@ -41,7 +41,13 @@ export const SearchResults = () => {
           </Link>
           <div className="flex flex-col">
             {searchResults?.tracks?.items?.slice(0, 4).map((track, index) => (
-              <TrackCard key={index} track={track} withImage index={index} />
+              <TrackCard
+                key={index}
+                track={track}
+                withImage
+                index={index}
+                withArtists
+              />
             ))}
           </div>
         </div>

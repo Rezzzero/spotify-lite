@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { CardItem } from "../../types/types";
 import { formatMsToMinutes } from "../../lib/format/msToMinutes";
 import { formatReleaseDate } from "../../lib/format/releaseDate";
+import { CustomTooltip } from "../tooltip/CustomTooltip";
 
 export const Card = ({
   item,
@@ -28,29 +29,37 @@ export const Card = ({
           isSearchPage ? "w-39 h-39" : "w-42 h-42"
         }`}
       />
-      <Link
-        to={link}
-        onClick={(e) => e.stopPropagation()}
-        className="hover:underline"
-      >
-        {item.name}
-      </Link>
+
+      <CustomTooltip title={item.name} withBorder>
+        <Link
+          to={link}
+          onClick={(e) => e.stopPropagation()}
+          className="hover:underline"
+        >
+          {item.name}
+        </Link>
+      </CustomTooltip>
 
       {cardType === "track" && item.artists && (
-        <div className="flex flex-wrap gap-x-1">
-          {item.artists!.map((artist, index) => (
-            <span key={artist.id}>
-              <Link
-                to={`/artist/${artist.id}`}
-                onClick={(e) => e.stopPropagation()}
-                className="text-sm font-semibold hover:underline"
-              >
-                {artist.name}
-              </Link>
-              {index < item.artists!.length - 1 && <span>,&nbsp;</span>}
-            </span>
-          ))}
-        </div>
+        <CustomTooltip
+          title={item.artists.map((artist) => artist.name).join(", ")}
+          placement="top"
+        >
+          <div className="flex flex-wrap gap-x-1">
+            {item.artists!.map((artist, index) => (
+              <span key={artist.id}>
+                <Link
+                  to={`/artist/${artist.id}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-sm font-semibold hover:underline"
+                >
+                  {artist.name}
+                </Link>
+                {index < item.artists!.length - 1 && <span>,&nbsp;</span>}
+              </span>
+            ))}
+          </div>
+        </CustomTooltip>
       )}
 
       {cardType === "artist" && (
