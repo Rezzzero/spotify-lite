@@ -1,11 +1,11 @@
 <svg width="21" height="22" viewBox="0 0 21 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-<line y1="-1" x2="11.5025" y2="-1" transform="matrix(-0.91161 -0.411055 0.401934 -0.915669 21 4.96643)" stroke="#BABABA" stroke-width="2"/>
-<line y1="-1" x2="11.5025" y2="-1" transform="matrix(0.91161 -0.411055 -0.401934 -0.915669 0 4.96643)" stroke="#BABABA" stroke-width="2"/>
-<line x1="1" y1="5.05469" x2="1" y2="21.2383" stroke="#BABABA" stroke-width="2"/>
-<line x1="19.9615" y1="5.05463" x2="19.9615" y2="21.2383" stroke="#BABABA" stroke-width="2"/>
-<line y1="20.2383" x2="7.98378" y2="20.2383" stroke="#BABABA" stroke-width="2"/>
-<line x1="6.98784" y1="14.158" x2="6.98784" y2="21.2383" stroke="#BABABA" stroke-width="2"/>
-<line x1="14.9696" y1="14.1465" x2="5.98784" y2="14.1465" stroke="#BABABA" stroke-width="2"/>
-<line x1="13.9736" y1="14.158" x2="13.9736" y2="21.2383" stroke="#BABABA" stroke-width="2"/>
-<line x1="12.9736" y1="20.2383" x2="20.9574" y2="20.2383" stroke="#BABABA" stroke-width="2"/>
+<line y1="-1" x2="11.5025" y2="-1" transform="matrix(-0.91161 -0.411055 0.401934 -0.915669 21 4.96643)" stroke="currentColor" stroke-width="2"/>
+<line y1="-1" x2="11.5025" y2="-1" transform="matrix(0.91161 -0.411055 -0.401934 -0.915669 0 4.96643)" stroke="currentColor" stroke-width="2"/>
+<line x1="1" y1="5.05469" x2="1" y2="21.2383" stroke="currentColor" stroke-width="2"/>
+<line x1="19.9615" y1="5.05463" x2="19.9615" y2="21.2383" stroke="currentColor" stroke-width="2"/>
+<line y1="20.2383" x2="7.98378" y2="20.2383" stroke="currentColor" stroke-width="2"/>
+<line x1="6.98784" y1="14.158" x2="6.98784" y2="21.2383" stroke="currentColor" stroke-width="2"/>
+<line x1="14.9696" y1="14.1465" x2="5.98784" y2="14.1465" stroke="currentColor" stroke-width="2"/>
+<line x1="13.9736" y1="14.158" x2="13.9736" y2="21.2383" stroke="currentColor" stroke-width="2"/>
+<line x1="12.9736" y1="20.2383" x2="20.9574" y2="20.2383" stroke="currentColor" stroke-width="2"/>
 </svg>

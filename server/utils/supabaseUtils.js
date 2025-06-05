@@ -127,3 +127,7 @@ export const getUserByAccessToken = async (accessToken) => {
 
   return user;
 };
+
+export const signOut = async () => {
+  await supabase.auth.signOut({ scope: "local" });
+};

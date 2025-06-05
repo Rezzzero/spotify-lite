@@ -1,23 +1,18 @@
-import PlusIcon from "../assets/plus-icon.svg";
-import PlusHoverIcon from "../assets/plus-hover-icon.svg";
+import PlusIcon from "../assets/plus-icon.svg?react";
 import GlobalIcon from "../assets/global-icon.svg";
-import { useState } from "react";
 import { MediaLibraryLinks } from "@shared/constants/constants";
 import { Link } from "react-router-dom";
 
 export const MediaLibrary = () => {
-  const [isHovering, setIsHovering] = useState(false);
   return (
     <div className="flex flex-col gap-7 bg-[#141414] w-[23%] h-[85vh] rounded-xl p-2 pb-8">
       <div className="flex items-center justify-between pt-1 px-2 mb-2">
         <h2 className="font-bold">Моя медиатека</h2>
         <button
           type="button"
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
           className="w-8 h-8 p-2 rounded-full flex items-center justify-center hover:bg-zinc-800 duration-300 cursor-pointer"
         >
-          <img src={isHovering ? PlusHoverIcon : PlusIcon} alt="plus icon" />
+          <PlusIcon className="text-[#bababa] w-4 h-4 hover:text-white" />
         </button>
       </div>
       <div className="flex flex-col items-start font-bold gap-1 bg-[#1f1f1f] rounded-xl py-3 px-5">

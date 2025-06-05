@@ -5,18 +5,11 @@ import { useState } from "react";
 
 export const BaseSwiper = ({ children }: { children: React.ReactNode }) => {
   const [isHovering, setIsHovering] = useState(false);
-  const handleMouseOver = () => {
-    setIsHovering(true);
-  };
-
-  const handleMouseOut = () => {
-    setIsHovering(false);
-  };
 
   return (
     <div
-      onMouseOver={handleMouseOver}
-      onMouseOut={handleMouseOut}
+      onMouseOver={() => setIsHovering(true)}
+      onMouseOut={() => setIsHovering(false)}
       className="relative"
     >
       <Swiper

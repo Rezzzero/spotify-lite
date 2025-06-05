@@ -18,6 +18,7 @@ import signInRoutes from "./routes/supabase/signIn.js";
 import sendOtpRoutes from "./routes/supabase/sendOtp.js";
 import singInWithOtpRoutes from "./routes/supabase/signInWithOtp.js";
 import initialUserRoutes from "./routes/supabase/initialUser.js";
+import signOutRoutes from "./routes/supabase/signOut.js";
 
 dotenv.config();
 
@@ -58,6 +59,8 @@ app.use("/check-email", checkEmailRoutes);
 app.use("/signup", signUpRoutes);
 
 app.use("/signin", signInRoutes);
+
+app.use("/signout", signOutRoutes);
 
 app.use("/auth/send-otp", sendOtpRoutes);
 
