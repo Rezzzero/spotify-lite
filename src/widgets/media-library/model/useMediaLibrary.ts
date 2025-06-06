@@ -8,13 +8,17 @@ export const useMediaLibrary = () => {
 
   const createPlaylistRef = useRef<HTMLDivElement>(null);
   const loginPromptRef = useRef<HTMLDivElement>(null);
+  const createPlaylistButtonRef = useRef<HTMLButtonElement>(null);
+  const showLoginPromptButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         createPlaylistModal &&
         createPlaylistRef.current &&
-        !createPlaylistRef.current.contains(event.target as Node)
+        !createPlaylistRef.current.contains(event.target as Node) &&
+        createPlaylistButtonRef.current &&
+        !createPlaylistButtonRef.current?.contains(event.target as Node)
       ) {
         setCreatePlaylistModal(false);
       }
@@ -40,6 +44,7 @@ export const useMediaLibrary = () => {
   };
 
   return {
+    user,
     createPlaylistModal,
     setCreatePlaylistModal,
     handleCreatePlaylist,
@@ -47,5 +52,6 @@ export const useMediaLibrary = () => {
     setLoginPromptModal,
     createPlaylistRef,
     loginPromptRef,
+    createPlaylistButtonRef,
   };
 };

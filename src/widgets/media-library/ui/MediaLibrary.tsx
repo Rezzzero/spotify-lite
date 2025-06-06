@@ -1,6 +1,7 @@
 import PlusIcon from "../assets/plus-icon.svg?react";
 import GlobalIcon from "../assets/global-icon.svg";
-import addPlaylistIcon from "../assets/playlist-icon.svg";
+import AddPlaylistIcon from "../assets/playlist-icon.svg?react";
+import AddDirectoryIcon from "../assets/directory-icon.svg?react";
 import { MediaLibraryLinks, Route } from "@shared/constants/constants";
 import { Link } from "react-router-dom";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
@@ -8,6 +9,7 @@ import { useMediaLibrary } from "../model/useMediaLibrary";
 
 export const MediaLibrary = () => {
   const {
+    user,
     createPlaylistModal,
     setCreatePlaylistModal,
     handleCreatePlaylist,
@@ -15,6 +17,7 @@ export const MediaLibrary = () => {
     setLoginPromptModal,
     createPlaylistRef,
     loginPromptRef,
+    createPlaylistButtonRef,
   } = useMediaLibrary();
   return (
     <div className="flex flex-col gap-7 bg-[#141414] w-[23%] h-[85vh] rounded-xl p-2 pb-8 relative">
@@ -23,10 +26,20 @@ export const MediaLibrary = () => {
         <CustomTooltip title="Создать плейлист или папку" placement="top">
           <button
             type="button"
-            onClick={() => setCreatePlaylistModal(true)}
-            className="w-8 h-8 p-2 rounded-full flex items-center justify-center hover:bg-zinc-800 duration-300 cursor-pointer"
+            ref={createPlaylistButtonRef}
+            onClick={() => setCreatePlaylistModal((prev) => !prev)}
+            className={`rounded-full flex items-center justify-center ${
+              user
+                ? "bg-zinc-800 hover:bg-zinc-700 py-[8px] px-4"
+                : "p-2 hover:bg-zinc-800"
+            } group duration-300 gap-3 cursor-pointer`}
           >
-            <PlusIcon className="text-[#bababa] w-4 h-4 hover:text-white" />
+            <PlusIcon
+              className={`text-[#bababa] group-hover:text-white w-4 h-4 ${
+                createPlaylistModal && user && "rotate-45"
+              } duration-400`}
+            />
+            {user && <p className="font-bold text-sm">Создать</p>}
           </button>
         </CustomTooltip>
       </div>
@@ -80,20 +93,53 @@ export const MediaLibrary = () => {
       {createPlaylistModal && (
         <div
           ref={createPlaylistRef}
-          className="absolute top-12 right-4 bg-[#292929] p-1 rounded-md shadow-[1px_23px_30px_-9px_rgba(0,_0,_0,_0.8)]"
+          className={`absolute ${
+            user ? "top-14 -right-36" : "top-12 right-4"
+          } bg-[#292929] p-1 rounded-md shadow-[1px_23px_30px_-9px_rgba(0,_0,_0,_0.8)] z-20`}
         >
-          <button
-            type="button"
-            onClick={handleCreatePlaylist}
-            className="flex items-center gap-3 bg-transparent hover:bg-zinc-700 w-full h-full px-3 py-2 rounded-xs"
-          >
-            <img
-              src={addPlaylistIcon}
-              alt="add playlist icon"
-              className="w-4 h-4"
-            />
-            Создать плейлист
-          </button>
+          {!user && (
+            <button
+              type="button"
+              onClick={handleCreatePlaylist}
+              className="flex items-center gap-3 bg-transparent hover:bg-zinc-700 w-full h-full px-3 py-2 rounded-xs"
+            >
+              <AddPlaylistIcon className="w-4 h-4 text-white" />
+              Создать плейлист
+            </button>
+          )}
+          {user && (
+            <>
+              <button
+                type="button"
+                className="flex gap-2 hover:bg-zinc-700 group rounded-md py-2 pl-2 pr-7"
+              >
+                <div className="bg-zinc-600 rounded-full p-3">
+                  <AddPlaylistIcon className="w-5 h-5 text-white group-hover:text-green-400 group-hover:rotate-7 group-hover:scale-105 duration-300" />
+                </div>
+                <div className="flex flex-col items-start">
+                  <p className="text-sm font-bold">Плейлист</p>
+                  <p className="text-sm text-[#b3b3b3]">
+                    Создай плейлист с треками.
+                  </p>
+                </div>
+              </button>
+              <div className=" h-0 border-b border-zinc-600 mx-3" />
+              <button
+                type="button"
+                className="flex gap-2 hover:bg-zinc-700 group rounded-md py-2 pl-2 pr-7"
+              >
+                <div className="bg-zinc-600 rounded-full p-2">
+                  <AddDirectoryIcon className="w-7 h-7 text-white group-hover:text-green-400 group-hover:rotate-7 group-hover:scale-105 duration-300" />
+                </div>
+                <div className="flex flex-col items-start">
+                  <p className="text-sm font-bold">Папка</p>
+                  <p className="text-sm text-[#b3b3b3]">
+                    Организуй свои плейлисты.
+                  </p>
+                </div>
+              </button>
+            </>
+          )}
         </div>
       )}
       {LoginPromptModal && (

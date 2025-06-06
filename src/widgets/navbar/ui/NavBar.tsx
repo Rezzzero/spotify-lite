@@ -11,9 +11,13 @@ export const NavBar = () => {
   const { user, location, handleSignOut } = useNavbar();
 
   return (
-    <div className="bg-black flex items-center gap-5 p-2 pl-5">
+    <div
+      className={`bg-black flex items-center ${
+        user ? "justify-between" : ""
+      } gap-5 p-2 pl-5`}
+    >
       <Logo />
-      <div className={`flex items-center gap-5 ${user && "mx-auto"}`}>
+      <div className="flex items-center gap-5 ">
         {location.pathname === Route.HOME && (
           <CustomTooltip title="Главная">
             <Link
@@ -53,7 +57,7 @@ export const NavBar = () => {
         </div>
       )}
       {user && (
-        <div className="flex items-center gap-3 ml-auto">
+        <div className="flex items-center gap-3">
           Профиль
           <button type="button" onClick={() => handleSignOut()}>
             Выход
