@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { useUserStore } from "src/app/store/user/useUser";
+import { useNavigate } from "react-router-dom";
+import { generateId } from "@shared/lib/id/generateId";
 
 export const useMediaLibrary = () => {
   const { user } = useUserStore();
   const [createPlaylistModal, setCreatePlaylistModal] = useState(false);
   const [LoginPromptModal, setLoginPromptModal] = useState(false);
-
+  const navigate = useNavigate();
   const createPlaylistRef = useRef<HTMLDivElement>(null);
   const loginPromptRef = useRef<HTMLDivElement>(null);
   const createPlaylistButtonRef = useRef<HTMLButtonElement>(null);
-  const showLoginPromptButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -38,7 +39,11 @@ export const useMediaLibrary = () => {
 
   const handleCreatePlaylist = () => {
     setCreatePlaylistModal(false);
-    if (!user) {
+
+    if (user) {
+      const id = generateId();
+      navigate(`/playlist/${id}`);
+    } else {
       setLoginPromptModal(true);
     }
   };

@@ -1,6 +1,6 @@
 import PlusIcon from "../assets/plus-icon.svg?react";
 import GlobalIcon from "../assets/global-icon.svg";
-import AddPlaylistIcon from "../assets/playlist-icon.svg?react";
+import AddPlaylistIcon from "@shared/assets/add-playlist-icon.svg?react";
 import AddDirectoryIcon from "../assets/directory-icon.svg?react";
 import { MediaLibraryLinks, Route } from "@shared/constants/constants";
 import { Link } from "react-router-dom";
@@ -111,6 +111,7 @@ export const MediaLibrary = () => {
             <>
               <button
                 type="button"
+                onClick={handleCreatePlaylist}
                 className="flex gap-2 hover:bg-zinc-700 group rounded-md py-2 pl-2 pr-7"
               >
                 <div className="bg-zinc-600 rounded-full p-3">

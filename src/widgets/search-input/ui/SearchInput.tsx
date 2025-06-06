@@ -1,8 +1,8 @@
 import { useSearchInput } from "../model/useSearchInput";
-import SearchIcon from "../assets/search-icon.svg?react";
+import SearchIcon from "@shared/assets/search-icon.svg?react";
 import BrowseIcon from "../assets/browse-icon.svg?react";
 import BrowseSelectedIcon from "../assets/browse-selected-icon.svg";
-import CrossIcon from "../assets/cross-icon.svg?react";
+import CrossIcon from "@shared/assets/cross-icon.svg?react";
 import { Link, useLocation } from "react-router-dom";
 import { Route } from "@shared/constants/constants";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";

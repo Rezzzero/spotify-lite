@@ -11,6 +11,7 @@ import { TrackPage } from "@pages/track/TrackPage";
 import { DiscographyPage } from "@pages/discography/DiscographyPage";
 import { LoginPage } from "@pages/login/LoginPage";
 import { RegistationPage } from "@pages/registration/RegistationPage";
+import { PlaylistPage } from "@pages/playlist/PlaylistPage";
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ export const router = createBrowserRouter([
       {
         path: Route.DISCOGRAPHY,
         element: <DiscographyPage />,
+      },
+      {
+        path: Route.PLAYLIST,
+        element: <PlaylistPage />,
       },
       {
         path: Route.TEST,
