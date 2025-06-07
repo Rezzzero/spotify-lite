@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useUserStore } from "src/app/store/user/useUser";
 import { useNavigate } from "react-router-dom";
 import { generateId } from "@shared/lib/id/generateId";
+import axios from "axios";
 
 export const useMediaLibrary = () => {
   const { user } = useUserStore();
@@ -37,11 +38,31 @@ export const useMediaLibrary = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [createPlaylistModal, LoginPromptModal]);
 
-  const handleCreatePlaylist = () => {
+  const handleCreatePlaylist = async () => {
     setCreatePlaylistModal(false);
 
     if (user) {
       const id = generateId();
+
+      const playlistData = {
+        id: id,
+        userId: user.user.id,
+        title: "Новый плейлист",
+        description: null,
+        isPublic: true,
+        coverUrl: null,
+        owner: {
+          id: user.user.id,
+          display_name: user.user.user_metadata.userName,
+        },
+      };
+
+      try {
+        await axios.post("http://localhost:3000/create-playlist", playlistData);
+      } catch (error) {
+        console.log(error);
+      }
+
       navigate(`/playlist/${id}`);
     } else {
       setLoginPromptModal(true);

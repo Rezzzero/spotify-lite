@@ -1,15 +1,15 @@
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import { Playlist } from "@shared/types/types";
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 export const usePlaylistInfo = () => {
+  const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
   const [openSearch, setOpenSearch] = useState(true);
   const [playlist, setPlaylist] = useState<Playlist | null>(null);
-  const [playlistNewName, setPlaylistNewName] = useState(
-    playlist?.name ? playlist.name : "Мой плейлист №1"
-  );
+  const [playlistNewName, setPlaylistNewName] = useState("");
   const [playlistDescription, setPlaylistDescription] = useState(
     playlist?.description ? playlist.description : ""
   );
@@ -23,7 +23,29 @@ export const usePlaylistInfo = () => {
   const { id } = useParams();
   const source = id?.startsWith("sp_") ? "supabase" : "spotify";
   const openPlaylist = true;
-  const playlistName = playlist?.name ? playlist.name : "Мой плейлист №1";
+
+  useEffect(() => {
+    setLoading(true);
+    const endpoint =
+      source === "supabase" ? "get-supabase-playlist" : "get-playlist";
+    const fetch = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/${endpoint}/${id}`
+        );
+
+        setPlaylist(response.data);
+        setPlaylistNewName(response.data.title);
+        setPlaylistDescription(response.data.description);
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching playlist info:", error);
+      }
+    };
+
+    fetch();
+  }, [id, source]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -58,7 +80,6 @@ export const usePlaylistInfo = () => {
     playlist,
     imageColors,
     openPlaylist,
-    playlistName,
     value,
     setValue,
     openSearch,
@@ -74,5 +95,6 @@ export const usePlaylistInfo = () => {
     playlistDescription,
     handleChangePlaylistName,
     handleChangePlaylistDescription,
+    loading,
   };
 };

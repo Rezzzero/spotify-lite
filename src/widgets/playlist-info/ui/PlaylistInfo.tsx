@@ -17,7 +17,6 @@ export const PlaylistInfo = () => {
     playlist,
     imageColors,
     openPlaylist,
-    playlistName,
     value,
     setValue,
     openSearch,
@@ -33,10 +32,13 @@ export const PlaylistInfo = () => {
     playlistDescription,
     handleChangePlaylistName,
     handleChangePlaylistDescription,
+    loading,
   } = usePlaylistInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
     : "linear-gradient(to bottom, #333, #222)";
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="flex flex-col">
@@ -56,7 +58,9 @@ export const PlaylistInfo = () => {
         </div>
         <div className="flex flex-col gap-3 pt-12 h-full">
           <h2>{openPlaylist ? "Открытый плейлист" : "Закрытый плейлист"}</h2>
-          <h1 className="text-[90px] font-bold leading-none">{playlistName}</h1>
+          <h1 className="text-[90px] font-bold leading-none">
+            {playlistNewName}
+          </h1>
           <div className="flex gap-1 mt-auto">
             <img
               src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
@@ -72,7 +76,7 @@ export const PlaylistInfo = () => {
       <div className="flex flex-col gap-5 w-full pl-5 pr-8 h-[700px] relative">
         <div className="flex items-center pt-7 pb-10 justify-between w-full">
           <CustomTooltip
-            title={`Открыть контекстное меню: ${playlistName}`}
+            title={`Открыть контекстное меню: ${playlistNewName}`}
             placement="top"
             customFontSize={13}
           >

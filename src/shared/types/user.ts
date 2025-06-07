@@ -17,4 +17,15 @@ export interface UserData {
       };
     };
   };
+  user: {
+    email: string;
+    id: string;
+    user_metadata: {
+      gender: string;
+      userName: string;
+      birthday: string;
+      monthOfBirthday: string;
+      yearOfBirthday: string;
+    };
+  };
 }

@@ -131,3 +131,39 @@ export const getUserByAccessToken = async (accessToken) => {
 export const signOut = async () => {
   await supabase.auth.signOut({ scope: "local" });
 };
+
+export const createPlaylist = async (playlistData) => {
+  const { data, error } = await supabase.from("playlists").insert([
+    {
+      id: playlistData.id,
+      user_id: playlistData.userId,
+      title: playlistData.title,
+      description: playlistData.description,
+      is_public: playlistData.isPublic,
+      cover_url: playlistData.coverUrl,
+      owner: playlistData.owner,
+    },
+  ]);
+
+  if (error) {
+    console.error("Ошибка при создании плейлиста:", error.message);
+    throw new Error("Ошибка при создании плейлиста");
+  }
+
+  return data;
+};
+
+export const getPlaylist = async (playlistId) => {
+  const { data, error } = await supabase
+    .from("playlists")
+    .select("*")
+    .eq("id", playlistId)
+    .single();
+
+  if (error) {
+    console.error("Ошибка при получении плейлиста:", error.message);
+    throw new Error("Ошибка при получении плейлиста");
+  }
+
+  return data;
+};

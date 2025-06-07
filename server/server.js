@@ -19,6 +19,8 @@ import sendOtpRoutes from "./routes/supabase/sendOtp.js";
 import singInWithOtpRoutes from "./routes/supabase/signInWithOtp.js";
 import initialUserRoutes from "./routes/supabase/initialUser.js";
 import signOutRoutes from "./routes/supabase/signOut.js";
+import createPlaylistRoutes from "./routes/supabase/createPlaylist.js";
+import getPlaylistRoutes from "./routes/supabase/getPlaylist.js";
 
 dotenv.config();
 
@@ -67,6 +69,10 @@ app.use("/auth/send-otp", sendOtpRoutes);
 app.use("/auth/verify-otp", singInWithOtpRoutes);
 
 app.use("/auth/me", initialUserRoutes);
+
+app.use("/create-playlist", createPlaylistRoutes);
+
+app.use("/get-supabase-playlist", getPlaylistRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
