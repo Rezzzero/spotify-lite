@@ -1,11 +1,16 @@
 import { usePlaylistInfo } from "../model/usePlaylistInfo";
-import PlaylistIcon from "@shared/assets/playlist-icon.svg?react";
-import EditIcon from "@shared/assets/edit-icon.svg?react";
+import PlaylistIcon from "@shared/assets/playlist/playlist-icon.svg?react";
+import EditIcon from "@shared/assets/playlist/edit-icon.svg?react";
+import DeleteIcon from "@shared/assets/playlist/delete-icon.svg?react";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import ListIcon from "@shared/assets/drop-down/list-icon.svg?react";
 import CrossIcon from "@shared/assets/cross-icon.svg?react";
 import SearchIcon from "@shared/assets/search-icon.svg?react";
+import CompactListIcon from "@shared/assets/compact-list-icon.svg?react";
+import OpenPlaylistIcon from "@shared/assets/global-icon.svg?react";
+import ClosePlaylistIcon from "@shared/assets/playlist/lock-icon.svg?react";
 import { Link } from "react-router-dom";
+import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 
 export const PlaylistInfo = () => {
   const {
@@ -17,6 +22,17 @@ export const PlaylistInfo = () => {
     setValue,
     openSearch,
     setOpenSearch,
+    menuModal,
+    setMenuModal,
+    menuModalRef,
+    menuButtonRef,
+    editModal,
+    setEditModal,
+    editModalRef,
+    playlistNewName,
+    playlistDescription,
+    handleChangePlaylistName,
+    handleChangePlaylistDescription,
   } = usePlaylistInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
@@ -53,9 +69,21 @@ export const PlaylistInfo = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-5 w-full pl-5 pr-8 h-[700px]">
+      <div className="flex flex-col gap-5 w-full pl-5 pr-8 h-[700px] relative">
         <div className="flex items-center pt-7 pb-10 justify-between w-full">
-          <MenuIcon className="w-10 h-10 text-gray-400 hover:text-white cursor-pointer" />
+          <CustomTooltip
+            title={`Открыть контекстное меню: ${playlistName}`}
+            placement="top"
+            customFontSize={13}
+          >
+            <button
+              ref={menuButtonRef}
+              type="button"
+              onClick={() => setMenuModal((prev) => !prev)}
+            >
+              <MenuIcon className="w-10 h-10 text-gray-400 hover:text-white cursor-pointer hover:scale-105" />
+            </button>
+          </CustomTooltip>
           <button
             type="button"
             className="flex gap-2 text-sm font-semibold items-center text-gray-400 group hover:text-white cursor-pointer"
@@ -96,7 +124,103 @@ export const PlaylistInfo = () => {
             </button>
           </div>
         )}
+        {menuModal && (
+          <div
+            ref={menuModalRef}
+            className="absolute top-20 left-7 w-[330px] rounded-sm bg-[#2d2d2e] p-1"
+          >
+            <div className="flex flex-col gap-1 border-y border-zinc-600">
+              <button
+                type="button"
+                onClick={() => {
+                  setMenuModal(false);
+                  setEditModal(true);
+                }}
+                className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
+              >
+                <EditIcon className="w-4 h-4" />
+                Изменение сведений
+              </button>
+              <button
+                type="button"
+                className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
+              >
+                <DeleteIcon className="w-4 h-4" />
+                Удалить
+              </button>
+            </div>
+            <div className="flex flex-col gap-1 border-b border-zinc-600">
+              <button
+                type="button"
+                className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
+              >
+                <ClosePlaylistIcon className="w-4 h-4" />
+                Закрыть доступ
+              </button>
+            </div>
+          </div>
+        )}
       </div>
+      {editModal && (
+        <>
+          <div className="bg-black/80 fixed inset-0 z-10" />
+          <div
+            ref={editModalRef}
+            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-5 w-[475px] z-30 py-5 pl-5 pr-3 bg-[#2d2d2e] rounded-md"
+          >
+            <div className="flex items-center justify-between">
+              <h2 className="font-bold text-xl">Изменение сведений</h2>
+              <button
+                type="button"
+                onClick={() => {
+                  setEditModal(false);
+                }}
+                className="hover:bg-zinc-600 rounded-full p-2"
+              >
+                <CrossIcon className="w-3 h-3" />
+              </button>
+            </div>
+            <div className="flex gap-3 w-full pr-2">
+              <div className="flex items-center bg-zinc-800 rounded-sm h-[180px] w-[180px] shadow-xl group relative flex-shrink-0">
+                <PlaylistIcon className="text-gray-400 w-13 h-13 mx-auto group-hover:hidden" />
+                <button
+                  type="button"
+                  className="flex flex-col items-center gap-2 hidden mx-auto group-hover:block"
+                >
+                  <EditIcon className="w-11 h-11 mx-auto" />
+                  <p className="font-bold">Выбрать фото</p>
+                </button>
+                <button className="absolute top-3 right-3 hidden bg-black/70 group-hover:block hover:block rounded-full p-1">
+                  <MenuIcon className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="flex flex-col gap-2 flex-1 text-sm">
+                <input
+                  type="text"
+                  value={playlistNewName}
+                  onChange={handleChangePlaylistName}
+                  placeholder="Добавь название"
+                  className="bg-zinc-600 p-1 rounded-sm outline-none w-full border border-transparent focus:border-zinc-500 focus:bg-zinc-700"
+                />
+                <textarea
+                  value={playlistDescription}
+                  onChange={handleChangePlaylistDescription}
+                  placeholder="Добавь описание (необязательно)"
+                  className="bg-zinc-600 p-1 rounded-sm outline-none w-full resize-none h-full border border-transparent focus:border-zinc-500 focus:bg-zinc-700"
+                />
+              </div>
+            </div>
+            <div className="flex w-full items-center justify-end pr-2">
+              <button
+                type="button"
+                className="bg-white rounded-full text-black font-bold py-3 px-7 hover:bg-gray-100 hover:scale-105 cursor-pointer"
+              >
+                Сохранить
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

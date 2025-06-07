@@ -6,11 +6,13 @@ export const CustomTooltip = ({
   title,
   placement,
   withBorder,
+  customFontSize,
 }: {
   children: ReactElement;
   title: string;
   placement?: "top" | "bottom" | "left" | "right";
   withBorder?: boolean;
+  customFontSize?: number;
 }) => {
   return (
     <Tooltip
@@ -22,7 +24,7 @@ export const CustomTooltip = ({
           sx: {
             color: "#fff",
             backgroundColor: "#262729",
-            fontSize: "14px",
+            fontSize: customFontSize ? `${customFontSize}px` : "14px",
             ...(withBorder && { border: "1px solid #fff" }),
           },
         },

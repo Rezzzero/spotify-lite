@@ -1,5 +1,5 @@
 import PlusIcon from "../assets/plus-icon.svg?react";
-import GlobalIcon from "../assets/global-icon.svg";
+import GlobalIcon from "@shared/assets/global-icon.svg";
 import AddPlaylistIcon from "@shared/assets/add-playlist-icon.svg?react";
 import AddDirectoryIcon from "../assets/directory-icon.svg?react";
 import { MediaLibraryLinks, Route } from "@shared/constants/constants";
@@ -50,6 +50,7 @@ export const MediaLibrary = () => {
         </p>
         <button
           type="button"
+          onClick={handleCreatePlaylist}
           className="bg-white rounded-full text-black text-sm py-2 px-4 hover:bg-gray-100 hover:scale-103 cursor-pointer"
         >
           Создать плейлист
