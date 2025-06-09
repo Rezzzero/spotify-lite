@@ -24,6 +24,7 @@ import signOutRoutes from "./routes/supabase/auth/signOut.js";
 import createPlaylistRoutes from "./routes/supabase/playlist/createPlaylist.js";
 import getPlaylistRoutes from "./routes/supabase/playlist/getPlaylist.js";
 import deletePlaylistRoutes from "./routes/supabase/playlist/deletePlaylist.js";
+import updatePlaylistRoutes from "./routes/supabase/playlist/updatePlaylist.js";
 
 dotenv.config();
 
@@ -40,44 +41,28 @@ app.use(express.json());
 const port = 3000;
 
 app.use("/api/popular-tracks", popularTracksRoutes);
-
 app.use("/api/popular-artists", popularArtistsRoutes);
-
 app.use("/api/new-releases", newReleasesRoutes);
-
 app.use("/api/search", searchRouter);
-
 app.use("/api/artist", artistRoutes);
-
 app.use("/api/album", albumRoutes);
-
 app.use("/api/track", trackRoutes);
-
 app.use("/api/discography", discographyRoutes);
-
 app.use("/api/soundcloud-search", soundcloudSearchRoutes);
-
 app.use("/api/soundcloud-stream", streamRoutes);
 
 app.use("/check-email", checkEmailRoutes);
-
 app.use("/signup", signUpRoutes);
-
 app.use("/signin", signInRoutes);
-
 app.use("/signout", signOutRoutes);
-
 app.use("/auth/send-otp", sendOtpRoutes);
-
 app.use("/auth/verify-otp", singInWithOtpRoutes);
-
 app.use("/auth/me", initialUserRoutes);
 
 app.use("/create-playlist", createPlaylistRoutes);
-
 app.use("/get-supabase-playlist", getPlaylistRoutes);
-
 app.use("/delete-supabase-playlist", deletePlaylistRoutes);
+app.use("/update-supabase-playlist", updatePlaylistRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

@@ -137,7 +137,7 @@ export const createPlaylist = async (playlistData) => {
     {
       id: playlistData.id,
       user_id: playlistData.userId,
-      title: playlistData.title,
+      name: playlistData.name,
       description: playlistData.description,
       is_public: playlistData.isPublic,
       cover_url: playlistData.coverUrl,
@@ -178,6 +178,21 @@ export const deletePlaylist = async (playlistId) => {
   if (error) {
     console.error("Ошибка при удалении плейлиста:", error.message);
     throw new Error("Ошибка при удалении плейлиста");
+  }
+
+  return data;
+};
+
+export const updatePlaylist = async (playlistId, playlistData) => {
+  const { data, error } = await supabase
+    .from("playlists")
+    .update(playlistData)
+    .eq("id", playlistId)
+    .select();
+
+  if (error) {
+    console.error("Ошибка при обновлении плейлиста:", error.message);
+    throw new Error("Ошибка при обновлении плейлиста");
   }
 
   return data;

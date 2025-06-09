@@ -43,6 +43,7 @@ export const PlaylistInfo = () => {
     handleDeletePlaylist,
     deletePlaylistModal,
     setDeletePlaylistModal,
+    handleUpatePlaylist,
   } = usePlaylistInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
@@ -56,7 +57,10 @@ export const PlaylistInfo = () => {
         style={{ background: headerGradient }}
         className="flex items-center gap-7 p-7"
       >
-        <div className="flex items-center bg-zinc-800 rounded-md w-[232px] h-[232px] shadow-xl group">
+        <div
+          onClick={() => setEditModal((prev) => !prev)}
+          className="flex items-center bg-zinc-800 rounded-md w-[232px] h-[232px] shadow-xl group"
+        >
           <PlaylistIcon className="text-gray-400 w-15 h-15 ml-20 group-hover:hidden" />
           <button
             type="button"
@@ -249,6 +253,7 @@ export const PlaylistInfo = () => {
             <div className="flex w-full items-center justify-end pr-2">
               <button
                 type="button"
+                onClick={() => handleUpatePlaylist()}
                 className="bg-white rounded-full text-black font-bold py-3 px-7 hover:bg-gray-100 hover:scale-105 cursor-pointer"
               >
                 Сохранить

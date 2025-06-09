@@ -11,7 +11,9 @@ export const usePlaylistInfo = () => {
   const [value, setValue] = useState("");
   const [openSearch, setOpenSearch] = useState(true);
   const [playlist, setPlaylist] = useState<Playlist | null>(null);
-  const [playlistName, setPlaylistName] = useState("");
+  const [playlistName, setPlaylistName] = useState(
+    playlist?.name ? playlist.name : ""
+  );
   const [playlistDescription, setPlaylistDescription] = useState(
     playlist?.description ? playlist.description : ""
   );
@@ -43,7 +45,7 @@ export const usePlaylistInfo = () => {
         );
 
         setPlaylist(response.data);
-        setPlaylistName(response.data.title);
+        setPlaylistName(response.data.name);
         setPlaylistDescription(response.data.description);
 
         setLoading(false);
@@ -115,6 +117,25 @@ export const usePlaylistInfo = () => {
     }
   };
 
+  const handleUpatePlaylist = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/update-supabase-playlist/${id}`,
+        {
+          name: playlistName,
+          description: playlistDescription,
+        }
+      );
+
+      setEditModal(false);
+      setPlaylist(response.data[0]);
+      setPlaylistName(response.data[0].name);
+      setPlaylistDescription(response.data[0].description);
+    } catch (error) {
+      console.error("Error updating playlist:", error);
+    }
+  };
+
   return {
     playlist,
     imageColors,
@@ -144,5 +165,6 @@ export const usePlaylistInfo = () => {
     handleDeletePlaylist,
     deletePlaylistModal,
     setDeletePlaylistModal,
+    handleUpatePlaylist,
   };
 };
