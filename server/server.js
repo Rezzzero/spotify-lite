@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+
 import popularTracksRoutes from "./routes/spotify/popularTracks.js";
 import popularArtistsRoutes from "./routes/spotify/popularArtists.js";
 import newReleasesRoutes from "./routes/spotify/newReleases.js";
@@ -25,6 +26,7 @@ import createPlaylistRoutes from "./routes/supabase/playlist/createPlaylist.js";
 import getPlaylistRoutes from "./routes/supabase/playlist/getPlaylist.js";
 import deletePlaylistRoutes from "./routes/supabase/playlist/deletePlaylist.js";
 import updatePlaylistRoutes from "./routes/supabase/playlist/updatePlaylist.js";
+import uploadPlaylistImageRoutes from "./routes/supabase/playlist/uploadPlaylistImage.js";
 
 dotenv.config();
 
@@ -63,6 +65,7 @@ app.use("/create-playlist", createPlaylistRoutes);
 app.use("/get-supabase-playlist", getPlaylistRoutes);
 app.use("/delete-supabase-playlist", deletePlaylistRoutes);
 app.use("/update-supabase-playlist", updatePlaylistRoutes);
+app.use("/upload-playlist-image", uploadPlaylistImageRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

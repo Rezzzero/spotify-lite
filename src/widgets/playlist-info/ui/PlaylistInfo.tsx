@@ -44,6 +44,10 @@ export const PlaylistInfo = () => {
     deletePlaylistModal,
     setDeletePlaylistModal,
     handleUpatePlaylist,
+    handleImageChange,
+    uploadPlaylistImage,
+    fileInputRef,
+    handleSelectImage,
   } = usePlaylistInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
@@ -221,7 +225,17 @@ export const PlaylistInfo = () => {
               </button>
             </div>
             <div className="flex gap-3 w-full pr-2">
-              <div className="flex items-center bg-zinc-800 rounded-sm h-[180px] w-[180px] shadow-xl group relative flex-shrink-0">
+              <div
+                onClick={() => handleSelectImage()}
+                className="flex items-center bg-zinc-800 rounded-sm h-[180px] w-[180px] shadow-xl group relative flex-shrink-0"
+              >
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleImageChange}
+                  style={{ display: "none" }}
+                />
                 <PlaylistIcon className="text-gray-400 w-13 h-13 mx-auto group-hover:hidden" />
                 <button
                   type="button"
@@ -253,7 +267,10 @@ export const PlaylistInfo = () => {
             <div className="flex w-full items-center justify-end pr-2">
               <button
                 type="button"
-                onClick={() => handleUpatePlaylist()}
+                onClick={() => {
+                  handleUpatePlaylist();
+                  uploadPlaylistImage();
+                }}
                 className="bg-white rounded-full text-black font-bold py-3 px-7 hover:bg-gray-100 hover:scale-105 cursor-pointer"
               >
                 Сохранить

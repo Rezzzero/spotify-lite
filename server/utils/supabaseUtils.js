@@ -197,3 +197,18 @@ export const updatePlaylist = async (playlistId, playlistData) => {
 
   return data;
 };
+
+export const uploadImageToSupabasePlaylists = async (file, playlistId) => {
+  const { error } = await supabaseAdmin.storage
+    .from("playlist")
+    .upload(`${playlistId}`, file.buffer, {
+      cacheControl: "3600",
+      upsert: true,
+      contentType: file.mimetype,
+    });
+
+  if (error) {
+    console.error("Ошибка при загрузке изображения:", error.message);
+    throw new Error("Ошибка при загрузке изображения");
+  }
+};
