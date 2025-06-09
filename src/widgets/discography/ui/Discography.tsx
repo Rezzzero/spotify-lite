@@ -15,6 +15,7 @@ import ListIcon from "@shared/assets/drop-down/list-icon.svg?react";
 import GridIcon from "@shared/assets/drop-down/grid-icon.svg?react";
 import { CardList } from "@shared/ui/card-list/CardList";
 import playIcon from "@shared/assets/play-icon.svg";
+import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
 
 export const Discography = ({
   setIsFilterDropDownOpen,
@@ -232,47 +233,10 @@ export const Discography = ({
               </button>
             ))}
           </div>
-          <div className="flex flex-col">
-            <p className="font-bold text-xs text-zinc-400 p-2">
-              Формат библиотеки
-            </p>
-
-            <button
-              type="button"
-              className={`flex gap-3 items-center p-2 w-34 ${
-                discographyFormat === "list" ? "text-green-400" : "text-white"
-              }`}
-              onClick={() => setDiscographyFormat("list")}
-            >
-              <ListIcon className="w-4 h-4" />
-              Список
-              {discographyFormat === "list" && (
-                <img
-                  src={checkmark}
-                  alt="checkmark"
-                  className="w-4 h-4 ml-auto"
-                />
-              )}
-            </button>
-
-            <button
-              type="button"
-              className={`flex gap-3 items-center p-2 w-34 ${
-                discographyFormat === "grid" ? "text-green-400" : "text-white"
-              }`}
-              onClick={() => setDiscographyFormat("grid")}
-            >
-              <GridIcon className="w-4 h-4" />
-              Сетка
-              {discographyFormat === "grid" && (
-                <img
-                  src={checkmark}
-                  alt="checkmark"
-                  className="w-4 h-4 ml-auto"
-                />
-              )}
-            </button>
-          </div>
+          <SelectLibraryFormat
+            libraryFormat={discographyFormat}
+            setLibraryFormat={setDiscographyFormat}
+          />
         </div>
       )}
     </>

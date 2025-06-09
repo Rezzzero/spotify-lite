@@ -9,16 +9,20 @@ export const usePlaylistInfo = () => {
   const [value, setValue] = useState("");
   const [openSearch, setOpenSearch] = useState(true);
   const [playlist, setPlaylist] = useState<Playlist | null>(null);
-  const [playlistNewName, setPlaylistNewName] = useState("");
+  const [playlistName, setPlaylistName] = useState("");
   const [playlistDescription, setPlaylistDescription] = useState(
     playlist?.description ? playlist.description : ""
   );
+  const [playlistFormat, setPlaylistFormat] = useState("list");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [menuModal, setMenuModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
+  const [changeFormatModal, setChangeFormatModal] = useState(false);
   const menuModalRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const editModalRef = useRef<HTMLDivElement>(null);
+  const changeFormatModalRef = useRef<HTMLDivElement>(null);
+  const changeFormatButtonRef = useRef<HTMLButtonElement>(null);
   const { imageColors } = useGetColors(imageUrl);
   const { id } = useParams();
   const source = id?.startsWith("sp_") ? "supabase" : "spotify";
@@ -35,7 +39,7 @@ export const usePlaylistInfo = () => {
         );
 
         setPlaylist(response.data);
-        setPlaylistNewName(response.data.title);
+        setPlaylistName(response.data.title);
         setPlaylistDescription(response.data.description);
 
         setLoading(false);
@@ -58,16 +62,34 @@ export const usePlaylistInfo = () => {
       ) {
         setMenuModal(false);
       }
+
+      if (
+        editModal &&
+        editModalRef.current &&
+        !editModalRef.current.contains(event.target as Node)
+      ) {
+        setEditModal(false);
+      }
+
+      if (
+        changeFormatModal &&
+        changeFormatModalRef.current &&
+        !changeFormatModalRef.current.contains(event.target as Node) &&
+        changeFormatButtonRef.current &&
+        !changeFormatButtonRef.current?.contains(event.target as Node)
+      ) {
+        setChangeFormatModal(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [menuModal]);
+  }, [menuModal, editModal, changeFormatModal]);
 
   const handleChangePlaylistName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPlaylistNewName(e.target.value);
+    setPlaylistName(e.target.value);
   };
 
   const handleChangePlaylistDescription = (
@@ -91,10 +113,16 @@ export const usePlaylistInfo = () => {
     editModal,
     setEditModal,
     editModalRef,
-    playlistNewName,
+    playlistName,
     playlistDescription,
     handleChangePlaylistName,
     handleChangePlaylistDescription,
     loading,
+    changeFormatModal,
+    setChangeFormatModal,
+    changeFormatModalRef,
+    playlistFormat,
+    setPlaylistFormat,
+    changeFormatButtonRef,
   };
 };

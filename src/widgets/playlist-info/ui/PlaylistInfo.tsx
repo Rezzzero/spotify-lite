@@ -11,6 +11,7 @@ import OpenPlaylistIcon from "@shared/assets/global-icon.svg?react";
 import ClosePlaylistIcon from "@shared/assets/playlist/lock-icon.svg?react";
 import { Link } from "react-router-dom";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
+import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
 
 export const PlaylistInfo = () => {
   const {
@@ -28,11 +29,17 @@ export const PlaylistInfo = () => {
     editModal,
     setEditModal,
     editModalRef,
-    playlistNewName,
+    playlistName,
     playlistDescription,
     handleChangePlaylistName,
     handleChangePlaylistDescription,
     loading,
+    changeFormatModal,
+    setChangeFormatModal,
+    changeFormatModalRef,
+    playlistFormat,
+    setPlaylistFormat,
+    changeFormatButtonRef,
   } = usePlaylistInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
@@ -58,9 +65,7 @@ export const PlaylistInfo = () => {
         </div>
         <div className="flex flex-col gap-3 pt-12 h-full">
           <h2>{openPlaylist ? "Открытый плейлист" : "Закрытый плейлист"}</h2>
-          <h1 className="text-[90px] font-bold leading-none">
-            {playlistNewName}
-          </h1>
+          <h1 className="text-[90px] font-bold leading-none">{playlistName}</h1>
           <div className="flex gap-1 mt-auto">
             <img
               src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
@@ -76,7 +81,7 @@ export const PlaylistInfo = () => {
       <div className="flex flex-col gap-5 w-full pl-5 pr-8 h-[700px] relative">
         <div className="flex items-center pt-7 pb-10 justify-between w-full">
           <CustomTooltip
-            title={`Открыть контекстное меню: ${playlistNewName}`}
+            title={`Открыть контекстное меню: ${playlistName}`}
             placement="top"
             customFontSize={13}
           >
@@ -90,10 +95,21 @@ export const PlaylistInfo = () => {
           </CustomTooltip>
           <button
             type="button"
+            ref={changeFormatButtonRef}
+            onClick={() => setChangeFormatModal((prev) => !prev)}
             className="flex gap-2 text-sm font-semibold items-center text-gray-400 group hover:text-white cursor-pointer"
           >
-            Список
-            <ListIcon className="w-3 h-3 text-gray-400 group-hover:text-white" />
+            {playlistFormat === "compact" ? (
+              <>
+                <span>Компактный</span>
+                <CompactListIcon className="w-3 h-3 text-gray-400 group-hover:text-white" />
+              </>
+            ) : (
+              <>
+                <span>Список</span>
+                <ListIcon className="w-3 h-3 text-gray-400 group-hover:text-white" />
+              </>
+            )}
           </button>
         </div>
         {openSearch ? (
@@ -164,6 +180,18 @@ export const PlaylistInfo = () => {
             </div>
           </div>
         )}
+        {changeFormatModal && (
+          <div
+            ref={changeFormatModalRef}
+            className="absolute top-18 right-5 bg-zinc-800 p-1 rounded-md"
+          >
+            <SelectLibraryFormat
+              libraryFormat={playlistFormat}
+              setLibraryFormat={setPlaylistFormat}
+              playlist
+            />
+          </div>
+        )}
       </div>
       {editModal && (
         <>
@@ -201,7 +229,7 @@ export const PlaylistInfo = () => {
               <div className="flex flex-col gap-2 flex-1 text-sm">
                 <input
                   type="text"
-                  value={playlistNewName}
+                  value={playlistName}
                   onChange={handleChangePlaylistName}
                   placeholder="Добавь название"
                   className="bg-zinc-600 p-1 rounded-sm outline-none w-full border border-transparent focus:border-zinc-500 focus:bg-zinc-700"
