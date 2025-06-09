@@ -1,5 +1,5 @@
 import express from "express";
-import { signOutHandler } from "../../controllers/supabase/signOutController.js";
+import { signOutHandler } from "../../../controllers/supabase/auth/signOutController.js";
 
 const router = express.Router();
 

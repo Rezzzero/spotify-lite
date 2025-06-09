@@ -12,15 +12,18 @@ import trackRoutes from "./routes/spotify/track.js";
 import discographyRoutes from "./routes/spotify/discography.js";
 import soundcloudSearchRoutes from "./routes/soundcloud/search.js";
 import streamRoutes from "./routes/soundcloud/stream.js";
-import checkEmailRoutes from "./routes/supabase/checkEmail.js";
-import signUpRoutes from "./routes/supabase/signUp.js";
-import signInRoutes from "./routes/supabase/signIn.js";
-import sendOtpRoutes from "./routes/supabase/sendOtp.js";
-import singInWithOtpRoutes from "./routes/supabase/signInWithOtp.js";
-import initialUserRoutes from "./routes/supabase/initialUser.js";
-import signOutRoutes from "./routes/supabase/signOut.js";
-import createPlaylistRoutes from "./routes/supabase/createPlaylist.js";
-import getPlaylistRoutes from "./routes/supabase/getPlaylist.js";
+
+import checkEmailRoutes from "./routes/supabase/auth/checkEmail.js";
+import signUpRoutes from "./routes/supabase/auth/signUp.js";
+import signInRoutes from "./routes/supabase/auth/signIn.js";
+import sendOtpRoutes from "./routes/supabase/auth/sendOtp.js";
+import singInWithOtpRoutes from "./routes/supabase/auth/signInWithOtp.js";
+import initialUserRoutes from "./routes/supabase/auth/initialUser.js";
+import signOutRoutes from "./routes/supabase/auth/signOut.js";
+
+import createPlaylistRoutes from "./routes/supabase/playlist/createPlaylist.js";
+import getPlaylistRoutes from "./routes/supabase/playlist/getPlaylist.js";
+import deletePlaylistRoutes from "./routes/supabase/playlist/deletePlaylist.js";
 
 dotenv.config();
 
@@ -73,6 +76,8 @@ app.use("/auth/me", initialUserRoutes);
 app.use("/create-playlist", createPlaylistRoutes);
 
 app.use("/get-supabase-playlist", getPlaylistRoutes);
+
+app.use("/delete-supabase-playlist", deletePlaylistRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

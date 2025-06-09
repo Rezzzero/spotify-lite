@@ -1,8 +1,10 @@
+import { Route } from "@shared/constants/constants";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import { Playlist } from "@shared/types/types";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const usePlaylistInfo = () => {
   const [loading, setLoading] = useState(false);
@@ -18,6 +20,7 @@ export const usePlaylistInfo = () => {
   const [menuModal, setMenuModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [changeFormatModal, setChangeFormatModal] = useState(false);
+  const [deletePlaylistModal, setDeletePlaylistModal] = useState(false);
   const menuModalRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const editModalRef = useRef<HTMLDivElement>(null);
@@ -27,6 +30,7 @@ export const usePlaylistInfo = () => {
   const { id } = useParams();
   const source = id?.startsWith("sp_") ? "supabase" : "spotify";
   const openPlaylist = true;
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -98,6 +102,19 @@ export const usePlaylistInfo = () => {
     setPlaylistDescription(e.target.value);
   };
 
+  const handleDeletePlaylist = async () => {
+    try {
+      await axios.delete(
+        `http://localhost:3000/delete-supabase-playlist/${id}`
+      );
+
+      setDeletePlaylistModal(false);
+      navigate(Route.HOME);
+    } catch (error) {
+      console.error("Error deleting playlist:", error);
+    }
+  };
+
   return {
     playlist,
     imageColors,
@@ -124,5 +141,8 @@ export const usePlaylistInfo = () => {
     playlistFormat,
     setPlaylistFormat,
     changeFormatButtonRef,
+    handleDeletePlaylist,
+    deletePlaylistModal,
+    setDeletePlaylistModal,
   };
 };

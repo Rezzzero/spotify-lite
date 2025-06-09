@@ -167,3 +167,18 @@ export const getPlaylist = async (playlistId) => {
 
   return data;
 };
+
+export const deletePlaylist = async (playlistId) => {
+  const { data, error } = await supabase
+    .from("playlists")
+    .delete()
+    .eq("id", playlistId)
+    .single();
+
+  if (error) {
+    console.error("Ошибка при удалении плейлиста:", error.message);
+    throw new Error("Ошибка при удалении плейлиста");
+  }
+
+  return data;
+};

@@ -1,5 +1,5 @@
 import express from "express";
-import { sendOtpHandler } from "../../controllers/supabase/sendOtpController.js";
+import { sendOtpHandler } from "../../../controllers/supabase/auth/sendOtpController.js";
 
 const router = express.Router();
 

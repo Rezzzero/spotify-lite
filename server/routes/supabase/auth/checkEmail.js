@@ -1,5 +1,5 @@
 import express from "express";
-import { checkEmailHandler } from "../../controllers/supabase/checkEmailController.js";
+import { checkEmailHandler } from "../../../controllers/supabase/auth/checkEmailController.js";
 
 const router = express.Router();
 

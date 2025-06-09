@@ -1,5 +1,5 @@
 import express from "express";
-import { getPlaylistHandler } from "../../controllers/supabase/getPlaylistController.js";
+import { getPlaylistHandler } from "../../../controllers/supabase/playlist/getPlaylistController.js";
 
 const router = express.Router();
 

@@ -1,4 +1,4 @@
-import { signOut } from "../../utils/supabaseUtils.js";
+import { signOut } from "../../../utils/supabaseUtils.js";
 
 export const signOutHandler = async (_, res) => {
   try {

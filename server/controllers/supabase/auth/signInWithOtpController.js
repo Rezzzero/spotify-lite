@@ -1,4 +1,4 @@
-import { signInWithOtp } from "../../utils/supabaseUtils.js";
+import { signInWithOtp } from "../../../utils/supabaseUtils.js";
 
 export const signInWithOtpHandler = async (req, res) => {
   try {

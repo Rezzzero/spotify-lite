@@ -1,5 +1,5 @@
 import express from "express";
-import { signInWithOtpHandler } from "../../controllers/supabase/signInWithOtpController.js";
+import { signInWithOtpHandler } from "../../../controllers/supabase/auth/signInWithOtpController.js";
 
 const router = express.Router();
 

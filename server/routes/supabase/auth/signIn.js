@@ -1,5 +1,5 @@
 import express from "express";
-import { signInHandler } from "../../controllers/supabase/signInController.js";
+import { signInHandler } from "../../../controllers/supabase/auth/signInController.js";
 
 const router = express.Router();
 

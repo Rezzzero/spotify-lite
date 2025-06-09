@@ -1,4 +1,4 @@
-import { getUserByAccessToken } from "../../utils/supabaseUtils.js";
+import { getUserByAccessToken } from "../../../utils/supabaseUtils.js";
 
 export const initialUserHandler = async (req, res) => {
   try {

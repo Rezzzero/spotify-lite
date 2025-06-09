@@ -40,6 +40,9 @@ export const PlaylistInfo = () => {
     playlistFormat,
     setPlaylistFormat,
     changeFormatButtonRef,
+    handleDeletePlaylist,
+    deletePlaylistModal,
+    setDeletePlaylistModal,
   } = usePlaylistInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
@@ -163,6 +166,7 @@ export const PlaylistInfo = () => {
               </button>
               <button
                 type="button"
+                onClick={() => setDeletePlaylistModal(true)}
                 className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
               >
                 <DeleteIcon className="w-4 h-4" />
@@ -249,6 +253,35 @@ export const PlaylistInfo = () => {
               >
                 Сохранить
               </button>
+            </div>
+          </div>
+        </>
+      )}
+      {deletePlaylistModal && (
+        <>
+          <div className="bg-black/80 fixed inset-0 z-10" />
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 z-30 p-7 bg-white text-black rounded-md">
+            <h2 className="font-bold text-2xl">Удалить из медиатеки?</h2>
+            <p className="text-sm max-w-[305px] pr-5">
+              Контент (<b>{playlistName}</b>) будет удален из <b>медиатеки</b>.
+            </p>
+            <div className="flex justify-end gap-5 w-full">
+              <button
+                type="button"
+                onClick={() => setDeletePlaylistModal(false)}
+                className="font-bold hover:scale-105 cursor-pointer"
+              >
+                Отмена
+              </button>
+              <div className="inline-block border-2 border-blue-700 p-[1px] hover:scale-105 rounded-full">
+                <button
+                  type="button"
+                  onClick={handleDeletePlaylist}
+                  className="font-bold cursor-pointer bg-green-400 px-4 py-2 rounded-full hover:bg-green-300"
+                >
+                  Удалить
+                </button>
+              </div>
             </div>
           </div>
         </>
