@@ -212,3 +212,16 @@ export const uploadImageToSupabasePlaylists = async (file, playlistId) => {
     throw new Error("Ошибка при загрузке изображения");
   }
 };
+
+export const getPlaylistImageUrl = (playlistId) => {
+  const { data, error } = supabaseAdmin.storage
+    .from("playlist")
+    .getPublicUrl(`${playlistId}`);
+
+  if (error) {
+    console.error("Ошибка при получении URL изображения:", error.message);
+    throw new Error("Ошибка при получении URL изображения");
+  }
+
+  return data.publicUrl;
+};

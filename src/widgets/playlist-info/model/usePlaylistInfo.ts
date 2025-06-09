@@ -46,9 +46,13 @@ export const usePlaylistInfo = () => {
           `http://localhost:3000/${endpoint}/${id}`
         );
 
-        setPlaylist(response.data);
-        setPlaylistName(response.data.name);
-        setPlaylistDescription(response.data.description);
+        if (response.data.playlistImage) {
+          setImageUrl(response.data.playlistImage);
+        }
+
+        setPlaylist(response.data.playlist);
+        setPlaylistName(response.data.playlist.name);
+        setPlaylistDescription(response.data.playlist.description);
 
         setLoading(false);
       } catch (error) {
