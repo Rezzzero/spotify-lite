@@ -17,7 +17,6 @@ export const PlaylistInfo = () => {
   const {
     playlist,
     imageColors,
-    openPlaylist,
     value,
     setValue,
     openSearch,
@@ -48,6 +47,7 @@ export const PlaylistInfo = () => {
     uploadPlaylistImage,
     fileInputRef,
     handleSelectImage,
+    changePublicStatus,
   } = usePlaylistInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
@@ -75,8 +75,12 @@ export const PlaylistInfo = () => {
           </button>
         </div>
         <div className="flex flex-col gap-3 pt-12 h-full">
-          <h2>{openPlaylist ? "Открытый плейлист" : "Закрытый плейлист"}</h2>
-          <h1 className="text-[90px] font-bold leading-none">{playlistName}</h1>
+          <h2>
+            {playlist?.public ? "Открытый плейлист" : "Закрытый плейлист"}
+          </h2>
+          <h1 className="text-[90px] font-bold leading-none">
+            {playlist?.name}
+          </h1>
           <div className="flex gap-1 mt-auto">
             <img
               src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
@@ -92,7 +96,7 @@ export const PlaylistInfo = () => {
       <div className="flex flex-col gap-5 w-full pl-5 pr-8 h-[700px] relative">
         <div className="flex items-center pt-7 pb-10 justify-between w-full">
           <CustomTooltip
-            title={`Открыть контекстное меню: ${playlistName}`}
+            title={`Открыть контекстное меню: ${playlist?.name}`}
             placement="top"
             customFontSize={13}
           >
@@ -184,10 +188,15 @@ export const PlaylistInfo = () => {
             <div className="flex flex-col gap-1 border-b border-zinc-600">
               <button
                 type="button"
+                onClick={() => changePublicStatus()}
                 className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
               >
-                <ClosePlaylistIcon className="w-4 h-4" />
-                Закрыть доступ
+                {playlist?.public ? (
+                  <ClosePlaylistIcon className="w-4 h-4" />
+                ) : (
+                  <OpenPlaylistIcon className="w-4 h-4" />
+                )}
+                {playlist?.public ? "Закрыть доступ" : "Сделать открытым"}
               </button>
             </div>
           </div>

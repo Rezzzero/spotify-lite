@@ -139,8 +139,8 @@ export const createPlaylist = async (playlistData) => {
       user_id: playlistData.userId,
       name: playlistData.name,
       description: playlistData.description,
-      is_public: playlistData.isPublic,
-      cover_url: playlistData.coverUrl,
+      public: playlistData.public,
+      images: playlistData.images,
       owner: playlistData.owner,
     },
   ]);
@@ -224,4 +224,15 @@ export const getPlaylistImageUrl = (playlistId) => {
   }
 
   return data.publicUrl;
+};
+
+export const deletePlaylistImage = async (playlistId) => {
+  const { error } = await supabaseAdmin.storage
+    .from("playlist")
+    .remove([playlistId]);
+
+  if (error) {
+    console.error("Ошибка при удалении изображения:", error.message);
+    throw new Error("Ошибка при удалении изображения");
+  }
 };

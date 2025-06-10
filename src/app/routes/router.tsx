@@ -12,6 +12,7 @@ import { DiscographyPage } from "@pages/discography/DiscographyPage";
 import { LoginPage } from "@pages/login/LoginPage";
 import { RegistationPage } from "@pages/registration/RegistationPage";
 import { PlaylistPage } from "@pages/playlist/PlaylistPage";
+import { NotFoundPage } from "@pages/not-found/NotFoundPage";
 
 export const router = createBrowserRouter([
   {
@@ -67,5 +68,9 @@ export const router = createBrowserRouter([
   {
     path: Route.REGISTRATION,
     element: <RegistationPage />,
+  },
+  {
+    path: Route.NOT_FOUND,
+    element: <NotFoundPage />,
   },
 ]);

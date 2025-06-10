@@ -1,4 +1,8 @@
-import { uploadImageToSupabasePlaylists } from "../../../utils/supabaseUtils.js";
+import {
+  getPlaylistImageUrl,
+  updatePlaylist,
+  uploadImageToSupabasePlaylists,
+} from "../../../utils/supabaseUtils.js";
 
 export const uploadPlaylistImageHandler = async (req, res) => {
   try {
@@ -9,9 +13,15 @@ export const uploadPlaylistImageHandler = async (req, res) => {
       return res.status(400).json({ error: "Файл не предоставлен" });
     }
 
-    const data = await uploadImageToSupabasePlaylists(file, playlistId);
-    res.json(data);
+    await uploadImageToSupabasePlaylists(file, playlistId);
+    const imageUrl = getPlaylistImageUrl(playlistId);
+    const playlist = await updatePlaylist(playlistId, {
+      images: [{ url: imageUrl }],
+    });
+
+    res.json(playlist);
   } catch (error) {
+    console.error("Ошибка в uploadPlaylistImageHandler:", error);
     res.status(500).json({ error: error.message });
   }
 };

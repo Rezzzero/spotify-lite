@@ -48,9 +48,13 @@ export const useMediaLibrary = () => {
         id: id,
         userId: user.user.id,
         name: "Новый плейлист",
-        description: '',
-        isPublic: true,
-        coverUrl: null,
+        description: "",
+        public: true,
+        images: [
+          {
+            url: "",
+          },
+        ],
         owner: {
           id: user.user.id,
           display_name: user.user.user_metadata.userName,

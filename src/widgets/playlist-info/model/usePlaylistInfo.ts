@@ -1,7 +1,7 @@
 import { Route } from "@shared/constants/constants";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import { Playlist } from "@shared/types/types";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +33,6 @@ export const usePlaylistInfo = () => {
   const { imageColors } = useGetColors(imageUrl);
   const { id } = useParams();
   const source = id?.startsWith("sp_") ? "supabase" : "spotify";
-  const openPlaylist = true;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,25 +42,31 @@ export const usePlaylistInfo = () => {
     const fetch = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/${endpoint}/${id}`
+          `http://localhost:3000/${endpoint}/${id}`,
+          {
+            withCredentials: true,
+          }
         );
 
-        if (response.data.playlistImage) {
-          setImageUrl(response.data.playlistImage);
+        if (response.data.images[0].url) {
+          setImageUrl(response.data.images[0].url);
         }
 
-        setPlaylist(response.data.playlist);
-        setPlaylistName(response.data.playlist.name);
-        setPlaylistDescription(response.data.playlist.description);
+        setPlaylist(response.data);
+        setPlaylistName(response.data.name);
+        setPlaylistDescription(response.data.description);
 
         setLoading(false);
       } catch (error) {
+        if ((error as AxiosError).status === 404) {
+          navigate(Route.NOT_FOUND);
+        }
         console.error("Error fetching playlist info:", error);
       }
     };
 
     fetch();
-  }, [id, source]);
+  }, [id, source, imageColors, navigate]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -163,7 +168,7 @@ export const usePlaylistInfo = () => {
     formData.append("file", imageFile);
 
     try {
-      axios.post(
+      const response = await axios.post(
         `http://localhost:3000/upload-playlist-image/${id}`,
         formData,
         {
@@ -172,15 +177,34 @@ export const usePlaylistInfo = () => {
           },
         }
       );
+
+      setPlaylist(response.data[0]);
+      setImageUrl(response.data[0].images[0].url);
+      console.log(playlist);
     } catch (error) {
       console.error("Error uploading playlist image:", error);
+    }
+  };
+
+  const changePublicStatus = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/update-supabase-playlist/${id}`,
+        {
+          public: !playlist?.public,
+        }
+      );
+
+      setMenuModal(false);
+      setPlaylist(response.data[0]);
+    } catch (error) {
+      console.error("Error changing public status:", error);
     }
   };
 
   return {
     playlist,
     imageColors,
-    openPlaylist,
     value,
     setValue,
     openSearch,
@@ -211,5 +235,6 @@ export const usePlaylistInfo = () => {
     uploadPlaylistImage,
     fileInputRef,
     handleSelectImage,
+    changePublicStatus,
   };
 };

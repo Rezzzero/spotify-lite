@@ -13,6 +13,7 @@ export const Route = {
   LOGIN: "/login",
   REGISTRATION: "/registration",
   PLAYLIST: "/playlist/:id",
+  NOT_FOUND: "/not-found",
   TEST: "/test",
 };
 

@@ -41,6 +41,7 @@ export interface Playlist {
   owner: {
     display_name: string;
   };
+  public: boolean;
 }
 
 export interface Album {
