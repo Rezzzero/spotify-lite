@@ -19,7 +19,6 @@ export const usePlaylistInfo = () => {
   );
   const [playlistFormat, setPlaylistFormat] = useState("list");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const [menuModal, setMenuModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [changeFormatModal, setChangeFormatModal] = useState(false);
@@ -29,7 +28,6 @@ export const usePlaylistInfo = () => {
   const editModalRef = useRef<HTMLDivElement>(null);
   const changeFormatModalRef = useRef<HTMLDivElement>(null);
   const changeFormatButtonRef = useRef<HTMLButtonElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const { imageColors } = useGetColors(imageUrl);
   const { id } = useParams();
   const source = id?.startsWith("sp_") ? "supabase" : "spotify";
@@ -105,103 +103,6 @@ export const usePlaylistInfo = () => {
     };
   }, [menuModal, editModal, changeFormatModal]);
 
-  const handleChangePlaylistName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPlaylistName(e.target.value);
-  };
-
-  const handleChangePlaylistDescription = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setPlaylistDescription(e.target.value);
-  };
-
-  const handleDeletePlaylist = async () => {
-    try {
-      await axios.delete(
-        `http://localhost:3000/delete-supabase-playlist/${id}`
-      );
-
-      setDeletePlaylistModal(false);
-      navigate(Route.HOME);
-    } catch (error) {
-      console.error("Error deleting playlist:", error);
-    }
-  };
-
-  const handleUpatePlaylist = async () => {
-    try {
-      const response = await axios.put(
-        `http://localhost:3000/update-supabase-playlist/${id}`,
-        {
-          name: playlistName,
-          description: playlistDescription,
-        }
-      );
-
-      setEditModal(false);
-      setPlaylist(response.data[0]);
-      setPlaylistName(response.data[0].name);
-      setPlaylistDescription(response.data[0].description);
-    } catch (error) {
-      console.error("Error updating playlist:", error);
-    }
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      console.log(imageFile);
-    }
-  };
-
-  const handleSelectImage = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-
-  const uploadPlaylistImage = async () => {
-    if (!imageFile) return;
-
-    const formData = new FormData();
-    formData.append("file", imageFile);
-
-    try {
-      const response = await axios.post(
-        `http://localhost:3000/upload-playlist-image/${id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      setPlaylist(response.data[0]);
-      setImageUrl(response.data[0].images[0].url);
-      console.log(playlist);
-    } catch (error) {
-      console.error("Error uploading playlist image:", error);
-    }
-  };
-
-  const changePublicStatus = async () => {
-    try {
-      const response = await axios.put(
-        `http://localhost:3000/update-supabase-playlist/${id}`,
-        {
-          public: !playlist?.public,
-        }
-      );
-
-      setMenuModal(false);
-      setPlaylist(response.data[0]);
-    } catch (error) {
-      console.error("Error changing public status:", error);
-    }
-  };
-
   return {
     playlist,
     imageColors,
@@ -218,8 +119,6 @@ export const usePlaylistInfo = () => {
     editModalRef,
     playlistName,
     playlistDescription,
-    handleChangePlaylistName,
-    handleChangePlaylistDescription,
     loading,
     changeFormatModal,
     setChangeFormatModal,
@@ -227,14 +126,11 @@ export const usePlaylistInfo = () => {
     playlistFormat,
     setPlaylistFormat,
     changeFormatButtonRef,
-    handleDeletePlaylist,
     deletePlaylistModal,
     setDeletePlaylistModal,
-    handleUpatePlaylist,
-    handleImageChange,
-    uploadPlaylistImage,
-    fileInputRef,
-    handleSelectImage,
-    changePublicStatus,
+    setPlaylistName,
+    setPlaylistDescription,
+    setPlaylist,
+    setImageUrl,
   };
 };

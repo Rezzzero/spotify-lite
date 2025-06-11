@@ -133,7 +133,7 @@ export const signOut = async () => {
 };
 
 export const createPlaylist = async (playlistData) => {
-  const { data, error } = await supabase.from("playlists").insert([
+  const { data, error } = await supabaseAdmin.from("playlists").insert([
     {
       id: playlistData.id,
       user_id: playlistData.userId,
@@ -154,7 +154,7 @@ export const createPlaylist = async (playlistData) => {
 };
 
 export const getPlaylist = async (playlistId) => {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from("playlists")
     .select("*")
     .eq("id", playlistId)
@@ -169,7 +169,7 @@ export const getPlaylist = async (playlistId) => {
 };
 
 export const deletePlaylist = async (playlistId) => {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from("playlists")
     .delete()
     .eq("id", playlistId)
@@ -184,7 +184,7 @@ export const deletePlaylist = async (playlistId) => {
 };
 
 export const updatePlaylist = async (playlistId, playlistData) => {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from("playlists")
     .update(playlistData)
     .eq("id", playlistId)
