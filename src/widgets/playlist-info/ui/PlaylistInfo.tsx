@@ -3,8 +3,6 @@ import PlaylistIcon from "@shared/assets/playlist/playlist-icon.svg?react";
 import EditIcon from "@shared/assets/playlist/edit-icon.svg?react";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import ListIcon from "@shared/assets/drop-down/list-icon.svg?react";
-import CrossIcon from "@shared/assets/cross-icon.svg?react";
-import SearchIcon from "@shared/assets/search-icon.svg?react";
 import CompactListIcon from "@shared/assets/compact-list-icon.svg?react";
 import { Link } from "react-router-dom";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
@@ -18,8 +16,6 @@ export const PlaylistInfo = () => {
   const {
     playlist,
     imageColors,
-    value,
-    setValue,
     openSearch,
     setOpenSearch,
     menuModal,

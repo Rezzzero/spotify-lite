@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 
 export const usePlaylistInfo = () => {
   const [loading, setLoading] = useState(false);
-  const [value, setValue] = useState("");
   const [openSearch, setOpenSearch] = useState(true);
   const [playlist, setPlaylist] = useState<Playlist | null>(null);
   const [playlistName, setPlaylistName] = useState(
@@ -106,8 +105,6 @@ export const usePlaylistInfo = () => {
   return {
     playlist,
     imageColors,
-    value,
-    setValue,
     openSearch,
     setOpenSearch,
     menuModal,

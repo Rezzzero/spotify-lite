@@ -8,12 +8,15 @@ export const getPlaylistHandler = async (req, res) => {
     const playlistId = req.params.playlistId;
     const accessToken = req.cookies.access_token;
     const playlist = await getPlaylist(playlistId);
+    let user;
 
     if (!accessToken && playlist.public === false) {
       return res.status(404).json({ error: "Страница не найдена" });
     }
 
-    const user = await getUserByAccessToken(accessToken);
+    if (accessToken) {
+      user = await getUserByAccessToken(accessToken);
+    }
 
     if (
       (playlist.public === false && playlist.user_id !== user.id) ||
@@ -24,6 +27,7 @@ export const getPlaylistHandler = async (req, res) => {
 
     res.json(playlist);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
