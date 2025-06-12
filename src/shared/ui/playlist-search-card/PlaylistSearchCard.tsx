@@ -16,7 +16,13 @@ const isTrack = (item: SearchCardType): item is Track => {
   return (item as Track).duration_ms !== undefined;
 };
 
-export const PlaylistSearchCard = ({ data }: { data: SearchCardType }) => {
+export const PlaylistSearchCard = ({
+  data,
+  handleAddTrack,
+}: {
+  data: SearchCardType;
+  handleAddTrack?: (track: Track) => void;
+}) => {
   let title = "";
   let subtitle = "";
   let imageUrl = "";
@@ -80,20 +86,20 @@ export const PlaylistSearchCard = ({ data }: { data: SearchCardType }) => {
           {data.album.name}
         </Link>
       )}
-      {isTrack(data) && (
+      {isTrack(data) && handleAddTrack && (
         <button
           type="button"
+          onClick={() => handleAddTrack(data)}
           className="rounded-full text-sm font-bold border border-gray-400 px-4 py-1 mr-1 cursor-pointer hover:border-white hover:scale-105"
         >
           Добавить
         </button>
       )}
-      {isAlbum(data) ||
-        (isArtist(data) && (
-          <button>
-            <ShowMoreIcon className="w-4 h-4" />
-          </button>
-        ))}
+      {isAlbum(data) || isArtist(data) ? (
+        <button>
+          <ShowMoreIcon className="w-5 h-5 mr-2" />
+        </button>
+      ) : null}
     </div>
   );
 };

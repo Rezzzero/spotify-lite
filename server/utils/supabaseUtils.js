@@ -253,3 +253,23 @@ export const getPlaylistsOfUser = async (userId) => {
 
   return data;
 };
+
+export const addTrackToPlaylist = async (trackData) => {
+  const { data, error } = await supabaseAdmin.from("tracks").insert([
+    {
+      id: trackData.id,
+      name: trackData.name,
+      duration_ms: trackData.duration_ms,
+      album: trackData.album,
+      artists: trackData.artists,
+      mp3_url: trackData.mp3_url,
+    },
+  ]);
+
+  if (error) {
+    console.error("Ошибка при добавлении трека в плейлист:", error.message);
+    throw new Error("Ошибка при добавлении трека в плейлист");
+  }
+
+  return data;
+};

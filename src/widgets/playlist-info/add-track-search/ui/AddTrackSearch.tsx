@@ -22,8 +22,9 @@ export const AddTrackSearch = ({
 }: {
   closeSearch: () => void;
 }) => {
-  const { value, setValue, results, showAll, setShowAll } = useAddTrackSearch();
-  console.log(results);
+  const { value, setValue, results, showAll, setShowAll, handleAddTrack } =
+    useAddTrackSearch();
+
   return (
     <>
       <div className="flex items-center justify-between pr-2 pt-5 border-t border-zinc-700">
@@ -51,7 +52,10 @@ export const AddTrackSearch = ({
           <>
             <div>
               {results.tracks && (
-                <PlaylistSearchCard data={results.tracks.items[0]} />
+                <PlaylistSearchCard
+                  data={results.tracks.items[0]}
+                  handleAddTrack={handleAddTrack}
+                />
               )}
               {results.artists && (
                 <PlaylistSearchCard data={results.artists.items[0]} />
@@ -59,11 +63,14 @@ export const AddTrackSearch = ({
               {results.albums &&
                 results.albums.items
                   .slice(0, 3)
-                  .map((album) => <PlaylistSearchCard data={album} />)}
+                  .map((album) => (
+                    <PlaylistSearchCard key={album.id} data={album} />
+                  ))}
             </div>
             <div className="flex flex-col gap-1">
               {showAllList.map((item) => (
                 <button
+                  key={item.title}
                   type="button"
                   onClick={() => setShowAll(item.title)}
                   className="flex justify-between items-center hover:bg-zinc-800 p-4 rounded-md"
