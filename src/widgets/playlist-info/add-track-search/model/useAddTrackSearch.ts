@@ -5,8 +5,9 @@ import { useState } from "react";
 export const useAddTrackSearch = () => {
   const [value, setValue] = useState("");
   const [results, setResults] = useState({} as SearchResults);
+  const [showAll, setShowAll] = useState("");
 
   useDebouncedSearch({ value, setResults, redirect: false });
 
-  return { value, setValue, results };
+  return { value, setValue, results, showAll, setShowAll };
 };

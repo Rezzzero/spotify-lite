@@ -1,7 +1,7 @@
 import { useSwiper } from "swiper/react";
 import { useEffect, useState } from "react";
-import prevIcon from "./assets/arrow-prev.svg";
-import nextIcon from "./assets/arrow-next.svg";
+import prevIcon from "@shared/assets/arrow-prev.svg";
+import nextIcon from "@shared/assets/arrow-next.svg";
 
 export const SwiperNavigation = () => {
   const swiper = useSwiper();

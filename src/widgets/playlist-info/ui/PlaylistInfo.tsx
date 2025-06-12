@@ -84,7 +84,7 @@ export const PlaylistInfo = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-5 w-full pl-5 pr-8 h-[700px] relative">
+      <div className="flex flex-col gap-5 w-full pl-5 pr-8 relative">
         <div className="flex items-center pt-7 pb-10 justify-between w-full">
           <CustomTooltip
             title={`Открыть контекстное меню: ${playlistData?.playlist.name}`}
