@@ -2,11 +2,13 @@ import { useDebouncedSearch } from "@shared/lib/hooks/useDebouncedSearch";
 import { SearchResults, Track } from "@shared/types/types";
 import axios from "axios";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 export const useAddTrackSearch = () => {
   const [value, setValue] = useState("");
   const [results, setResults] = useState({} as SearchResults);
   const [showAll, setShowAll] = useState("");
+  const { id: playlistId } = useParams();
 
   useDebouncedSearch({ value, setResults, redirect: false });
 
@@ -29,6 +31,7 @@ export const useAddTrackSearch = () => {
         "http://localhost:3000/add-track-to-playlist",
         {
           track: trackToAdd,
+          playlist_id: playlistId,
         }
       );
 

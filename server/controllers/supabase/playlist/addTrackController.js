@@ -7,6 +7,7 @@ import { addTrackToPlaylist } from "../../../utils/supabaseUtils.js";
 export const addTrackHandler = async (req, res) => {
   try {
     const track = req.body.track;
+    const playlistId = req.body.playlist_id;
 
     const soundcloudData = await getSoundCloudSearchResults(track.name);
     const streamInfo = soundcloudData.collection[0].media.transcodings.find(
@@ -24,7 +25,7 @@ export const addTrackHandler = async (req, res) => {
       mp3_url: mp3Url,
     };
 
-    const data = await addTrackToPlaylist(trackWithMp3);
+    const data = await addTrackToPlaylist(trackWithMp3, playlistId);
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
