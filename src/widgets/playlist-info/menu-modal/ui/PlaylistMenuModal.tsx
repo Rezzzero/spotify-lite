@@ -3,7 +3,7 @@ import DeleteIcon from "@shared/assets/playlist/delete-icon.svg?react";
 import OpenPlaylistIcon from "@shared/assets/global-icon.svg?react";
 import ClosePlaylistIcon from "@shared/assets/playlist/lock-icon.svg?react";
 import { usePlaylistMenuModal } from "../model/usePlaylistMenuModal";
-import { Playlist } from "@shared/types/types";
+import { PlaylistData } from "@widgets/playlist-info/types/types";
 
 export const PlaylistMenuModal = ({
   modalRef,
@@ -18,7 +18,7 @@ export const PlaylistMenuModal = ({
   openEditModal: () => void;
   openDeleteModal: () => void;
   isPublic: boolean | undefined;
-  setPlaylist: React.Dispatch<React.SetStateAction<Playlist | null>>;
+  setPlaylist: React.Dispatch<React.SetStateAction<PlaylistData | null>>;
 }) => {
   const { changePublicStatus } = usePlaylistMenuModal({
     isPublic,

@@ -7,7 +7,8 @@ export const AddTrackSearch = ({
 }: {
   closeSearch: () => void;
 }) => {
-  const { value, setValue } = useAddTrackSearch();
+  const { value, setValue, results } = useAddTrackSearch();
+  console.log(results);
   return (
     <div className="flex items-center justify-between pr-2 pt-5 border-t border-zinc-700">
       <div className="flex flex-col gap-1">

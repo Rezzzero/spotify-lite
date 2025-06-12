@@ -3,7 +3,7 @@ import PlaylistIcon from "@shared/assets/playlist/playlist-icon.svg?react";
 import EditIcon from "@shared/assets/playlist/edit-icon.svg?react";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import { useEditPlaylistModal } from "../model/useEditPlaylistModal";
-import { Playlist } from "@shared/types/types";
+import { PlaylistData } from "@widgets/playlist-info/types/types";
 
 export const EditPlaylistModal = ({
   editModalRef,
@@ -11,18 +11,12 @@ export const EditPlaylistModal = ({
   playlistName,
   playlistDescription,
   setPlaylist,
-  setPlaylistName,
-  setPlaylistDescription,
-  setImageUrl,
 }: {
   closeModal: () => void;
   editModalRef: React.RefObject<HTMLDivElement | null>;
-  playlistName: string;
-  playlistDescription: string;
-  setPlaylist: React.Dispatch<React.SetStateAction<Playlist | null>>;
-  setPlaylistName: React.Dispatch<React.SetStateAction<string>>;
-  setPlaylistDescription: React.Dispatch<React.SetStateAction<string>>;
-  setImageUrl: React.Dispatch<React.SetStateAction<string | null>>;
+  playlistName: string | undefined;
+  playlistDescription: string | undefined;
+  setPlaylist: React.Dispatch<React.SetStateAction<PlaylistData | null>>;
 }) => {
   const {
     handleSelectImage,
@@ -37,9 +31,6 @@ export const EditPlaylistModal = ({
     playlistName,
     playlistDescription,
     setPlaylist,
-    setPlaylistName,
-    setPlaylistDescription,
-    setImageUrl,
   });
   return (
     <>

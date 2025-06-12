@@ -14,7 +14,8 @@ import { AddTrackSearch } from "../add-track-search/ui/AddTrackSearch";
 
 export const PlaylistInfo = () => {
   const {
-    playlist,
+    playlistData,
+    setPlaylistData,
     imageColors,
     openSearch,
     setOpenSearch,
@@ -25,8 +26,6 @@ export const PlaylistInfo = () => {
     editModal,
     setEditModal,
     editModalRef,
-    playlistName,
-    playlistDescription,
     loading,
     changeFormatModal,
     setChangeFormatModal,
@@ -36,16 +35,10 @@ export const PlaylistInfo = () => {
     changeFormatButtonRef,
     deletePlaylistModal,
     setDeletePlaylistModal,
-    setPlaylist,
-    setImageUrl,
-    setPlaylistName,
-    setPlaylistDescription,
   } = usePlaylistInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
     : "linear-gradient(to bottom, #333, #222)";
-
-  console.log(imageColors);
 
   if (loading) return <div>Loading...</div>;
 
@@ -70,10 +63,12 @@ export const PlaylistInfo = () => {
         </div>
         <div className="flex flex-col gap-3 pt-12 h-full">
           <h2>
-            {playlist?.public ? "Открытый плейлист" : "Закрытый плейлист"}
+            {playlistData?.playlist?.public
+              ? "Открытый плейлист"
+              : "Закрытый плейлист"}
           </h2>
           <h1 className="text-[90px] font-bold leading-none">
-            {playlist?.name}
+            {playlistData?.playlist?.name}
           </h1>
           <div className="flex gap-1 mt-auto">
             <img
@@ -82,7 +77,9 @@ export const PlaylistInfo = () => {
               className="w-6 h-6 rounded-full"
             />
             <Link to={"/"} className="hover:underline">
-              {playlist ? playlist.owner.display_name : "owner"}
+              {playlistData
+                ? playlistData.playlist.owner.display_name
+                : "owner"}
             </Link>
           </div>
         </div>
@@ -90,7 +87,7 @@ export const PlaylistInfo = () => {
       <div className="flex flex-col gap-5 w-full pl-5 pr-8 h-[700px] relative">
         <div className="flex items-center pt-7 pb-10 justify-between w-full">
           <CustomTooltip
-            title={`Открыть контекстное меню: ${playlist?.name}`}
+            title={`Открыть контекстное меню: ${playlistData?.playlist.name}`}
             placement="top"
             customFontSize={13}
           >
@@ -140,8 +137,8 @@ export const PlaylistInfo = () => {
             closeModal={() => setMenuModal(false)}
             openEditModal={() => setEditModal(true)}
             openDeleteModal={() => setDeletePlaylistModal(true)}
-            isPublic={playlist?.public}
-            setPlaylist={setPlaylist}
+            isPublic={playlistData?.playlist.public}
+            setPlaylist={setPlaylistData}
           />
         )}
         {changeFormatModal && (
@@ -161,17 +158,14 @@ export const PlaylistInfo = () => {
         <EditPlaylistModal
           editModalRef={editModalRef}
           closeModal={() => setEditModal(false)}
-          playlistName={playlistName}
-          playlistDescription={playlistDescription}
-          setPlaylist={setPlaylist}
-          setPlaylistName={setPlaylistName}
-          setPlaylistDescription={setPlaylistDescription}
-          setImageUrl={setImageUrl}
+          playlistName={playlistData?.playlistName}
+          playlistDescription={playlistData?.playlistDescription}
+          setPlaylist={setPlaylistData}
         />
       )}
       {deletePlaylistModal && (
         <DeletePlaylistModal
-          playlistName={playlistName}
+          playlistName={playlistData?.playlistName}
           closeModal={() => setDeletePlaylistModal(false)}
         />
       )}

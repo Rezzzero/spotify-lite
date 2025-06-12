@@ -5,7 +5,7 @@ export const DeletePlaylistModal = ({
   playlistName,
 }: {
   closeModal: () => void;
-  playlistName: string;
+  playlistName: string | undefined;
 }) => {
   const { handleDeletePlaylist } = useDeletePlaylistModal(closeModal);
   return (

@@ -1,4 +1,4 @@
-import { Playlist } from "@shared/types/types";
+import { PlaylistData } from "@widgets/playlist-info/types/types";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
@@ -9,7 +9,7 @@ export const usePlaylistMenuModal = ({
 }: {
   isPublic: boolean | undefined;
   closeModal: () => void;
-  setPlaylist: React.Dispatch<React.SetStateAction<Playlist | null>>;
+  setPlaylist: React.Dispatch<React.SetStateAction<PlaylistData | null>>;
 }) => {
   const { id } = useParams();
   const changePublicStatus = async () => {
@@ -22,7 +22,12 @@ export const usePlaylistMenuModal = ({
       );
 
       closeModal();
-      setPlaylist(response.data[0]);
+      setPlaylist({
+        playlist: response.data[0],
+        playlistName: response.data[0].name,
+        playlistDescription: response.data[0].description,
+        imageUrl: response.data[0].image_url,
+      });
     } catch (error) {
       console.error("Error changing public status:", error);
     }

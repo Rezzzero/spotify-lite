@@ -1,23 +1,16 @@
 import { Route } from "@shared/constants/constants";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
-import { Playlist } from "@shared/types/types";
 import axios, { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { PlaylistData } from "../types/types";
 
 export const usePlaylistInfo = () => {
   const [loading, setLoading] = useState(false);
   const [openSearch, setOpenSearch] = useState(true);
-  const [playlist, setPlaylist] = useState<Playlist | null>(null);
-  const [playlistName, setPlaylistName] = useState(
-    playlist?.name ? playlist.name : ""
-  );
-  const [playlistDescription, setPlaylistDescription] = useState(
-    playlist?.description ? playlist.description : ""
-  );
+  const [playlistData, setPlaylistData] = useState<PlaylistData | null>(null);
   const [playlistFormat, setPlaylistFormat] = useState("list");
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [menuModal, setMenuModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [changeFormatModal, setChangeFormatModal] = useState(false);
@@ -27,7 +20,7 @@ export const usePlaylistInfo = () => {
   const editModalRef = useRef<HTMLDivElement>(null);
   const changeFormatModalRef = useRef<HTMLDivElement>(null);
   const changeFormatButtonRef = useRef<HTMLButtonElement>(null);
-  const { imageColors } = useGetColors(imageUrl);
+  const { imageColors } = useGetColors(playlistData?.imageUrl || null);
   const { id } = useParams();
   const source = id?.startsWith("sp_") ? "supabase" : "spotify";
   const navigate = useNavigate();
@@ -45,14 +38,15 @@ export const usePlaylistInfo = () => {
             withCredentials: true,
           }
         );
-        setImageUrl(null);
-        if (response.data.images[0].url) {
-          setImageUrl(response.data.images[0].url);
-        }
 
-        setPlaylist(response.data);
-        setPlaylistName(response.data.name);
-        setPlaylistDescription(response.data.description);
+        setPlaylistData({
+          playlist: response.data,
+          playlistName: response.data.name,
+          playlistDescription: response.data.description,
+          imageUrl: response.data.images[0].url
+            ? response.data.images[0].url
+            : "",
+        });
 
         setLoading(false);
       } catch (error) {
@@ -64,7 +58,7 @@ export const usePlaylistInfo = () => {
     };
 
     fetch();
-  }, [id, source, imageColors, navigate]);
+  }, [id, source, navigate]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -104,7 +98,7 @@ export const usePlaylistInfo = () => {
   }, [menuModal, editModal, changeFormatModal]);
 
   return {
-    playlist,
+    playlistData,
     imageColors,
     openSearch,
     setOpenSearch,
@@ -115,8 +109,6 @@ export const usePlaylistInfo = () => {
     editModal,
     setEditModal,
     editModalRef,
-    playlistName,
-    playlistDescription,
     loading,
     changeFormatModal,
     setChangeFormatModal,
@@ -126,9 +118,6 @@ export const usePlaylistInfo = () => {
     changeFormatButtonRef,
     deletePlaylistModal,
     setDeletePlaylistModal,
-    setPlaylistName,
-    setPlaylistDescription,
-    setPlaylist,
-    setImageUrl,
+    setPlaylistData,
   };
 };
