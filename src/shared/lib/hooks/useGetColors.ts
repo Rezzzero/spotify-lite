@@ -10,10 +10,15 @@ export const useGetColors = (imageUrl: string | null) => {
   });
 
   useEffect(() => {
+    if (!imageUrl) {
+      setImageColors(null);
+      return;
+    }
+
     if (dominantColor && darkerColor) {
       setImageColors([dominantColor, darkerColor]);
     }
-  }, [dominantColor, darkerColor]);
+  }, [imageUrl, dominantColor, darkerColor]);
 
   return { imageColors };
 };

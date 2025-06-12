@@ -18,6 +18,8 @@ export const MediaLibrary = () => {
     createPlaylistRef,
     loginPromptRef,
     createPlaylistButtonRef,
+    playlists,
+    id,
   } = useMediaLibrary();
   return (
     <div className="flex flex-col gap-7 bg-[#141414] w-[23%] h-[85vh] rounded-xl p-2 pb-8 relative">
@@ -43,54 +45,89 @@ export const MediaLibrary = () => {
           </button>
         </CustomTooltip>
       </div>
-      <div className="flex flex-col items-start font-bold gap-1 bg-[#212121] rounded-xl py-3 px-5">
-        <h2>Создай свой первый плейлист</h2>
-        <p className="text-sm font-normal mb-4">
-          Это совсем не сложно! Мы поможем.
-        </p>
-        <button
-          type="button"
-          onClick={handleCreatePlaylist}
-          className="bg-white rounded-full text-black text-sm py-2 px-4 hover:bg-gray-100 hover:scale-103 cursor-pointer"
-        >
-          Создать плейлист
-        </button>
-      </div>
-      <div className="flex flex-col items-start font-bold gap-1 bg-[#212121] rounded-xl py-3 px-5 mb-auto">
-        <h2>Подпишись на интересные подкасты</h2>
-        <p className="text-sm font-normal mb-4">
-          Ты будешь узнавать о новых выпусках.
-        </p>
-        <button
-          type="button"
-          className="bg-white rounded-full text-black text-sm py-2 px-4 hover:bg-gray-100 hover:scale-103 cursor-pointer"
-        >
-          Обзор
-        </button>
-      </div>
-      <div className="flex flex-col items-start gap-3 px-5">
-        <ul className="flex flex-wrap text-[11px] text-[#b3b3b3] gap-3">
-          {MediaLibraryLinks.map((link, index) => (
-            <li key={index}>
-              <Link to={link.path}>{link.name}</Link>
-            </li>
+      {playlists.length === 0 ? (
+        <>
+          <div className="flex flex-col items-start font-bold gap-1 bg-[#212121] rounded-xl py-3 px-5">
+            <h2>Создай свой первый плейлист</h2>
+            <p className="text-sm font-normal mb-4">
+              Это совсем не сложно! Мы поможем.
+            </p>
+            <button
+              type="button"
+              onClick={handleCreatePlaylist}
+              className="bg-white rounded-full text-black text-sm py-2 px-4 hover:bg-gray-100 hover:scale-103 cursor-pointer"
+            >
+              Создать плейлист
+            </button>
+          </div>
+          <div className="flex flex-col items-start font-bold gap-1 bg-[#212121] rounded-xl py-3 px-5 mb-auto">
+            <h2>Подпишись на интересные подкасты</h2>
+            <p className="text-sm font-normal mb-4">
+              Ты будешь узнавать о новых выпусках.
+            </p>
+            <button
+              type="button"
+              className="bg-white rounded-full text-black text-sm py-2 px-4 hover:bg-gray-100 hover:scale-103 cursor-pointer"
+            >
+              Обзор
+            </button>
+          </div>
+          <div className="flex flex-col items-start mt-auto gap-3 px-5">
+            <ul className="flex flex-wrap text-[11px] text-[#b3b3b3] gap-3">
+              {MediaLibraryLinks.map((link, index) => (
+                <li key={index}>
+                  <Link to={link.path}>{link.name}</Link>
+                </li>
+              ))}
+            </ul>
+            <Link to={"/"} className="text-xs mb-5 hover:underline">
+              Файлы cookie
+            </Link>
+            <button
+              type="button"
+              className="flex items-center gap-2 font-bold text-sm border border-gray-500 rounded-full py-1 px-3 hover:border-white hover:scale-105 cursor-pointer"
+            >
+              <img
+                src={GlobalIcon}
+                alt="select language icon"
+                className="w-4 h-4"
+              />
+              <span>Русский</span>
+            </button>
+          </div>
+        </>
+      ) : (
+        <div className="flex flex-col gap-1">
+          {playlists.map((playlist) => (
+            <Link
+              to={`/playlist/${playlist.id}`}
+              key={playlist.id}
+              className={`${
+                id === playlist.id
+                  ? "bg-zinc-800 hover:bg-zinc-700"
+                  : "hover:bg-zinc-800"
+              } flex gap-2 py-2 px-2 rounded-md cursor-pointer`}
+            >
+              <img
+                src={
+                  playlist.images[0].url
+                    ? playlist.images[0].url
+                    : "https://jiiyqowxssltsrpijqog.supabase.co/storage/v1/object/public/playlist//playlist-placeholder.png"
+                }
+                alt="playlist image"
+                className="w-12 h-12 rounded-md"
+              />
+              <div>
+                <h1 className="font-bold">{playlist.name}</h1>
+                <span className="flex gap-1 font-semibold text-sm text-gray-400">
+                  Плейлист <p className="font-bold text-lg leading-none">·</p>
+                  {playlist.owner.display_name}
+                </span>
+              </div>
+            </Link>
           ))}
-        </ul>
-        <Link to={"/"} className="text-xs mb-5 hover:underline">
-          Файлы cookie
-        </Link>
-        <button
-          type="button"
-          className="flex items-center gap-2 font-bold text-sm border border-gray-500 rounded-full py-1 px-3 hover:border-white hover:scale-105 cursor-pointer"
-        >
-          <img
-            src={GlobalIcon}
-            alt="select language icon"
-            className="w-4 h-4"
-          />
-          <span>Русский</span>
-        </button>
-      </div>
+        </div>
+      )}
       {createPlaylistModal && (
         <div
           ref={createPlaylistRef}

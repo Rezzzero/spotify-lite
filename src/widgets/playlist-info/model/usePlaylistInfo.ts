@@ -36,6 +36,7 @@ export const usePlaylistInfo = () => {
     setLoading(true);
     const endpoint =
       source === "supabase" ? "get-supabase-playlist" : "get-playlist";
+
     const fetch = async () => {
       try {
         const response = await axios.get(
@@ -44,7 +45,7 @@ export const usePlaylistInfo = () => {
             withCredentials: true,
           }
         );
-
+        setImageUrl(null);
         if (response.data.images[0].url) {
           setImageUrl(response.data.images[0].url);
         }

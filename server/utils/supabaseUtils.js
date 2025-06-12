@@ -236,3 +236,20 @@ export const deletePlaylistImage = async (playlistId) => {
     throw new Error("Ошибка при удалении изображения");
   }
 };
+
+export const getPlaylistsOfUser = async (userId) => {
+  const { data, error } = await supabaseAdmin
+    .from("playlists")
+    .select("*")
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error(
+      "Ошибка при получении плейлистов пользователя:",
+      error.message
+    );
+    throw new Error("Ошибка при получении плейлистов пользователя");
+  }
+
+  return data;
+};

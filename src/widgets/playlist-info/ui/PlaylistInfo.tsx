@@ -45,6 +45,8 @@ export const PlaylistInfo = () => {
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
     : "linear-gradient(to bottom, #333, #222)";
 
+  console.log(imageColors);
+
   if (loading) return <div>Loading...</div>;
 
   return (

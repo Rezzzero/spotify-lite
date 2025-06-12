@@ -27,6 +27,7 @@ import getPlaylistRoutes from "./routes/supabase/playlist/getPlaylist.js";
 import deletePlaylistRoutes from "./routes/supabase/playlist/deletePlaylist.js";
 import updatePlaylistRoutes from "./routes/supabase/playlist/updatePlaylist.js";
 import uploadPlaylistImageRoutes from "./routes/supabase/playlist/uploadPlaylistImage.js";
+import getPlaylistsOfUserRoutes from "./routes/supabase/playlist/getPlaylistsOfUser.js";
 
 dotenv.config();
 
@@ -66,6 +67,7 @@ app.use("/get-supabase-playlist", getPlaylistRoutes);
 app.use("/delete-supabase-playlist", deletePlaylistRoutes);
 app.use("/update-supabase-playlist", updatePlaylistRoutes);
 app.use("/upload-playlist-image", uploadPlaylistImageRoutes);
+app.use('/get-playlists-of-user', getPlaylistsOfUserRoutes)
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
