@@ -7,7 +7,7 @@ export const getPlaylistHandler = async (req, res) => {
   try {
     const playlistId = req.params.playlistId;
     const accessToken = req.cookies.access_token;
-    const playlist = await getPlaylist(playlistId);
+    const { playlist, tracks } = await getPlaylist(playlistId);
     let user;
 
     if (!accessToken && playlist.public === false) {
@@ -25,7 +25,7 @@ export const getPlaylistHandler = async (req, res) => {
       return res.status(404).json({ error: "Страница не найдена" });
     }
 
-    res.json(playlist);
+    res.json({ ...playlist, tracks });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });

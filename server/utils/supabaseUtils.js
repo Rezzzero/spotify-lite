@@ -154,18 +154,34 @@ export const createPlaylist = async (playlistData) => {
 };
 
 export const getPlaylist = async (playlistId) => {
-  const { data, error } = await supabaseAdmin
+  const { data: playlist, error: playlistError } = await supabaseAdmin
     .from("playlists")
     .select("*")
     .eq("id", playlistId)
     .single();
 
-  if (error) {
-    console.error("Ошибка при получении плейлиста:", error.message);
+  if (playlistError) {
+    console.error("Ошибка при получении плейлиста:", playlistError.message);
     throw new Error("Ошибка при получении плейлиста");
   }
 
-  return data;
+  const { data: tracks, error: tracksError } = await supabaseAdmin
+    .from("playlist_tracks")
+    .select("track_id, tracks(*)")
+    .eq("playlist_id", playlistId);
+
+  if (tracksError) {
+    console.error(
+      "Ошибка при получении треков плейлиста:",
+      tracksError.message
+    );
+    throw new Error("Ошибка при получении треков плейлиста");
+  }
+
+  return {
+    playlist,
+    tracks: tracks.map((item) => item.tracks),
+  };
 };
 
 export const deletePlaylist = async (playlistId) => {
@@ -265,6 +281,7 @@ export const addTrackToPlaylist = async (trackData, playlistId) => {
         album: trackData.album,
         artists: trackData.artists,
         mp3_url: trackData.mp3_url,
+        added_at: trackData.added_at,
       },
     ])
     .select()

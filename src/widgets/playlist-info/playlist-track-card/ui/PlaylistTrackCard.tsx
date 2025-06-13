@@ -1,36 +1,29 @@
 import { Link } from "react-router-dom";
-import { Track } from "../../types/types";
-import { formatMsToMinutesAndSeconds } from "../../lib/format/msToMinutesAndSeconds";
-import { CustomTooltip } from "../tooltip/CustomTooltip";
+import { Track } from "@shared/types/types";
+import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
+import { formatDate } from "@shared/lib/format/formatDate";
+import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 
-export const TrackCard = ({
+export const PlaylistTrackCard = ({
   track,
   index,
-  withNum,
-  withAlbumName,
-  withImage,
-  withArtists,
-  grid,
+  libraryFormat,
 }: {
   track: Track;
   index: number;
-  withNum?: boolean;
-  withAlbumName?: boolean;
-  withImage?: boolean;
-  withArtists?: boolean;
-  grid?: boolean;
+  libraryFormat: string;
 }) => {
   return (
     <div
-      className={`${
-        grid ? "px-5 grid grid-cols-[30px_2fr_1fr_auto]" : "px-2 flex"
+      className={`px-5 grid ${
+        libraryFormat === "compact"
+          ? "grid-cols-[30px_2fr_1fr_1fr_1fr_auto]"
+          : "grid-cols-[30px_2fr_1fr_1fr_auto]"
       } items-center py-[6px] pr-6 rounded-md group hover:bg-[#333336]`}
     >
-      {withNum && (
-        <p className="text-gray-400 text-lg font-semibold">{index + 1}</p>
-      )}
+      <p className="text-gray-400 text-lg font-semibold">{index + 1}</p>
       <div className="flex items-center gap-4">
-        {withImage && (
+        {libraryFormat !== "compact" && (
           <img
             src={track.album.images[0].url}
             alt={`${track.name} image`}
@@ -43,7 +36,7 @@ export const TrackCard = ({
               {track.name}
             </Link>
           </CustomTooltip>
-          {withArtists && (
+          {libraryFormat !== "compact" && (
             <CustomTooltip
               title={track.artists.map((artist) => artist.name).join(", ")}
               placement="top"
@@ -65,13 +58,19 @@ export const TrackCard = ({
           )}
         </div>
       </div>
-      {withAlbumName && (
-        <Link
-          to={`/album/${track.album.id}`}
-          className="text-sm text-gray-400 pl-[6px] group-hover:text-white hover:underline"
-        >
-          {track.album.name}
-        </Link>
+      {libraryFormat === "compact" && (
+        <div className="text-gray-400">
+          {track.artists.map((artist) => artist.name).join(", ")}
+        </div>
+      )}
+      <Link
+        to={`/album/${track.album.id}`}
+        className="text-sm text-gray-400 pl-[6px] group-hover:text-white hover:underline"
+      >
+        {track.album.name}
+      </Link>
+      {track.added_at && (
+        <p className="text-gray-400 pl-1">{formatDate(track.added_at)}</p>
       )}
       <p className="text-gray-400 ml-auto">
         {formatMsToMinutesAndSeconds(track.duration_ms)}

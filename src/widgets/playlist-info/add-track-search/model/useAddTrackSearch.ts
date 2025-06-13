@@ -24,6 +24,7 @@ export const useAddTrackSearch = () => {
       },
       artists: track.artists,
       mp3_url: "",
+      added_at: new Date().toISOString(),
     };
 
     try {

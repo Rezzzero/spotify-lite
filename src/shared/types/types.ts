@@ -66,6 +66,7 @@ export interface Track {
   duration_ms: number;
   id: string;
   name: string;
+  added_at?: string;
 }
 
 export interface Show {

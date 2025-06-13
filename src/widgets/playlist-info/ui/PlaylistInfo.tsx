@@ -4,6 +4,7 @@ import EditIcon from "@shared/assets/playlist/edit-icon.svg?react";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import ListIcon from "@shared/assets/drop-down/list-icon.svg?react";
 import CompactListIcon from "@shared/assets/compact-list-icon.svg?react";
+import ClockIcon from "@shared/assets/clock-icon.svg?react";
 import { Link } from "react-router-dom";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
@@ -11,6 +12,7 @@ import { DeletePlaylistModal } from "../delete-modal/ui/DeletePlaylistModal";
 import { EditPlaylistModal } from "../edit-modal/ui/EditPlaylistModal";
 import { PlaylistMenuModal } from "../menu-modal/ui/PlaylistMenuModal";
 import { AddTrackSearch } from "../add-track-search/ui/AddTrackSearch";
+import { PlaylistTrackCard } from "../playlist-track-card/ui/PlaylistTrackCard";
 
 export const PlaylistInfo = () => {
   const {
@@ -35,6 +37,7 @@ export const PlaylistInfo = () => {
     changeFormatButtonRef,
     deletePlaylistModal,
     setDeletePlaylistModal,
+    tracks,
   } = usePlaylistInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
@@ -118,6 +121,34 @@ export const PlaylistInfo = () => {
             )}
           </button>
         </div>
+        {tracks.length > 0 && (
+          <div className="flex flex-col gap-2">
+            <div
+              className={`grid ${
+                playlistFormat === "compact"
+                  ? "grid-cols-[30px_2fr_1fr_1fr_1fr_auto]"
+                  : "grid-cols-[30px_2fr_1fr_1fr_auto]"
+              } px-5 py-2 border-b border-zinc-700`}
+            >
+              <span>#</span>
+              <span>Название</span>
+              {playlistFormat === "compact" && <span>Исполнитель</span>}
+              <span>Альбом</span>
+              <span>Дата добавления</span>
+              <ClockIcon className="w-5 h-5 mr-1" />
+            </div>
+            <div>
+              {tracks.map((track, index) => (
+                <PlaylistTrackCard
+                  key={track.id}
+                  track={track}
+                  index={index}
+                  libraryFormat={playlistFormat}
+                />
+              ))}
+            </div>
+          </div>
+        )}
         {openSearch ? (
           <AddTrackSearch closeSearch={() => setOpenSearch(false)} />
         ) : (

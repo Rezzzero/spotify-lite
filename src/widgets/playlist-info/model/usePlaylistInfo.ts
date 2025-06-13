@@ -5,11 +5,13 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { PlaylistData } from "../types/types";
+import { Track } from "@shared/types/types";
 
 export const usePlaylistInfo = () => {
   const [loading, setLoading] = useState(false);
   const [openSearch, setOpenSearch] = useState(true);
   const [playlistData, setPlaylistData] = useState<PlaylistData | null>(null);
+  const [tracks, setTracks] = useState<Track[]>([]);
   const [playlistFormat, setPlaylistFormat] = useState("list");
   const [menuModal, setMenuModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
@@ -47,6 +49,10 @@ export const usePlaylistInfo = () => {
             ? response.data.images[0].url
             : "",
         });
+
+        if (response.data.tracks) {
+          setTracks(response.data.tracks);
+        }
 
         setLoading(false);
       } catch (error) {
@@ -119,5 +125,6 @@ export const usePlaylistInfo = () => {
     deletePlaylistModal,
     setDeletePlaylistModal,
     setPlaylistData,
+    tracks,
   };
 };
