@@ -3,6 +3,8 @@ import { Track } from "@shared/types/types";
 import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
 import { formatDate } from "@shared/lib/format/formatDate";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
+import MenuIcon from "@shared/assets/menu-icon.svg?react";
+import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
 
 export const PlaylistTrackCard = ({
   track,
@@ -19,9 +21,21 @@ export const PlaylistTrackCard = ({
         libraryFormat === "compact"
           ? "grid-cols-[30px_2fr_1fr_1fr_1fr_auto]"
           : "grid-cols-[30px_2fr_1fr_1fr_auto]"
-      } items-center py-[6px] pr-6 rounded-md group hover:bg-[#333336]`}
+      } items-center py-[6px] pr-10 rounded-md group hover:bg-[#333336] relative`}
     >
-      <p className="text-gray-400 text-lg font-semibold">{index + 1}</p>
+      <div className="flex items-center gap-2">
+        <p className="text-gray-400 text-lg group-hover:hidden font-semibold">
+          {index + 1}
+        </p>
+        <CustomTooltip
+          title={`Включить трек «${track.name}» исполнителя ${track.artists
+            .map((artist) => artist.name)
+            .join(", ")}`}
+          placement="top"
+        >
+          <SmallPlayIcon className="w-3 h-3 hidden group-hover:block" />
+        </CustomTooltip>
+      </div>
       <div className="flex items-center gap-4">
         {libraryFormat !== "compact" && (
           <img
@@ -75,6 +89,7 @@ export const PlaylistTrackCard = ({
       <p className="text-gray-400 ml-auto">
         {formatMsToMinutesAndSeconds(track.duration_ms)}
       </p>
+      <MenuIcon className="w-6 h-6 absolute right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer hover:scale-105" />
     </div>
   );
 };

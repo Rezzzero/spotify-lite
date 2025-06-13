@@ -1,5 +1,4 @@
 import { usePlaylistInfo } from "../model/usePlaylistInfo";
-import PlaylistIcon from "@shared/assets/playlist/playlist-icon.svg?react";
 import EditIcon from "@shared/assets/playlist/edit-icon.svg?react";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import ListIcon from "@shared/assets/drop-down/list-icon.svg?react";
@@ -53,16 +52,25 @@ export const PlaylistInfo = () => {
       >
         <div
           onClick={() => setEditModal((prev) => !prev)}
-          className="flex items-center bg-zinc-800 rounded-md w-[232px] h-[232px] shadow-xl group"
+          className="flex items-center bg-zinc-900 rounded-md w-[232px] h-[232px] shadow-xl group relative"
         >
-          <PlaylistIcon className="text-gray-400 w-15 h-15 ml-20 group-hover:hidden" />
-          <button
-            type="button"
-            className="flex flex-col items-center gap-2 ml-16 hidden group-hover:block"
-          >
-            <EditIcon className="w-13 h-13 ml-7" />
+          <img
+            src={
+              playlistData?.playlist.images[0].url
+                ? playlistData?.playlist.images[0].url
+                : "https://jiiyqowxssltsrpijqog.supabase.co/storage/v1/object/public/playlist//playlist-placeholder.png"
+            }
+            alt="playlist image"
+            className={`w-full h-full object-cover rounded-md ${
+              playlistData?.playlist.images[0].url
+                ? "group-hover:opacity-20"
+                : "group-hover:opacity-0"
+            } transition-opacity duration-200`}
+          />
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <EditIcon className="w-13 h-13" />
             <p className="font-bold">Выбрать фото</p>
-          </button>
+          </div>
         </div>
         <div className="flex flex-col gap-3 pt-12 h-full">
           <h2>
@@ -128,7 +136,7 @@ export const PlaylistInfo = () => {
                 playlistFormat === "compact"
                   ? "grid-cols-[30px_2fr_1fr_1fr_1fr_auto]"
                   : "grid-cols-[30px_2fr_1fr_1fr_auto]"
-              } px-5 py-2 border-b border-zinc-700`}
+              } px-5 pr-9 py-2 border-b border-zinc-700`}
             >
               <span>#</span>
               <span>Название</span>
