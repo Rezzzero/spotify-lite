@@ -12,12 +12,10 @@ export const PlaylistTrackCard = ({
   track,
   index,
   libraryFormat,
-  playlistId,
 }: {
   track: Track;
   index: number;
   libraryFormat: string;
-  playlistId: string;
 }) => {
   const { isMenuOpen, setIsMenuOpen, menuRef, buttonRef, handleDeleteTrack } =
     usePlaylistTrackCard();
@@ -114,7 +112,7 @@ export const PlaylistTrackCard = ({
             <button
               className="w-full flex gap-2 items-center px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
               onClick={() => {
-                handleDeleteTrack(track.id, playlistId);
+                handleDeleteTrack(track.id);
                 setIsMenuOpen(false);
               }}
             >
