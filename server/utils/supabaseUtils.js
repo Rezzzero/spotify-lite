@@ -271,25 +271,42 @@ export const getPlaylistsOfUser = async (userId) => {
 };
 
 export const addTrackToPlaylist = async (trackData, playlistId) => {
-  const { data: track, error: trackError } = await supabaseAdmin
+  const { data: existingTrack, error: checkError } = await supabaseAdmin
     .from("tracks")
-    .insert([
-      {
-        id: trackData.id,
-        name: trackData.name,
-        duration_ms: trackData.duration_ms,
-        album: trackData.album,
-        artists: trackData.artists,
-        mp3_url: trackData.mp3_url,
-        added_at: trackData.added_at,
-      },
-    ])
     .select()
+    .eq("id", trackData.id)
     .single();
 
-  if (trackError) {
-    console.error("Ошибка при добавлении трека:", trackError.message);
-    throw new Error("Ошибка при добавлении трека");
+  if (checkError) {
+    console.error("Ошибка при проверке трека:", checkError.message);
+    throw new Error("Ошибка при проверке трека");
+  }
+
+  let trackId = trackData.id;
+
+  if (!existingTrack) {
+    const { data: newTrack, error: trackError } = await supabaseAdmin
+      .from("tracks")
+      .insert([
+        {
+          id: trackData.id,
+          name: trackData.name,
+          duration_ms: trackData.duration_ms,
+          album: trackData.album,
+          artists: trackData.artists,
+          mp3_url: trackData.mp3_url,
+          added_at: trackData.added_at,
+        },
+      ])
+      .select()
+      .single();
+
+    if (trackError) {
+      console.error("Ошибка при добавлении трека:", trackError.message);
+      throw new Error("Ошибка при добавлении трека");
+    }
+
+    trackId = newTrack.id;
   }
 
   const { data: playlistTrack, error: playlistTrackError } = await supabaseAdmin
@@ -297,7 +314,7 @@ export const addTrackToPlaylist = async (trackData, playlistId) => {
     .insert([
       {
         playlist_id: playlistId,
-        track_id: trackData.id,
+        track_id: trackId,
       },
     ])
     .select()
@@ -311,14 +328,15 @@ export const addTrackToPlaylist = async (trackData, playlistId) => {
     throw new Error("Ошибка при добавлении трека в плейлист");
   }
 
-  return { track, playlistTrack };
+  return { track: existingTrack || newTrack, playlistTrack };
 };
 
-export const deleteTrackFromPlaylist = async (trackId) => {
+export const deleteTrackFromPlaylist = async (trackId, playlistId) => {
   const { data, error } = await supabaseAdmin
     .from("playlist_tracks")
     .delete()
     .eq("track_id", trackId)
+    .eq("playlist_id", playlistId)
     .select();
 
   if (error) {

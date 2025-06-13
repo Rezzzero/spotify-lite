@@ -5,16 +5,23 @@ import { formatDate } from "@shared/lib/format/formatDate";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
+import { usePlaylistTrackCard } from "../model/usePlaylistTrackCard";
+import DeleteTrackIcon from "@shared/assets/trash-fill-icon.svg?react";
 
 export const PlaylistTrackCard = ({
   track,
   index,
   libraryFormat,
+  playlistId,
 }: {
   track: Track;
   index: number;
   libraryFormat: string;
+  playlistId: string;
 }) => {
+  const { isMenuOpen, setIsMenuOpen, menuRef, buttonRef, handleDeleteTrack } =
+    usePlaylistTrackCard();
+
   return (
     <div
       className={`px-5 grid ${
@@ -89,7 +96,34 @@ export const PlaylistTrackCard = ({
       <p className="text-gray-400 ml-auto">
         {formatMsToMinutesAndSeconds(track.duration_ms)}
       </p>
-      <MenuIcon className="w-6 h-6 absolute right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer hover:scale-105" />
+
+      <button
+        ref={buttonRef}
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        className="absolute right-1 hidden group-hover:block hover:scale-105 cursor-pointer"
+      >
+        <MenuIcon className="w-7 h-7 text-white text-gray-400" />
+      </button>
+
+      {isMenuOpen && (
+        <div
+          ref={menuRef}
+          className="absolute right-3 bottom-14 mt-2 w-[330px] bg-zinc-800 rounded-md shadow-lg z-50"
+        >
+          <div className="py-1">
+            <button
+              className="w-full flex gap-2 items-center px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
+              onClick={() => {
+                handleDeleteTrack(track.id, playlistId);
+                setIsMenuOpen(false);
+              }}
+            >
+              <DeleteTrackIcon className="w-5 h-5 mr-2" />
+              Удалить из плейлиста
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
