@@ -3,6 +3,7 @@ import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSe
 import { useTrackInfo } from "../model/useTrackInfo";
 import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import { CardList } from "@shared/ui/card-list/CardList";
+import { truncateText } from "@shared/lib/format/truncateText";
 
 export const TrackInfo = () => {
   const { trackData, albums, singles, imageColors } = useTrackInfo();
@@ -20,12 +21,12 @@ export const TrackInfo = () => {
         <img
           src={trackData.track.album.images[0].url}
           alt={trackData.track.name + " image"}
-          className="rounded-md w-[232px] h-[232px] shadow-2xl"
+          className="rounded-md w-[232px] h-[232px] shadow-[0px_7px_58px_-2px_rgba(0,_0,_0,_0.6)]"
         />
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col h-full pt-17 gap-2">
           <p>Трек</p>
-          <h2 className="text-[100px] font-bold leading-none">
-            {trackData.track.name}
+          <h2 className="text-[70px] font-bold leading-none mb-auto">
+            {truncateText(trackData.track.name, 30)}
           </h2>
           <div className="flex items-center">
             <img
@@ -44,7 +45,7 @@ export const TrackInfo = () => {
                 ·
               </span>
               <Link to={`/album/${trackData.track.album.id}`}>
-                {trackData.track.name}
+                {trackData.track.album.name}
               </Link>
               <span className="text-xl opacity-70 font-bold relative top-[1px] mx-1">
                 ·

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Card } from "../card/Card";
 import { CardItem } from "../../types/types";
+import { truncateText } from "@shared/lib/format/truncateText";
 
 export const CardList = ({
   title,
@@ -27,8 +28,9 @@ export const CardList = ({
         <Link
           to={titleLink}
           className="text-2xl font-bold px-3 hover:underline"
+          title={title}
         >
-          {title}
+          {truncateText(title, 30)}
         </Link>
       )}
       <div

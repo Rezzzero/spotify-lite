@@ -24,7 +24,7 @@ export const ArtistInfo = () => {
         <img
           src={artistInfo.artist.images[0].url}
           alt={artistInfo.artist.name + " image"}
-          className="rounded-full w-[232px] h-[232px] shadow-2xl"
+          className="rounded-full w-[232px] h-[232px] shadow-[0px_7px_58px_-2px_rgba(0,_0,_0,_0.6)]"
         />
         <h2 className="text-[100px] font-bold">{artistInfo.artist.name}</h2>
       </div>
