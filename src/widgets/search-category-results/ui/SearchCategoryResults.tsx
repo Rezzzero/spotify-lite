@@ -6,6 +6,7 @@ import clockIcon from "@shared/assets/clock-icon.svg";
 
 export const SearchCategoryResults = () => {
   const { items, category } = useSearchCategoryResults();
+
   if (category === "tracks")
     return (
       <div className="flex flex-col w-full gap-5 px-3 mb-10">
@@ -40,7 +41,7 @@ export const SearchCategoryResults = () => {
     <div className="py-5 px-3 mb-10">
       <CardList
         items={items as CardItem[]}
-        itemType={category as string}
+        itemType={category?.slice(0, -1) as string}
         isCategoryPage
       />
     </div>
