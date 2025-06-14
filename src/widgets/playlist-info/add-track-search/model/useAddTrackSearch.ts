@@ -4,7 +4,11 @@ import axios from "axios";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
-export const useAddTrackSearch = () => {
+export const useAddTrackSearch = ({
+  setTracks,
+}: {
+  setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
+}) => {
   const [value, setValue] = useState("");
   const [results, setResults] = useState({} as SearchResults);
   const [showAll, setShowAll] = useState("");
@@ -18,13 +22,12 @@ export const useAddTrackSearch = () => {
       name: track.name,
       duration_ms: track.duration_ms,
       album: {
-        id: track.album.id,
-        name: track.album.name,
-        images: track.album.images,
+        id: track.album?.id ?? "",
+        name: track.album?.name ?? "",
+        images: track.album?.images ?? [],
       },
-      artists: track.artists,
+      artists: track.artists ?? [],
       mp3_url: "",
-      added_at: new Date().toISOString(),
     };
 
     try {
@@ -36,7 +39,14 @@ export const useAddTrackSearch = () => {
         }
       );
 
-      console.log(response.data);
+      const { track, playlistTrack } = response.data;
+      setTracks((prevTracks: Track[]) => [
+        ...prevTracks,
+        {
+          ...track,
+          added_at: playlistTrack.added_at,
+        },
+      ]);
     } catch (error) {
       console.error("Error adding track to playlist:", error);
     }

@@ -37,6 +37,7 @@ export const PlaylistInfo = () => {
     deletePlaylistModal,
     setDeletePlaylistModal,
     tracks,
+    setTracks,
   } = usePlaylistInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
@@ -152,13 +153,17 @@ export const PlaylistInfo = () => {
                   track={track}
                   index={index}
                   libraryFormat={playlistFormat}
+                  setTracks={setTracks}
                 />
               ))}
             </div>
           </div>
         )}
         {openSearch ? (
-          <AddTrackSearch closeSearch={() => setOpenSearch(false)} />
+          <AddTrackSearch
+            closeSearch={() => setOpenSearch(false)}
+            setTracks={setTracks}
+          />
         ) : (
           <div className="w-full flex justify-end">
             <button

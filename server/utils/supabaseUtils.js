@@ -167,7 +167,7 @@ export const getPlaylist = async (playlistId) => {
 
   const { data: tracks, error: tracksError } = await supabaseAdmin
     .from("playlist_tracks")
-    .select("track_id, tracks(*)")
+    .select("track_id, added_at, tracks(*)")
     .eq("playlist_id", playlistId);
 
   if (tracksError) {
@@ -180,7 +180,10 @@ export const getPlaylist = async (playlistId) => {
 
   return {
     playlist,
-    tracks: tracks.map((item) => item.tracks),
+    tracks: tracks.map((item) => ({
+      ...item.tracks,
+      added_at: item.added_at,
+    })),
   };
 };
 
@@ -275,7 +278,7 @@ export const addTrackToPlaylist = async (trackData, playlistId) => {
     .from("tracks")
     .select()
     .eq("id", trackData.id)
-    .single();
+    .maybeSingle();
 
   if (checkError) {
     console.error("Ошибка при проверке трека:", checkError.message);
@@ -283,6 +286,7 @@ export const addTrackToPlaylist = async (trackData, playlistId) => {
   }
 
   let trackId = trackData.id;
+  let trackToReturn;
 
   if (!existingTrack) {
     const { data: newTrack, error: trackError } = await supabaseAdmin
@@ -295,7 +299,6 @@ export const addTrackToPlaylist = async (trackData, playlistId) => {
           album: trackData.album,
           artists: trackData.artists,
           mp3_url: trackData.mp3_url,
-          added_at: trackData.added_at,
         },
       ])
       .select()
@@ -307,6 +310,9 @@ export const addTrackToPlaylist = async (trackData, playlistId) => {
     }
 
     trackId = newTrack.id;
+    trackToReturn = newTrack;
+  } else {
+    trackToReturn = existingTrack;
   }
 
   const { data: playlistTrack, error: playlistTrackError } = await supabaseAdmin
@@ -315,6 +321,7 @@ export const addTrackToPlaylist = async (trackData, playlistId) => {
       {
         playlist_id: playlistId,
         track_id: trackId,
+        added_at: new Date().toISOString(),
       },
     ])
     .select()
@@ -328,7 +335,13 @@ export const addTrackToPlaylist = async (trackData, playlistId) => {
     throw new Error("Ошибка при добавлении трека в плейлист");
   }
 
-  return { track: existingTrack || newTrack, playlistTrack };
+  return {
+    track: {
+      ...trackToReturn,
+      added_at: playlistTrack.added_at,
+    },
+    playlistTrack,
+  };
 };
 
 export const deleteTrackFromPlaylist = async (trackId, playlistId) => {

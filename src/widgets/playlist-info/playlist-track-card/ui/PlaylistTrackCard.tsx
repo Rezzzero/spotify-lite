@@ -12,13 +12,15 @@ export const PlaylistTrackCard = ({
   track,
   index,
   libraryFormat,
+  setTracks,
 }: {
   track: Track;
   index: number;
   libraryFormat: string;
+  setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
 }) => {
   const { isMenuOpen, setIsMenuOpen, menuRef, buttonRef, handleDeleteTrack } =
-    usePlaylistTrackCard();
+    usePlaylistTrackCard({ setTracks });
 
   return (
     <div

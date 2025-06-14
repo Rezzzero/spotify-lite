@@ -1,8 +1,13 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Track } from "@shared/types/types";
 
-export const usePlaylistTrackCard = () => {
+export const usePlaylistTrackCard = ({
+  setTracks,
+}: {
+  setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -30,7 +35,12 @@ export const usePlaylistTrackCard = () => {
         trackId,
         playlistId,
       });
-      console.log(response);
+
+      if (response.status === 200) {
+        setTracks((prevTracks: Track[]) =>
+          prevTracks.filter((track) => track.id !== trackId)
+        );
+      }
     } catch (error) {
       console.error("Error deleting track:", error);
     }

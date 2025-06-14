@@ -126,5 +126,6 @@ export const usePlaylistInfo = () => {
     setDeletePlaylistModal,
     setPlaylistData,
     tracks,
+    setTracks,
   };
 };
