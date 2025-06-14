@@ -199,7 +199,7 @@ export const LoginForm = () => {
             </button>
             <button
               type="submit"
-              onClick={verifyOtp}
+              onClick={() => verifyOtp(otp.join(""))}
               className="text-black font-bold w-full rounded-full bg-green-400 hover:bg-[#74eda0] hover:scale-105 py-3 px-10 cursor-pointer"
             >
               Войти

@@ -76,7 +76,7 @@ export const useLogin = () => {
     const newOtp = otp.map((_, i) => pasted[i] || "");
     setOtp(newOtp);
     inputRefs.current[pasted.length - 1]?.focus();
-    verifyOtp();
+    verifyOtp(newOtp.join(""));
   };
 
   const sendOtp = async () => {
@@ -107,10 +107,10 @@ export const useLogin = () => {
     }, 30000);
   };
 
-  const verifyOtp = async () => {
+  const verifyOtp = async (newOtp: string) => {
     setLoading(true);
 
-    if (otp.join("").length < 1) {
+    if (newOtp.length < 1) {
       setOtpError({
         status: true,
         message: "Это поле нельзя оставлять пустым",
@@ -118,7 +118,7 @@ export const useLogin = () => {
       setLoading(false);
       return;
     }
-    if (otp.join("").length < 6) {
+    if (newOtp.length < 6) {
       setOtpError({
         status: true,
         message: "Код слишком короткий",
@@ -132,7 +132,7 @@ export const useLogin = () => {
         "http://localhost:3000/auth/verify-otp",
         {
           email: emailValue,
-          otp: otp.join(""),
+          otp: newOtp,
         },
         {
           withCredentials: true,

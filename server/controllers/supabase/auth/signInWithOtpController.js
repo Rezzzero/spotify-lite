@@ -5,7 +5,7 @@ export const signInWithOtpHandler = async (req, res) => {
     const { email, otp } = req.body;
     const result = await signInWithOtp(email, otp);
 
-    res.cookie("access_token", result[0].session.access_token, {
+    res.cookie("access_token", result.session.access_token, {
       httpOnly: true,
       secure: false,
       maxAge: result.session.expires_in * 1000,

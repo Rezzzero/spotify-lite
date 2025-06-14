@@ -26,10 +26,12 @@ export const OTPInput = ({
           value={digit}
           onChange={(e) => handleChangeOtp(i, e.target.value)}
           onKeyDown={(e) => handleOtpKeyDown(i, e)}
-          onPaste={handleOtpPaste}
-          className={`rounded-md border ${
-            otpError.status ? "border-red-500" : "border-gray-300"
-          } text-center text-2xl w-9 h-12`}
+          onPaste={(e) => handleOtpPaste(e)}
+          className={`rounded-md border outline-none text-center text-2xl w-9 h-12 ${
+            otpError.status
+              ? "border-red-500 focus:border-red-500"
+              : "border-gray-300 hover:border-white focus:border-white"
+          }`}
         />
       ))}
     </div>
