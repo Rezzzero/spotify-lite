@@ -4,7 +4,7 @@ import ShowAllIcon from "@shared/assets/arrow-next.svg?react";
 import HideAllIcon from "@shared/assets/arrow-prev.svg?react";
 import { useAddTrackSearch } from "../model/useAddTrackSearch";
 import { PlaylistSearchCard } from "@shared/ui/playlist-search-card/PlaylistSearchCard";
-import { Track } from "@shared/types/types";
+import { SearchResults, Track } from "@shared/types/types";
 
 const showAllList = [
   {
@@ -25,8 +25,33 @@ export const AddTrackSearch = ({
   closeSearch: () => void;
   setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
 }) => {
-  const { value, setValue, results, showAll, setShowAll, handleAddTrack } =
-    useAddTrackSearch({ setTracks });
+  const {
+    value,
+    setValue,
+    results,
+    setResults,
+    showAll,
+    setShowAll,
+    handleAddTrack,
+    handleGetArtistTopTracksAndAlbums,
+    artistTopTracks,
+    artistAlbums,
+    showTracksAndAlbums,
+    setShowTracksAndAlbums,
+    showAlbum,
+    setShowAlbum,
+    album,
+    handleGetAlbumTracks,
+  } = useAddTrackSearch({ setTracks });
+
+  const shouldShowSearchResults =
+    showAll === "" &&
+    Object.keys(results).length > 0 &&
+    !showTracksAndAlbums &&
+    !showAlbum;
+  const shouldShowAllResults = showAll !== "" && !showTracksAndAlbums;
+  const shouldShowArtistContent = showTracksAndAlbums;
+  const shouldShowAlbumContent = album !== null && showAlbum;
 
   return (
     <>
@@ -44,6 +69,18 @@ export const AddTrackSearch = ({
               className="bg-transparent w-full outline-none placeholder:text-gray-300 pr-10"
             />
             <SearchIcon className="absolute top-1/2 transform -translate-y-1/2 left-2 w-5 h-5 text-gray-400" />
+            {value.length > 0 && (
+              <button
+                type="button"
+                onClick={() => {
+                  setValue("");
+                  setResults({} as SearchResults);
+                }}
+                className="absolute top-1/2 transform -translate-y-1/2 right-2"
+              >
+                <CrossIcon className="w-4 h-4 text-gray-400" />
+              </button>
+            )}
           </div>
         </div>
         <button type="button" onClick={() => closeSearch()}>
@@ -51,24 +88,40 @@ export const AddTrackSearch = ({
         </button>
       </div>
       <div className="flex flex-col gap-1">
-        {showAll === "" && Object.keys(results).length > 0 && (
+        {shouldShowSearchResults && (
           <>
             <div>
+              {results.artists && (
+                <PlaylistSearchCard
+                  data={results.artists.items[0]}
+                  handleShowArtist={handleGetArtistTopTracksAndAlbums}
+                />
+              )}
+              {results.tracks &&
+                results.tracks.items
+                  .slice(0, 6)
+                  .map((track) => (
+                    <PlaylistSearchCard
+                      key={track.id}
+                      data={track}
+                      handleAddTrack={handleAddTrack}
+                    />
+                  ))}
+              {results.albums && (
+                <PlaylistSearchCard
+                  data={results.albums.items[0]}
+                  handleShowAlbum={handleGetAlbumTracks}
+                />
+              )}
               {results.tracks && (
                 <PlaylistSearchCard
-                  data={results.tracks.items[0]}
+                  data={results.tracks.items[6]}
                   handleAddTrack={handleAddTrack}
                 />
               )}
-              {results.artists && (
-                <PlaylistSearchCard data={results.artists.items[0]} />
+              {results.albums && (
+                <PlaylistSearchCard data={results.albums.items[1]} />
               )}
-              {results.albums &&
-                results.albums.items
-                  .slice(0, 3)
-                  .map((album) => (
-                    <PlaylistSearchCard key={album.id} data={album} />
-                  ))}
             </div>
             <div className="flex flex-col gap-1">
               {showAllList.map((item) => (
@@ -85,7 +138,7 @@ export const AddTrackSearch = ({
             </div>
           </>
         )}
-        {showAll !== "" && (
+        {shouldShowAllResults && (
           <>
             <button
               type="button"
@@ -99,15 +152,86 @@ export const AddTrackSearch = ({
               {showAll === "Все исполнители" &&
                 results.artists.items
                   .slice(0, 10)
-                  .map((item) => <PlaylistSearchCard data={item} />)}
+                  .map((item) => (
+                    <PlaylistSearchCard
+                      key={item.id}
+                      data={item}
+                      handleShowArtist={handleGetArtistTopTracksAndAlbums}
+                    />
+                  ))}
               {showAll === "Все треки" &&
                 results.tracks.items
                   .slice(0, 10)
-                  .map((item) => <PlaylistSearchCard data={item} />)}
+                  .map((item) => (
+                    <PlaylistSearchCard
+                      key={item.id}
+                      data={item}
+                      handleAddTrack={handleAddTrack}
+                    />
+                  ))}
               {showAll === "Все альбомы" &&
                 results.albums.items
                   .slice(0, 8)
-                  .map((item) => <PlaylistSearchCard data={item} />)}
+                  .map((item) => (
+                    <PlaylistSearchCard
+                      key={item.id}
+                      data={item}
+                      handleShowAlbum={handleGetAlbumTracks}
+                    />
+                  ))}
+            </div>
+          </>
+        )}
+        {shouldShowArtistContent && (
+          <>
+            <button
+              type="button"
+              onClick={() => setShowTracksAndAlbums(false)}
+              className="flex items-center gap-3 my-3"
+            >
+              <HideAllIcon className="w-5 h-5" />
+              <h1 className="font-bold">{results.artists.items[0].name}</h1>
+            </button>
+            <div className="flex flex-col gap-1 mb-2">
+              <h1 className="font-bold">Популярные треки</h1>
+              {artistTopTracks.map((item) => (
+                <PlaylistSearchCard
+                  key={item.id}
+                  data={item}
+                  handleAddTrack={handleAddTrack}
+                />
+              ))}
+            </div>
+            <div className="flex flex-col gap-1">
+              <h1 className="font-bold">Альбомы</h1>
+              {artistAlbums.slice(0, 20).map((item) => (
+                <PlaylistSearchCard
+                  key={item.id}
+                  data={item}
+                  handleShowAlbum={handleGetAlbumTracks}
+                />
+              ))}
+            </div>
+          </>
+        )}
+        {shouldShowAlbumContent && (
+          <>
+            <button
+              type="button"
+              onClick={() => setShowAlbum(false)}
+              className="flex items-center gap-3 my-3"
+            >
+              <HideAllIcon className="w-5 h-5" />
+              <h1 className="font-bold">{album.name}</h1>
+            </button>
+            <div className="flex flex-col gap-1 mb-2">
+              {album.tracks.items.map((item) => (
+                <PlaylistSearchCard
+                  key={item.id}
+                  data={item}
+                  handleAddTrack={handleAddTrack}
+                />
+              ))}
             </div>
           </>
         )}

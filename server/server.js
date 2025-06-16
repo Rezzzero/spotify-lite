@@ -13,6 +13,9 @@ import trackRoutes from "./routes/spotify/track.js";
 import discographyRoutes from "./routes/spotify/discography.js";
 import soundcloudSearchRoutes from "./routes/soundcloud/search.js";
 import streamRoutes from "./routes/soundcloud/stream.js";
+import artistTopTracksRoutes from "./routes/spotify/artistTopTracks.js";
+import artistAlbumsRoutes from "./routes/spotify/artistAlbums.js";
+import albumTracksRoutes from "./routes/spotify/albumTracks.js";
 
 import checkEmailRoutes from "./routes/supabase/auth/checkEmail.js";
 import signUpRoutes from "./routes/supabase/auth/signUp.js";
@@ -55,6 +58,9 @@ app.use("/api/track", trackRoutes);
 app.use("/api/discography", discographyRoutes);
 app.use("/api/soundcloud-search", soundcloudSearchRoutes);
 app.use("/api/soundcloud-stream", streamRoutes);
+app.use("/api/artist-top-tracks", artistTopTracksRoutes);
+app.use("/api/artist-albums", artistAlbumsRoutes);
+app.use("/api/album-tracks", albumTracksRoutes);
 
 app.use("/check-email", checkEmailRoutes);
 app.use("/signup", signUpRoutes);

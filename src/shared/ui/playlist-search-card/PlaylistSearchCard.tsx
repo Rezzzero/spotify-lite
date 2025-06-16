@@ -19,9 +19,13 @@ const isTrack = (item: SearchCardType): item is Track => {
 export const PlaylistSearchCard = ({
   data,
   handleAddTrack,
+  handleShowArtist,
+  handleShowAlbum,
 }: {
   data: SearchCardType;
   handleAddTrack?: (track: Track) => void;
+  handleShowArtist?: (artistId: string) => void;
+  handleShowAlbum?: (albumId: string) => void;
 }) => {
   let title = "";
   let subtitle = "";
@@ -48,6 +52,14 @@ export const PlaylistSearchCard = ({
 
   return (
     <div
+      onClick={() => {
+        if (handleShowArtist) {
+          handleShowArtist(data.id);
+        }
+        if (handleShowAlbum) {
+          handleShowAlbum(data.id);
+        }
+      }}
       className={`${
         isTrack(data) ? "grid grid-cols-[2fr_1fr_auto]" : "flex justify-between"
       } items-center hover:bg-zinc-800 p-2 rounded-md`}
