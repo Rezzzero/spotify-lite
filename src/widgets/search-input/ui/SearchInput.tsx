@@ -16,11 +16,11 @@ export const SearchInput = () => {
         <SearchIcon className="w-8 h-8 cursor-pointer text-[#bababa] group-hover:text-white group-focus-within:text-white" />
       </CustomTooltip>
       <input
-        type="text"
+        type="search"
         value={value}
         onChange={handleChange}
         placeholder="Что хочешь включить?"
-        className="bg-transparent w-full outline-none placeholder:text-[#bababa] pr-10 border-r border-[#bababa]"
+        className="bg-transparent w-full outline-none placeholder:text-[#bababa] pr-10 border-r border-[#bababa] [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden [&::-webkit-search-results-button]:hidden [&::-webkit-search-results-decoration]:hidden"
       />
       {value.length > 0 && (
         <CustomTooltip title="Очистить строку поиска">

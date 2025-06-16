@@ -64,11 +64,11 @@ export const AddTrackSearch = ({
           </h2>
           <div className="relative bg-zinc-700 mt-5 rounded-sm p-2 pl-8">
             <input
-              type="text"
+              type="search"
               value={value}
               onChange={(e) => setValue(e.target.value)}
               placeholder="Поиск треков"
-              className="bg-transparent w-full outline-none placeholder:text-gray-300 pr-10"
+              className="bg-transparent w-full outline-none placeholder:text-gray-300 pr-10 [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden [&::-webkit-search-results-button]:hidden [&::-webkit-search-results-decoration]:hidden"
             />
             <SearchIcon className="absolute top-1/2 transform -translate-y-1/2 left-2 w-5 h-5 text-gray-400" />
             {value.length > 0 && (
