@@ -62,7 +62,7 @@ export const PlaylistSearchCard = ({
       }}
       className={`${
         isTrack(data) ? "grid grid-cols-[2fr_1fr_auto]" : "flex justify-between"
-      } items-center hover:bg-zinc-800 p-2 rounded-md`}
+      } items-center group hover:bg-zinc-800 p-2 rounded-md`}
     >
       <div className="flex gap-3">
         <img
@@ -94,7 +94,10 @@ export const PlaylistSearchCard = ({
         </div>
       </div>
       {isTrack(data) && (
-        <Link to={`/album/${data.id}`} className="text-sm text-gray-400">
+        <Link
+          to={`/album/${data.album.id}`}
+          className="text-sm text-gray-400 group-hover:text-white hover:underline"
+        >
           {data.album.name}
         </Link>
       )}

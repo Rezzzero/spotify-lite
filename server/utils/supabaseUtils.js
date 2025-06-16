@@ -178,12 +178,22 @@ export const getPlaylist = async (playlistId) => {
     throw new Error("Ошибка при получении треков плейлиста");
   }
 
+  const tracksWithAddedAt = tracks.map((item) => ({
+    ...item.tracks,
+    added_at: item.added_at,
+  }));
+
+  const duration = tracksWithAddedAt.reduce(
+    (acc, track) => acc + track.duration_ms,
+    0
+  );
+
   return {
-    playlist,
-    tracks: tracks.map((item) => ({
-      ...item.tracks,
-      added_at: item.added_at,
-    })),
+    playlist: {
+      ...playlist,
+      duration,
+    },
+    tracks: tracksWithAddedAt,
   };
 };
 

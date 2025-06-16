@@ -45,9 +45,10 @@ export const usePlaylistInfo = () => {
           playlist: response.data,
           playlistName: response.data.name,
           playlistDescription: response.data.description,
-          imageUrl: response.data.images[0].url
-            ? response.data.images[0].url
-            : "",
+          imageUrl:
+            response.data.images[0]?.url ||
+            response.data.tracks?.[0]?.album?.images?.[0]?.url ||
+            "",
         });
 
         if (response.data.tracks) {
@@ -103,6 +104,21 @@ export const usePlaylistInfo = () => {
     };
   }, [menuModal, editModal, changeFormatModal]);
 
+  const handleUpdateDuration = (trackDuration: number, isAdd: boolean) => {
+    setPlaylistData((prevPlaylistData) => {
+      if (!prevPlaylistData) return null;
+      return {
+        ...prevPlaylistData,
+        playlist: {
+          ...prevPlaylistData.playlist,
+          duration: isAdd
+            ? prevPlaylistData.playlist.duration + trackDuration
+            : prevPlaylistData.playlist.duration - trackDuration,
+        },
+      };
+    });
+  };
+
   return {
     playlistData,
     imageColors,
@@ -127,5 +143,6 @@ export const usePlaylistInfo = () => {
     setPlaylistData,
     tracks,
     setTracks,
+    handleUpdateDuration,
   };
 };

@@ -21,9 +21,11 @@ const showAllList = [
 export const AddTrackSearch = ({
   closeSearch,
   setTracks,
+  handleUpdateDuration,
 }: {
   closeSearch: () => void;
   setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
+  handleUpdateDuration: (trackDuration: number, isAdd: boolean) => void;
 }) => {
   const {
     value,
@@ -42,7 +44,7 @@ export const AddTrackSearch = ({
     setShowAlbum,
     album,
     handleGetAlbumTracks,
-  } = useAddTrackSearch({ setTracks });
+  } = useAddTrackSearch({ setTracks, handleUpdateDuration });
 
   const shouldShowSearchResults =
     showAll === "" &&

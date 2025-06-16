@@ -7,20 +7,24 @@ import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
 import { usePlaylistTrackCard } from "../model/usePlaylistTrackCard";
 import DeleteTrackIcon from "@shared/assets/trash-fill-icon.svg?react";
+import ToArtistIcon from "@shared/assets/artist-to-icon.svg?react";
+import ToAlbumIcon from "@shared/assets/album-to-icon.svg?react";
 
 export const PlaylistTrackCard = ({
   track,
   index,
   libraryFormat,
   setTracks,
+  handleUpdateDuration,
 }: {
   track: Track;
   index: number;
   libraryFormat: string;
   setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
+  handleUpdateDuration: (trackDuration: number, isAdd: boolean) => void;
 }) => {
   const { isMenuOpen, setIsMenuOpen, menuRef, buttonRef, handleDeleteTrack } =
-    usePlaylistTrackCard({ setTracks });
+    usePlaylistTrackCard({ setTracks, handleUpdateDuration });
 
   return (
     <div
@@ -110,17 +114,31 @@ export const PlaylistTrackCard = ({
           ref={menuRef}
           className="absolute right-3 bottom-14 mt-2 w-[330px] bg-zinc-800 rounded-md shadow-lg z-50"
         >
-          <div className="py-1">
+          <div className="p-1">
             <button
-              className="w-full flex gap-2 items-center px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
+              className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
               onClick={() => {
-                handleDeleteTrack(track.id);
+                handleDeleteTrack(track.id, track.duration_ms);
                 setIsMenuOpen(false);
               }}
             >
               <DeleteTrackIcon className="w-5 h-5 mr-2" />
-              Удалить из плейлиста
+              Удалить из этого плейлиста
             </button>
+            <Link
+              className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
+              to={`/artist/${track.artists[0].id}`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <ToArtistIcon className="w-5 h-5 mr-2" />К исполнителю
+            </Link>
+            <Link
+              className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
+              to={`/album/${track.album.id}`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <ToAlbumIcon className="w-5 h-5 mr-2" />К альбому
+            </Link>
           </div>
         </div>
       )}

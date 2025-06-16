@@ -6,6 +6,7 @@ import { MediaLibraryLinks, Route } from "@shared/constants/constants";
 import { Link } from "react-router-dom";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import { useMediaLibrary } from "../model/useMediaLibrary";
+import { PLACEHOLDER_URL } from "@shared/constants/urls";
 
 export const MediaLibrary = () => {
   const {
@@ -112,7 +113,7 @@ export const MediaLibrary = () => {
                 src={
                   playlist.images[0].url
                     ? playlist.images[0].url
-                    : "https://jiiyqowxssltsrpijqog.supabase.co/storage/v1/object/public/playlist//playlist-placeholder.png"
+                    : PLACEHOLDER_URL
                 }
                 alt="playlist image"
                 className="w-12 h-12 rounded-md"

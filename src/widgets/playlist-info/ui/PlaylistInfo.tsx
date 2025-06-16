@@ -12,6 +12,8 @@ import { EditPlaylistModal } from "../edit-modal/ui/EditPlaylistModal";
 import { PlaylistMenuModal } from "../menu-modal/ui/PlaylistMenuModal";
 import { AddTrackSearch } from "../add-track-search/ui/AddTrackSearch";
 import { PlaylistTrackCard } from "../playlist-track-card/ui/PlaylistTrackCard";
+import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
+import { PLACEHOLDER_URL } from "@shared/constants/urls";
 
 export const PlaylistInfo = () => {
   const {
@@ -38,6 +40,7 @@ export const PlaylistInfo = () => {
     setDeletePlaylistModal,
     tracks,
     setTracks,
+    handleUpdateDuration,
   } = usePlaylistInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
@@ -57,13 +60,13 @@ export const PlaylistInfo = () => {
         >
           <img
             src={
-              playlistData?.playlist.images[0].url
-                ? playlistData?.playlist.images[0].url
-                : "https://jiiyqowxssltsrpijqog.supabase.co/storage/v1/object/public/playlist//playlist-placeholder.png"
+              playlistData?.playlist.images[0]?.url ||
+              playlistData?.imageUrl ||
+              PLACEHOLDER_URL
             }
             alt="playlist image"
             className={`w-full h-full object-cover rounded-md ${
-              playlistData?.playlist.images[0].url
+              playlistData?.playlist.images[0]?.url || playlistData?.imageUrl
                 ? "group-hover:opacity-20"
                 : "group-hover:opacity-0"
             } transition-opacity duration-200`}
@@ -82,17 +85,29 @@ export const PlaylistInfo = () => {
           <h1 className="text-[90px] font-bold leading-none">
             {playlistData?.playlist?.name}
           </h1>
-          <div className="flex gap-1 mt-auto">
+          <div className="flex items-center gap-1 mt-auto">
             <img
               src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
               alt="playlist creator image"
               className="w-6 h-6 rounded-full"
             />
-            <Link to={"/"} className="hover:underline">
+            <Link to={"/"} className="font-bold text-sm hover:underline">
               {playlistData
                 ? playlistData.playlist.owner.display_name
                 : "owner"}
             </Link>
+            {playlistData?.playlist?.duration && tracks.length > 0 && (
+              <p className="font-semibold opacity-70 text-sm pb-1">
+                <span className="text-xl font-bold relative top-[1px] mx-1">
+                  ·
+                </span>
+                {tracks.length} треков,{" "}
+                {formatMsToMinutesAndSeconds(
+                  playlistData?.playlist?.duration,
+                  true
+                )}
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -154,6 +169,7 @@ export const PlaylistInfo = () => {
                   index={index}
                   libraryFormat={playlistFormat}
                   setTracks={setTracks}
+                  handleUpdateDuration={handleUpdateDuration}
                 />
               ))}
             </div>
@@ -163,6 +179,7 @@ export const PlaylistInfo = () => {
           <AddTrackSearch
             closeSearch={() => setOpenSearch(false)}
             setTracks={setTracks}
+            handleUpdateDuration={handleUpdateDuration}
           />
         ) : (
           <div className="w-full flex justify-end">
@@ -204,6 +221,11 @@ export const PlaylistInfo = () => {
           closeModal={() => setEditModal(false)}
           playlistName={playlistData?.playlistName}
           playlistDescription={playlistData?.playlistDescription}
+          playlistImage={
+            playlistData?.playlist.images[0]?.url ||
+            playlistData?.imageUrl ||
+            PLACEHOLDER_URL
+          }
           setPlaylist={setPlaylistData}
         />
       )}

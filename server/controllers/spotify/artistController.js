@@ -19,7 +19,7 @@ export const artistHandler = async (req, res) => {
       "album,single"
     );
     const ids = getArtistIdsFromAlbums(albumsAndSingles);
-    const otherArtists = await getSeveralArtists(ids);
+    const otherArtists = ids.length > 0 ? await getSeveralArtists(ids) : [];
     const moreWithArtist = await getMoreWithArtist(id);
     const playlists = await getPlaylistsWithArtist(artist.name);
 

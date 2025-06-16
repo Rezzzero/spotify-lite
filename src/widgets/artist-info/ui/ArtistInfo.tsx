@@ -98,14 +98,24 @@ export const ArtistInfo = () => {
           itemType="playlist"
         />
       </div>
-      <div className="flex flex-col gap-2 px-3">
-        <h2 className="text-2xl font-bold px-2">Коллаборации с артистами</h2>
-        <CardList items={artistInfo.otherArtists} itemType="artist" />
-      </div>
-      <div className="flex flex-col gap-2 px-3">
-        <h2 className="text-2xl font-bold px-2">Ещё с этим исполнителем</h2>
-        <CardList items={artistInfo.moreWithArtist} itemType="album" />
-      </div>
+      {artistInfo.otherArtists && (
+        <div className="flex flex-col gap-2 px-3">
+          <h2 className="text-2xl font-bold px-2">Коллаборации с артистами</h2>
+          <CardList
+            items={artistInfo.otherArtists.slice(0, 8)}
+            itemType="artist"
+          />
+        </div>
+      )}
+      {artistInfo.moreWithArtist && (
+        <div className="flex flex-col gap-2 px-3">
+          <h2 className="text-2xl font-bold px-2">Ещё с этим исполнителем</h2>
+          <CardList
+            items={artistInfo.moreWithArtist.slice(0, 8)}
+            itemType="album"
+          />
+        </div>
+      )}
     </div>
   );
 };

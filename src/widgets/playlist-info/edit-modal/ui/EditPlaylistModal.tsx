@@ -1,21 +1,23 @@
 import CrossIcon from "@shared/assets/cross-icon.svg?react";
-import PlaylistIcon from "@shared/assets/playlist/playlist-icon.svg?react";
 import EditIcon from "@shared/assets/playlist/edit-icon.svg?react";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import { useEditPlaylistModal } from "../model/useEditPlaylistModal";
 import { PlaylistData } from "@widgets/playlist-info/types/types";
+import { PLACEHOLDER_URL } from "@shared/constants/urls";
 
 export const EditPlaylistModal = ({
   editModalRef,
   closeModal,
   playlistName,
   playlistDescription,
+  playlistImage,
   setPlaylist,
 }: {
   closeModal: () => void;
   editModalRef: React.RefObject<HTMLDivElement | null>;
   playlistName: string | undefined;
   playlistDescription: string | undefined;
+  playlistImage: string | undefined;
   setPlaylist: React.Dispatch<React.SetStateAction<PlaylistData | null>>;
 }) => {
   const {
@@ -54,7 +56,7 @@ export const EditPlaylistModal = ({
         <div className="flex gap-3 w-full pr-2">
           <div
             onClick={() => handleSelectImage()}
-            className="flex items-center bg-zinc-800 rounded-sm h-[180px] w-[180px] shadow-xl group relative flex-shrink-0"
+            className="flex items-center bg-zinc-800 rounded-sm h-[180px] w-[180px] shadow-xl group relative"
           >
             <input
               type="file"
@@ -63,10 +65,18 @@ export const EditPlaylistModal = ({
               onChange={handleImageChange}
               style={{ display: "none" }}
             />
-            <PlaylistIcon className="text-gray-400 w-13 h-13 mx-auto group-hover:hidden" />
+            <img
+              src={playlistImage}
+              alt="playlist image"
+              className={`w-full h-full object-cover rounded-md ${
+                playlistImage && playlistImage !== PLACEHOLDER_URL
+                  ? "group-hover:opacity-20"
+                  : "group-hover:opacity-0"
+              }`}
+            />
             <button
               type="button"
-              className="flex flex-col items-center gap-2 hidden mx-auto group-hover:block"
+              className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
             >
               <EditIcon className="w-11 h-11 mx-auto" />
               <p className="font-bold">Выбрать фото</p>

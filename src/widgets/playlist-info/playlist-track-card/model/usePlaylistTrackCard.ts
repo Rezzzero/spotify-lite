@@ -5,8 +5,10 @@ import { Track } from "@shared/types/types";
 
 export const usePlaylistTrackCard = ({
   setTracks,
+  handleUpdateDuration,
 }: {
   setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
+  handleUpdateDuration: (trackDuration: number, isAdd: boolean) => void;
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -29,7 +31,7 @@ export const usePlaylistTrackCard = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleDeleteTrack = async (trackId: string) => {
+  const handleDeleteTrack = async (trackId: string, trackDuration: number) => {
     try {
       const response = await axios.post("http://localhost:3000/delete-track", {
         trackId,
@@ -40,6 +42,7 @@ export const usePlaylistTrackCard = ({
         setTracks((prevTracks: Track[]) =>
           prevTracks.filter((track) => track.id !== trackId)
         );
+        handleUpdateDuration(trackDuration, false);
       }
     } catch (error) {
       console.error("Error deleting track:", error);

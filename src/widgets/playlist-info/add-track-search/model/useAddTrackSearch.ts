@@ -6,8 +6,10 @@ import { useParams } from "react-router-dom";
 
 export const useAddTrackSearch = ({
   setTracks,
+  handleUpdateDuration,
 }: {
   setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
+  handleUpdateDuration: (trackDuration: number, isAdd: boolean) => void;
 }) => {
   const [value, setValue] = useState("");
   const [results, setResults] = useState({} as SearchResults);
@@ -52,6 +54,7 @@ export const useAddTrackSearch = ({
           added_at: playlistTrack.added_at,
         },
       ]);
+      handleUpdateDuration(track.duration_ms, true);
     } catch (error) {
       console.error("Error adding track to playlist:", error);
     }
