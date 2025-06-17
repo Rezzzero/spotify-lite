@@ -2,15 +2,15 @@ import { deleteTrackFromPlaylist } from "../../../utils/supabaseUtils.js";
 
 export const deleteTrackHandler = async (req, res) => {
   try {
-    const { trackId, playlistId } = req.body;
+    const { entryId } = req.body;
 
-    if (!trackId || !playlistId) {
+    if (!entryId) {
       return res.status(400).json({
-        error: "Missing required fields: trackId and playlistId are required",
+        error: "Missing required fields: entryId is required",
       });
     }
 
-    const result = await deleteTrackFromPlaylist(trackId, playlistId);
+    const result = await deleteTrackFromPlaylist(entryId);
 
     if (result.error) {
       return res.status(400).json({ error: result.error });

@@ -118,7 +118,7 @@ export const PlaylistTrackCard = ({
             <button
               className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
               onClick={() => {
-                handleDeleteTrack(track.id, track.duration_ms);
+                handleDeleteTrack(track.duration_ms, track.entry_id || "");
                 setIsMenuOpen(false);
               }}
             >

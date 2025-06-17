@@ -96,7 +96,7 @@ export const PlaylistInfo = () => {
                 ? playlistData.playlist.owner.display_name
                 : "owner"}
             </Link>
-            {playlistData?.playlist?.duration && tracks.length > 0 && (
+            {playlistData?.playlist?.duration && tracks.length > 0 ? (
               <p className="font-semibold opacity-70 text-sm pb-1">
                 <span className="text-xl font-bold relative top-[1px] mx-1">
                   ·
@@ -107,7 +107,7 @@ export const PlaylistInfo = () => {
                   true
                 )}
               </p>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

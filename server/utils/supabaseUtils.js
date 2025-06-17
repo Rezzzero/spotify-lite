@@ -167,7 +167,7 @@ export const getPlaylist = async (playlistId) => {
 
   const { data: tracks, error: tracksError } = await supabaseAdmin
     .from("playlist_tracks")
-    .select("track_id, added_at, tracks(*)")
+    .select("id, track_id, added_at, tracks(*)")
     .eq("playlist_id", playlistId);
 
   if (tracksError) {
@@ -181,6 +181,7 @@ export const getPlaylist = async (playlistId) => {
   const tracksWithAddedAt = tracks.map((item) => ({
     ...item.tracks,
     added_at: item.added_at,
+    entry_id: item.id,
   }));
 
   const duration = tracksWithAddedAt.reduce(
@@ -349,17 +350,17 @@ export const addTrackToPlaylist = async (trackData, playlistId) => {
     track: {
       ...trackToReturn,
       added_at: playlistTrack.added_at,
+      entry_id: playlistTrack.id,
     },
     playlistTrack,
   };
 };
 
-export const deleteTrackFromPlaylist = async (trackId, playlistId) => {
+export const deleteTrackFromPlaylist = async (entryId) => {
   const { data, error } = await supabaseAdmin
     .from("playlist_tracks")
     .delete()
-    .eq("track_id", trackId)
-    .eq("playlist_id", playlistId)
+    .eq("id", entryId)
     .select();
 
   if (error) {

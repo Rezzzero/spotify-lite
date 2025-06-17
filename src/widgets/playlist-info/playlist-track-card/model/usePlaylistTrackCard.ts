@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
 import { Track } from "@shared/types/types";
 
 export const usePlaylistTrackCard = ({
@@ -13,7 +12,6 @@ export const usePlaylistTrackCard = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const { id: playlistId } = useParams();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -31,16 +29,15 @@ export const usePlaylistTrackCard = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleDeleteTrack = async (trackId: string, trackDuration: number) => {
+  const handleDeleteTrack = async (trackDuration: number, entryId: string) => {
     try {
       const response = await axios.post("http://localhost:3000/delete-track", {
-        trackId,
-        playlistId,
+        entryId,
       });
 
       if (response.status === 200) {
         setTracks((prevTracks: Track[]) =>
-          prevTracks.filter((track) => track.id !== trackId)
+          prevTracks.filter((track) => track.entry_id !== entryId)
         );
         handleUpdateDuration(trackDuration, false);
       }

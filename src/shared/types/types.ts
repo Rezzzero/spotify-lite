@@ -67,6 +67,7 @@ export interface Track {
   id: string;
   name: string;
   added_at?: string;
+  entry_id?: string;
 }
 
 export interface Show {
