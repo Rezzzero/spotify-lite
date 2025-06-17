@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Track } from "@shared/types/types";
+import { formatDate } from "@shared/lib/format/formatDate";
+import { formatTimeAgo } from "@shared/lib/format/formatTimeAgo";
 
 export const usePlaylistTrackCard = ({
   setTracks,
@@ -46,11 +48,21 @@ export const usePlaylistTrackCard = ({
     }
   };
 
+  const formatAddedAt = (addedAt: string) => {
+    const date = new Date(addedAt);
+    const now = new Date();
+    const diffInMonths =
+      (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24 * 30);
+
+    return diffInMonths >= 1 ? formatDate(addedAt) : formatTimeAgo(addedAt);
+  };
+
   return {
     isMenuOpen,
     setIsMenuOpen,
     menuRef,
     buttonRef,
     handleDeleteTrack,
+    formatAddedAt,
   };
 };

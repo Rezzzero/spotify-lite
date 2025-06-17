@@ -1,5 +1,5 @@
 import { Tooltip } from "@mui/material";
-import { ReactElement } from "react";
+import { ReactElement, ReactNode } from "react";
 
 export const CustomTooltip = ({
   children,
@@ -7,24 +7,28 @@ export const CustomTooltip = ({
   placement,
   withBorder,
   customFontSize,
+  disableHoverListener,
 }: {
   children: ReactElement;
-  title: string;
+  title: ReactNode;
   placement?: "top" | "bottom" | "left" | "right";
   withBorder?: boolean;
   customFontSize?: number;
+  disableHoverListener?: boolean;
 }) => {
   return (
     <Tooltip
       title={title}
       disableInteractive
       placement={placement}
+      disableHoverListener={disableHoverListener}
       slotProps={{
         tooltip: {
           sx: {
             color: "#fff",
             backgroundColor: "#262729",
             fontSize: customFontSize ? `${customFontSize}px` : "14px",
+            padding: "8px",
             ...(withBorder && { border: "1px solid #fff" }),
           },
         },

@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Track } from "@shared/types/types";
 import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
-import { formatDate } from "@shared/lib/format/formatDate";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
@@ -23,8 +22,14 @@ export const PlaylistTrackCard = ({
   setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
   handleUpdateDuration: (trackDuration: number, isAdd: boolean) => void;
 }) => {
-  const { isMenuOpen, setIsMenuOpen, menuRef, buttonRef, handleDeleteTrack } =
-    usePlaylistTrackCard({ setTracks, handleUpdateDuration });
+  const {
+    isMenuOpen,
+    setIsMenuOpen,
+    menuRef,
+    buttonRef,
+    handleDeleteTrack,
+    formatAddedAt,
+  } = usePlaylistTrackCard({ setTracks, handleUpdateDuration });
 
   return (
     <div
@@ -95,7 +100,7 @@ export const PlaylistTrackCard = ({
         {track.album.name}
       </Link>
       {track.added_at && (
-        <p className="text-gray-400 pl-1">{formatDate(track.added_at)}</p>
+        <p className="text-gray-400 pl-1">{formatAddedAt(track.added_at)}</p>
       )}
       <p className="text-gray-400 ml-auto">
         {formatMsToMinutesAndSeconds(track.duration_ms)}

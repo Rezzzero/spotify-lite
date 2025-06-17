@@ -23,7 +23,7 @@ export const Logo = () => {
         <img
           src={SpotifyLogo}
           alt="spotify logo"
-          className="w-9 h-9 cursor-pointer"
+          className="w-9 h-9 cursor-pointer ml-2"
         />
       </Link>
     </Tooltip>

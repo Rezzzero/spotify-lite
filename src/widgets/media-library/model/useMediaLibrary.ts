@@ -10,6 +10,7 @@ export const useMediaLibrary = () => {
   const [playlists, setPlaylist] = useState<Playlist[]>([]);
   const [createPlaylistModal, setCreatePlaylistModal] = useState(false);
   const [LoginPromptModal, setLoginPromptModal] = useState(false);
+  const [isMediaLibraryOpen, setIsMediaLibraryOpen] = useState(true);
   const navigate = useNavigate();
   const createPlaylistRef = useRef<HTMLDivElement>(null);
   const loginPromptRef = useRef<HTMLDivElement>(null);
@@ -111,5 +112,7 @@ export const useMediaLibrary = () => {
     createPlaylistButtonRef,
     playlists,
     id,
+    isMediaLibraryOpen,
+    setIsMediaLibraryOpen,
   };
 };

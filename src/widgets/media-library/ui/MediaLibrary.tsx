@@ -7,6 +7,9 @@ import { Link } from "react-router-dom";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import { useMediaLibrary } from "../model/useMediaLibrary";
 import { PLACEHOLDER_URL } from "@shared/constants/urls";
+import CloseMediaLibraryIcon from "@shared/assets/media-library/close-media-library.svg?react";
+import OpenMediaLibraryIcon from "@shared/assets/media-library/open-media-library.svg?react";
+import ClosedMediaLibraryIcon from "@shared/assets/media-library/closed-media-library.svg?react";
 
 export const MediaLibrary = () => {
   const {
@@ -21,11 +24,48 @@ export const MediaLibrary = () => {
     createPlaylistButtonRef,
     playlists,
     id,
+    isMediaLibraryOpen,
+    setIsMediaLibraryOpen,
   } = useMediaLibrary();
   return (
-    <div className="flex flex-col gap-7 bg-[#141414] w-[23%] h-[85vh] rounded-xl p-2 pb-8 relative">
-      <div className="flex items-center justify-between pt-1 px-2 mb-2">
-        <h2 className="font-bold">Моя медиатека</h2>
+    <div
+      className={`flex flex-col gap-7 bg-[#141414] ${
+        isMediaLibraryOpen ? "w-[25%] p-2" : "w-20 p-1"
+      } h-[85vh] rounded-xl pb-8 relative`}
+    >
+      <div
+        className={`flex ${
+          isMediaLibraryOpen
+            ? "flex-row justify-between px-2"
+            : "flex-col gap-3 mt-1"
+        } items-center pt-1 mb-2`}
+      >
+        <CustomTooltip
+          title={`${
+            isMediaLibraryOpen ? "Закрыть мою медиатеку" : "Открыть медиатеку"
+          }`}
+          placement="right"
+        >
+          <button
+            type="button"
+            onClick={() => setIsMediaLibraryOpen(!isMediaLibraryOpen)}
+            className="flex items-center gap-2 font-bold group cursor-pointer relative"
+          >
+            {isMediaLibraryOpen ? (
+              <>
+                <CloseMediaLibraryIcon className="w-5 h-5 absolute top-1/2 -translate-y-1/2 -left-20 opacity-0 group-hover:opacity-100 group-hover:translate-x-[80px] transition-all duration-300 ease-in-out" />
+                <p className="font-bold group-hover:translate-x-[26px] transition-all duration-300 ease-in-out">
+                  Моя медиатека
+                </p>
+              </>
+            ) : (
+              <>
+                <ClosedMediaLibraryIcon className="w-5 h-5 opacity-100 group-hover:opacity-0 transition-all duration-300 ease-in-out" />
+                <OpenMediaLibraryIcon className="w-5 h-5 absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out" />
+              </>
+            )}
+          </button>
+        </CustomTooltip>
         <CustomTooltip title="Создать плейлист или папку" placement="top">
           <button
             type="button"
@@ -33,7 +73,9 @@ export const MediaLibrary = () => {
             onClick={() => setCreatePlaylistModal((prev) => !prev)}
             className={`rounded-full flex items-center justify-center ${
               user
-                ? "bg-zinc-800 hover:bg-zinc-700 py-[8px] px-4"
+                ? `bg-zinc-800 hover:bg-zinc-700 py-[8px] ${
+                    isMediaLibraryOpen ? "px-4" : "px-2"
+                  }`
                 : "p-2 hover:bg-zinc-800"
             } group duration-300 gap-3 cursor-pointer`}
           >
@@ -42,7 +84,9 @@ export const MediaLibrary = () => {
                 createPlaylistModal && user && "rotate-45"
               } duration-400`}
             />
-            {user && <p className="font-bold text-sm">Создать</p>}
+            {user && isMediaLibraryOpen && (
+              <p className="font-bold text-sm">Создать</p>
+            )}
           </button>
         </CustomTooltip>
       </div>
@@ -100,32 +144,50 @@ export const MediaLibrary = () => {
       ) : (
         <div className="flex flex-col gap-1">
           {playlists.map((playlist) => (
-            <Link
-              to={`/playlist/${playlist.id}`}
+            <CustomTooltip
               key={playlist.id}
-              className={`${
-                id === playlist.id
-                  ? "bg-zinc-800 hover:bg-zinc-700"
-                  : "hover:bg-zinc-800"
-              } flex gap-2 py-2 px-2 rounded-md cursor-pointer`}
+              title={
+                <>
+                  <h1 className="font-bold">{playlist.name}</h1>
+                  <span className="flex gap-1 font-normal text-sm text-gray-400">
+                    Плейлист{" "}
+                    <p className="font-bold mt-[3px] text-lg leading-none">·</p>
+                    {playlist.owner.display_name}
+                  </span>
+                </>
+              }
+              placement="right"
+              disableHoverListener={isMediaLibraryOpen}
             >
-              <img
-                src={
-                  playlist.images[0].url
-                    ? playlist.images[0].url
-                    : PLACEHOLDER_URL
-                }
-                alt="playlist image"
-                className="w-12 h-12 rounded-md"
-              />
               <div>
-                <h1 className="font-bold">{playlist.name}</h1>
-                <span className="flex gap-1 font-semibold text-sm text-gray-400">
-                  Плейлист <p className="font-bold text-lg leading-none">·</p>
-                  {playlist.owner.display_name}
-                </span>
+                <Link
+                  to={`/playlist/${playlist.id}`}
+                  className={`${
+                    id === playlist.id
+                      ? "bg-zinc-800 hover:bg-zinc-700"
+                      : "hover:bg-zinc-800"
+                  } flex items-center ${
+                    !isMediaLibraryOpen ? "justify-center" : "gap-3"
+                  } rounded-md transition-colors p-2`}
+                >
+                  <img
+                    src={playlist.images[0]?.url || PLACEHOLDER_URL}
+                    alt={playlist.name}
+                    className="w-12 h-12 rounded-md"
+                  />
+                  {isMediaLibraryOpen && (
+                    <div>
+                      <h1 className="font-bold">{playlist.name}</h1>
+                      <span className="flex gap-1 font-semibold text-sm text-gray-400">
+                        Плейлист{" "}
+                        <p className="font-bold text-lg leading-none">·</p>
+                        {playlist.owner.display_name}
+                      </span>
+                    </div>
+                  )}
+                </Link>
               </div>
-            </Link>
+            </CustomTooltip>
           ))}
         </div>
       )}
