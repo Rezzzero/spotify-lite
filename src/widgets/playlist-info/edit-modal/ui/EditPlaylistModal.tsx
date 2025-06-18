@@ -24,10 +24,10 @@ export const EditPlaylistModal = ({
     handleSelectImage,
     handleImageChange,
     fileInputRef,
-    handleUpatePlaylist,
+    handleUpdatePlaylist,
     handleChangePlaylistName,
     handleChangePlaylistDescription,
-    uploadPlaylistImage,
+    handleUploadPlaylistImage,
   } = useEditPlaylistModal({
     closeModal,
     playlistName,
@@ -105,8 +105,8 @@ export const EditPlaylistModal = ({
           <button
             type="button"
             onClick={() => {
-              handleUpatePlaylist();
-              uploadPlaylistImage();
+              handleUpdatePlaylist();
+              handleUploadPlaylistImage();
             }}
             className="bg-white rounded-full text-black font-bold py-3 px-7 hover:bg-gray-100 hover:scale-105 cursor-pointer"
           >

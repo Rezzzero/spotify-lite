@@ -20,7 +20,7 @@ export const PlaylistMenuModal = ({
   isPublic: boolean | undefined;
   setPlaylist: React.Dispatch<React.SetStateAction<PlaylistData | null>>;
 }) => {
-  const { changePublicStatus } = usePlaylistMenuModal({
+  const { handleChangePublicStatus } = usePlaylistMenuModal({
     isPublic,
     closeModal,
     setPlaylist,
@@ -54,7 +54,7 @@ export const PlaylistMenuModal = ({
       <div className="flex flex-col gap-1 border-b border-zinc-600">
         <button
           type="button"
-          onClick={() => changePublicStatus()}
+          onClick={() => handleChangePublicStatus()}
           className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
         >
           {isPublic ? (

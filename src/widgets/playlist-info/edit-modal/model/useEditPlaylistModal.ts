@@ -1,7 +1,7 @@
 import { PlaylistData } from "@widgets/playlist-info/types/types";
-import axios from "axios";
 import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useMediaLibraryStore } from "src/app/store/media-library/useMediaLibraryStore";
 
 export const useEditPlaylistModal = ({
   closeModal,
@@ -18,6 +18,7 @@ export const useEditPlaylistModal = ({
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { updatePlaylist, uploadPlaylistImage } = useMediaLibraryStore();
 
   const handleChangePlaylistName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlaylist(
@@ -34,23 +35,23 @@ export const useEditPlaylistModal = ({
     );
   };
 
-  const handleUpatePlaylist = async () => {
+  const handleUpdatePlaylist = async () => {
     try {
-      const response = await axios.put(
-        `http://localhost:3000/update-supabase-playlist/${id}`,
-        {
-          name: playlistName,
-          description: playlistDescription,
-        }
-      );
+      const updatedPlaylist = await updatePlaylist({
+        id: id as string,
+        name: playlistName as string,
+        description: playlistDescription as string,
+      });
 
       closeModal();
-      setPlaylist({
-        playlist: response.data[0],
-        playlistName: response.data[0].name,
-        playlistDescription: response.data[0].description,
-        imageUrl: response.data[0].image_url || "",
-      });
+      if (updatedPlaylist) {
+        setPlaylist({
+          playlist: updatedPlaylist,
+          playlistName: updatedPlaylist.name,
+          playlistDescription: updatedPlaylist.description,
+          imageUrl: updatedPlaylist.images[0].url || "",
+        });
+      }
     } catch (error) {
       console.error("Error updating playlist:", error);
     }
@@ -70,28 +71,20 @@ export const useEditPlaylistModal = ({
     }
   };
 
-  const uploadPlaylistImage = async () => {
+  const handleUploadPlaylistImage = async () => {
     if (!imageFile) return;
 
     const formData = new FormData();
     formData.append("file", imageFile);
 
     try {
-      const response = await axios.post(
-        `http://localhost:3000/upload-playlist-image/${id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await uploadPlaylistImage(id as string, formData);
 
       setPlaylist(
         (prev) =>
           ({
             ...prev,
-            imageUrl: response.data[0].image_url,
+            imageUrl: response,
           } as PlaylistData)
       );
     } catch (error) {
@@ -103,9 +96,9 @@ export const useEditPlaylistModal = ({
     handleSelectImage,
     handleImageChange,
     fileInputRef,
-    handleUpatePlaylist,
+    handleUpdatePlaylist,
     handleChangePlaylistName,
     handleChangePlaylistDescription,
-    uploadPlaylistImage,
+    handleUploadPlaylistImage,
   };
 };

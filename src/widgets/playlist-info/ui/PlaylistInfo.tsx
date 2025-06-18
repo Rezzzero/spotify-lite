@@ -4,6 +4,10 @@ import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import ListIcon from "@shared/assets/drop-down/list-icon.svg?react";
 import CompactListIcon from "@shared/assets/compact-list-icon.svg?react";
 import ClockIcon from "@shared/assets/clock-icon.svg?react";
+import AddToMediaLibraryIcon from "@shared/assets/playlist/add-to-media-library-icon.svg?react";
+import PlaylistInMediaLibraryIcon from "@shared/assets/playlist/playlist-in-media-library-icon.svg?react";
+import ListenPlaylistIcon from "@shared/assets/play-icon.svg?react";
+import PausePlaylistIcon from "@shared/assets/playlist/pause-icon.svg?react";
 import { Link } from "react-router-dom";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
@@ -17,6 +21,7 @@ import { PLACEHOLDER_URL } from "@shared/constants/urls";
 
 export const PlaylistInfo = () => {
   const {
+    playlists,
     playlistData,
     setPlaylistData,
     imageColors,
@@ -41,6 +46,10 @@ export const PlaylistInfo = () => {
     tracks,
     setTracks,
     handleUpdateDuration,
+    handleDeletePlaylistFromMediaLibrary,
+    isOwnPlaylist,
+    handleListenPlaylist,
+    isPlaying,
   } = usePlaylistInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
@@ -113,19 +122,66 @@ export const PlaylistInfo = () => {
       </div>
       <div className="flex flex-col gap-5 w-full pl-5 pr-8 relative">
         <div className="flex items-center pt-7 pb-10 justify-between w-full">
-          <CustomTooltip
-            title={`Открыть контекстное меню: ${playlistData?.playlist.name}`}
-            placement="top"
-            customFontSize={13}
-          >
-            <button
-              ref={menuButtonRef}
-              type="button"
-              onClick={() => setMenuModal((prev) => !prev)}
+          <div className="flex items-center gap-4">
+            <CustomTooltip
+              title={
+                isPlaying
+                  ? `Поставить на паузу плейлист ${playlistData?.playlist.name}`
+                  : `Слушать плейлист ${playlistData?.playlist.name}`
+              }
+              placement="top"
+              customFontSize={13}
             >
-              <MenuIcon className="w-10 h-10 text-gray-400 hover:text-white cursor-pointer hover:scale-105" />
-            </button>
-          </CustomTooltip>
+              <button type="button" onClick={handleListenPlaylist}>
+                {isPlaying ? (
+                  <PausePlaylistIcon className="w-12 h-12 text-green-500 hover:text-green-400 cursor-pointer hover:scale-105" />
+                ) : (
+                  <ListenPlaylistIcon className="w-12 h-12 text-green-500 hover:text-green-400 cursor-pointer hover:scale-105" />
+                )}
+              </button>
+            </CustomTooltip>
+            {!isOwnPlaylist() &&
+              (playlists.find((p) => p.id === playlistData?.playlist.id) ? (
+                <CustomTooltip
+                  title={`Удалить из медиатеки`}
+                  placement="top"
+                  customFontSize={13}
+                >
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleDeletePlaylistFromMediaLibrary(
+                        playlistData?.playlist.id as string
+                      )
+                    }
+                  >
+                    <PlaylistInMediaLibraryIcon className="w-7 h-7 text-gray-400 hover:text-white cursor-pointer hover:scale-105" />
+                  </button>
+                </CustomTooltip>
+              ) : (
+                <CustomTooltip
+                  title={`Добавить в медиатеку`}
+                  placement="top"
+                  customFontSize={13}
+                >
+                  <AddToMediaLibraryIcon className="w-7 h-7 text-gray-400 hover:text-white cursor-pointer hover:scale-105" />
+                </CustomTooltip>
+              ))}
+
+            <CustomTooltip
+              title={`Открыть контекстное меню: ${playlistData?.playlist.name}`}
+              placement="top"
+              customFontSize={13}
+            >
+              <button
+                ref={menuButtonRef}
+                type="button"
+                onClick={() => setMenuModal((prev) => !prev)}
+              >
+                <MenuIcon className="w-10 h-10 text-gray-400 hover:text-white cursor-pointer hover:scale-105" />
+              </button>
+            </CustomTooltip>
+          </div>
           <button
             type="button"
             ref={changeFormatButtonRef}

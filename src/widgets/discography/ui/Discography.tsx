@@ -14,7 +14,7 @@ import DropDownIcon from "@shared/assets/drop-down/drop-down-arrow.svg?react";
 import ListIcon from "@shared/assets/drop-down/list-icon.svg?react";
 import GridIcon from "@shared/assets/drop-down/grid-icon.svg?react";
 import { CardList } from "@shared/ui/card-list/CardList";
-import playIcon from "@shared/assets/play-icon.svg";
+import PlayIcon from "@shared/assets/play-icon.svg?react";
 import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
 
 export const Discography = ({
@@ -60,7 +60,7 @@ export const Discography = ({
         <div className="flex gap-2 font-bold text-xl h-16 items-center">
           {activeAlbum && (
             <button type="button">
-              <img src={playIcon} alt="play icon" className="w-12 h-12" />
+              <PlayIcon className="w-12 h-12 text-green-400" />
             </button>
           )}
           {activeAlbum}

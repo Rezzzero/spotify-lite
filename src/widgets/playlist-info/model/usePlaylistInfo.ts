@@ -6,13 +6,18 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { PlaylistData } from "../types/types";
 import { Track } from "@shared/types/types";
+import { useMediaLibraryStore } from "src/app/store/media-library/useMediaLibraryStore";
+import { useUserStore } from "src/app/store/user/useUser";
 
 export const usePlaylistInfo = () => {
+  const { user } = useUserStore();
+  const { playlists, removePlaylist } = useMediaLibraryStore();
   const [loading, setLoading] = useState(false);
   const [openSearch, setOpenSearch] = useState(true);
   const [playlistData, setPlaylistData] = useState<PlaylistData | null>(null);
   const [tracks, setTracks] = useState<Track[]>([]);
   const [playlistFormat, setPlaylistFormat] = useState("list");
+  const [isPlaying, setIsPlaying] = useState(false);
   const [menuModal, setMenuModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [changeFormatModal, setChangeFormatModal] = useState(false);
@@ -119,7 +124,35 @@ export const usePlaylistInfo = () => {
     });
   };
 
+  const handleDeletePlaylistFromMediaLibrary = async (id: string) => {
+    if (!user) return;
+    try {
+      removePlaylist(id);
+
+      navigate(Route.HOME);
+    } catch (error) {
+      console.error("Error deleting playlist:", error);
+    }
+  };
+
+  const isOwnPlaylist = () => {
+    if (!user || !playlistData?.playlist) return false;
+
+    if ("userId" in playlistData.playlist) {
+      return user.user.id === playlistData.playlist.userId;
+    }
+
+    return (
+      user.user.id === (playlistData.playlist.owner as { id?: string })?.id
+    );
+  };
+
+  const handleListenPlaylist = () => {
+    setIsPlaying((prev) => !prev);
+  };
+
   return {
+    playlists,
     playlistData,
     imageColors,
     openSearch,
@@ -144,5 +177,9 @@ export const usePlaylistInfo = () => {
     tracks,
     setTracks,
     handleUpdateDuration,
+    handleDeletePlaylistFromMediaLibrary,
+    isOwnPlaylist,
+    handleListenPlaylist,
+    isPlaying,
   };
 };

@@ -1,6 +1,6 @@
 import { PlaylistData } from "@widgets/playlist-info/types/types";
-import axios from "axios";
 import { useParams } from "react-router-dom";
+import { useMediaLibraryStore } from "src/app/store/media-library/useMediaLibraryStore";
 
 export const usePlaylistMenuModal = ({
   isPublic,
@@ -12,26 +12,24 @@ export const usePlaylistMenuModal = ({
   setPlaylist: React.Dispatch<React.SetStateAction<PlaylistData | null>>;
 }) => {
   const { id } = useParams();
-  const changePublicStatus = async () => {
+  const { changePublicStatus } = useMediaLibraryStore();
+  const handleChangePublicStatus = async () => {
     try {
-      const response = await axios.put(
-        `http://localhost:3000/update-supabase-playlist/${id}`,
-        {
-          public: !isPublic,
-        }
-      );
+      const response = await changePublicStatus(id as string, !isPublic);
 
       closeModal();
-      setPlaylist({
-        playlist: response.data[0],
-        playlistName: response.data[0].name,
-        playlistDescription: response.data[0].description,
-        imageUrl: response.data[0].image_url,
-      });
+      if (response) {
+        setPlaylist({
+          playlist: response,
+          playlistName: response.name,
+          playlistDescription: response.description,
+          imageUrl: response.images[0].url,
+        });
+      }
     } catch (error) {
       console.error("Error changing public status:", error);
     }
   };
 
-  return { changePublicStatus };
+  return { handleChangePublicStatus };
 };

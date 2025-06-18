@@ -2,12 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { useUserStore } from "src/app/store/user/useUser";
 import { useNavigate, useParams } from "react-router-dom";
 import { generateId } from "@shared/lib/id/generateId";
-import axios from "axios";
-import { Playlist } from "@shared/types/types";
+import { useMediaLibraryStore } from "src/app/store/media-library/useMediaLibraryStore";
 
 export const useMediaLibrary = () => {
   const { user } = useUserStore();
-  const [playlists, setPlaylist] = useState<Playlist[]>([]);
+  const { playlists, fetchPlaylists, addPlaylist } = useMediaLibraryStore();
   const [createPlaylistModal, setCreatePlaylistModal] = useState(false);
   const [LoginPromptModal, setLoginPromptModal] = useState(false);
   const [isMediaLibraryOpen, setIsMediaLibraryOpen] = useState(true);
@@ -44,26 +43,9 @@ export const useMediaLibrary = () => {
 
   useEffect(() => {
     if (user) {
-      const userId = user.user.id;
-
-      const fetchPlaylists = async () => {
-        try {
-          const response = await axios.post(
-            `http://localhost:3000/get-playlists-of-user`,
-            {
-              userId: userId,
-            }
-          );
-
-          setPlaylist(response.data);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      fetchPlaylists();
+      fetchPlaylists(user.user.id);
     }
-  }, [user]);
+  }, [user, fetchPlaylists]);
 
   const handleCreatePlaylist = async () => {
     setCreatePlaylistModal(false);
@@ -89,7 +71,7 @@ export const useMediaLibrary = () => {
       };
 
       try {
-        await axios.post("http://localhost:3000/create-playlist", playlistData);
+        await addPlaylist(playlistData);
       } catch (error) {
         console.log(error);
       }

@@ -40,6 +40,7 @@ export interface Playlist {
   description: string;
   owner: {
     display_name: string;
+    id: string;
   };
   public: boolean;
 }

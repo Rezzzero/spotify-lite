@@ -1,15 +1,14 @@
 import { Route } from "@shared/constants/constants";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { useMediaLibraryStore } from "src/app/store/media-library/useMediaLibraryStore";
 
 export const useDeletePlaylistModal = (closeModal: () => void) => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { removePlaylist } = useMediaLibraryStore();
   const handleDeletePlaylist = async () => {
     try {
-      await axios.delete(
-        `http://localhost:3000/delete-supabase-playlist/${id}`
-      );
+      removePlaylist(id as string);
 
       closeModal();
       navigate(Route.HOME);
