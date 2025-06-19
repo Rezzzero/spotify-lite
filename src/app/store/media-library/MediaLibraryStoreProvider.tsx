@@ -2,6 +2,7 @@ import axios from "axios";
 import { ReactNode, useState } from "react";
 import { MediaLibraryContext } from "./MediaLibraryContext";
 import { SupabasePlaylist } from "@shared/types/playlist";
+import { API_URL } from "@shared/constants/constants";
 
 export const MediaLibraryStoreProvider = ({
   children,
@@ -16,7 +17,7 @@ export const MediaLibraryStoreProvider = ({
   const fetchPlaylists = async (userId: string) => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/get-playlists-of-user`,
+        `${API_URL}/get-playlists-of-user`,
         {
           userId: userId,
         }
@@ -30,7 +31,7 @@ export const MediaLibraryStoreProvider = ({
 
   const addPlaylist = async (playlistData: SupabasePlaylist) => {
     try {
-      await axios.post("http://localhost:3000/create-playlist", playlistData);
+      await axios.post(`${API_URL}/create-playlist`, playlistData);
     } catch (error) {
       console.log(error);
     }
@@ -41,7 +42,7 @@ export const MediaLibraryStoreProvider = ({
   const removePlaylist = async (playlistId: string) => {
     try {
       await axios.delete(
-        `http://localhost:3000/delete-supabase-playlist/${playlistId}`
+        `${API_URL}/delete-supabase-playlist/${playlistId}`
       );
       setPlaylists(playlists.filter((playlist) => playlist.id !== playlistId));
     } catch (error) {
@@ -56,7 +57,7 @@ export const MediaLibraryStoreProvider = ({
   }) => {
     try {
       const response = await axios.put(
-        `http://localhost:3000/update-supabase-playlist/${playlist.id}`,
+        `${API_URL}/update-supabase-playlist/${playlist.id}`,
         playlist
       );
       const playlistToUpdate = response.data[0] as SupabasePlaylist;
@@ -79,7 +80,7 @@ export const MediaLibraryStoreProvider = ({
   ) => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/upload-playlist-image/${id}`,
+        `${API_URL}/upload-playlist-image/${id}`,
         formData,
         {
           headers: {
@@ -113,7 +114,7 @@ export const MediaLibraryStoreProvider = ({
   const changePublicStatus = async (id: string, isPublic: boolean) => {
     try {
       const response = await axios.put(
-        `http://localhost:3000/update-supabase-playlist/${id}`,
+        `${API_URL}/update-supabase-playlist/${id}`,
         {
           public: isPublic,
         }

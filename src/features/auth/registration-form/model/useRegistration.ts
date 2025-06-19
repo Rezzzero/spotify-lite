@@ -4,7 +4,7 @@ import { initialUserInfoBlur } from "./state/InitialStates";
 import { UserInfoKey } from "./types/NewUser";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Route } from "@shared/constants/constants";
+import { API_URL, Route } from "@shared/constants/constants";
 import { USER_PLACEHOLDER_URL } from "@shared/constants/urls";
 
 export type FormValues = {
@@ -79,7 +79,7 @@ export const useRegistrationForm = () => {
   const handleNextStep = async () => {
     if (step === 0) {
       try {
-        const response = await axios.get("http://localhost:3000/check-email", {
+        const response = await axios.get(`${API_URL}/check-email`, {
           params: { email: emailValue },
         });
 
@@ -145,7 +145,7 @@ export const useRegistrationForm = () => {
       clearErrors("termsOfUse");
 
       try {
-        await axios.post("http://localhost:3000/signup", {
+        await axios.post(`${API_URL}/signup`, {
           email: emailValue,
           password: passwordValue,
           userName: userNameValue,

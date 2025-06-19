@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import { Album, Artist, Track } from "@shared/types/types";
+import { API_URL } from "@shared/constants/constants";
 
 interface TrackDataType {
   track: Track;
@@ -22,9 +23,7 @@ export const useTrackInfo = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/api/track/${id}`
-        );
+        const response = await axios.get(`${API_URL}/api/track/${id}`);
         const data: TrackDataType = response.data;
         setTrackData(data);
         setAlbums(

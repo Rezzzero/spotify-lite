@@ -1,4 +1,4 @@
-import { Route } from "@shared/constants/constants";
+import { Route, API_URL } from "@shared/constants/constants";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import axios, { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -40,12 +40,9 @@ export const usePlaylistInfo = () => {
 
     const fetch = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/${endpoint}/${id}`,
-          {
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get(`${API_URL}/${endpoint}/${id}`, {
+          withCredentials: true,
+        });
 
         setPlaylistData({
           playlist: response.data,

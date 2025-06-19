@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { API_URL } from "@shared/constants/constants";
 
 export const SoundCloudSearch = () => {
   const [tracks, setTracks] = useState([]);
@@ -7,9 +8,7 @@ export const SoundCloudSearch = () => {
   const [audio, setAudio] = useState(null);
 
   const searchTracks = async () => {
-    const res = await axios.get(
-      `http://localhost:3000/api/soundcloud-search?q=${query}`
-    );
+    const res = await axios.get(`${API_URL}/api/soundcloud-search?q=${query}`);
     const data = await res.data;
     setTracks(data.collection);
   };
@@ -24,7 +23,7 @@ export const SoundCloudSearch = () => {
     }
 
     const res = await axios.get(
-      `http://localhost:3000/api/soundcloud-stream?url=${streamInfo.url}`
+      `${API_URL}/api/soundcloud-stream?url=${streamInfo.url}`
     );
     const streamData = await res.data;
     console.log(streamData);

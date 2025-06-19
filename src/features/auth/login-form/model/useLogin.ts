@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../../../../app/store/user/useUser";
 import { useForm } from "react-hook-form";
 import { maskEmail } from "@shared/lib/mask/maskEmail";
+import { API_URL } from "@shared/constants/constants";
 
 type FormValues = {
   email: string;
@@ -92,7 +93,7 @@ export const useLogin = () => {
       }
 
       try {
-        const res = await axios.post("http://localhost:3000/auth/send-otp", {
+        const res = await axios.post(`${API_URL}/auth/send-otp`, {
           email: emailValue,
         });
         console.log(res);
@@ -129,7 +130,7 @@ export const useLogin = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/auth/verify-otp",
+        `${API_URL}/auth/verify-otp`,
         {
           email: emailValue,
           otp: newOtp,
@@ -161,7 +162,7 @@ export const useLogin = () => {
     setLoading(true);
     try {
       const res = await axios.post(
-        "http://localhost:3000/signin",
+        `${API_URL}/signin`,
         {
           email: emailValue,
           password: passwordValue,

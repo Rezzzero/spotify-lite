@@ -2,6 +2,7 @@ import { useState, ReactNode, useEffect } from "react";
 import { UserContext } from "./UserContext";
 import { UserData } from "@shared/types/user";
 import axios from "axios";
+import { API_URL } from "@shared/constants/constants";
 
 export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserData | null>(null);
@@ -10,7 +11,7 @@ export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const initialUser = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/auth/me", {
+        const response = await axios.get(`${API_URL}/auth/me`, {
           withCredentials: true,
         });
 
@@ -24,7 +25,9 @@ export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser, userImagePreview, setUserImagePreview }}>
+    <UserContext.Provider
+      value={{ user, setUser, userImagePreview, setUserImagePreview }}
+    >
       {children}
     </UserContext.Provider>
   );

@@ -1,3 +1,4 @@
+import { API_URL } from "@shared/constants/constants";
 import { useDebouncedSearch } from "@shared/lib/hooks/useDebouncedSearch";
 import { SearchResults, Track, Album } from "@shared/types/types";
 import axios from "axios";
@@ -39,7 +40,7 @@ export const useAddTrackSearch = ({
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/add-track-to-playlist",
+        `${API_URL}/add-track-to-playlist`,
         {
           track: trackToAdd,
           playlist_id: playlistId,
@@ -65,7 +66,7 @@ export const useAddTrackSearch = ({
     const topTracks = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/artist-top-tracks/${artistId}`
+          `${API_URL}/api/artist-top-tracks/${artistId}`
         );
         return response.data;
       } catch (error) {
@@ -75,7 +76,7 @@ export const useAddTrackSearch = ({
     const albums = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/artist-albums/${artistId}`
+          `${API_URL}/api/artist-albums/${artistId}`
         );
         return response.data;
       } catch (error) {
@@ -102,7 +103,7 @@ export const useAddTrackSearch = ({
     setShowTracksAndAlbums(false);
     try {
       const response = await axios.get(
-        `http://localhost:3000/api/album-tracks/${albumId}`
+        `${API_URL}/api/album-tracks/${albumId}`
       );
       const albumData = response.data;
       const tracksWithAlbumData = albumData.tracks.items.map(

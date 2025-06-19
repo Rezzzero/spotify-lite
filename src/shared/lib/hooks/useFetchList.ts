@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Artist, Release, Track } from "../../types/types";
+import { API_URL } from "@shared/constants/constants";
 
 type SectionName = "popular-artists" | "popular-tracks" | "new-releases";
 
@@ -26,7 +27,7 @@ export const useFetchList = <T extends SectionName>(sectionName: T) => {
     const fetch = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`http://localhost:3000/api/${sectionName}`);
+        const res = await axios.get(`${API_URL}/api/${sectionName}`);
         const rawData = res.data;
 
         if (sectionName === "popular-tracks") {

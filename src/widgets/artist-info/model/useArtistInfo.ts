@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Album, Artist, Playlist, Track } from "@shared/types/types";
-import { artistMusicFilterList } from "@shared/constants/constants";
+import { artistMusicFilterList, API_URL } from "@shared/constants/constants";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
 
 interface ArtistInfoType {
@@ -29,9 +29,7 @@ export const useArtistInfo = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/api/artist/${id}`
-        );
+        const response = await axios.get(`${API_URL}/api/artist/${id}`);
         const data: ArtistInfoType = response.data;
         setArtistInfo(data);
         setFiltredAlbumsAndSingles(data.albumsAndSingles);

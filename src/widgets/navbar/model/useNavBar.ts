@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { useUserStore } from "src/app/store/user/useUser";
 import axios from "axios";
+import { API_URL } from "@shared/constants/constants";
 
 export const useNavbar = () => {
   const { user } = useUserStore();
@@ -8,7 +9,7 @@ export const useNavbar = () => {
 
   const handleSignOut = async () => {
     try {
-      await axios.post("http://localhost:3000/signout", null, {
+      await axios.post(`${API_URL}/signout`, null, {
         withCredentials: true,
       });
       window.location.reload();

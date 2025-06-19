@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Track } from "@shared/types/types";
 import { formatDate } from "@shared/lib/format/formatDate";
 import { formatTimeAgo } from "@shared/lib/format/formatTimeAgo";
+import { API_URL } from "@shared/constants/constants";
 
 export const usePlaylistTrackCard = ({
   setTracks,
@@ -33,7 +34,7 @@ export const usePlaylistTrackCard = ({
 
   const handleDeleteTrack = async (trackDuration: number, entryId: string) => {
     try {
-      const response = await axios.post("http://localhost:3000/delete-track", {
+      const response = await axios.post(`${API_URL}/delete-track`, {
         entryId,
       });
 

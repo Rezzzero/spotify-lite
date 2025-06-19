@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Album } from "@shared/types/types";
 import axios from "axios";
+import { API_URL } from "@shared/constants/constants";
 
 export const useDiscographyData = ({
   filterFromUrl,
@@ -23,9 +24,7 @@ export const useDiscographyData = ({
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/api/discography/${id}`
-        );
+        const response = await axios.get(`${API_URL}/api/discography/${id}`);
         const data: Album[] = response.data.discography;
         setDiscography(data);
         if (filterFromUrl === "all") {

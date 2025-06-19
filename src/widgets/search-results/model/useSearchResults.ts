@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useSearchStore } from "../../../app/store/search/useSearchStore";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "@shared/constants/constants";
 
 export const useSearchResults = () => {
   const { value: queryFromParams } = useParams();
@@ -14,7 +15,7 @@ export const useSearchResults = () => {
       const fetch = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:3000/api/search?q=${queryFromParams}`
+            `${API_URL}/api/search?q=${queryFromParams}`
           );
           setSearchResults(response.data);
         } catch (error) {

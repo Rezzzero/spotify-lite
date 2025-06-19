@@ -3,6 +3,7 @@ import axios from "axios";
 import { Album, Artist } from "@shared/types/types";
 import { useParams } from "react-router-dom";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
+import { API_URL } from "@shared/constants/constants";
 
 interface AlbumDataType {
   album: Album;
@@ -19,9 +20,7 @@ export const useAlbumInfo = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/api/album/${id}`
-        );
+        const response = await axios.get(`${API_URL}/api/album/${id}`);
         const data: AlbumDataType = response.data;
         setAlbumData(data);
         if (data.album.images[1].url) {

@@ -4,6 +4,7 @@ import { getUserSource } from "@shared/lib/source/getUserSource";
 import axios from "axios";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import { useUserStore } from "src/app/store/user/useUser";
+import { API_URL } from "@shared/constants/constants";
 
 interface UserInfo {
   id: string;
@@ -29,9 +30,9 @@ export const useUserInfo = () => {
     setLoading(true);
     let endpoint = "";
     if (source === "supabase") {
-      endpoint = `http://localhost:3000/get-user-by-id/${id}`;
+      endpoint = `${API_URL}/get-user-by-id/${id}`;
     } else {
-      endpoint = `http://localhost:3000/get-spotify-user-by-id/${id}`;
+      endpoint = `${API_URL}/get-spotify-user-by-id/${id}`;
     }
     const fetchUserInfo = async () => {
       const response = await axios.get(endpoint);
@@ -80,7 +81,7 @@ export const useUserInfo = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:3000/upload-user-image/${id}`,
+        `${API_URL}/upload-user-image/${id}`,
         formData,
         {
           headers: {
