@@ -28,6 +28,9 @@ export const EditPlaylistModal = ({
     handleChangePlaylistName,
     handleChangePlaylistDescription,
     handleUploadPlaylistImage,
+    previewImage,
+    playlistPreviewImages,
+    playlistId,
   } = useEditPlaylistModal({
     closeModal,
     playlistName,
@@ -66,7 +69,12 @@ export const EditPlaylistModal = ({
               style={{ display: "none" }}
             />
             <img
-              src={playlistImage}
+              src={
+                playlistPreviewImages.find((p) => p.id === playlistId)
+                  ?.previewImage ||
+                previewImage ||
+                playlistImage
+              }
               alt="playlist image"
               className={`w-full h-full object-cover rounded-md ${
                 playlistImage && playlistImage !== PLACEHOLDER_URL

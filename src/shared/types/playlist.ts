@@ -11,5 +11,5 @@ export interface SupabasePlaylist {
     id: string;
     display_name: string;
   };
-  duration: number;
+  duration?: number;
 }

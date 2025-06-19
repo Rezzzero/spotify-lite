@@ -11,7 +11,8 @@ import { useUserStore } from "src/app/store/user/useUser";
 
 export const usePlaylistInfo = () => {
   const { user } = useUserStore();
-  const { playlists, removePlaylist } = useMediaLibraryStore();
+  const { playlists, removePlaylist, playlistPreviewImages } =
+    useMediaLibraryStore();
   const [loading, setLoading] = useState(false);
   const [openSearch, setOpenSearch] = useState(true);
   const [playlistData, setPlaylistData] = useState<PlaylistData | null>(null);
@@ -111,7 +112,7 @@ export const usePlaylistInfo = () => {
 
   const handleUpdateDuration = (trackDuration: number, isAdd: boolean) => {
     setPlaylistData((prevPlaylistData) => {
-      if (!prevPlaylistData) return null;
+      if (!prevPlaylistData || !prevPlaylistData.playlist.duration) return null;
       return {
         ...prevPlaylistData,
         playlist: {
@@ -153,6 +154,7 @@ export const usePlaylistInfo = () => {
 
   return {
     playlists,
+    playlistPreviewImages,
     playlistData,
     imageColors,
     openSearch,

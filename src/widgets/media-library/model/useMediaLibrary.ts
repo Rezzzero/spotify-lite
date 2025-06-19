@@ -6,7 +6,8 @@ import { useMediaLibraryStore } from "src/app/store/media-library/useMediaLibrar
 
 export const useMediaLibrary = () => {
   const { user } = useUserStore();
-  const { playlists, fetchPlaylists, addPlaylist } = useMediaLibraryStore();
+  const { playlists, fetchPlaylists, addPlaylist, playlistPreviewImages } =
+    useMediaLibraryStore();
   const [createPlaylistModal, setCreatePlaylistModal] = useState(false);
   const [LoginPromptModal, setLoginPromptModal] = useState(false);
   const [isMediaLibraryOpen, setIsMediaLibraryOpen] = useState(true);
@@ -96,5 +97,6 @@ export const useMediaLibrary = () => {
     id,
     isMediaLibraryOpen,
     setIsMediaLibraryOpen,
+    playlistPreviewImages,
   };
 };

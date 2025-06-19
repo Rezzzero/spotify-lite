@@ -9,6 +9,9 @@ export const MediaLibraryStoreProvider = ({
   children: ReactNode;
 }) => {
   const [playlists, setPlaylists] = useState<SupabasePlaylist[]>([]);
+  const [playlistPreviewImages, setPlaylistPreviewImages] = useState<
+    { id: string; previewImage: string }[]
+  >([]);
 
   const fetchPlaylists = async (userId: string) => {
     try {
@@ -69,7 +72,11 @@ export const MediaLibraryStoreProvider = ({
     }
   };
 
-  const uploadPlaylistImage = async (id: string, formData: FormData) => {
+  const uploadPlaylistImage = async (
+    id: string,
+    formData: FormData,
+    previewImage: string
+  ) => {
     try {
       const response = await axios.post(
         `http://localhost:3000/upload-playlist-image/${id}`,
@@ -80,7 +87,23 @@ export const MediaLibraryStoreProvider = ({
           },
         }
       );
-      console.log(response.data);
+
+      setPlaylists(
+        playlists.map((p) =>
+          p.id === id
+            ? {
+                ...p,
+                images: [response.data[0].images[0], ...p.images],
+              }
+            : p
+        )
+      );
+
+      setPlaylistPreviewImages([
+        ...playlistPreviewImages,
+        { id, previewImage },
+      ]);
+
       return response.data[0].images[0].url;
     } catch (error) {
       console.log(error);
@@ -116,6 +139,7 @@ export const MediaLibraryStoreProvider = ({
         updatePlaylist,
         uploadPlaylistImage,
         changePublicStatus,
+        playlistPreviewImages,
       }}
     >
       {children}

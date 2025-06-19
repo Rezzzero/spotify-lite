@@ -11,11 +11,16 @@ interface MediaLibraryContextType {
     name: string;
     description: string;
   }) => Promise<SupabasePlaylist | undefined>;
-  uploadPlaylistImage: (id: string, formData: FormData) => Promise<string>;
+  uploadPlaylistImage: (
+    id: string,
+    formData: FormData,
+    previewImage: string
+  ) => Promise<string>;
   changePublicStatus: (
     id: string,
     isPublic: boolean
   ) => Promise<SupabasePlaylist | undefined>;
+  playlistPreviewImages: { id: string; previewImage: string }[];
 }
 
 export const MediaLibraryContext = createContext({} as MediaLibraryContextType);

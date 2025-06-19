@@ -16,9 +16,11 @@ export const useEditPlaylistModal = ({
 }) => {
   const { id } = useParams();
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { updatePlaylist, uploadPlaylistImage } = useMediaLibraryStore();
+  const { updatePlaylist, uploadPlaylistImage, playlistPreviewImages } =
+    useMediaLibraryStore();
 
   const handleChangePlaylistName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlaylist(
@@ -45,12 +47,15 @@ export const useEditPlaylistModal = ({
 
       closeModal();
       if (updatedPlaylist) {
-        setPlaylist({
-          playlist: updatedPlaylist,
-          playlistName: updatedPlaylist.name,
-          playlistDescription: updatedPlaylist.description,
-          imageUrl: updatedPlaylist.images[0].url || "",
-        });
+        setPlaylist(
+          (prev) =>
+            ({
+              ...prev,
+              playlist: updatedPlaylist,
+              playlistName: updatedPlaylist.name,
+              playlistDescription: updatedPlaylist.description,
+            } as PlaylistData)
+        );
       }
     } catch (error) {
       console.error("Error updating playlist:", error);
@@ -67,7 +72,7 @@ export const useEditPlaylistModal = ({
     const file = e.target.files?.[0];
     if (file) {
       setImageFile(file);
-      console.log(imageFile);
+      setPreviewImage(URL.createObjectURL(file));
     }
   };
 
@@ -78,7 +83,11 @@ export const useEditPlaylistModal = ({
     formData.append("file", imageFile);
 
     try {
-      const response = await uploadPlaylistImage(id as string, formData);
+      const response = await uploadPlaylistImage(
+        id as string,
+        formData,
+        previewImage as string
+      );
 
       setPlaylist(
         (prev) =>
@@ -100,5 +109,8 @@ export const useEditPlaylistModal = ({
     handleChangePlaylistName,
     handleChangePlaylistDescription,
     handleUploadPlaylistImage,
+    previewImage,
+    playlistPreviewImages,
+    playlistId: id as string,
   };
 };

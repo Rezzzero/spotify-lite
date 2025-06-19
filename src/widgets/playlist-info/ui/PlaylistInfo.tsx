@@ -22,6 +22,7 @@ import { PLACEHOLDER_URL } from "@shared/constants/urls";
 export const PlaylistInfo = () => {
   const {
     playlists,
+    playlistPreviewImages,
     playlistData,
     setPlaylistData,
     imageColors,
@@ -69,13 +70,20 @@ export const PlaylistInfo = () => {
         >
           <img
             src={
+              playlistPreviewImages.find(
+                (p) => p.id === playlistData?.playlist.id
+              )?.previewImage ||
               playlistData?.playlist.images[0]?.url ||
               playlistData?.imageUrl ||
               PLACEHOLDER_URL
             }
             alt="playlist image"
             className={`w-full h-full object-cover rounded-md ${
-              playlistData?.playlist.images[0]?.url || playlistData?.imageUrl
+              playlistPreviewImages.find(
+                (p) => p.id === playlistData?.playlist.id
+              )?.previewImage ||
+              playlistData?.playlist.images[0]?.url ||
+              playlistData?.imageUrl
                 ? "group-hover:opacity-20"
                 : "group-hover:opacity-0"
             } transition-opacity duration-200`}
@@ -123,23 +131,25 @@ export const PlaylistInfo = () => {
       <div className="flex flex-col gap-5 w-full pl-5 pr-8 relative">
         <div className="flex items-center pt-7 pb-10 justify-between w-full">
           <div className="flex items-center gap-4">
-            <CustomTooltip
-              title={
-                isPlaying
-                  ? `Поставить на паузу плейлист ${playlistData?.playlist.name}`
-                  : `Слушать плейлист ${playlistData?.playlist.name}`
-              }
-              placement="top"
-              customFontSize={13}
-            >
-              <button type="button" onClick={handleListenPlaylist}>
-                {isPlaying ? (
-                  <PausePlaylistIcon className="w-12 h-12 text-green-500 hover:text-green-400 cursor-pointer hover:scale-105" />
-                ) : (
-                  <ListenPlaylistIcon className="w-12 h-12 text-green-500 hover:text-green-400 cursor-pointer hover:scale-105" />
-                )}
-              </button>
-            </CustomTooltip>
+            {tracks.length > 0 && (
+              <CustomTooltip
+                title={
+                  isPlaying
+                    ? `Поставить на паузу плейлист ${playlistData?.playlist.name}`
+                    : `Слушать плейлист ${playlistData?.playlist.name}`
+                }
+                placement="top"
+                customFontSize={13}
+              >
+                <button type="button" onClick={handleListenPlaylist}>
+                  {isPlaying ? (
+                    <PausePlaylistIcon className="w-12 h-12 text-green-500 hover:text-green-400 cursor-pointer hover:scale-105" />
+                  ) : (
+                    <ListenPlaylistIcon className="w-12 h-12 text-green-500 hover:text-green-400 cursor-pointer hover:scale-105" />
+                  )}
+                </button>
+              </CustomTooltip>
+            )}
             {!isOwnPlaylist() &&
               (playlists.find((p) => p.id === playlistData?.playlist.id) ? (
                 <CustomTooltip
@@ -231,23 +241,24 @@ export const PlaylistInfo = () => {
             </div>
           </div>
         )}
-        {openSearch ? (
-          <AddTrackSearch
-            closeSearch={() => setOpenSearch(false)}
-            setTracks={setTracks}
-            handleUpdateDuration={handleUpdateDuration}
-          />
-        ) : (
-          <div className="w-full flex justify-end">
-            <button
-              type="button"
-              onClick={() => setOpenSearch(true)}
-              className="font-bold text-sm"
-            >
-              Еще
-            </button>
-          </div>
-        )}
+        {isOwnPlaylist() &&
+          (openSearch ? (
+            <AddTrackSearch
+              closeSearch={() => setOpenSearch(false)}
+              setTracks={setTracks}
+              handleUpdateDuration={handleUpdateDuration}
+            />
+          ) : (
+            <div className="w-full flex justify-end">
+              <button
+                type="button"
+                onClick={() => setOpenSearch(true)}
+                className="font-bold text-sm"
+              >
+                Еще
+              </button>
+            </div>
+          ))}
         {menuModal && (
           <PlaylistMenuModal
             modalRef={menuModalRef}

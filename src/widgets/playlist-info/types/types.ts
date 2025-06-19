@@ -6,4 +6,5 @@ export interface PlaylistData {
   playlistName: string;
   playlistDescription: string;
   imageUrl: string;
+  previewImage?: string;
 }

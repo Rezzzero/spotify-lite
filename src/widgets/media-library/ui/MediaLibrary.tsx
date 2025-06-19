@@ -26,6 +26,7 @@ export const MediaLibrary = () => {
     id,
     isMediaLibraryOpen,
     setIsMediaLibraryOpen,
+    playlistPreviewImages,
   } = useMediaLibrary();
   return (
     <div
@@ -171,7 +172,12 @@ export const MediaLibrary = () => {
                   } rounded-md transition-colors p-2`}
                 >
                   <img
-                    src={playlist.images[0]?.url || PLACEHOLDER_URL}
+                    src={
+                      playlistPreviewImages.find((p) => p.id === playlist.id)
+                        ?.previewImage ||
+                      playlist.images[0]?.url ||
+                      PLACEHOLDER_URL
+                    }
                     alt={playlist.name}
                     className="w-12 h-12 rounded-md"
                   />

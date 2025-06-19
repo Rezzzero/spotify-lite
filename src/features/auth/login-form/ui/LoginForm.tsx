@@ -133,7 +133,7 @@ export const LoginForm = () => {
                 <button
                   type="submit"
                   onClick={signInWithPassword}
-                  className="text-black font-bold rounded-full bg-green-400 hover:bg-[#74eda0] hover:scale-105 py-3 px-10 cursor-pointer mb-5"
+                  className="text-black font-bold rounded-full bg-green-400 hover:bg-[#74eda0] hover:scale-105 py-3 px-10 cursor-pointer mb-5 mt-3"
                 >
                   {loading ? "Загрузка..." : "Войти"}
                 </button>
@@ -149,7 +149,7 @@ export const LoginForm = () => {
               <button
                 type="button"
                 onClick={sendOtp}
-                className="text-black font-bold rounded-full bg-green-400 hover:bg-[#74eda0] hover:scale-105 py-3 px-10 cursor-pointer"
+                className="text-black font-bold rounded-full bg-green-400 hover:bg-[#74eda0] hover:scale-105 py-3 px-10 cursor-pointer mt-3"
               >
                 {loading ? "Загрузка..." : "Продолжить"}
               </button>
