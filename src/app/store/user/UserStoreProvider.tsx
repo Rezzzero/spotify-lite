@@ -5,6 +5,7 @@ import axios from "axios";
 
 export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserData | null>(null);
+  const [userImagePreview, setUserImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
     const initialUser = async () => {
@@ -23,7 +24,7 @@ export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, userImagePreview, setUserImagePreview }}>
       {children}
     </UserContext.Provider>
   );

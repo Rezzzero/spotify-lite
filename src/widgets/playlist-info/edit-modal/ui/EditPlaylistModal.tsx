@@ -109,7 +109,7 @@ export const EditPlaylistModal = ({
             />
           </div>
         </div>
-        <div className="flex w-full items-center justify-end pr-2">
+        <div className="flex items-center justify-end pr-2">
           <button
             type="button"
             onClick={() => {

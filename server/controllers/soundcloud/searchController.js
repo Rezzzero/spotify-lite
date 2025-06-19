@@ -2,7 +2,6 @@ import { getSoundCloudSearchResults } from "../../utils/soundCloudUtils.js";
 
 export const soundcloudSearchHandler = async (req, res) => {
   const query = req.query.q;
-  console.log(query);
   if (!query) {
     return res.status(400).json({ error: "Missing query parameter" });
   }

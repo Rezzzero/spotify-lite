@@ -389,3 +389,18 @@ export const getUserById = async (id) => {
 
   return user;
 };
+
+export const uploadUserImageToSupabase = async (file, userId) => {
+  const { error } = await supabaseAdmin.storage
+    .from("user")
+    .upload(`${userId}`, file.buffer, {
+      cacheControl: "3600",
+      upsert: true,
+      contentType: file.mimetype,
+    });
+
+  if (error) {
+    console.error("Ошибка при загрузке изображения:", error.message);
+    throw new Error("Ошибка при загрузке изображения");
+  }
+};

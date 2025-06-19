@@ -3,10 +3,24 @@ import { useUserInfo } from "../model/useUserInfo";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import EditIcon from "@shared/assets/playlist/edit-icon.svg?react";
+import CrossIcon from "@shared/assets/cross-icon.svg?react";
 
 export const UserInfo = () => {
-  const { userInfo, loading, imageColors, editModal, setEditModal, isOwner } =
-    useUserInfo();
+  const {
+    userInfo,
+    loading,
+    imageColors,
+    editModal,
+    setEditModal,
+    isOwner,
+    editModalRef,
+    fileInputRef,
+    previewImage,
+    handleImageChange,
+    handleSelectImage,
+    handleUploadUserImage,
+    userImagePreview,
+  } = useUserInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
     : "linear-gradient(to bottom, #333, #222)";
@@ -29,7 +43,11 @@ export const UserInfo = () => {
             {isOwner ? (
               <>
                 <img
-                  src={userInfo?.imageUrl || USER_PLACEHOLDER_URL}
+                  src={
+                    userImagePreview ||
+                    userInfo?.imageUrl ||
+                    USER_PLACEHOLDER_URL
+                  }
                   alt="playlist image"
                   className={`w-full h-full object-cover rounded-full ${
                     userInfo?.imageUrl
@@ -44,7 +62,9 @@ export const UserInfo = () => {
               </>
             ) : (
               <img
-                src={userInfo?.imageUrl || USER_PLACEHOLDER_URL}
+                src={
+                  userImagePreview || userInfo?.imageUrl || USER_PLACEHOLDER_URL
+                }
                 alt="playlist image"
                 className="w-full h-full object-cover rounded-full"
               />
@@ -73,7 +93,77 @@ export const UserInfo = () => {
         </div>
       </div>
       {editModal && (
-        <div className="w-full h-full bg-white text-black">Edit modal</div>
+        <>
+          <div className="bg-black/80 fixed inset-0 z-10" />
+
+          <div
+            ref={editModalRef}
+            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-5 w-[525px] z-30 py-5 px-5 bg-[#2d2d2e] rounded-md"
+          >
+            <div className="flex items-center justify-between">
+              <h2 className="font-bold text-xl">Изменение сведений</h2>
+              <button
+                type="button"
+                onClick={() => {
+                  setEditModal(false);
+                }}
+              >
+                <CrossIcon className="w-3 h-3" />
+              </button>
+            </div>
+            <div className="flex items-center gap-5 w-full">
+              <div
+                className="flex flex-col gap-2 w-[180px] h-[180px] justify-center items-center cursor-pointer group relative"
+                onClick={() => {
+                  handleSelectImage();
+                }}
+              >
+                <img
+                  src={
+                    previewImage || userInfo?.imageUrl || USER_PLACEHOLDER_URL
+                  }
+                  alt="user edit image"
+                  className="w-full h-full object-cover rounded-full shadow-xl group-hover:opacity-20 transition-opacity duration-200"
+                />
+                <button
+                  type="button"
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                >
+                  <EditIcon className="w-11 h-11 mx-auto" />
+                  <p className="font-bold">Выбрать фото</p>
+                </button>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  className="hidden"
+                  onChange={handleImageChange}
+                />
+              </div>
+              <div className="flex flex-col w-full gap-2 flex-1">
+                <label
+                  htmlFor="userName"
+                  className="flex flex-col gap-2 relative group focus-within:[&>p]:opacity-100"
+                >
+                  <p className="absolute text-xs left-3 -top-2 opacity-0 font-bold transition-all duration-400 ease-in-out">
+                    Название
+                  </p>
+                  <input
+                    id="userName"
+                    type="text"
+                    className="w-full h-10 bg-zinc-900 rounded-md px-3 outline-none border border-transparent focus:border-zinc-500 focus:bg-zinc-700"
+                  />
+                </label>
+                <button
+                  type="button"
+                  onClick={handleUploadUserImage}
+                  className="bg-white rounded-full self-end w-[140px] text-black font-bold py-3 px-7 hover:bg-gray-100 hover:scale-105 cursor-pointer"
+                >
+                  Сохранить
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </>
   );
