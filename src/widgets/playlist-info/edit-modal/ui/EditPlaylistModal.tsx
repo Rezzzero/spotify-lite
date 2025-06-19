@@ -3,7 +3,7 @@ import EditIcon from "@shared/assets/playlist/edit-icon.svg?react";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import { useEditPlaylistModal } from "../model/useEditPlaylistModal";
 import { PlaylistData } from "@widgets/playlist-info/types/types";
-import { PLACEHOLDER_URL } from "@shared/constants/urls";
+import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 
 export const EditPlaylistModal = ({
   editModalRef,
@@ -77,7 +77,7 @@ export const EditPlaylistModal = ({
               }
               alt="playlist image"
               className={`w-full h-full object-cover rounded-md ${
-                playlistImage && playlistImage !== PLACEHOLDER_URL
+                playlistImage && playlistImage !== PLAYLIST_PLACEHOLDER_URL
                   ? "group-hover:opacity-20"
                   : "group-hover:opacity-0"
               }`}

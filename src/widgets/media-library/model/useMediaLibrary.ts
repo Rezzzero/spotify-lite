@@ -68,6 +68,7 @@ export const useMediaLibrary = () => {
         owner: {
           id: user.user.id,
           display_name: user.user.user_metadata.userName,
+          imageUrl: user.user.user_metadata.imageUrl,
         },
       };
 

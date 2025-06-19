@@ -6,7 +6,7 @@ import { MediaLibraryLinks, Route } from "@shared/constants/constants";
 import { Link } from "react-router-dom";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import { useMediaLibrary } from "../model/useMediaLibrary";
-import { PLACEHOLDER_URL } from "@shared/constants/urls";
+import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import CloseMediaLibraryIcon from "@shared/assets/media-library/close-media-library.svg?react";
 import OpenMediaLibraryIcon from "@shared/assets/media-library/open-media-library.svg?react";
 import ClosedMediaLibraryIcon from "@shared/assets/media-library/closed-media-library.svg?react";
@@ -176,7 +176,7 @@ export const MediaLibrary = () => {
                       playlistPreviewImages.find((p) => p.id === playlist.id)
                         ?.previewImage ||
                       playlist.images[0]?.url ||
-                      PLACEHOLDER_URL
+                      PLAYLIST_PLACEHOLDER_URL
                     }
                     alt={playlist.name}
                     className="w-12 h-12 rounded-md"

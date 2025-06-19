@@ -1,3 +1,4 @@
+import { USER_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { useState, useEffect } from "react";
 import { useExtractColors } from "react-extract-colors";
 
@@ -10,7 +11,7 @@ export const useGetColors = (imageUrl: string | null) => {
   });
 
   useEffect(() => {
-    if (!imageUrl) {
+    if (!imageUrl || imageUrl === USER_PLACEHOLDER_URL) {
       setImageColors(null);
       return;
     }

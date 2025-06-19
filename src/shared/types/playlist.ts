@@ -10,6 +10,7 @@ export interface SupabasePlaylist {
   owner: {
     id: string;
     display_name: string;
+    imageUrl: string;
   };
   duration?: number;
 }

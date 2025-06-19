@@ -5,6 +5,7 @@ import { UserInfoKey } from "./types/NewUser";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Route } from "@shared/constants/constants";
+import { USER_PLACEHOLDER_URL } from "@shared/constants/urls";
 
 export type FormValues = {
   email: string;
@@ -144,7 +145,7 @@ export const useRegistrationForm = () => {
       clearErrors("termsOfUse");
 
       try {
-        const response = await axios.post("http://localhost:3000/signup", {
+        await axios.post("http://localhost:3000/signup", {
           email: emailValue,
           password: passwordValue,
           userName: userNameValue,
@@ -152,8 +153,9 @@ export const useRegistrationForm = () => {
           monthOfBirthday: monthOfBirthdayValue,
           yearOfBirthday: yearOfBirthdayValue,
           gender: currentGender,
+          userImage: USER_PLACEHOLDER_URL,
         });
-        console.log(response.data);
+
         navigate(Route.HOME);
       } catch (error) {
         console.error("Ошибка регистрации:", error);

@@ -22,6 +22,7 @@ export const signUp = async (userData) => {
         birthday: userData.birthday,
         monthOfBirthday: userData.monthOfBirthday,
         yearOfBirthday: userData.yearOfBirthday,
+        userImage: userData.userImage,
       },
     },
   });
@@ -369,4 +370,22 @@ export const deleteTrackFromPlaylist = async (entryId) => {
   }
 
   return data;
+};
+
+export const getUserById = async (id) => {
+  const { data, error } = await supabaseAdmin.auth.admin.getUserById(id);
+
+  if (error) {
+    console.error("Ошибка при получении пользователя:", error.message);
+    throw new Error("Ошибка при получении пользователя");
+  }
+
+  const user = {
+    id: data.user.id,
+    email: data.user.email,
+    userName: data.user.user_metadata.userName,
+    imageUrl: data.user.user_metadata.userImage,
+  };
+
+  return user;
 };

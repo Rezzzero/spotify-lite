@@ -34,6 +34,8 @@ import getPlaylistsOfUserRoutes from "./routes/supabase/playlist/getPlaylistsOfU
 import addTrackRoutes from "./routes/supabase/playlist/addTrack.js";
 import deleteTrackRoutes from "./routes/supabase/playlist/deleteTrack.js";
 
+import getUserByIdRoutes from "./routes/supabase/user/getUserById.js";
+
 dotenv.config();
 
 const app = express();
@@ -78,6 +80,8 @@ app.use("/upload-playlist-image", uploadPlaylistImageRoutes);
 app.use("/get-playlists-of-user", getPlaylistsOfUserRoutes);
 app.use("/add-track-to-playlist", addTrackRoutes);
 app.use("/delete-track", deleteTrackRoutes);
+
+app.use("/get-user-by-id", getUserByIdRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

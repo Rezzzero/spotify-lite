@@ -15,6 +15,7 @@ export const Route = {
   PLAYLIST: "/playlist/:id",
   NOT_FOUND: "/not-found",
   TEST: "/test",
+  USER: "/user/:id",
 };
 
 export const MediaLibraryLinks = [

@@ -17,7 +17,10 @@ import { PlaylistMenuModal } from "../menu-modal/ui/PlaylistMenuModal";
 import { AddTrackSearch } from "../add-track-search/ui/AddTrackSearch";
 import { PlaylistTrackCard } from "../playlist-track-card/ui/PlaylistTrackCard";
 import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
-import { PLACEHOLDER_URL } from "@shared/constants/urls";
+import {
+  PLAYLIST_PLACEHOLDER_URL,
+  USER_PLACEHOLDER_URL,
+} from "@shared/constants/urls";
 
 export const PlaylistInfo = () => {
   const {
@@ -65,33 +68,51 @@ export const PlaylistInfo = () => {
         className="flex items-center gap-7 p-7"
       >
         <div
-          onClick={() => setEditModal((prev) => !prev)}
+          onClick={() => {
+            if (isOwnPlaylist()) {
+              setEditModal((prev) => !prev);
+            }
+          }}
           className="flex items-center bg-zinc-900 rounded-md w-[232px] h-[232px] shadow-xl group relative"
         >
-          <img
-            src={
-              playlistPreviewImages.find(
-                (p) => p.id === playlistData?.playlist.id
-              )?.previewImage ||
-              playlistData?.playlist.images[0]?.url ||
-              playlistData?.imageUrl ||
-              PLACEHOLDER_URL
-            }
-            alt="playlist image"
-            className={`w-full h-full object-cover rounded-md ${
-              playlistPreviewImages.find(
-                (p) => p.id === playlistData?.playlist.id
-              )?.previewImage ||
-              playlistData?.playlist.images[0]?.url ||
-              playlistData?.imageUrl
-                ? "group-hover:opacity-20"
-                : "group-hover:opacity-0"
-            } transition-opacity duration-200`}
-          />
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <EditIcon className="w-13 h-13" />
-            <p className="font-bold">Выбрать фото</p>
-          </div>
+          {isOwnPlaylist() ? (
+            <>
+              <img
+                src={
+                  playlistPreviewImages.find(
+                    (p) => p.id === playlistData?.playlist.id
+                  )?.previewImage ||
+                  playlistData?.playlist.images[0]?.url ||
+                  playlistData?.imageUrl ||
+                  PLAYLIST_PLACEHOLDER_URL
+                }
+                alt="playlist image"
+                className={`w-full h-full object-cover rounded-md ${
+                  playlistPreviewImages.find(
+                    (p) => p.id === playlistData?.playlist.id
+                  )?.previewImage ||
+                  playlistData?.playlist.images[0]?.url ||
+                  playlistData?.imageUrl
+                    ? "group-hover:opacity-20"
+                    : "group-hover:opacity-0"
+                } transition-opacity duration-200`}
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <EditIcon className="w-13 h-13" />
+                <p className="font-bold">Выбрать фото</p>
+              </div>
+            </>
+          ) : (
+            <img
+              src={
+                playlistData?.playlist.images[0]?.url ||
+                playlistData?.imageUrl ||
+                PLAYLIST_PLACEHOLDER_URL
+              }
+              alt="playlist image"
+              className="w-full h-full object-cover rounded-md"
+            />
+          )}
         </div>
         <div className="flex flex-col gap-3 pt-12 h-full">
           <h2>
@@ -104,11 +125,16 @@ export const PlaylistInfo = () => {
           </h1>
           <div className="flex items-center gap-1 mt-auto">
             <img
-              src="https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
+              src={
+                playlistData?.playlist.owner.imageUrl || USER_PLACEHOLDER_URL
+              }
               alt="playlist creator image"
               className="w-6 h-6 rounded-full"
             />
-            <Link to={"/"} className="font-bold text-sm hover:underline">
+            <Link
+              to={`/user/${playlistData?.playlist.owner.id}`}
+              className="font-bold text-sm hover:underline"
+            >
               {playlistData
                 ? playlistData.playlist.owner.display_name
                 : "owner"}
@@ -291,7 +317,7 @@ export const PlaylistInfo = () => {
           playlistImage={
             playlistData?.playlist.images[0]?.url ||
             playlistData?.imageUrl ||
-            PLACEHOLDER_URL
+            PLAYLIST_PLACEHOLDER_URL
           }
           setPlaylist={setPlaylistData}
         />
