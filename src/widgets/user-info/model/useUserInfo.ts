@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { getUserSource } from "@shared/lib/source/getUserSource";
 import axios from "axios";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
+import { useUserStore } from "src/app/store/user/useUser";
 
 interface UserInfo {
   id: string;
@@ -11,7 +12,9 @@ interface UserInfo {
 }
 
 export const useUserInfo = () => {
+  const { user } = useUserStore();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [editModal, setEditModal] = useState(false);
   const { imageColors } = useGetColors(userInfo?.imageUrl || null);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
@@ -34,5 +37,15 @@ export const useUserInfo = () => {
     fetchUserInfo();
   }, [id, source]);
 
-  return { userInfo, setUserInfo, loading, imageColors };
+  const isOwner = userInfo?.id === user?.user.id;
+
+  return {
+    userInfo,
+    setUserInfo,
+    loading,
+    imageColors,
+    editModal,
+    setEditModal,
+    isOwner,
+  };
 };
