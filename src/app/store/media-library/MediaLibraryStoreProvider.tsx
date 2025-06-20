@@ -1,33 +1,40 @@
 import axios from "axios";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { MediaLibraryContext } from "./MediaLibraryContext";
 import { SupabasePlaylist } from "@shared/types/playlist";
 import { API_URL } from "@shared/constants/constants";
+import { useUserStore } from "../user/useUser";
 
 export const MediaLibraryStoreProvider = ({
   children,
 }: {
   children: ReactNode;
 }) => {
+  const { user } = useUserStore();
   const [playlists, setPlaylists] = useState<SupabasePlaylist[]>([]);
   const [playlistPreviewImages, setPlaylistPreviewImages] = useState<
     { id: string; previewImage: string }[]
   >([]);
 
-  const fetchPlaylists = async (userId: string) => {
-    try {
-      const response = await axios.post(
-        `${API_URL}/get-playlists-of-user`,
-        {
-          userId: userId,
-        }
-      );
+  useEffect(() => {
+    if (user) {
+      const fetchPlaylists = async (userId: string) => {
+        try {
+          const response = await axios.post(
+            `${API_URL}/get-playlists-of-user`,
+            {
+              userId: userId,
+            }
+          );
 
-      setPlaylists(response.data);
-    } catch (error) {
-      console.log(error);
+          setPlaylists(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchPlaylists(user.user.id);
     }
-  };
+  }, [user]);
 
   const addPlaylist = async (playlistData: SupabasePlaylist) => {
     try {
@@ -41,9 +48,7 @@ export const MediaLibraryStoreProvider = ({
 
   const removePlaylist = async (playlistId: string) => {
     try {
-      await axios.delete(
-        `${API_URL}/delete-supabase-playlist/${playlistId}`
-      );
+      await axios.delete(`${API_URL}/delete-supabase-playlist/${playlistId}`);
       setPlaylists(playlists.filter((playlist) => playlist.id !== playlistId));
     } catch (error) {
       console.log(error);
@@ -134,7 +139,6 @@ export const MediaLibraryStoreProvider = ({
     <MediaLibraryContext.Provider
       value={{
         playlists,
-        fetchPlaylists,
         addPlaylist,
         removePlaylist,
         updatePlaylist,

@@ -3,12 +3,21 @@ import { Logo } from "@shared/ui/logo/Logo";
 import HomeIcon from "../assets/icons/home-icon.svg";
 import HomeLeftIcon from "../assets/icons/home-left-icon.svg?react";
 import { Route } from "@shared/constants/constants";
+import { USER_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { SearchInput } from "../../search-input/ui/SearchInput";
 import { useNavbar } from "../model/useNavBar";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 
 export const NavBar = () => {
-  const { user, location, handleSignOut } = useNavbar();
+  const {
+    user,
+    location,
+    handleSignOut,
+    userImagePreview,
+    isUserMenuOpen,
+    userMenuRef,
+    handleUserMenuOpen,
+  } = useNavbar();
 
   return (
     <div
@@ -58,9 +67,50 @@ export const NavBar = () => {
       )}
       {user && (
         <div className="flex items-center gap-3">
-          Профиль
-          <button type="button" onClick={() => handleSignOut()}>
-            Выход
+          <button
+            type="button"
+            className="cursor-pointer p-2 bg-zinc-800 rounded-full"
+            onClick={handleUserMenuOpen}
+          >
+            <img
+              src={
+                userImagePreview ||
+                user.user.user_metadata.userImage ||
+                USER_PLACEHOLDER_URL
+              }
+              alt="user image"
+              className="w-8 h-8 rounded-full"
+            />
+          </button>
+        </div>
+      )}
+      {isUserMenuOpen && (
+        <div
+          className="absolute top-16 right-3 text-sm font-semibold bg-zinc-800 z-10 w-[190px] rounded-sm p-1 flex flex-col items-start"
+          ref={userMenuRef}
+        >
+          <div className="flex w-full flex-col border-b border-zinc-700">
+            <Link
+              to={`/user/${user?.user.id}`}
+              onClick={handleUserMenuOpen}
+              className="text-white pl-2 py-2 w-full hover:underline hover:bg-zinc-700 rounded-xs cursor-default"
+            >
+              Профиль
+            </Link>
+            <Link
+              to={`/user/${user?.user.id}`}
+              onClick={handleUserMenuOpen}
+              className="text-white pl-2 py-2 w-full hover:underline hover:bg-zinc-700 rounded-xs cursor-default"
+            >
+              Настройки
+            </Link>
+          </div>
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="text-white text-start pl-2 py-2 w-full hover:bg-zinc-700 rounded-xs cursor-default"
+          >
+            Выйти
           </button>
         </div>
       )}

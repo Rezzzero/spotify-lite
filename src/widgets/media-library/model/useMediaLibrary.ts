@@ -6,7 +6,7 @@ import { useMediaLibraryStore } from "src/app/store/media-library/useMediaLibrar
 
 export const useMediaLibrary = () => {
   const { user } = useUserStore();
-  const { playlists, fetchPlaylists, addPlaylist, playlistPreviewImages } =
+  const { playlists, addPlaylist, playlistPreviewImages } =
     useMediaLibraryStore();
   const [createPlaylistModal, setCreatePlaylistModal] = useState(false);
   const [LoginPromptModal, setLoginPromptModal] = useState(false);
@@ -42,12 +42,6 @@ export const useMediaLibrary = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [createPlaylistModal, LoginPromptModal]);
 
-  useEffect(() => {
-    if (user) {
-      fetchPlaylists(user.user.id);
-    }
-  }, [user, fetchPlaylists]);
-
   const handleCreatePlaylist = async () => {
     setCreatePlaylistModal(false);
 
@@ -66,9 +60,7 @@ export const useMediaLibrary = () => {
           },
         ],
         owner: {
-          id: user.user.id,
           display_name: user.user.user_metadata.userName,
-          imageUrl: user.user.user_metadata.imageUrl,
         },
       };
 

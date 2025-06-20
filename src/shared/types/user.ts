@@ -14,7 +14,7 @@ export interface UserData {
         birthday: string;
         monthOfBirthday: string;
         yearOfBirthday: string;
-        imageUrl: string;
+        userImage: string;
       };
     };
   };
@@ -27,7 +27,7 @@ export interface UserData {
       birthday: string;
       monthOfBirthday: string;
       yearOfBirthday: string;
-      imageUrl: string;
+      userImage: string;
     };
   };
 }

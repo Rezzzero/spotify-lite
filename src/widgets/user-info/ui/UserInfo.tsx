@@ -20,11 +20,15 @@ export const UserInfo = () => {
     handleSelectImage,
     handleUploadUserImage,
     userImagePreview,
+    userName,
+    handleUserNameChange,
+    handleSaveUserName,
   } = useUserInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
     : "linear-gradient(to bottom, #333, #222)";
   if (loading) return <div>Loading...</div>;
+
   return (
     <>
       <div className="flex flex-col gap-2 relative">
@@ -62,9 +66,7 @@ export const UserInfo = () => {
               </>
             ) : (
               <img
-                src={
-                  userImagePreview || userInfo?.imageUrl || USER_PLACEHOLDER_URL
-                }
+                src={userInfo?.imageUrl || USER_PLACEHOLDER_URL}
                 alt="playlist image"
                 className="w-full h-full object-cover rounded-full"
               />
@@ -151,11 +153,18 @@ export const UserInfo = () => {
                     id="userName"
                     type="text"
                     className="w-full h-10 bg-zinc-900 rounded-md px-3 outline-none border border-transparent focus:border-zinc-500 focus:bg-zinc-700"
+                    value={userName}
+                    onChange={handleUserNameChange}
                   />
                 </label>
                 <button
                   type="button"
-                  onClick={handleUploadUserImage}
+                  onClick={() => {
+                    handleUploadUserImage();
+                    if (userName.trim() !== userInfo?.userName) {
+                      handleSaveUserName();
+                    }
+                  }}
                   className="bg-white rounded-full self-end w-[140px] text-black font-bold py-3 px-7 hover:bg-gray-100 hover:scale-105 cursor-pointer"
                 >
                   Сохранить

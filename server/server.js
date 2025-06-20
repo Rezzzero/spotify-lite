@@ -36,6 +36,7 @@ import deleteTrackRoutes from "./routes/supabase/playlist/deleteTrack.js";
 
 import getUserByIdRoutes from "./routes/supabase/user/getUserById.js";
 import uploadUserImageRoutes from "./routes/supabase/user/uploadUserImage.js";
+import updateUserNameRoutes from "./routes/supabase/user/updateUserName.js";
 
 dotenv.config();
 
@@ -84,6 +85,7 @@ app.use("/delete-track", deleteTrackRoutes);
 
 app.use("/get-user-by-id", getUserByIdRoutes);
 app.use("/upload-user-image", uploadUserImageRoutes);
+app.use("/update-user-name", updateUserNameRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

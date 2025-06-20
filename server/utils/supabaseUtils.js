@@ -142,7 +142,9 @@ export const createPlaylist = async (playlistData) => {
       description: playlistData.description,
       public: playlistData.public,
       images: playlistData.images,
-      owner: playlistData.owner,
+      owner: {
+        display_name: playlistData.owner.display_name,
+      },
     },
   ]);
 
@@ -403,4 +405,58 @@ export const uploadUserImageToSupabase = async (file, userId) => {
     console.error("Ошибка при загрузке изображения:", error.message);
     throw new Error("Ошибка при загрузке изображения");
   }
+};
+
+export const getUserImageUrl = async (userId) => {
+  const { data, error } = supabaseAdmin.storage
+    .from("user")
+    .getPublicUrl(`${userId}`);
+
+  if (error) {
+    console.error("Ошибка при получении URL изображения:", error.message);
+    throw new Error("Ошибка при получении URL изображения");
+  }
+
+  return data.publicUrl;
+};
+
+export const updateUserImage = async (userId, imageUrl) => {
+  const { data, error } = await supabaseAdmin.auth.admin.updateUserById(
+    userId,
+    {
+      user_metadata: { userImage: imageUrl },
+    }
+  );
+
+  if (error) {
+    console.error("Ошибка при обновлении изображения:", error.message);
+    throw new Error("Ошибка при обновлении изображения");
+  }
+
+  return data;
+};
+
+export const updateUserName = async (userId, userName) => {
+  const { data, error } = await supabaseAdmin.auth.admin.updateUserById(
+    userId,
+    {
+      user_metadata: { userName },
+    }
+  );
+
+  const { error: updateError } = await supabaseAdmin
+    .from("playlists")
+    .update({
+      owner: {
+        display_name: data.user.user_metadata.userName,
+      },
+    })
+    .eq("user_id", userId);
+
+  if (error || updateError) {
+    console.error("Ошибка при обновлении имени пользователя:", error.message);
+    throw new Error("Ошибка при обновлении имени пользователя");
+  }
+
+  return data;
 };

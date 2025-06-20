@@ -3,7 +3,6 @@ import { SupabasePlaylist } from "@shared/types/playlist";
 
 interface MediaLibraryContextType {
   playlists: SupabasePlaylist[];
-  fetchPlaylists: (userId: string) => Promise<void>;
   addPlaylist: (playlistData: SupabasePlaylist) => Promise<void>;
   removePlaylist: (playlistId: string) => void;
   updatePlaylist: (playlist: {

@@ -126,17 +126,17 @@ export const PlaylistInfo = () => {
           <div className="flex items-center gap-1 mt-auto">
             <img
               src={
-                playlistData?.playlist.owner.imageUrl || USER_PLACEHOLDER_URL
+                playlistData?.playlist?.owner?.imageUrl || USER_PLACEHOLDER_URL
               }
               alt="playlist creator image"
               className="w-6 h-6 rounded-full"
             />
             <Link
-              to={`/user/${playlistData?.playlist.owner.id}`}
+              to={`/user/${playlistData?.playlist?.owner?.id}`}
               className="font-bold text-sm hover:underline"
             >
               {playlistData
-                ? playlistData.playlist.owner.display_name
+                ? playlistData.playlist?.owner?.display_name
                 : "owner"}
             </Link>
             {playlistData?.playlist?.duration && tracks.length > 0 ? (

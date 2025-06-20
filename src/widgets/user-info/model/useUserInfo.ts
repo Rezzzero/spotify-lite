@@ -17,6 +17,7 @@ export const useUserInfo = () => {
     useUserStore();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [editModal, setEditModal] = useState(false);
+  const [userName, setUserName] = useState<string>("");
   const { imageColors } = useGetColors(userInfo?.imageUrl || null);
   const [loading, setLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -38,6 +39,7 @@ export const useUserInfo = () => {
       const response = await axios.get(endpoint);
 
       setUserInfo(response.data);
+      setUserName(response.data.userName);
       setLoading(false);
     };
     fetchUserInfo();
@@ -97,7 +99,7 @@ export const useUserInfo = () => {
             ...user?.user,
             user_metadata: {
               ...user?.user.user_metadata,
-              imageUrl: response.data.imageUrl,
+              userImage: response.data.imageUrl,
             },
           },
         });
@@ -105,6 +107,25 @@ export const useUserInfo = () => {
       setEditModal(false);
     } catch (error) {
       console.error("Error uploading user image:", error);
+    }
+  };
+
+  const handleUserNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUserName(e.target.value);
+  };
+
+  const handleSaveUserName = async () => {
+    try {
+      const response = await axios.post(`${API_URL}/update-user-name/${id}`, {
+        userName,
+      });
+      const data = response.data.user.user_metadata.userName;
+      if (data) {
+        setUserInfo((prev) => (prev ? { ...prev, userName: data } : null));
+      }
+      setEditModal(false);
+    } catch (error) {
+      console.error("Error saving user name:", error);
     }
   };
 
@@ -126,5 +147,8 @@ export const useUserInfo = () => {
     imageFile,
     handleUploadUserImage,
     userImagePreview,
+    userName,
+    handleUserNameChange,
+    handleSaveUserName,
   };
 };

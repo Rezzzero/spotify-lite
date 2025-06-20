@@ -153,7 +153,7 @@ export const MediaLibrary = () => {
                   <span className="flex gap-1 font-normal text-sm text-gray-400">
                     Плейлист{" "}
                     <p className="font-bold mt-[3px] text-lg leading-none">·</p>
-                    {playlist.owner.display_name}
+                    {playlist.owner?.display_name}
                   </span>
                 </>
               }
@@ -187,7 +187,7 @@ export const MediaLibrary = () => {
                       <span className="flex gap-1 font-semibold text-sm text-gray-400">
                         Плейлист{" "}
                         <p className="font-bold text-lg leading-none">·</p>
-                        {playlist.owner.display_name}
+                        {playlist.owner?.display_name}
                       </span>
                     </div>
                   )}
