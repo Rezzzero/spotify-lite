@@ -39,13 +39,10 @@ export const useAddTrackSearch = ({
     };
 
     try {
-      const response = await axios.post(
-        `${API_URL}/add-track-to-playlist`,
-        {
-          track: trackToAdd,
-          playlist_id: playlistId,
-        }
-      );
+      const response = await axios.post(`${API_URL}/add-track-to-playlist`, {
+        track: trackToAdd,
+        playlist_id: playlistId,
+      });
 
       const { track, playlistTrack } = response.data;
       setTracks((prevTracks: Track[]) => [

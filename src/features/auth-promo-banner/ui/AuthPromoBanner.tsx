@@ -1,7 +1,7 @@
 import { Route } from "@shared/constants/constants";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "src/app/store/user/useUser";
+import { useUserStore } from "@app/store/user/useUser";
 
 export const AuthPromoBanner = () => {
   const { user } = useUserStore();

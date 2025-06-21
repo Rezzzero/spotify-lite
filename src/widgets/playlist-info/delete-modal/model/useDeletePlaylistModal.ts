@@ -1,6 +1,6 @@
 import { Route } from "@shared/constants/constants";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMediaLibraryStore } from "src/app/store/media-library/useMediaLibraryStore";
+import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 
 export const useDeletePlaylistModal = (closeModal: () => void) => {
   const { id } = useParams();

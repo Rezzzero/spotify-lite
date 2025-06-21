@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { useUserStore } from "src/app/store/user/useUser";
+import { useUserStore } from "@app/store/user/useUser";
 import { useNavigate, useParams } from "react-router-dom";
 import { generateId } from "@shared/lib/id/generateId";
-import { useMediaLibraryStore } from "src/app/store/media-library/useMediaLibraryStore";
+import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
+import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 
 export const useMediaLibrary = () => {
   const { user } = useUserStore();
@@ -56,7 +57,7 @@ export const useMediaLibrary = () => {
         public: true,
         images: [
           {
-            url: "",
+            url: PLAYLIST_PLACEHOLDER_URL,
           },
         ],
         owner: {

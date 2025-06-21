@@ -1,6 +1,6 @@
 import { PlaylistData } from "@widgets/playlist-info/types/types";
 import { useParams } from "react-router-dom";
-import { useMediaLibraryStore } from "src/app/store/media-library/useMediaLibraryStore";
+import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 
 export const usePlaylistMenuModal = ({
   isPublic,

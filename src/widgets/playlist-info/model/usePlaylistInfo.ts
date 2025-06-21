@@ -6,8 +6,8 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { PlaylistData } from "../types/types";
 import { Track } from "@shared/types/types";
-import { useMediaLibraryStore } from "src/app/store/media-library/useMediaLibraryStore";
-import { useUserStore } from "src/app/store/user/useUser";
+import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
+import { useUserStore } from "@app/store/user/useUser";
 
 export const usePlaylistInfo = () => {
   const { user } = useUserStore();
@@ -23,6 +23,7 @@ export const usePlaylistInfo = () => {
   const [editModal, setEditModal] = useState(false);
   const [changeFormatModal, setChangeFormatModal] = useState(false);
   const [deletePlaylistModal, setDeletePlaylistModal] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
   const menuModalRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const editModalRef = useRef<HTMLDivElement>(null);
@@ -58,6 +59,8 @@ export const usePlaylistInfo = () => {
           setTracks(response.data.tracks);
         }
 
+        setIsOwner(response.data.user_id === user?.user.id);
+
         setLoading(false);
       } catch (error) {
         if ((error as AxiosError).status === 404) {
@@ -68,7 +71,7 @@ export const usePlaylistInfo = () => {
     };
 
     fetch();
-  }, [id, source, navigate]);
+  }, [id, source, navigate, user]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -109,14 +112,18 @@ export const usePlaylistInfo = () => {
 
   const handleUpdateDuration = (trackDuration: number, isAdd: boolean) => {
     setPlaylistData((prevPlaylistData) => {
-      if (!prevPlaylistData || !prevPlaylistData.playlist.duration) return null;
+      if (!prevPlaylistData) return null;
+
+      const currentDuration = prevPlaylistData.playlist.duration || 0;
+      const newDuration = isAdd
+        ? currentDuration + trackDuration
+        : Math.max(0, currentDuration - trackDuration);
+
       return {
         ...prevPlaylistData,
         playlist: {
           ...prevPlaylistData.playlist,
-          duration: isAdd
-            ? prevPlaylistData.playlist.duration + trackDuration
-            : prevPlaylistData.playlist.duration - trackDuration,
+          duration: newDuration,
         },
       };
     });
@@ -131,18 +138,6 @@ export const usePlaylistInfo = () => {
     } catch (error) {
       console.error("Error deleting playlist:", error);
     }
-  };
-
-  const isOwnPlaylist = () => {
-    if (!user || !playlistData?.playlist) return false;
-
-    if ("userId" in playlistData.playlist) {
-      return user.user.id === playlistData.playlist.userId;
-    }
-
-    return (
-      user.user.id === (playlistData.playlist.owner as { id?: string })?.id
-    );
   };
 
   const handleListenPlaylist = () => {
@@ -177,7 +172,7 @@ export const usePlaylistInfo = () => {
     setTracks,
     handleUpdateDuration,
     handleDeletePlaylistFromMediaLibrary,
-    isOwnPlaylist,
+    isOwner,
     handleListenPlaylist,
     isPlaying,
   };

@@ -1,9 +1,10 @@
 import CrossIcon from "@shared/assets/cross-icon.svg?react";
 import EditIcon from "@shared/assets/playlist/edit-icon.svg?react";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
+import DeleteIcon from "@shared/assets/trash-fill-icon.svg?react";
+import ChangeIcon from "@shared/assets/playlist/gallery-icon.svg?react";
 import { useEditPlaylistModal } from "../model/useEditPlaylistModal";
 import { PlaylistData } from "@widgets/playlist-info/types/types";
-import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 
 export const EditPlaylistModal = ({
   editModalRef,
@@ -24,13 +25,17 @@ export const EditPlaylistModal = ({
     handleSelectImage,
     handleImageChange,
     fileInputRef,
-    handleUpdatePlaylist,
+    handleSavePlaylist,
     handleChangePlaylistName,
     handleChangePlaylistDescription,
-    handleUploadPlaylistImage,
     previewImage,
     playlistPreviewImages,
     playlistId,
+    subModal,
+    setSubModal,
+    subModalRef,
+    subModalButtonRef,
+    handleDeletePlaylistPreviewImage,
   } = useEditPlaylistModal({
     closeModal,
     playlistName,
@@ -42,7 +47,7 @@ export const EditPlaylistModal = ({
       <div className="bg-black/80 fixed inset-0 z-10" />
       <div
         ref={editModalRef}
-        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-5 w-[475px] z-30 py-5 pl-5 pr-3 bg-[#2d2d2e] rounded-md"
+        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-5 w-[475px] z-20 py-5 pl-5 pr-3 bg-[#2d2d2e] rounded-md"
       >
         <div className="flex items-center justify-between">
           <h2 className="font-bold text-xl">Изменение сведений</h2>
@@ -59,7 +64,7 @@ export const EditPlaylistModal = ({
         <div className="flex gap-3 w-full pr-2">
           <div
             onClick={() => handleSelectImage()}
-            className="flex items-center bg-zinc-800 rounded-sm h-[180px] w-[180px] shadow-xl group relative"
+            className="flex items-center rounded-sm hover:bg-zinc-800 h-[180px] w-[180px] group relative"
           >
             <input
               type="file"
@@ -70,26 +75,32 @@ export const EditPlaylistModal = ({
             />
             <img
               src={
+                previewImage ||
                 playlistPreviewImages.find((p) => p.id === playlistId)
                   ?.previewImage ||
-                previewImage ||
                 playlistImage
               }
               alt="playlist image"
-              className={`w-full h-full object-cover rounded-md ${
-                playlistImage && playlistImage !== PLAYLIST_PLACEHOLDER_URL
-                  ? "group-hover:opacity-20"
-                  : "group-hover:opacity-0"
-              }`}
+              className="w-full h-full object-cover rounded-md shadow-xl group-hover:opacity-20 transition-opacity duration-200"
             />
             <button
               type="button"
-              className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              className="absolute inset-0 top-1/2 -translate-y-1/3 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
             >
-              <EditIcon className="w-11 h-11 mx-auto" />
+              <EditIcon className="w-11 h-11" />
               <p className="font-bold">Выбрать фото</p>
             </button>
-            <button className="absolute top-3 right-3 hidden bg-black/70 group-hover:block hover:block rounded-full p-1">
+            <button
+              type="button"
+              ref={subModalButtonRef}
+              onClick={(event) => {
+                event.stopPropagation();
+                setSubModal((prev) => !prev);
+              }}
+              className={`absolute top-3 right-3 ${
+                subModal ? "block" : "hidden"
+              } bg-black/70 group-hover:block hover:block rounded-full p-1`}
+            >
               <MenuIcon className="w-5 h-5" />
             </button>
           </div>
@@ -112,15 +123,39 @@ export const EditPlaylistModal = ({
         <div className="flex items-center justify-end pr-2">
           <button
             type="button"
-            onClick={() => {
-              handleUpdatePlaylist();
-              handleUploadPlaylistImage();
-            }}
+            onClick={handleSavePlaylist}
             className="bg-white rounded-full text-black font-bold py-3 px-7 hover:bg-gray-100 hover:scale-105 cursor-pointer"
           >
             Сохранить
           </button>
         </div>
+        {subModal && (
+          <div
+            ref={subModalRef}
+            className="absolute top-1/3 left-1/3 rounded-sm bg-[#2d2d2e] p-1 z-30"
+          >
+            <button
+              type="button"
+              onClick={() => {
+                handleSelectImage();
+              }}
+              className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
+            >
+              <ChangeIcon className="w-4 h-4" />
+              Cменить фото
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                handleDeletePlaylistPreviewImage();
+              }}
+              className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
+            >
+              <DeleteIcon className="w-4 h-4" />
+              Удалить
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

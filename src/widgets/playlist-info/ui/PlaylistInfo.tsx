@@ -51,7 +51,7 @@ export const PlaylistInfo = () => {
     setTracks,
     handleUpdateDuration,
     handleDeletePlaylistFromMediaLibrary,
-    isOwnPlaylist,
+    isOwner,
     handleListenPlaylist,
     isPlaying,
   } = usePlaylistInfo();
@@ -69,13 +69,13 @@ export const PlaylistInfo = () => {
       >
         <div
           onClick={() => {
-            if (isOwnPlaylist()) {
+            if (isOwner) {
               setEditModal((prev) => !prev);
             }
           }}
           className="flex items-center bg-zinc-900 rounded-md w-[232px] h-[232px] shadow-xl group relative"
         >
-          {isOwnPlaylist() ? (
+          {isOwner ? (
             <>
               <img
                 src={
@@ -176,7 +176,7 @@ export const PlaylistInfo = () => {
                 </button>
               </CustomTooltip>
             )}
-            {!isOwnPlaylist() &&
+            {!isOwner &&
               (playlists.find((p) => p.id === playlistData?.playlist.id) ? (
                 <CustomTooltip
                   title={`Удалить из медиатеки`}
@@ -267,7 +267,7 @@ export const PlaylistInfo = () => {
             </div>
           </div>
         )}
-        {isOwnPlaylist() &&
+        {isOwner &&
           (openSearch ? (
             <AddTrackSearch
               closeSearch={() => setOpenSearch(false)}

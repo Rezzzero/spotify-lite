@@ -1,7 +1,8 @@
+import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { PlaylistData } from "@widgets/playlist-info/types/types";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useMediaLibraryStore } from "src/app/store/media-library/useMediaLibraryStore";
+import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 
 export const useEditPlaylistModal = ({
   closeModal,
@@ -17,10 +18,17 @@ export const useEditPlaylistModal = ({
   const { id } = useParams();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [subModal, setSubModal] = useState(false);
+  const subModalRef = useRef<HTMLDivElement>(null);
+  const subModalButtonRef = useRef<HTMLButtonElement>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { updatePlaylist, uploadPlaylistImage, playlistPreviewImages } =
-    useMediaLibraryStore();
+  const {
+    updatePlaylist,
+    uploadPlaylistImage,
+    deletePlaylistImage,
+    playlistPreviewImages,
+  } = useMediaLibraryStore();
 
   const handleChangePlaylistName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlaylist(
@@ -37,7 +45,7 @@ export const useEditPlaylistModal = ({
     );
   };
 
-  const handleUpdatePlaylist = async () => {
+  const handleSavePlaylist = async () => {
     try {
       const updatedPlaylist = await updatePlaylist({
         id: id as string,
@@ -45,7 +53,27 @@ export const useEditPlaylistModal = ({
         description: playlistDescription as string,
       });
 
-      closeModal();
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+
+        const response = await uploadPlaylistImage(
+          id as string,
+          formData,
+          previewImage as string
+        );
+
+        setPlaylist(
+          (prev) =>
+            ({
+              ...prev,
+              imageUrl: response,
+            } as PlaylistData)
+        );
+      } else if (previewImage === PLAYLIST_PLACEHOLDER_URL) {
+        await deletePlaylistImage(id as string);
+      }
+
       if (updatedPlaylist) {
         setPlaylist(
           (prev) =>
@@ -57,12 +85,15 @@ export const useEditPlaylistModal = ({
             } as PlaylistData)
         );
       }
+
+      closeModal();
     } catch (error) {
-      console.error("Error updating playlist:", error);
+      console.error("Error saving playlist:", error);
     }
   };
 
   const handleSelectImage = () => {
+    setSubModal(false);
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
@@ -76,41 +107,42 @@ export const useEditPlaylistModal = ({
     }
   };
 
-  const handleUploadPlaylistImage = async () => {
-    if (!imageFile) return;
-
-    const formData = new FormData();
-    formData.append("file", imageFile);
-
-    try {
-      const response = await uploadPlaylistImage(
-        id as string,
-        formData,
-        previewImage as string
-      );
-
-      setPlaylist(
-        (prev) =>
-          ({
-            ...prev,
-            imageUrl: response,
-          } as PlaylistData)
-      );
-    } catch (error) {
-      console.error("Error uploading playlist image:", error);
-    }
+  const handleDeletePlaylistPreviewImage = () => {
+    setPreviewImage(PLAYLIST_PLACEHOLDER_URL);
   };
+
+  useEffect(() => {
+    const handleClickOutsideSubModal = (event: MouseEvent) => {
+      if (
+        subModal &&
+        subModalRef.current &&
+        subModalButtonRef.current &&
+        !subModalButtonRef.current.contains(event.target as Node) &&
+        !subModalRef.current.contains(event.target as Node)
+      ) {
+        setSubModal(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutsideSubModal);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideSubModal);
+    };
+  }, [subModal]);
 
   return {
     handleSelectImage,
     handleImageChange,
     fileInputRef,
-    handleUpdatePlaylist,
+    handleSavePlaylist,
     handleChangePlaylistName,
     handleChangePlaylistDescription,
-    handleUploadPlaylistImage,
     previewImage,
     playlistPreviewImages,
     playlistId: id as string,
+    subModal,
+    setSubModal,
+    subModalRef,
+    subModalButtonRef,
+    handleDeletePlaylistPreviewImage,
   };
 };

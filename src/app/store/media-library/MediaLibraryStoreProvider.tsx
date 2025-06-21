@@ -4,6 +4,7 @@ import { MediaLibraryContext } from "./MediaLibraryContext";
 import { SupabasePlaylist } from "@shared/types/playlist";
 import { API_URL } from "@shared/constants/constants";
 import { useUserStore } from "../user/useUser";
+import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 
 export const MediaLibraryStoreProvider = ({
   children,
@@ -135,6 +136,18 @@ export const MediaLibraryStoreProvider = ({
     }
   };
 
+  const deletePlaylistImage = async (id: string) => {
+    try {
+      await axios.delete(`${API_URL}/delete-playlist-image/${id}`);
+      setPlaylistPreviewImages([
+        ...playlistPreviewImages,
+        { id, previewImage: PLAYLIST_PLACEHOLDER_URL },
+      ]);
+    } catch (error) {
+      console.error("Error deleting playlist image:", error);
+    }
+  };
+
   return (
     <MediaLibraryContext.Provider
       value={{
@@ -145,6 +158,8 @@ export const MediaLibraryStoreProvider = ({
         uploadPlaylistImage,
         changePublicStatus,
         playlistPreviewImages,
+        setPlaylistPreviewImages,
+        deletePlaylistImage,
       }}
     >
       {children}

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { getUserSource } from "@shared/lib/source/getUserSource";
 import axios from "axios";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
-import { useUserStore } from "src/app/store/user/useUser";
+import { useUserStore } from "@app/store/user/useUser";
 import { API_URL } from "@shared/constants/constants";
 import { USER_PLACEHOLDER_URL } from "@shared/constants/urls";
 

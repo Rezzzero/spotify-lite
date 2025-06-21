@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useUserStore } from "src/app/store/user/useUser";
+import { useUserStore } from "@app/store/user/useUser";
 import axios from "axios";
 import { API_URL } from "@shared/constants/constants";
 import { useEffect, useRef, useState } from "react";

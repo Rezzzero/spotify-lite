@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUserStore } from "../../../../app/store/user/useUser";
+import { useUserStore } from "@app/store/user/useUser";
 import { useForm } from "react-hook-form";
 import { maskEmail } from "@shared/lib/mask/maskEmail";
 import { API_URL } from "@shared/constants/constants";

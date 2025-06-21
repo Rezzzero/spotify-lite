@@ -20,6 +20,10 @@ interface MediaLibraryContextType {
     isPublic: boolean
   ) => Promise<SupabasePlaylist | undefined>;
   playlistPreviewImages: { id: string; previewImage: string }[];
+  setPlaylistPreviewImages: (
+    playlistPreviewImages: { id: string; previewImage: string }[]
+  ) => void;
+  deletePlaylistImage: (id: string) => Promise<void>;
 }
 
 export const MediaLibraryContext = createContext({} as MediaLibraryContextType);
