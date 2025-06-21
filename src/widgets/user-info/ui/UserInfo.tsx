@@ -4,6 +4,8 @@ import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import EditIcon from "@shared/assets/playlist/edit-icon.svg?react";
 import CrossIcon from "@shared/assets/cross-icon.svg?react";
+import CopyIcon from "@shared/assets/copy-icon.svg?react";
+import SubscibeIcon from "@shared/assets/subscribe-icon.svg?react";
 
 export const UserInfo = () => {
   const {
@@ -23,6 +25,9 @@ export const UserInfo = () => {
     handleUserNameChange,
     handleDeletePreviewImage,
     handleSaveProfile,
+    menuModal,
+    setMenuModal,
+    menuModalRef,
   } = useUserInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
@@ -79,7 +84,7 @@ export const UserInfo = () => {
             </h1>
           </div>
         </div>
-        <div className="flex items-center gap-3 px-5 py-7">
+        <div className="flex items-center gap-3 px-5 py-7 relative">
           {!isOwner && (
             <button className="text-sm font-semibold border border-gray-600 hover:border-white rounded-full px-4 h-8 hover:scale-105 cursor-pointer">
               Подписаться
@@ -90,10 +95,63 @@ export const UserInfo = () => {
             placement="top"
             customFontSize={13}
           >
-            <button type="button">
+            <button
+              type="button"
+              onClick={() => {
+                setMenuModal((prev) => !prev);
+              }}
+            >
               <MenuIcon className="w-10 h-10 text-gray-400 hover:text-white cursor-pointer hover:scale-105" />
             </button>
           </CustomTooltip>
+          {menuModal && (
+            <div
+              ref={menuModalRef}
+              className={`absolute top-22 ${
+                isOwner ? "left-5" : "left-[150px]"
+              } rounded-sm bg-[#2d2d2e] p-1`}
+            >
+              <div className="flex flex-col gap-1">
+                {isOwner ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMenuModal(false);
+                      setEditModal((prev) => !prev);
+                    }}
+                    className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
+                  >
+                    <EditIcon className="w-4 h-4" />
+                    Изменение профиля
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMenuModal(false);
+                    }}
+                    className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
+                  >
+                    <SubscibeIcon className="w-4 h-4" />
+                    Подписаться
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      `${window.location.origin}/user/${userInfo?.id}`
+                    );
+                    setMenuModal(false);
+                  }}
+                  className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
+                >
+                  <CopyIcon className="w-4 h-4" />
+                  Копировать ссылку на профиль
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       {editModal && (

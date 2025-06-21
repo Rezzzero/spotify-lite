@@ -18,6 +18,7 @@ export const useUserInfo = () => {
     useUserStore();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [editModal, setEditModal] = useState(false);
+  const [menuModal, setMenuModal] = useState(false);
   const [userName, setUserName] = useState<string>("");
   const { imageColors } = useGetColors(userInfo?.imageUrl || null);
   const [loading, setLoading] = useState(false);
@@ -26,6 +27,7 @@ export const useUserInfo = () => {
   const { id } = useParams();
   const source = getUserSource(id || "");
   const editModalRef = useRef<HTMLDivElement>(null);
+  const menuModalRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -55,12 +57,19 @@ export const useUserInfo = () => {
       ) {
         setEditModal(false);
       }
+      if (
+        menuModal &&
+        menuModalRef.current &&
+        !menuModalRef.current.contains(event.target as Node)
+      ) {
+        setMenuModal(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [editModal]);
+  }, [editModal, menuModal]);
 
   const handleSelectImage = () => {
     if (fileInputRef.current) {
@@ -166,5 +175,8 @@ export const useUserInfo = () => {
     handleUserNameChange,
     handleDeletePreviewImage,
     handleSaveProfile,
+    menuModal,
+    setMenuModal,
+    menuModalRef,
   };
 };
