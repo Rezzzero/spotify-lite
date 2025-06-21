@@ -18,11 +18,11 @@ export const UserInfo = () => {
     previewImage,
     handleImageChange,
     handleSelectImage,
-    handleUploadUserImage,
     userImagePreview,
     userName,
     handleUserNameChange,
-    handleSaveUserName,
+    handleDeletePreviewImage,
+    handleSaveProfile,
   } = useUserInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
@@ -80,9 +80,11 @@ export const UserInfo = () => {
           </div>
         </div>
         <div className="flex items-center gap-3 px-5 py-7">
-          <button className="text-sm font-semibold border border-gray-600 hover:border-white rounded-full px-4 h-8 hover:scale-105 cursor-pointer">
-            Подписаться
-          </button>
+          {!isOwner && (
+            <button className="text-sm font-semibold border border-gray-600 hover:border-white rounded-full px-4 h-8 hover:scale-105 cursor-pointer">
+              Подписаться
+            </button>
+          )}
           <CustomTooltip
             title={`Открыть контекстное меню: ${userInfo?.userName}`}
             placement="top"
@@ -100,26 +102,22 @@ export const UserInfo = () => {
 
           <div
             ref={editModalRef}
-            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-5 w-[525px] z-30 py-5 px-5 bg-[#2d2d2e] rounded-md"
+            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-5 w-[525px] z-30 py-5 pl-5 pr-3 bg-[#2d2d2e] rounded-md"
           >
             <div className="flex items-center justify-between">
-              <h2 className="font-bold text-xl">Изменение сведений</h2>
+              <h2 className="font-bold text-2xl">Данные профиля</h2>
               <button
                 type="button"
                 onClick={() => {
                   setEditModal(false);
                 }}
+                className="hover:bg-zinc-700 rounded-full p-3"
               >
                 <CrossIcon className="w-3 h-3" />
               </button>
             </div>
-            <div className="flex items-center gap-5 w-full">
-              <div
-                className="flex flex-col gap-2 w-[180px] h-[180px] justify-center items-center cursor-pointer group relative"
-                onClick={() => {
-                  handleSelectImage();
-                }}
-              >
+            <div className="flex items-center gap-5 w-full pr-2">
+              <div className="flex flex-col gap-2 w-[180px] h-[180px] justify-center items-center group relative">
                 <img
                   src={
                     previewImage || userInfo?.imageUrl || USER_PLACEHOLDER_URL
@@ -127,13 +125,25 @@ export const UserInfo = () => {
                   alt="user edit image"
                   className="w-full h-full object-cover rounded-full shadow-xl group-hover:opacity-20 transition-opacity duration-200"
                 />
-                <button
-                  type="button"
-                  className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                >
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleSelectImage();
+                    }}
+                    className="font-bold hover:underline"
+                  >
+                    Выбрать фото
+                  </button>
                   <EditIcon className="w-11 h-11 mx-auto" />
-                  <p className="font-bold">Выбрать фото</p>
-                </button>
+                  <button
+                    type="button"
+                    onClick={handleDeletePreviewImage}
+                    className="font-bold hover:underline"
+                  >
+                    Удалить фото
+                  </button>
+                </div>
                 <input
                   type="file"
                   ref={fileInputRef}
@@ -159,12 +169,7 @@ export const UserInfo = () => {
                 </label>
                 <button
                   type="button"
-                  onClick={() => {
-                    handleUploadUserImage();
-                    if (userName.trim() !== userInfo?.userName) {
-                      handleSaveUserName();
-                    }
-                  }}
+                  onClick={handleSaveProfile}
                   className="bg-white rounded-full self-end w-[140px] text-black font-bold py-3 px-7 hover:bg-gray-100 hover:scale-105 cursor-pointer"
                 >
                   Сохранить

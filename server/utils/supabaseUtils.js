@@ -460,3 +460,12 @@ export const updateUserName = async (userId, userName) => {
 
   return data;
 };
+
+export const deleteUserImage = async (userId) => {
+  const { error } = await supabaseAdmin.storage.from("user").remove([userId]);
+
+  if (error) {
+    console.error("Ошибка при удалении изображения:", error.message);
+    throw new Error("Ошибка при удалении изображения");
+  }
+};

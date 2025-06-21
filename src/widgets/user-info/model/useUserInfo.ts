@@ -5,6 +5,7 @@ import axios from "axios";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import { useUserStore } from "src/app/store/user/useUser";
 import { API_URL } from "@shared/constants/constants";
+import { USER_PLACEHOLDER_URL } from "@shared/constants/urls";
 
 interface UserInfo {
   id: string;
@@ -75,57 +76,73 @@ export const useUserInfo = () => {
     }
   };
 
-  const handleUploadUserImage = async () => {
-    if (!imageFile) return;
-
-    const formData = new FormData();
-    formData.append("file", imageFile);
-
-    try {
-      const response = await axios.post(
-        `${API_URL}/upload-user-image/${id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      setUserImagePreview(previewImage);
-      if (response.data.imageUrl && user) {
-        setUser({
-          ...user,
-          user: {
-            ...user?.user,
-            user_metadata: {
-              ...user?.user.user_metadata,
-              userImage: response.data.imageUrl,
-            },
-          },
-        });
-      }
-      setEditModal(false);
-    } catch (error) {
-      console.error("Error uploading user image:", error);
-    }
-  };
-
   const handleUserNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserName(e.target.value);
   };
 
-  const handleSaveUserName = async () => {
+  const handleDeletePreviewImage = () => {
+    setPreviewImage(USER_PLACEHOLDER_URL);
+  };
+
+  const handleSaveProfile = async () => {
     try {
-      const response = await axios.post(`${API_URL}/update-user-name/${id}`, {
-        userName,
-      });
-      const data = response.data.user.user_metadata.userName;
-      if (data) {
-        setUserInfo((prev) => (prev ? { ...prev, userName: data } : null));
+      if (userName.trim() !== userInfo?.userName) {
+        const nameResponse = await axios.post(
+          `${API_URL}/update-user-name/${id}`,
+          {
+            userName,
+          }
+        );
+        const data = nameResponse.data.user.user_metadata.userName;
+        if (data) {
+          setUserInfo((prev) => (prev ? { ...prev, userName: data } : null));
+        }
       }
+
+      if (imageFile) {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+
+        const imageResponse = await axios.post(
+          `${API_URL}/upload-user-image/${id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        setUserImagePreview(previewImage);
+        if (imageResponse.data.imageUrl && user) {
+          setUser({
+            ...user,
+            user: {
+              ...user?.user,
+              user_metadata: {
+                ...user?.user.user_metadata,
+                userImage: imageResponse.data.imageUrl,
+              },
+            },
+          });
+        }
+      } else if (
+        previewImage === USER_PLACEHOLDER_URL &&
+        userInfo?.imageUrl !== USER_PLACEHOLDER_URL
+      ) {
+        const deleteResponse = await axios.delete(
+          `${API_URL}/delete-user-image/${id}`
+        );
+        if (deleteResponse.data.message) {
+          setUserImagePreview(USER_PLACEHOLDER_URL);
+          setUserInfo((prev) =>
+            prev ? { ...prev, imageUrl: USER_PLACEHOLDER_URL } : null
+          );
+        }
+      }
+
       setEditModal(false);
     } catch (error) {
-      console.error("Error saving user name:", error);
+      console.error("Error saving profile:", error);
     }
   };
 
@@ -144,11 +161,10 @@ export const useUserInfo = () => {
     previewImage,
     handleImageChange,
     handleSelectImage,
-    imageFile,
-    handleUploadUserImage,
     userImagePreview,
     userName,
     handleUserNameChange,
-    handleSaveUserName,
+    handleDeletePreviewImage,
+    handleSaveProfile,
   };
 };
