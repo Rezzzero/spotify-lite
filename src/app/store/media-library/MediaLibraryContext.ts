@@ -24,6 +24,8 @@ interface MediaLibraryContextType {
     playlistPreviewImages: { id: string; previewImage: string }[]
   ) => void;
   deletePlaylistImage: (id: string) => Promise<void>;
+  removePlaylistFromUser: (playlistId: string) => Promise<void>;
+  addPlaylistToUser: (playlistId: string) => Promise<void>;
 }
 
 export const MediaLibraryContext = createContext({} as MediaLibraryContextType);

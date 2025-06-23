@@ -54,6 +54,7 @@ export const PlaylistInfo = () => {
     isOwner,
     handleListenPlaylist,
     isPlaying,
+    handleAddPlaylistToMediaLibrary,
   } = usePlaylistInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
@@ -200,7 +201,16 @@ export const PlaylistInfo = () => {
                   placement="top"
                   customFontSize={13}
                 >
-                  <AddToMediaLibraryIcon className="w-7 h-7 text-gray-400 hover:text-white cursor-pointer hover:scale-105" />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleAddPlaylistToMediaLibrary(
+                        playlistData?.playlist.id as string
+                      )
+                    }
+                  >
+                    <AddToMediaLibraryIcon className="w-7 h-7 text-gray-400 hover:text-white cursor-pointer hover:scale-105" />
+                  </button>
                 </CustomTooltip>
               ))}
 

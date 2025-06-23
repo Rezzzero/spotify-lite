@@ -11,8 +11,12 @@ import { useUserStore } from "@app/store/user/useUser";
 
 export const usePlaylistInfo = () => {
   const { user } = useUserStore();
-  const { playlists, removePlaylist, playlistPreviewImages } =
-    useMediaLibraryStore();
+  const {
+    playlists,
+    playlistPreviewImages,
+    removePlaylistFromUser,
+    addPlaylistToUser,
+  } = useMediaLibraryStore();
   const [loading, setLoading] = useState(false);
   const [openSearch, setOpenSearch] = useState(true);
   const [playlistData, setPlaylistData] = useState<PlaylistData | null>(null);
@@ -132,11 +136,19 @@ export const usePlaylistInfo = () => {
   const handleDeletePlaylistFromMediaLibrary = async (id: string) => {
     if (!user) return;
     try {
-      removePlaylist(id);
-
+      await removePlaylistFromUser(id);
       navigate(Route.HOME);
     } catch (error) {
       console.error("Error deleting playlist:", error);
+    }
+  };
+
+  const handleAddPlaylistToMediaLibrary = async (id: string) => {
+    if (!user) return;
+    try {
+      await addPlaylistToUser(id);
+    } catch (error) {
+      console.error("Error adding playlist to media library:", error);
     }
   };
 
@@ -175,5 +187,6 @@ export const usePlaylistInfo = () => {
     isOwner,
     handleListenPlaylist,
     isPlaying,
+    handleAddPlaylistToMediaLibrary,
   };
 };

@@ -156,6 +156,49 @@ export const createPlaylist = async (playlistData) => {
   return data;
 };
 
+export const addPlaylistToUser = async (playlistId, userId) => {
+  const { error: errorWithAdd } = await supabaseAdmin
+    .from("user_playlists")
+    .insert([{ playlist_id: playlistId, user_id: userId }]);
+
+  const { data: playlist, error: playlistError } = await supabaseAdmin
+    .from("playlists")
+    .select("*")
+    .eq("id", playlistId)
+    .single();
+
+  if (errorWithAdd) {
+    console.error(
+      "Ошибка при добавлении плейлиста в пользователя:",
+      errorWithAdd.message
+    );
+    throw new Error("Ошибка при добавлении плейлиста в пользователя");
+  }
+
+  if (playlistError) {
+    console.error("Ошибка при получении плейлиста:", playlistError.message);
+    throw new Error("Ошибка при получении плейлиста");
+  }
+
+  return playlist;
+};
+
+export const deletePlaylistFromUser = async (playlistId, userId) => {
+  const { error } = await supabaseAdmin
+    .from("user_playlists")
+    .delete()
+    .eq("playlist_id", playlistId)
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error(
+      "Ошибка при удалении плейлиста из пользователя:",
+      error.message
+    );
+    throw new Error("Ошибка при удалении плейлиста из пользователя");
+  }
+};
+
 export const getPlaylist = async (playlistId) => {
   const { data: playlist, error: playlistError } = await supabaseAdmin
     .from("playlists")
@@ -272,8 +315,8 @@ export const deletePlaylistImage = async (playlistId) => {
 
 export const getPlaylistsOfUser = async (userId) => {
   const { data, error } = await supabaseAdmin
-    .from("playlists")
-    .select("*")
+    .from("user_playlists")
+    .select("playlists(*)")
     .eq("user_id", userId);
 
   if (error) {
@@ -284,7 +327,7 @@ export const getPlaylistsOfUser = async (userId) => {
     throw new Error("Ошибка при получении плейлистов пользователя");
   }
 
-  return data;
+  return data.map((item) => item.playlists);
 };
 
 export const addTrackToPlaylist = async (trackData, playlistId) => {

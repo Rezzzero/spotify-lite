@@ -49,8 +49,37 @@ export const MediaLibraryStoreProvider = ({
 
   const removePlaylist = async (playlistId: string) => {
     try {
-      await axios.delete(`${API_URL}/delete-supabase-playlist/${playlistId}`);
+      await axios.delete(`${API_URL}/delete-supabase-playlist/${playlistId}`, {
+        data: {
+          userId: user?.user.id,
+        },
+      });
       setPlaylists(playlists.filter((playlist) => playlist.id !== playlistId));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removePlaylistFromUser = async (playlistId: string) => {
+    try {
+      await axios.post(`${API_URL}/delete-playlist-from-user/${playlistId}`, {
+        userId: user?.user.id,
+      });
+      setPlaylists(playlists.filter((playlist) => playlist.id !== playlistId));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addPlaylistToUser = async (playlistId: string) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/add-playlist/${playlistId}`,
+        {
+          userId: user?.user.id,
+        }
+      );
+      setPlaylists([...playlists, response.data]);
     } catch (error) {
       console.log(error);
     }
@@ -160,6 +189,8 @@ export const MediaLibraryStoreProvider = ({
         playlistPreviewImages,
         setPlaylistPreviewImages,
         deletePlaylistImage,
+        removePlaylistFromUser,
+        addPlaylistToUser,
       }}
     >
       {children}
