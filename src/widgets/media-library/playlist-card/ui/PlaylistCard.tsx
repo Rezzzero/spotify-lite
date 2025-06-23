@@ -100,7 +100,9 @@ export const PlaylistCard = ({
                   libraryFormat === "compact-list" ? "hidden" : "block"
                 }`}
               >
-                {playlist.owner?.display_name}
+                {libraryFormat === "grid"
+                  ? truncateText(playlist.owner?.display_name || "", 3)
+                  : playlist.owner?.display_name}
               </span>
             </p>
           </div>
