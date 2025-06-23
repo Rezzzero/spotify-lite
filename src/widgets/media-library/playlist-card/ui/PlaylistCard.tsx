@@ -60,9 +60,7 @@ export const PlaylistCard = ({
             PLAYLIST_PLACEHOLDER_URL
           }
           alt={playlist.name}
-          className={`w-12 h-12 ${
-            libraryFormat === "compact-list" && "hidden"
-          } ${
+          className={`${libraryFormat === "compact-list" && "hidden"} ${
             libraryFormat === "compact-grid" || libraryFormat === "grid"
               ? "w-full h-25"
               : "w-12 h-12"
@@ -122,7 +120,7 @@ export const PlaylistCard = ({
             <div className="bg-black opacity-50 rounded-md w-12 h-12" />
             <button
               type="button"
-              className=" w-5 h-5 hover:scale-104 cursor-pointer z-10 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
+              className="cursor-pointer z-10 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
             >
               <SmallPlayIcon className="w-full h-full" />
             </button>
