@@ -1,11 +1,13 @@
 import {
   deletePlaylist,
   deletePlaylistImage,
+  deleteAllTracksFromPlaylist,
 } from "../../../utils/supabaseUtils.js";
 
 export const deletePlaylistHandler = async (req, res) => {
   try {
     const playlistId = req.params.playlistId;
+    await deleteAllTracksFromPlaylist(playlistId);
     const data = await deletePlaylist(playlistId);
     await deletePlaylistImage(playlistId);
     res.json(data);

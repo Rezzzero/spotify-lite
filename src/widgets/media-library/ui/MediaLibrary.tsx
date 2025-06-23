@@ -6,10 +6,13 @@ import { MediaLibraryLinks, Route } from "@shared/constants/constants";
 import { Link } from "react-router-dom";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import { useMediaLibrary } from "../model/useMediaLibrary";
-import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import CloseMediaLibraryIcon from "@shared/assets/media-library/close-media-library.svg?react";
 import OpenMediaLibraryIcon from "@shared/assets/media-library/open-media-library.svg?react";
 import ClosedMediaLibraryIcon from "@shared/assets/media-library/closed-media-library.svg?react";
+import { PlaylistCard } from "../playlist-card/ui/PlaylistCard";
+import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
+import { SelectSortFilter } from "@shared/ui/select-sort-filter/SelectSortFilter";
+import { libraryFormatList } from "@shared/constants/constants";
 
 export const MediaLibrary = () => {
   const {
@@ -27,11 +30,25 @@ export const MediaLibrary = () => {
     isMediaLibraryOpen,
     setIsMediaLibraryOpen,
     playlistPreviewImages,
+    libraryFormat,
+    handleChangeLibraryFormat,
+    sortBy,
+    handleChangeSortBy,
+    isFilterModalOpen,
+    handleFilterModalOpen,
+    filterModalRef,
+    filterModalButtonRef,
+    sortedPlaylists,
   } = useMediaLibrary();
+
+  const selectedFormat = libraryFormatList.find(
+    (format) => format.value === libraryFormat
+  );
+
   return (
     <div
-      className={`flex flex-col gap-7 bg-[#141414] ${
-        isMediaLibraryOpen ? "w-[25%] p-2" : "w-20 p-1"
+      className={`flex flex-col bg-[#141414] ${
+        isMediaLibraryOpen ? "w-[25%] p-2 group/mediaLibrary" : "w-20 p-1"
       } h-[85vh] rounded-xl pb-8 relative`}
     >
       <div
@@ -50,12 +67,14 @@ export const MediaLibrary = () => {
           <button
             type="button"
             onClick={() => setIsMediaLibraryOpen(!isMediaLibraryOpen)}
-            className="flex items-center gap-2 font-bold group cursor-pointer relative"
+            className={`flex items-center gap-2 font-bold cursor-pointer relative ${
+              isMediaLibraryOpen ? "group/mediaLibrary" : "group"
+            }`}
           >
             {isMediaLibraryOpen ? (
               <>
-                <CloseMediaLibraryIcon className="w-5 h-5 absolute top-1/2 -translate-y-1/2 -left-20 opacity-0 group-hover:opacity-100 group-hover:translate-x-[80px] transition-all duration-300 ease-in-out" />
-                <p className="font-bold group-hover:translate-x-[26px] transition-all duration-300 ease-in-out">
+                <CloseMediaLibraryIcon className="w-5 h-5 absolute top-1/2 -translate-y-1/2 -left-20 opacity-0 group-hover/mediaLibrary:opacity-100 group-hover/mediaLibrary:translate-x-[80px] transition-all duration-300 ease-in-out" />
+                <p className="font-bold group-hover/mediaLibrary:translate-x-[26px] transition-all duration-300 ease-in-out">
                   Моя медиатека
                 </p>
               </>
@@ -93,7 +112,7 @@ export const MediaLibrary = () => {
       </div>
       {playlists.length === 0 ? (
         <>
-          <div className="flex flex-col items-start font-bold gap-1 bg-[#212121] rounded-xl py-3 px-5">
+          <div className="flex flex-col items-start font-bold gap-1 bg-[#212121] rounded-xl py-3 px-5 mt-7">
             <h2>Создай свой первый плейлист</h2>
             <p className="text-sm font-normal mb-4">
               Это совсем не сложно! Мы поможем.
@@ -106,7 +125,7 @@ export const MediaLibrary = () => {
               Создать плейлист
             </button>
           </div>
-          <div className="flex flex-col items-start font-bold gap-1 bg-[#212121] rounded-xl py-3 px-5 mb-auto">
+          <div className="flex flex-col items-start font-bold gap-1 bg-[#212121] rounded-xl py-3 px-5 mb-auto mt-7">
             <h2>Подпишись на интересные подкасты</h2>
             <p className="text-sm font-normal mb-4">
               Ты будешь узнавать о новых выпусках.
@@ -143,59 +162,43 @@ export const MediaLibrary = () => {
           </div>
         </>
       ) : (
-        <div className="flex flex-col gap-1">
-          {playlists.map((playlist) => (
-            <CustomTooltip
-              key={playlist.id}
-              title={
-                <>
-                  <h1 className="font-bold">{playlist.name}</h1>
-                  <span className="flex gap-1 font-normal text-sm text-gray-400">
-                    Плейлист{" "}
-                    <p className="font-bold mt-[3px] text-lg leading-none">·</p>
-                    {playlist.owner?.display_name}
-                  </span>
-                </>
-              }
-              placement="right"
-              disableHoverListener={isMediaLibraryOpen}
-            >
-              <div>
-                <Link
-                  to={`/playlist/${playlist.id}`}
-                  className={`${
-                    id === playlist.id
-                      ? "bg-zinc-800 hover:bg-zinc-700"
-                      : "hover:bg-zinc-800"
-                  } flex items-center ${
-                    !isMediaLibraryOpen ? "justify-center" : "gap-3"
-                  } rounded-md transition-colors p-2`}
-                >
-                  <img
-                    src={
-                      playlistPreviewImages.find((p) => p.id === playlist.id)
-                        ?.previewImage ||
-                      playlist.images[0]?.url ||
-                      PLAYLIST_PLACEHOLDER_URL
-                    }
-                    alt={playlist.name}
-                    className="w-12 h-12 rounded-md"
-                  />
-                  {isMediaLibraryOpen && (
-                    <div>
-                      <h1 className="font-bold">{playlist.name}</h1>
-                      <span className="flex gap-1 font-semibold text-sm text-gray-400">
-                        Плейлист{" "}
-                        <p className="font-bold text-lg leading-none">·</p>
-                        {playlist.owner?.display_name}
-                      </span>
-                    </div>
-                  )}
-                </Link>
-              </div>
-            </CustomTooltip>
-          ))}
-        </div>
+        <>
+          {isMediaLibraryOpen && (
+            <div className="flex w-full justify-end px-2 mb-2 mt-5">
+              <button
+                type="button"
+                ref={filterModalButtonRef}
+                className="flex items-center group gap-2 cursor-pointer hover:scale-105 duration-200"
+                onClick={handleFilterModalOpen}
+              >
+                <span className="text-sm text-zinc-400 group-hover:text-white">
+                  {sortBy.name}
+                </span>
+                {selectedFormat?.icon && (
+                  <selectedFormat.icon className="w-3 h-3 text-zinc-400 group-hover:text-white" />
+                )}
+              </button>
+            </div>
+          )}
+          <div
+            className={`flex ${
+              libraryFormat === "grid" || libraryFormat === "compact-grid"
+                ? "grid grid-cols-3"
+                : "flex-col"
+            } gap-1`}
+          >
+            {sortedPlaylists.map((playlist) => (
+              <PlaylistCard
+                key={playlist.id}
+                playlist={playlist}
+                libraryFormat={libraryFormat}
+                isMediaLibraryOpen={isMediaLibraryOpen}
+                playlistPreviewImages={playlistPreviewImages}
+                id={id}
+              />
+            ))}
+          </div>
+        </>
       )}
       {createPlaylistModal && (
         <div
@@ -276,6 +279,23 @@ export const MediaLibrary = () => {
               Войти
             </Link>
           </div>
+        </div>
+      )}
+      {isFilterModalOpen && (
+        <div
+          ref={filterModalRef}
+          className="absolute top-33 right-5 text-sm flex flex-col gap-2 bg-zinc-800 p-1 rounded-md z-20 shadow-md"
+        >
+          <SelectSortFilter
+            isMediaLibrary
+            MediaLibrarySorting={sortBy.value}
+            setMediaLibrarySorting={handleChangeSortBy}
+          />
+          <SelectLibraryFormat
+            libraryFormat={libraryFormat}
+            setLibraryFormat={handleChangeLibraryFormat}
+            onlyIcons
+          />
         </div>
       )}
     </div>

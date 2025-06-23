@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useUserStore } from "@app/store/user/useUser";
 import { useNavigate, useParams } from "react-router-dom";
 import { generateId } from "@shared/lib/id/generateId";
@@ -12,11 +12,37 @@ export const useMediaLibrary = () => {
   const [createPlaylistModal, setCreatePlaylistModal] = useState(false);
   const [LoginPromptModal, setLoginPromptModal] = useState(false);
   const [isMediaLibraryOpen, setIsMediaLibraryOpen] = useState(true);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [libraryFormat, setLibraryFormat] = useState("list");
+  const [sortBy, setSortBy] = useState({ name: "Недавние", value: "recent" });
   const navigate = useNavigate();
   const createPlaylistRef = useRef<HTMLDivElement>(null);
   const loginPromptRef = useRef<HTMLDivElement>(null);
   const createPlaylistButtonRef = useRef<HTMLButtonElement>(null);
+  const filterModalRef = useRef<HTMLDivElement>(null);
+  const filterModalButtonRef = useRef<HTMLButtonElement>(null);
   const { id } = useParams();
+
+  const sortedPlaylists = useMemo(() => {
+    if (!playlists) return [];
+
+    switch (sortBy.value) {
+      case "recent":
+        return playlists;
+      case "alphabet":
+        return [...playlists].sort((a, b) => a.name.localeCompare(b.name));
+      case "owner-name":
+        return [...playlists].sort(
+          (a, b) =>
+            a.owner?.display_name?.localeCompare(b.owner?.display_name || "") ||
+            0
+        );
+      case "recent-added":
+        return playlists;
+      default:
+        return playlists;
+    }
+  }, [playlists, sortBy]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -37,11 +63,21 @@ export const useMediaLibrary = () => {
       ) {
         setLoginPromptModal(false);
       }
+
+      if (
+        isFilterModalOpen &&
+        filterModalRef.current &&
+        !filterModalRef.current.contains(event.target as Node) &&
+        filterModalButtonRef.current &&
+        !filterModalButtonRef.current?.contains(event.target as Node)
+      ) {
+        setIsFilterModalOpen(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [createPlaylistModal, LoginPromptModal]);
+  }, [createPlaylistModal, LoginPromptModal, isFilterModalOpen]);
 
   const handleCreatePlaylist = async () => {
     setCreatePlaylistModal(false);
@@ -77,6 +113,18 @@ export const useMediaLibrary = () => {
     }
   };
 
+  const handleChangeLibraryFormat = (format: string) => {
+    setLibraryFormat(format);
+  };
+
+  const handleChangeSortBy = (sort: { name: string; value: string }) => {
+    setSortBy(sort);
+  };
+
+  const handleFilterModalOpen = () => {
+    setIsFilterModalOpen(!isFilterModalOpen);
+  };
+
   return {
     user,
     createPlaylistModal,
@@ -92,5 +140,14 @@ export const useMediaLibrary = () => {
     isMediaLibraryOpen,
     setIsMediaLibraryOpen,
     playlistPreviewImages,
+    libraryFormat,
+    handleChangeLibraryFormat,
+    sortBy,
+    handleChangeSortBy,
+    isFilterModalOpen,
+    handleFilterModalOpen,
+    filterModalRef,
+    filterModalButtonRef,
+    sortedPlaylists,
   };
 };

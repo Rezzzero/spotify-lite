@@ -1,3 +1,5 @@
+/// <reference types="vite-plugin-svgr/client" />
+
 import { Outlet } from "react-router-dom";
 import { NavBar } from "@widgets/navbar/ui/NavBar";
 import { MediaLibrary } from "@widgets/media-library/ui/MediaLibrary";

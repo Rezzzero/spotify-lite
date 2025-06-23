@@ -1,4 +1,8 @@
 import { Album } from "../types/types";
+import ListIcon from "@shared/assets/drop-down/list-icon.svg?react";
+import GridIcon from "@shared/assets/drop-down/grid-icon.svg?react";
+import CompactListIcon from "@shared/assets/compact-list-icon.svg?react";
+import CompactGridIcon from "@shared/assets/compact-grid-icon.svg?react";
 export const API_URL = import.meta.env.VITE_API_URL;
 
 export const Route = {
@@ -269,3 +273,26 @@ export const GENDERS = {
     value: "dont want to say",
   },
 };
+
+export const libraryFormatList = [
+  {
+    name: "Compact list",
+    value: "compact-list",
+    icon: CompactListIcon,
+  },
+  {
+    name: "Стандартный список",
+    value: "list",
+    icon: ListIcon,
+  },
+  {
+    name: "Compact grid",
+    value: "compact-grid",
+    icon: CompactGridIcon,
+  },
+  {
+    name: "Стандартная сетка",
+    value: "grid",
+    icon: GridIcon,
+  },
+];

@@ -1,21 +1,16 @@
-/// <reference types="vite-plugin-svgr/client" />
-
 import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import { useDiscography } from "../model/useDiscography";
 import { Link } from "react-router-dom";
 import clockIcon from "@shared/assets/clock-icon.svg";
-import {
-  artistMusicFilterList,
-  artistMusicSortList,
-} from "@shared/constants/constants";
+import { artistMusicFilterList } from "@shared/constants/constants";
 import checkmark from "@shared/assets/checkmark-icon.svg";
-import orderIcon from "@shared/assets/drop-down/order-icon.svg";
 import DropDownIcon from "@shared/assets/drop-down/drop-down-arrow.svg?react";
 import ListIcon from "@shared/assets/drop-down/list-icon.svg?react";
 import GridIcon from "@shared/assets/drop-down/grid-icon.svg?react";
 import { CardList } from "@shared/ui/card-list/CardList";
 import PlayIcon from "@shared/assets/play-icon.svg?react";
 import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
+import { SelectSortFilter } from "@shared/ui/select-sort-filter/SelectSortFilter";
 
 export const Discography = ({
   setIsFilterDropDownOpen,
@@ -36,7 +31,6 @@ export const Discography = ({
     setDiscographyFormat,
     albumRefs,
     activeAlbum,
-
     filterDropDownRef,
     filterButtonRef,
     showFilterDropDown,
@@ -161,6 +155,7 @@ export const Discography = ({
                     track={track}
                     index={index}
                     withNum
+                    withArtists
                     grid
                   />
                 ))}
@@ -199,40 +194,9 @@ export const Discography = ({
       {showSortDropDown && (
         <div
           ref={sortDropDownRef}
-          className="absolute top-20 right-10 bg-zinc-800 p-1 rounded-md flex flex-col"
+          className="absolute top-30 right-10 bg-zinc-800 p-1 rounded-md flex flex-col"
         >
-          <div className="flex flex-col border-b border-zinc-700">
-            <p className="font-bold text-xs text-zinc-400 p-2">Сортировка</p>
-
-            {Object.values(artistMusicSortList).map((sort) => (
-              <button
-                key={sort.name}
-                className={`font-semibold text-sm p-2 w-34 flex justify-between rounded-xs hover:bg-zinc-700 ${
-                  sorting.name === sort.name && "text-green-400"
-                }`}
-                onClick={() =>
-                  sortDiscography(
-                    sort.path,
-                    sort.name,
-                    sorting.ascOrder === sort.ascOrder
-                      ? !sort.ascOrder
-                      : sort.ascOrder
-                  )
-                }
-              >
-                {sort.name}
-                {sorting.name === sort.name && (
-                  <img
-                    src={orderIcon}
-                    alt="order icon"
-                    className={`w-4 h-4 ${
-                      sorting.ascOrder ? "rotate-180" : ""
-                    } `}
-                  />
-                )}
-              </button>
-            ))}
-          </div>
+          <SelectSortFilter sorting={sorting} setSorting={sortDiscography} />
           <SelectLibraryFormat
             libraryFormat={discographyFormat}
             setLibraryFormat={setDiscographyFormat}

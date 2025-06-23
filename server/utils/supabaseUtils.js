@@ -374,6 +374,21 @@ export const deleteTrackFromPlaylist = async (entryId) => {
   return data;
 };
 
+export const deleteAllTracksFromPlaylist = async (playlistId) => {
+  const { error } = await supabaseAdmin
+    .from("playlist_tracks")
+    .delete()
+    .eq("playlist_id", playlistId);
+
+  if (error) {
+    console.error(
+      "Ошибка при удалении всех треков из плейлиста:",
+      error.message
+    );
+    throw new Error("Ошибка при удалении всех треков из плейлиста");
+  }
+};
+
 export const getUserById = async (id) => {
   const { data, error } = await supabaseAdmin.auth.admin.getUserById(id);
 
