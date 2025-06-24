@@ -24,6 +24,7 @@ import {
 
 export const PlaylistInfo = () => {
   const {
+    user,
     playlists,
     playlistPreviewImages,
     playlistData,
@@ -272,6 +273,9 @@ export const PlaylistInfo = () => {
                   libraryFormat={playlistFormat}
                   setTracks={setTracks}
                   handleUpdateDuration={handleUpdateDuration}
+                  isOwner={isOwner}
+                  playlists={playlists}
+                  userId={user?.user?.id}
                 />
               ))}
             </div>

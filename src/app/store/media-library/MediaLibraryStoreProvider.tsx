@@ -76,7 +76,7 @@ export const MediaLibraryStoreProvider = ({
       const response = await axios.post(
         `${API_URL}/add-playlist/${playlistId}`,
         {
-          userId: user?.user.id,
+          user_id: user?.user.id,
         }
       );
       setPlaylists([...playlists, response.data]);

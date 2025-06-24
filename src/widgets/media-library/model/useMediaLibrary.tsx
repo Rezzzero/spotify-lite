@@ -88,7 +88,7 @@ export const useMediaLibrary = () => {
 
       const playlistData = {
         id: id,
-        userId: user.user.id,
+        user_id: user.user.id,
         name: "Новый плейлист",
         description: "",
         public: true,

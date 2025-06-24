@@ -137,7 +137,7 @@ export const createPlaylist = async (playlistData) => {
   const { data, error } = await supabaseAdmin.from("playlists").insert([
     {
       id: playlistData.id,
-      user_id: playlistData.userId,
+      user_id: playlistData.user_id,
       name: playlistData.name,
       description: playlistData.description,
       public: playlistData.public,

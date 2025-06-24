@@ -163,6 +163,7 @@ export const usePlaylistInfo = () => {
   };
 
   return {
+    user,
     playlists,
     playlistPreviewImages,
     playlistData,

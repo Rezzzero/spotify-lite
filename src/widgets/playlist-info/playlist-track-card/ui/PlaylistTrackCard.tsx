@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Track } from "@shared/types/types";
+import { Playlist, Track } from "@shared/types/types";
 import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
@@ -8,6 +8,8 @@ import { usePlaylistTrackCard } from "../model/usePlaylistTrackCard";
 import DeleteTrackIcon from "@shared/assets/trash-fill-icon.svg?react";
 import ToArtistIcon from "@shared/assets/artist-to-icon.svg?react";
 import ToAlbumIcon from "@shared/assets/album-to-icon.svg?react";
+import PlusIcon from "@shared/assets/plus-icon.svg?react";
+import { SupabasePlaylist } from "@shared/types/playlist";
 
 export const PlaylistTrackCard = ({
   track,
@@ -15,12 +17,18 @@ export const PlaylistTrackCard = ({
   libraryFormat,
   setTracks,
   handleUpdateDuration,
+  isOwner,
+  playlists,
+  userId,
 }: {
   track: Track;
   index: number;
   libraryFormat: string;
   setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
   handleUpdateDuration: (trackDuration: number, isAdd: boolean) => void;
+  isOwner: boolean;
+  playlists: Playlist[] | SupabasePlaylist[];
+  userId: string | undefined;
 }) => {
   const {
     isMenuOpen,
@@ -29,6 +37,11 @@ export const PlaylistTrackCard = ({
     buttonRef,
     handleDeleteTrack,
     formatAddedAt,
+    isAddToMediaLibraryModalOpen,
+    handleMouseEnter,
+    handleMouseLeave,
+    addToMediaLibraryRef,
+    handleAddTrackToPlaylist,
   } = usePlaylistTrackCard({ setTracks, handleUpdateDuration });
 
   return (
@@ -121,30 +134,60 @@ export const PlaylistTrackCard = ({
         >
           <div className="p-1">
             <button
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
               className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
-              onClick={() => {
-                handleDeleteTrack(track.duration_ms, track.entry_id || "");
-                setIsMenuOpen(false);
-              }}
             >
-              <DeleteTrackIcon className="w-5 h-5 mr-2" />
-              Удалить из этого плейлиста
+              <PlusIcon className="w-4 h-4 mr-2" />
+              Добавить в плейлист
             </button>
+            {isOwner && (
+              <button
+                className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
+                onClick={() => {
+                  handleDeleteTrack(track.duration_ms, track.entry_id || "");
+                  setIsMenuOpen(false);
+                }}
+              >
+                <DeleteTrackIcon className="w-4 h-4 mr-2" />
+                Удалить из этого плейлиста
+              </button>
+            )}
             <Link
               className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
               to={`/artist/${track.artists[0].id}`}
               onClick={() => setIsMenuOpen(false)}
             >
-              <ToArtistIcon className="w-5 h-5 mr-2" />К исполнителю
+              <ToArtistIcon className="w-4 h-4 mr-2" />К исполнителю
             </Link>
             <Link
               className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
               to={`/album/${track.album.id}`}
               onClick={() => setIsMenuOpen(false)}
             >
-              <ToAlbumIcon className="w-5 h-5 mr-2" />К альбому
+              <ToAlbumIcon className="w-4 h-4 mr-2" />К альбому
             </Link>
           </div>
+        </div>
+      )}
+      {isAddToMediaLibraryModalOpen && (
+        <div
+          ref={addToMediaLibraryRef}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className="absolute right-[342px] -top-[155px] w-[260px] flex flex-col mt-2 bg-zinc-800 rounded-md shadow-lg z-50 p-1"
+        >
+          {playlists
+            .filter((p) => p.user_id === userId)
+            .map((playlist) => (
+              <button
+                key={playlist.id}
+                onClick={() => handleAddTrackToPlaylist(playlist.id, track)}
+                className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
+              >
+                {playlist.name}
+              </button>
+            ))}
         </div>
       )}
     </div>

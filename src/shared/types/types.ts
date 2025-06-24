@@ -44,6 +44,7 @@ export interface Playlist {
     imageUrl?: string;
   };
   public: boolean;
+  user_id?: string;
 }
 
 export interface Album {

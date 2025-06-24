@@ -1,7 +1,7 @@
 export interface SupabasePlaylist {
   id: string;
   name: string;
-  userId: string;
+  user_id: string;
   description: string;
   public: boolean;
   images: {
