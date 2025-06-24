@@ -1,9 +1,11 @@
+import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 import { API_URL } from "@shared/constants/constants";
 import { useDebouncedSearch } from "@shared/lib/hooks/useDebouncedSearch";
 import { SearchResults, Track, Album } from "@shared/types/types";
 import axios from "axios";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export const useAddTrackSearch = ({
   setTracks,
@@ -12,6 +14,7 @@ export const useAddTrackSearch = ({
   setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
   handleUpdateDuration: (trackDuration: number, isAdd: boolean) => void;
 }) => {
+  const { playlists } = useMediaLibraryStore();
   const [value, setValue] = useState("");
   const [results, setResults] = useState({} as SearchResults);
   const [showAll, setShowAll] = useState("");
@@ -38,6 +41,8 @@ export const useAddTrackSearch = ({
       mp3_url: "",
     };
 
+    const playlist = playlists.find((playlist) => playlist.id === playlistId);
+
     try {
       const response = await axios.post(`${API_URL}/add-track-to-playlist`, {
         track: trackToAdd,
@@ -53,6 +58,19 @@ export const useAddTrackSearch = ({
         },
       ]);
       handleUpdateDuration(track.duration_ms, true);
+      toast(
+        <div className="flex items-center">
+          <img
+            src={track.album?.images[0]?.url}
+            alt="обложка"
+            className="w-6 h-6 mr-2 rounded-md"
+          />
+          <span className="font-bold">Добавлено сюда: «{playlist?.name}»</span>
+        </div>,
+        {
+          style: { width: "360px" },
+        }
+      );
     } catch (error) {
       console.error("Error adding track to playlist:", error);
     }

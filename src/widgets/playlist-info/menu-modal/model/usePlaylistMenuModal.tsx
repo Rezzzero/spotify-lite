@@ -1,6 +1,7 @@
 import { PlaylistData } from "@widgets/playlist-info/types/types";
 import { useParams } from "react-router-dom";
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
+import { toast } from "react-toastify";
 
 export const usePlaylistMenuModal = ({
   isPublic,
@@ -26,6 +27,12 @@ export const usePlaylistMenuModal = ({
           imageUrl: response.images[0].url,
         });
       }
+      const message = !isPublic
+        ? "Теперь это открытый плейлист"
+        : "Теперь это закрытый плейлист";
+      toast(<p className="font-semibold">{message}</p>, {
+        style: { width: "280px" },
+      });
     } catch (error) {
       console.error("Error changing public status:", error);
     }

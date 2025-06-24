@@ -8,6 +8,7 @@ import { PlaylistData } from "../types/types";
 import { Track } from "@shared/types/types";
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 import { useUserStore } from "@app/store/user/useUser";
+import { toast } from "react-toastify";
 
 export const usePlaylistInfo = () => {
   const { user } = useUserStore();
@@ -137,7 +138,9 @@ export const usePlaylistInfo = () => {
     if (!user) return;
     try {
       await removePlaylistFromUser(id);
-      navigate(Route.HOME);
+      toast(<p className="font-semibold">Удалено из медиатеки</p>, {
+        style: { width: "210px" },
+      });
     } catch (error) {
       console.error("Error deleting playlist:", error);
     }
@@ -147,6 +150,9 @@ export const usePlaylistInfo = () => {
     if (!user) return;
     try {
       await addPlaylistToUser(id);
+      toast(<p className="font-semibold">Добавлено в медиатеку</p>, {
+        style: { width: "220px" },
+      });
     } catch (error) {
       console.error("Error adding playlist to media library:", error);
     }
