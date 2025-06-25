@@ -13,6 +13,7 @@ interface AlbumDataType {
 
 export const useAlbumInfo = () => {
   const [albumData, setAlbumData] = useState<AlbumDataType | null>(null);
+  const [loading, setLoading] = useState(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const { imageColors } = useGetColors(imageUrl);
   const { id } = useParams();
@@ -26,6 +27,7 @@ export const useAlbumInfo = () => {
         if (data.album.images[1].url) {
           setImageUrl(data.album.images[1].url);
         }
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching album info:", error);
       }
@@ -34,5 +36,5 @@ export const useAlbumInfo = () => {
     fetch();
   }, [id]);
 
-  return { albumData, imageColors };
+  return { albumData, imageColors, loading };
 };

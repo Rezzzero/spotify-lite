@@ -2,7 +2,7 @@ import { Route } from "@shared/constants/constants";
 import { Link } from "react-router-dom";
 import spotifyLogo from "@shared/assets/spotify-green-logo.svg";
 
-export const NotFoundPage = () => {
+const NotFoundPage = () => {
   return (
     <div className="flex flex-col justify-center items-center gap-4 h-screen">
       <img src={spotifyLogo} alt="spotify logo" className="w-15 h-15 mb-5" />
@@ -17,3 +17,5 @@ export const NotFoundPage = () => {
     </div>
   );
 };
+
+export default NotFoundPage;

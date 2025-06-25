@@ -11,6 +11,7 @@ import ShowPasswordIcon from "@shared/assets/auth/password-show-icon.svg?react";
 import HidePasswordIcon from "@shared/assets/auth/password-hide-icon.svg?react";
 import { OTPInput } from "@shared/ui/otp-input/OTPInput";
 import { CustomInput } from "@shared/ui/custom-input/CustomInput";
+import { CircularProgress } from "@mui/material";
 
 export const LoginForm = () => {
   const {
@@ -135,7 +136,11 @@ export const LoginForm = () => {
                   onClick={signInWithPassword}
                   className="text-black font-bold rounded-full bg-green-400 hover:bg-[#74eda0] hover:scale-105 py-3 px-10 cursor-pointer mb-5 mt-3"
                 >
-                  {loading ? "Загрузка..." : "Войти"}
+                  {loading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : (
+                    "Войти"
+                  )}
                 </button>
                 <button
                   type="button"
@@ -151,7 +156,11 @@ export const LoginForm = () => {
                 onClick={sendOtp}
                 className="text-black font-bold rounded-full bg-green-400 hover:bg-[#74eda0] hover:scale-105 py-3 px-10 cursor-pointer mt-3"
               >
-                {loading ? "Загрузка..." : "Продолжить"}
+                {loading ? (
+                  <CircularProgress color="inherit" size={20} />
+                ) : (
+                  "Продолжить"
+                )}
               </button>
             )}
           </form>

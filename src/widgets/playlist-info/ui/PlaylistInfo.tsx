@@ -21,6 +21,7 @@ import {
   PLAYLIST_PLACEHOLDER_URL,
   USER_PLACEHOLDER_URL,
 } from "@shared/constants/urls";
+import { Loader } from "@shared/ui/loader/Loader";
 
 export const PlaylistInfo = () => {
   const {
@@ -61,7 +62,12 @@ export const PlaylistInfo = () => {
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
     : "linear-gradient(to bottom, #333, #222)";
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-full">
+        <Loader />
+      </div>
+    );
 
   return (
     <div className="flex flex-col">

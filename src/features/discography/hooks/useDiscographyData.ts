@@ -6,9 +6,11 @@ import { API_URL } from "@shared/constants/constants";
 export const useDiscographyData = ({
   filterFromUrl,
   id,
+  setLoading,
 }: {
   filterFromUrl: string | undefined;
   id: string | undefined;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [discography, setDiscography] = useState<Album[]>([]);
   const [filteredDiscography, setFilteredDiscography] = useState<Album[]>([]);
@@ -34,13 +36,14 @@ export const useDiscographyData = ({
             data.filter((album: Album) => album.album_type === filterFromUrl)
           );
         }
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching discography:", error);
       }
     };
 
     fetch();
-  }, [id, filterFromUrl]);
+  }, [id, filterFromUrl, setLoading]);
 
   const handleChangeFilter = (filter: string) => {
     setSelectedFilterByType(filter);

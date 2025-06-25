@@ -13,13 +13,14 @@ export const useDiscography = ({
   scrollContainerRef: React.RefObject<HTMLDivElement | null>;
 }) => {
   const { id, filter } = useParams();
+  const [loading, setLoading] = useState(false);
   const {
     filteredDiscography,
     selectedFilterByType,
     sorting,
     handleChangeFilter,
     sortDiscography,
-  } = useDiscographyData({ filterFromUrl: filter, id });
+  } = useDiscographyData({ filterFromUrl: filter, id, setLoading });
   const filterDropdown = useDropdown(setIsFilterDropDownOpen);
   const sortDropdown = useDropdown(setIsSortDropDownOpen);
   const [discographyFormat, setDiscographyFormat] = useState("list");
@@ -68,6 +69,7 @@ export const useDiscography = ({
     setDiscographyFormat,
     albumRefs,
     activeAlbum,
+    loading,
 
     filterDropDownRef: filterDropdown.dropDownRef,
     filterButtonRef: filterDropdown.buttonRef,

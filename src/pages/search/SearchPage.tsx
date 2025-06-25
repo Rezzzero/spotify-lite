@@ -4,7 +4,7 @@ import { Footer } from "@widgets/footer/ui/Footer";
 import { CategoryList } from "@widgets/category-list/ui/CategoryList";
 import { SearchCategoryResults } from "@widgets/search-category-results/ui/SearchCategoryResults";
 
-export const SearchPage = () => {
+const SearchPage = () => {
   const { value, category } = useParams();
 
   if (!value) {
@@ -28,3 +28,5 @@ export const SearchPage = () => {
     </div>
   );
 };
+
+export default SearchPage;

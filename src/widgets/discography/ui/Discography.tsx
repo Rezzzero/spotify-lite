@@ -11,6 +11,7 @@ import { CardList } from "@shared/ui/card-list/CardList";
 import PlayIcon from "@shared/assets/play-icon.svg?react";
 import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
 import { SelectSortFilter } from "@shared/ui/select-sort-filter/SelectSortFilter";
+import { Loader } from "@shared/ui/loader/Loader";
 
 export const Discography = ({
   setIsFilterDropDownOpen,
@@ -41,13 +42,19 @@ export const Discography = ({
     showSortDropDown,
     handleShowSortDropDown,
     handleHideSortDropDown,
+    loading,
   } = useDiscography({
     setIsFilterDropDownOpen,
     setIsSortDropDownOpen,
     scrollContainerRef,
   });
 
-  if (discography.length === 0) return <div>Загрузка...</div>;
+  if (loading || discography.length === 0)
+    return (
+      <div className="flex justify-center items-center h-full">
+        <Loader />
+      </div>
+    );
   return (
     <>
       <div className="sticky top-0 left-0 w-full flex flex-col px-5 py-3 bg-[#141414] z-10 text-white">
@@ -114,7 +121,7 @@ export const Discography = ({
             >
               <div className="flex gap-5 px-7">
                 <img
-                  src={album.images[0].url}
+                  src={album.images[1].url}
                   alt={`${album.name} image`}
                   className="w-32 h-32 rounded-md"
                 />
@@ -166,7 +173,9 @@ export const Discography = ({
       )}
 
       {discographyFormat === "grid" && (
-        <CardList items={discography} itemType="album" grid />
+        <>
+          <CardList items={discography} itemType="album" grid />
+        </>
       )}
 
       {showFilterDropDown && (

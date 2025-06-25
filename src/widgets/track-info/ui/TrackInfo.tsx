@@ -4,11 +4,19 @@ import { useTrackInfo } from "../model/useTrackInfo";
 import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import { CardList } from "@shared/ui/card-list/CardList";
 import { truncateText } from "@shared/lib/format/truncateText";
+import { Loader } from "@shared/ui/loader/Loader";
 
 export const TrackInfo = () => {
-  const { trackData, albums, singles, imageColors } = useTrackInfo();
-  if (!trackData || !imageColors) return <div>Загрузка...</div>;
-  const headerGradient = `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`;
+  const { trackData, albums, singles, imageColors, loading } = useTrackInfo();
+  if (loading || !trackData)
+    return (
+      <div className="flex justify-center items-center h-full">
+        <Loader />
+      </div>
+    );
+  const headerGradient = imageColors
+    ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
+    : "linear-gradient(to bottom, #333, #222)";
   const duration = formatMsToMinutesAndSeconds(trackData.track.duration_ms);
   const releaseYear = trackData.track.album.release_date.split("-")[0];
 

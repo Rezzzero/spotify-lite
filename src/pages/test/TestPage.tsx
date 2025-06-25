@@ -1,9 +1,11 @@
 import { SoundCloudSearch } from "@widgets/sound-cloud-test/SoundCloud";
 
-export const TestPage = () => {
+const TestPage = () => {
   return (
-    <div>
+    <div className="flex flex-col gap-10 w-full">
       <SoundCloudSearch />
     </div>
   );
 };
+
+export default TestPage;

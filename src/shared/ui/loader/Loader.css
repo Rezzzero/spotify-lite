@@ -1,0 +1,30 @@
+.dots-loader {
+  display: flex;
+  justify-content: center;
+  margin: 40px auto;
+}
+
+.dots-loader > div {
+  width: 8px;
+  height: 8px;
+  margin: 3px 6px;
+  border-radius: 50%;
+  background-color: #a3a1a1;
+  opacity: 1;
+  animation: dots-scale-loader 0.3s infinite alternate;
+}
+
+@keyframes dots-scale-loader {
+  to {
+    transform: scale(1.2);
+    opacity: 0.3;
+  }
+}
+
+.dots-loader > div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dots-loader > div:nth-child(3) {
+  animation-delay: 0.4s;
+}

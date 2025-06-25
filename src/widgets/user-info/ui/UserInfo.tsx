@@ -6,6 +6,7 @@ import EditIcon from "@shared/assets/playlist/edit-icon.svg?react";
 import CrossIcon from "@shared/assets/cross-icon.svg?react";
 import CopyIcon from "@shared/assets/copy-icon.svg?react";
 import SubscibeIcon from "@shared/assets/subscribe-icon.svg?react";
+import { Loader } from "@shared/ui/loader/Loader";
 
 export const UserInfo = () => {
   const {
@@ -32,7 +33,12 @@ export const UserInfo = () => {
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
     : "linear-gradient(to bottom, #333, #222)";
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-full">
+        <Loader />
+      </div>
+    );
 
   return (
     <>

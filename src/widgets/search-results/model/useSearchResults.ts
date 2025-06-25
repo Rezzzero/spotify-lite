@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchStore } from "../../../app/store/search/useSearchStore";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -7,6 +7,7 @@ import { API_URL } from "@shared/constants/constants";
 export const useSearchResults = () => {
   const { value: queryFromParams } = useParams();
   const { searchResults, setSearchResults } = useSearchStore();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const isEmpty = !searchResults || Object.keys(searchResults).length === 0;
@@ -18,6 +19,7 @@ export const useSearchResults = () => {
             `${API_URL}/api/search?q=${queryFromParams}`
           );
           setSearchResults(response.data);
+          setLoading(false);
         } catch (error) {
           console.error("Error fetching search results:", error);
         }
@@ -26,5 +28,5 @@ export const useSearchResults = () => {
     }
   }, [searchResults, setSearchResults, queryFromParams]);
 
-  return { searchResults };
+  return { searchResults, loading };
 };

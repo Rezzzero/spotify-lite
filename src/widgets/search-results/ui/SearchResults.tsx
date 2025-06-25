@@ -2,13 +2,18 @@ import { Link } from "react-router-dom";
 import { useSearchResults } from "../model/useSearchResults";
 import { CardList } from "@shared/ui/card-list/CardList";
 import { TrackCard } from "@shared/ui/track-card/TrackCard";
+import { Loader } from "@shared/ui/loader/Loader";
 
 export const SearchResults = () => {
-  const { searchResults } = useSearchResults();
+  const { searchResults, loading } = useSearchResults();
   const bestResult = searchResults?.tracks?.items?.[0];
 
-  if (!bestResult) {
-    return <div>Загрузка...</div>;
+  if (loading || !bestResult) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <Loader />
+      </div>
+    );
   }
 
   return (

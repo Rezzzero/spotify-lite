@@ -175,7 +175,9 @@ export const PlaylistTrackCard = ({
           ref={addToMediaLibraryRef}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className="absolute right-[342px] -top-[155px] w-[260px] flex flex-col mt-2 bg-zinc-800 rounded-md shadow-lg z-50 p-1"
+          className={`absolute right-[342px] ${
+            isOwner ? "-top-[155px]" : "-top-[120px]"
+          } w-[260px] flex flex-col mt-2 bg-zinc-800 rounded-md shadow-lg z-50 p-1`}
         >
           {playlists
             .filter((p) => p.user_id === userId)

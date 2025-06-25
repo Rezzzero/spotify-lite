@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Discography } from "@widgets/discography/ui/Discography";
 import { Footer } from "@widgets/footer/ui/Footer";
 
-export const DiscographyPage = () => {
+const DiscographyPage = () => {
   const [isFilterDropDownOpen, setIsFilterDropDownOpen] = useState(false);
   const [isSortDropDownOpen, setIsSortDropDownOpen] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -25,3 +25,5 @@ export const DiscographyPage = () => {
     </div>
   );
 };
+
+export default DiscographyPage;

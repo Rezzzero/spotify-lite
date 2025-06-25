@@ -3,6 +3,7 @@ import { CardList } from "@shared/ui/card-list/CardList";
 import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import { useArtistInfo } from "../model/useArtistInfo";
 import { artistMusicFilterList } from "@shared/constants/constants";
+import { Loader } from "@shared/ui/loader/Loader";
 
 export const ArtistInfo = () => {
   const {
@@ -11,9 +12,17 @@ export const ArtistInfo = () => {
     handleChangeFilter,
     selectedFilter,
     filtredAlbumsAndSingles,
+    loading,
   } = useArtistInfo();
-  if (!artistInfo || !imageColors) return <div>Загрузка...</div>;
-  const headerGradient = `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`;
+  if (loading || !artistInfo)
+    return (
+      <div className="flex justify-center items-center h-full">
+        <Loader />
+      </div>
+    );
+  const headerGradient = imageColors
+    ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
+    : "linear-gradient(to bottom, #333, #222)";
 
   return (
     <div className="flex flex-col gap-15">

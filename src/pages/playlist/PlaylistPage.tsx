@@ -1,7 +1,7 @@
 import { Footer } from "@widgets/footer/ui/Footer";
 import { PlaylistInfo } from "@widgets/playlist-info/ui/PlaylistInfo";
 
-export const PlaylistPage = () => {
+const PlaylistPage = () => {
   return (
     <div className="flex flex-col gap-20 bg-[#141414] w-full h-[85vh] overflow-y-auto [&::-webkit-scrollbar]:hidden rounded-xl relative">
       <PlaylistInfo />
@@ -11,3 +11,5 @@ export const PlaylistPage = () => {
     </div>
   );
 };
+
+export default PlaylistPage;

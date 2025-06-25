@@ -17,6 +17,7 @@ interface ArtistInfoType {
 export const useArtistInfo = () => {
   const [artistInfo, setArtistInfo] = useState<ArtistInfoType | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const { imageColors } = useGetColors(imageUrl);
   const { id } = useParams();
   const [selectedFilter, setSelectedFilter] = useState(
@@ -36,6 +37,7 @@ export const useArtistInfo = () => {
         if (data.artist.images[1].url) {
           setImageUrl(data.artist.images[1].url);
         }
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching artist info:", error);
       }
@@ -63,5 +65,6 @@ export const useArtistInfo = () => {
     handleChangeFilter,
     selectedFilter,
     filtredAlbumsAndSingles,
+    loading,
   };
 };

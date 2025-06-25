@@ -19,6 +19,7 @@ export const useTrackInfo = () => {
   const [singles, setSingles] = useState<Album[]>([]);
   const { imageColors } = useGetColors(imageUrl);
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetch = async () => {
@@ -35,6 +36,7 @@ export const useTrackInfo = () => {
         if (data.track.album.images[1].url) {
           setImageUrl(data.track.album.images[1].url);
         }
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching track info:", error);
       }
@@ -42,5 +44,5 @@ export const useTrackInfo = () => {
     fetch();
   }, [id]);
 
-  return { trackData, albums, singles, imageColors };
+  return { trackData, albums, singles, imageColors, loading };
 };

@@ -1,19 +1,25 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Route } from "@shared/constants/constants";
 import App from "../App";
-import { HomePage } from "@pages/home/HomePage";
-import { SearchPage } from "@pages/search/SearchPage";
-import { SectionPage } from "@pages/section/SectionPage";
-import { ArtistPage } from "@pages/artist/ArtistPage";
-import { TestPage } from "@pages/test/TestPage";
-import { AlbumPage } from "@pages/album/AlbumPage";
-import { TrackPage } from "@pages/track/TrackPage";
-import { DiscographyPage } from "@pages/discography/DiscographyPage";
-import { LoginPage } from "@pages/login/LoginPage";
-import { RegistationPage } from "@pages/registration/RegistationPage";
-import { PlaylistPage } from "@pages/playlist/PlaylistPage";
-import { NotFoundPage } from "@pages/not-found/NotFoundPage";
-import UserPage from "@pages/user/UserPage";
+import { lazy } from "react";
+
+const HomePage = lazy(() => import("@pages/home/HomePage"));
+const SearchPage = lazy(() => import("@pages/search/SearchPage"));
+const SectionPage = lazy(() => import("@pages/section/SectionPage"));
+const ArtistPage = lazy(() => import("@pages/artist/ArtistPage"));
+const TestPage = lazy(() => import("@pages/test/TestPage"));
+const AlbumPage = lazy(() => import("@pages/album/AlbumPage"));
+const TrackPage = lazy(() => import("@pages/track/TrackPage"));
+const DiscographyPage = lazy(
+  () => import("@pages/discography/DiscographyPage")
+);
+const LoginPage = lazy(() => import("@pages/login/LoginPage"));
+const RegistationPage = lazy(
+  () => import("@pages/registration/RegistationPage")
+);
+const PlaylistPage = lazy(() => import("@pages/playlist/PlaylistPage"));
+const NotFoundPage = lazy(() => import("@pages/not-found/NotFoundPage"));
+const UserPage = lazy(() => import("@pages/user/UserPage"));
 
 export const router = createBrowserRouter([
   {

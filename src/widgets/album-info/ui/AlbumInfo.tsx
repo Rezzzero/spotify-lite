@@ -6,11 +6,19 @@ import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import { formatReleaseDate } from "@shared/lib/format/releaseDate";
 import { CardList } from "@shared/ui/card-list/CardList";
 import { truncateText } from "@shared/lib/format/truncateText";
+import { Loader } from "@shared/ui/loader/Loader";
 
 export const AlbumInfo = () => {
-  const { albumData, imageColors } = useAlbumInfo();
-  if (!albumData || !imageColors) return <div>Загрузка...</div>;
-  const headerGradient = `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`;
+  const { albumData, imageColors, loading } = useAlbumInfo();
+  if (loading || !albumData)
+    return (
+      <div className="flex justify-center items-center h-full">
+        <Loader />
+      </div>
+    );
+  const headerGradient = imageColors
+    ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
+    : "linear-gradient(to bottom, #333, #222)";
 
   const sumOfDuration = albumData.album.tracks.items.reduce(
     (acc, track) => acc + track.duration_ms,
