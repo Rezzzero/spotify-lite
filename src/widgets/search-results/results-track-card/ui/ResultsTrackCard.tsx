@@ -1,31 +1,26 @@
-import { Link } from "react-router-dom";
-import { Playlist, Track } from "@shared/types/types";
+import { Track } from "@shared/types/types";
+import { SupabasePlaylist } from "@shared/types/playlist";
+import { Playlist } from "@shared/types/types";
+import { useResultsTrackCard } from "../model/useResultsTrackCard";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
-import MenuIcon from "@shared/assets/menu-icon.svg?react";
+import { TrackCard } from "@shared/ui/track-card/TrackCard";
+import { Link } from "react-router-dom";
 import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
-import { usePlaylistTrackCard } from "../model/usePlaylistTrackCard";
+import MenuIcon from "@shared/assets/menu-icon.svg?react";
+import PlusIcon from "@shared/assets/plus-icon.svg?react";
 import DeleteTrackIcon from "@shared/assets/trash-fill-icon.svg?react";
 import ToArtistIcon from "@shared/assets/artist-to-icon.svg?react";
 import ToAlbumIcon from "@shared/assets/album-to-icon.svg?react";
-import PlusIcon from "@shared/assets/plus-icon.svg?react";
-import { SupabasePlaylist } from "@shared/types/playlist";
-import { TrackCard } from "@shared/ui/track-card/TrackCard";
 
-export const PlaylistTrackCard = ({
+export const ResultsTrackCard = ({
   track,
   index,
-  libraryFormat,
-  setTracks,
-  handleUpdateDuration,
   isOwner,
   playlists,
   userId,
 }: {
   track: Track;
   index: number;
-  libraryFormat: string;
-  setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
-  handleUpdateDuration: (trackDuration: number, isAdd: boolean) => void;
   isOwner: boolean;
   playlists: Playlist[] | SupabasePlaylist[];
   userId: string | undefined;
@@ -35,38 +30,33 @@ export const PlaylistTrackCard = ({
     setIsMenuOpen,
     menuRef,
     buttonRef,
-    handleDeleteTrack,
     isAddToMediaLibraryModalOpen,
     handleMouseEnter,
     handleMouseLeave,
-    addToMediaLibraryRef,
     handleAddTrackToPlaylist,
-  } = usePlaylistTrackCard({ setTracks, handleUpdateDuration });
-
+    addToMediaLibraryRef,
+  } = useResultsTrackCard();
   return (
     <>
-      <div className="relative flex items-center group hover:bg-[#333336] pr-4 pl-7">
+      <div className="relative flex items-center group hover:bg-[#333336] pr-4 rounded-md">
         <div className="absolute left-5 flex items-center gap-2">
-          <p className="text-gray-400 text-lg group-hover:hidden font-semibold">
-            {index + 1}
-          </p>
+          <div className="w-10 h-10 bg-black/50 rounded-md hidden group-hover:block" />
           <CustomTooltip
             title={`Включить трек «${track.name}» исполнителя ${track.artists
               .map((artist) => artist.name)
               .join(", ")}`}
             placement="top"
           >
-            <SmallPlayIcon className="w-3 h-3 hidden group-hover:block" />
+            <SmallPlayIcon className="w-5 h-5 hidden group-hover:block absolute left-1/2 -translate-x-1/2 z-10" />
           </CustomTooltip>
         </div>
         <TrackCard
           track={track}
           index={index}
-          withAlbumName={true}
           withImage={true}
           withArtists={true}
+          format="search"
           grid={true}
-          format={libraryFormat}
           addedAt={track.added_at}
         />
         <button
@@ -95,7 +85,6 @@ export const PlaylistTrackCard = ({
                 <button
                   className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
                   onClick={() => {
-                    handleDeleteTrack(track.duration_ms, track.entry_id || "");
                     setIsMenuOpen(false);
                   }}
                 >

@@ -3,29 +3,22 @@ import { Playlist, Track } from "@shared/types/types";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
-import { usePlaylistTrackCard } from "../model/usePlaylistTrackCard";
-import DeleteTrackIcon from "@shared/assets/trash-fill-icon.svg?react";
 import ToArtistIcon from "@shared/assets/artist-to-icon.svg?react";
 import ToAlbumIcon from "@shared/assets/album-to-icon.svg?react";
 import PlusIcon from "@shared/assets/plus-icon.svg?react";
 import { SupabasePlaylist } from "@shared/types/playlist";
 import { TrackCard } from "@shared/ui/track-card/TrackCard";
+import { useTrackInfoTrackCard } from "../model/useTrackInfoTrackCard";
 
-export const PlaylistTrackCard = ({
+export const TrackInfoTrackCard = ({
   track,
   index,
-  libraryFormat,
-  setTracks,
-  handleUpdateDuration,
   isOwner,
   playlists,
   userId,
 }: {
   track: Track;
   index: number;
-  libraryFormat: string;
-  setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
-  handleUpdateDuration: (trackDuration: number, isAdd: boolean) => void;
   isOwner: boolean;
   playlists: Playlist[] | SupabasePlaylist[];
   userId: string | undefined;
@@ -35,13 +28,12 @@ export const PlaylistTrackCard = ({
     setIsMenuOpen,
     menuRef,
     buttonRef,
-    handleDeleteTrack,
     isAddToMediaLibraryModalOpen,
     handleMouseEnter,
     handleMouseLeave,
     addToMediaLibraryRef,
     handleAddTrackToPlaylist,
-  } = usePlaylistTrackCard({ setTracks, handleUpdateDuration });
+  } = useTrackInfoTrackCard();
 
   return (
     <>
@@ -62,11 +54,11 @@ export const PlaylistTrackCard = ({
         <TrackCard
           track={track}
           index={index}
-          withAlbumName={true}
           withImage={true}
           withArtists={true}
+          withAlbumName={true}
+          format="list"
           grid={true}
-          format={libraryFormat}
           addedAt={track.added_at}
         />
         <button
@@ -91,18 +83,6 @@ export const PlaylistTrackCard = ({
                 <PlusIcon className="w-4 h-4 mr-2" />
                 Добавить в плейлист
               </button>
-              {isOwner && (
-                <button
-                  className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
-                  onClick={() => {
-                    handleDeleteTrack(track.duration_ms, track.entry_id || "");
-                    setIsMenuOpen(false);
-                  }}
-                >
-                  <DeleteTrackIcon className="w-4 h-4 mr-2" />
-                  Удалить из этого плейлиста
-                </button>
-              )}
               <Link
                 className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
                 to={`/artist/${track.artists[0].id}`}

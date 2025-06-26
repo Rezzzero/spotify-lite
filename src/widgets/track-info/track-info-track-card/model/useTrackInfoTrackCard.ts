@@ -3,13 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Track } from "@shared/types/types";
 import { API_URL } from "@shared/constants/constants";
 
-export const usePlaylistTrackCard = ({
-  setTracks,
-  handleUpdateDuration,
-}: {
-  setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
-  handleUpdateDuration: (trackDuration: number, isAdd: boolean) => void;
-}) => {
+export const useTrackInfoTrackCard = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAddToMediaLibraryModalOpen, setIsAddToMediaLibraryModalOpen] =
     useState(false);
@@ -33,23 +27,6 @@ export const usePlaylistTrackCard = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const handleDeleteTrack = async (trackDuration: number, entryId: string) => {
-    try {
-      const response = await axios.post(`${API_URL}/delete-track`, {
-        entryId,
-      });
-
-      if (response.status === 200) {
-        setTracks((prevTracks: Track[]) =>
-          prevTracks.filter((track) => track.entry_id !== entryId)
-        );
-        handleUpdateDuration(trackDuration, false);
-      }
-    } catch (error) {
-      console.error("Error deleting track:", error);
-    }
-  };
 
   const handleMouseEnter = () => {
     if (closeTimeout.current) {
@@ -97,7 +74,6 @@ export const usePlaylistTrackCard = ({
     setIsMenuOpen,
     menuRef,
     buttonRef,
-    handleDeleteTrack,
     isAddToMediaLibraryModalOpen,
     setIsAddToMediaLibraryModalOpen,
     addToMediaLibraryRef,

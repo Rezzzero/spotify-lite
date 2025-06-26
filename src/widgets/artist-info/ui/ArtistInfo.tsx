@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { CardList } from "@shared/ui/card-list/CardList";
-import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import { useArtistInfo } from "../model/useArtistInfo";
 import { artistMusicFilterList } from "@shared/constants/constants";
 import { Loader } from "@shared/ui/loader/Loader";
+import { ArtistInfoTrackCard } from "../artist-info-track-card/ui/ArtistInfoTrackCard";
 
 export const ArtistInfo = () => {
   const {
@@ -13,6 +13,8 @@ export const ArtistInfo = () => {
     selectedFilter,
     filtredAlbumsAndSingles,
     loading,
+    playlists,
+    user,
   } = useArtistInfo();
   if (loading || !artistInfo)
     return (
@@ -41,13 +43,15 @@ export const ArtistInfo = () => {
         <h2 className="text-2xl font-bold">Популярные треки</h2>
         <div className="flex flex-col w-[70%]">
           {artistInfo.topTracks.map((track, index) => (
-            <TrackCard
+            <ArtistInfoTrackCard
               key={track.id}
               track={track}
               index={index}
-              grid
-              withNum
-              withImage
+              isOwner={false}
+              format="list"
+              withImage={true}
+              playlists={playlists}
+              userId={user?.user?.id}
             />
           ))}
         </div>

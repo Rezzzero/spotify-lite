@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
 import { useTrackInfo } from "../model/useTrackInfo";
-import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import { CardList } from "@shared/ui/card-list/CardList";
 import { truncateText } from "@shared/lib/format/truncateText";
 import { Loader } from "@shared/ui/loader/Loader";
+import { TrackInfoTrackCard } from "../track-info-track-card/ui/TrackInfoTrackCard";
 
 export const TrackInfo = () => {
-  const { trackData, albums, singles, imageColors, loading } = useTrackInfo();
+  const { trackData, albums, singles, imageColors, loading, playlists, user } =
+    useTrackInfo();
   if (loading || !trackData)
     return (
       <div className="flex justify-center items-center h-full">
@@ -74,13 +75,13 @@ export const TrackInfo = () => {
         <h2 className="text-2xl font-bold">{trackData.artist.name}</h2>
         <div className="flex flex-col">
           {trackData.topTracks.map((track, index) => (
-            <TrackCard
+            <TrackInfoTrackCard
               key={track.id}
               track={track}
               index={index}
-              grid
-              withNum
-              withImage
+              isOwner={false}
+              playlists={playlists}
+              userId={user?.user?.id}
             />
           ))}
         </div>

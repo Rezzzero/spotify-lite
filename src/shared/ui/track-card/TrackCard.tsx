@@ -3,36 +3,50 @@ import { Track } from "../../types/types";
 import { formatMsToMinutesAndSeconds } from "../../lib/format/msToMinutesAndSeconds";
 import { CustomTooltip } from "../tooltip/CustomTooltip";
 import { memo } from "react";
+import { formatAddedAt } from "../../lib/format/formatAddedAt";
 
 export const TrackCard = memo(
   ({
     track,
-    index,
-    withNum,
     withAlbumName,
     withImage,
     withArtists,
     grid,
+    format,
+    addedAt,
   }: {
     track: Track;
     index: number;
-    withNum?: boolean;
     withAlbumName?: boolean;
     withImage?: boolean;
     withArtists?: boolean;
     grid?: boolean;
+    format?: string;
+    addedAt?: string;
   }) => {
+    let gridCols = "";
+    if (grid) {
+      if (format === "compact") {
+        gridCols = "grid-cols-[2fr_1fr_1fr_1fr_auto]";
+      } else if (format === "list") {
+        gridCols = "grid-cols-[2fr_1fr_1fr_auto]";
+      } else if (format === "search" || format === "discography") {
+        gridCols = "grid-cols-[1fr_2fr_auto]";
+      } else {
+        gridCols = "grid-cols-[30px_2fr_1fr_auto]";
+      }
+    }
+
+    const cardClassName = [
+      grid ? "px-5 grid" : "px-2 flex",
+      grid ? gridCols : "",
+      "items-center w-full py-[6px] pr-6 rounded-md group bg-transparent",
+    ].join(" ");
+
     return (
-      <div
-        className={`${
-          grid ? "px-5 grid grid-cols-[30px_2fr_1fr_auto]" : "px-2 flex"
-        } items-center py-[6px] pr-6 rounded-md group hover:bg-[#333336]`}
-      >
-        {withNum && (
-          <p className="text-gray-400 text-lg font-semibold">{index + 1}</p>
-        )}
+      <div className={cardClassName}>
         <div className="flex items-center gap-4">
-          {withImage && (
+          {withImage && format !== "compact" && (
             <img
               src={track.album.images[0].url}
               alt={`${track.name} image`}
@@ -45,7 +59,7 @@ export const TrackCard = memo(
                 {track.name}
               </Link>
             </CustomTooltip>
-            {withArtists && (
+            {withArtists && format !== "compact" && (
               <CustomTooltip
                 title={track.artists.map((artist) => artist.name).join(", ")}
                 placement="top"
@@ -67,6 +81,11 @@ export const TrackCard = memo(
             )}
           </div>
         </div>
+        {format === "compact" && (
+          <p className="text-gray-400">
+            {track.artists.map((artist) => artist.name).join(", ")}
+          </p>
+        )}
         {withAlbumName && (
           <Link
             to={`/album/${track.album.id}`}
@@ -74,6 +93,9 @@ export const TrackCard = memo(
           >
             {track.album.name}
           </Link>
+        )}
+        {addedAt && (
+          <p className="text-gray-400 pl-1">{formatAddedAt(addedAt)}</p>
         )}
         <p className="text-gray-400 ml-auto">
           {formatMsToMinutesAndSeconds(track.duration_ms)}

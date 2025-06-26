@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { Album, Artist, Playlist, Track } from "@shared/types/types";
 import { artistMusicFilterList, API_URL } from "@shared/constants/constants";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
+import { useUserStore } from "@app/store/user/useUser";
+import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 
 interface ArtistInfoType {
   artist: Artist;
@@ -15,6 +17,8 @@ interface ArtistInfoType {
 }
 
 export const useArtistInfo = () => {
+  const { user } = useUserStore();
+  const { playlists } = useMediaLibraryStore();
   const [artistInfo, setArtistInfo] = useState<ArtistInfoType | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -66,5 +70,7 @@ export const useArtistInfo = () => {
     selectedFilter,
     filtredAlbumsAndSingles,
     loading,
+    playlists,
+    user,
   };
 };

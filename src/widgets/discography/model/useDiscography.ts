@@ -2,6 +2,8 @@ import { useParams } from "react-router-dom";
 import { useDiscographyData } from "@features/discography/hooks/useDiscographyData";
 import { useDropdown } from "@shared/lib/hooks/useDropDown";
 import { useState } from "react";
+import { useUserStore } from "@app/store/user/useUser";
+import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 
 export const useDiscography = ({
   setIsFilterDropDownOpen,
@@ -10,6 +12,8 @@ export const useDiscography = ({
   setIsFilterDropDownOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSortDropDownOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  const { user } = useUserStore();
+  const { playlists } = useMediaLibraryStore();
   const { id, filter } = useParams();
   const [loading, setLoading] = useState(false);
   const {
@@ -25,6 +29,9 @@ export const useDiscography = ({
   const [activeAlbum, setActiveAlbum] = useState<string | null>("");
 
   return {
+    playlists,
+    user,
+
     filteredDiscography,
     selectedFilterByType,
     handleChangeFilter,

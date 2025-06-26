@@ -1,31 +1,25 @@
-import { Link } from "react-router-dom";
+import { SupabasePlaylist } from "@shared/types/playlist";
 import { Playlist, Track } from "@shared/types/types";
+import { useCategoryResultsTrackCard } from "../model/useCategoryResultsTrackCard";
+import { Link } from "react-router-dom";
+import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
-import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
-import { usePlaylistTrackCard } from "../model/usePlaylistTrackCard";
+import MenuIcon from "@shared/assets/menu-icon.svg?react";
+import PlusIcon from "@shared/assets/plus-icon.svg?react";
 import DeleteTrackIcon from "@shared/assets/trash-fill-icon.svg?react";
 import ToArtistIcon from "@shared/assets/artist-to-icon.svg?react";
 import ToAlbumIcon from "@shared/assets/album-to-icon.svg?react";
-import PlusIcon from "@shared/assets/plus-icon.svg?react";
-import { SupabasePlaylist } from "@shared/types/playlist";
-import { TrackCard } from "@shared/ui/track-card/TrackCard";
 
-export const PlaylistTrackCard = ({
+export const CategoryResultsTrackCard = ({
   track,
   index,
-  libraryFormat,
-  setTracks,
-  handleUpdateDuration,
   isOwner,
   playlists,
   userId,
 }: {
   track: Track;
   index: number;
-  libraryFormat: string;
-  setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
-  handleUpdateDuration: (trackDuration: number, isAdd: boolean) => void;
   isOwner: boolean;
   playlists: Playlist[] | SupabasePlaylist[];
   userId: string | undefined;
@@ -35,14 +29,12 @@ export const PlaylistTrackCard = ({
     setIsMenuOpen,
     menuRef,
     buttonRef,
-    handleDeleteTrack,
     isAddToMediaLibraryModalOpen,
+    addToMediaLibraryRef,
     handleMouseEnter,
     handleMouseLeave,
-    addToMediaLibraryRef,
     handleAddTrackToPlaylist,
-  } = usePlaylistTrackCard({ setTracks, handleUpdateDuration });
-
+  } = useCategoryResultsTrackCard();
   return (
     <>
       <div className="relative flex items-center group hover:bg-[#333336] pr-4 pl-7">
@@ -66,7 +58,7 @@ export const PlaylistTrackCard = ({
           withImage={true}
           withArtists={true}
           grid={true}
-          format={libraryFormat}
+          format="list"
           addedAt={track.added_at}
         />
         <button
@@ -95,7 +87,6 @@ export const PlaylistTrackCard = ({
                 <button
                   className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
                   onClick={() => {
-                    handleDeleteTrack(track.duration_ms, track.entry_id || "");
                     setIsMenuOpen(false);
                   }}
                 >

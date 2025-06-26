@@ -2,14 +2,14 @@ import { Link } from "react-router-dom";
 import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
 import { useAlbumInfo } from "../model/useAlbumInfo";
 import clockIcon from "@shared/assets/clock-icon.svg";
-import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import { formatReleaseDate } from "@shared/lib/format/releaseDate";
 import { CardList } from "@shared/ui/card-list/CardList";
 import { truncateText } from "@shared/lib/format/truncateText";
 import { Loader } from "@shared/ui/loader/Loader";
+import { AlbumInfoTrackCard } from "../album-info-track-card/ui/AlbumInfoTrackCard";
 
 export const AlbumInfo = () => {
-  const { albumData, imageColors, loading } = useAlbumInfo();
+  const { albumData, imageColors, loading, playlists, user } = useAlbumInfo();
   if (loading || !albumData)
     return (
       <div className="flex justify-center items-center h-full">
@@ -71,7 +71,7 @@ export const AlbumInfo = () => {
         </div>
       </div>
       <div className="px-7">
-        <div className="grid w-full items-center text-sm border-b border-zinc-800 text-gray-400 py-2 pr-6 grid-cols-[50px_2fr_1fr_auto]">
+        <div className="grid w-full items-center text-sm border-b border-zinc-800 text-gray-400 py-2 pr-10 grid-cols-[50px_2fr_1fr_auto]">
           <p className="text-lg pl-5 pr-4">#</p>
           <p>Название</p>
           <img
@@ -82,12 +82,13 @@ export const AlbumInfo = () => {
         </div>
         <div className="flex flex-col">
           {albumData.album.tracks.items.map((track, index) => (
-            <TrackCard
+            <AlbumInfoTrackCard
               key={track.id}
-              track={(track = { ...track, album: albumData.album })}
+              track={track}
               index={index}
-              grid
-              withNum
+              playlists={playlists}
+              userId={user?.user?.id}
+              isOwner={false}
             />
           ))}
         </div>
