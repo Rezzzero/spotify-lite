@@ -7,8 +7,7 @@ import { Loader } from "@shared/ui/loader/Loader";
 export const SearchResults = () => {
   const { searchResults, loading } = useSearchResults();
   const bestResult = searchResults?.tracks?.items?.[0];
-
-  if (loading || !bestResult) {
+  if (!searchResults || loading) {
     return (
       <div className="flex justify-center items-center h-full">
         <Loader />

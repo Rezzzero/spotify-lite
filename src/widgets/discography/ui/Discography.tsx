@@ -1,7 +1,5 @@
-import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import { useDiscography } from "../model/useDiscography";
 import { Link } from "react-router-dom";
-import clockIcon from "@shared/assets/clock-icon.svg";
 import { artistMusicFilterList } from "@shared/constants/constants";
 import checkmark from "@shared/assets/checkmark-icon.svg";
 import DropDownIcon from "@shared/assets/drop-down/drop-down-arrow.svg?react";
@@ -12,6 +10,7 @@ import PlayIcon from "@shared/assets/play-icon.svg?react";
 import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
 import { SelectSortFilter } from "@shared/ui/select-sort-filter/SelectSortFilter";
 import { Loader } from "@shared/ui/loader/Loader";
+import { AlbumList } from "../album-list/ui/AlbumList";
 
 export const Discography = ({
   setIsFilterDropDownOpen,
@@ -30,8 +29,8 @@ export const Discography = ({
     sortDiscography,
     discographyFormat,
     setDiscographyFormat,
-    albumRefs,
     activeAlbum,
+    setActiveAlbum,
     filterDropDownRef,
     filterButtonRef,
     showFilterDropDown,
@@ -46,7 +45,6 @@ export const Discography = ({
   } = useDiscography({
     setIsFilterDropDownOpen,
     setIsSortDropDownOpen,
-    scrollContainerRef,
   });
 
   if (loading || discography.length === 0)
@@ -110,65 +108,11 @@ export const Discography = ({
 
       {discographyFormat === "list" && (
         <div className="flex flex-col gap-10 px-5">
-          {discography.map((album, index) => (
-            <div
-              key={album.id}
-              ref={(el) => {
-                albumRefs.current[index] = el;
-              }}
-              data-name={album.name}
-              className="flex flex-col gap-5"
-            >
-              <div className="flex gap-5 px-7">
-                <img
-                  src={album.images[1].url}
-                  alt={`${album.name} image`}
-                  className="w-32 h-32 rounded-md"
-                />
-                <div>
-                  <Link
-                    to={`/album/${album.id}`}
-                    className="text-3xl font-bold hover:underline"
-                  >
-                    {album.name}
-                  </Link>
-                  <p className="font-bold text-zinc-400 text-sm leading-none pb-1">
-                    {album.album_type === "album" ? "Альбом" : "Сингл"}
-                    <span className="text-xl font-bold relative top-[2px] mx-1">
-                      ·
-                    </span>
-                    {album.release_date.split("-")[0]}
-                    <span className="text-xl font-bold relative top-[2px] mx-1">
-                      ·
-                    </span>
-                    {album.total_tracks}{" "}
-                    {album.total_tracks === 1 ? "трек" : "треков"}
-                  </p>
-                </div>
-              </div>
-              <div className="grid w-full items-center text-sm border-b border-zinc-800 text-gray-400 py-2 pr-6 grid-cols-[50px_2fr_1fr_auto]">
-                <p className="text-lg pl-5 pr-4">#</p>
-                <p>Название</p>
-                <img
-                  src={clockIcon}
-                  alt="clock icon"
-                  className="w-5 h-5 justify-self-end"
-                />
-              </div>
-              <div className="flex flex-col">
-                {album.tracks.items.map((track, index) => (
-                  <TrackCard
-                    key={track.id}
-                    track={track}
-                    index={index}
-                    withNum
-                    withArtists
-                    grid
-                  />
-                ))}
-              </div>
-            </div>
-          ))}
+          <AlbumList
+            albums={discography}
+            scrollContainerRef={scrollContainerRef}
+            setActiveAlbum={setActiveAlbum}
+          />
         </div>
       )}
 

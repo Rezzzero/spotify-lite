@@ -12,16 +12,22 @@ export const useSearchResults = () => {
   useEffect(() => {
     const isEmpty = !searchResults || Object.keys(searchResults).length === 0;
 
-    if (isEmpty && queryFromParams) {
+    if (!isEmpty) {
+      setLoading(false);
+      return;
+    }
+
+    if (queryFromParams) {
       const fetch = async () => {
         try {
           const response = await axios.get(
             `${API_URL}/api/search?q=${queryFromParams}`
           );
           setSearchResults(response.data);
-          setLoading(false);
         } catch (error) {
           console.error("Error fetching search results:", error);
+        } finally {
+          setLoading(false);
         }
       };
       fetch();
