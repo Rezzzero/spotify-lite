@@ -12,6 +12,7 @@ export const useAlbumInfoTrackCard = ({ album }: { album: Album }) => {
     handleMouseEnter,
     handleMouseLeave,
     handleAddTrackToPlaylist,
+    handleListenTrack,
   } = useTrackCard({ album });
 
   return {
@@ -24,5 +25,6 @@ export const useAlbumInfoTrackCard = ({ album }: { album: Album }) => {
     handleMouseEnter,
     handleMouseLeave,
     handleAddTrackToPlaylist,
+    handleListenTrack,
   };
 };

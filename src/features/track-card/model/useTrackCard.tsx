@@ -4,9 +4,11 @@ import { Album, Track } from "@shared/types/types";
 import { API_URL } from "@shared/constants/constants";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { toast } from "react-toastify";
+import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 
 export const useTrackCard = ({ album }: { album?: Album } = {}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { selectTrackToListen } = useMediaLibraryStore();
   const [isAddToMediaLibraryModalOpen, setIsAddToMediaLibraryModalOpen] =
     useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -95,6 +97,10 @@ export const useTrackCard = ({ album }: { album?: Album } = {}) => {
     }
   };
 
+  const handleListenTrack = (track: Track) => {
+    selectTrackToListen(track);
+  };
+
   return {
     isMenuOpen,
     setIsMenuOpen,
@@ -106,5 +112,6 @@ export const useTrackCard = ({ album }: { album?: Album } = {}) => {
     handleMouseEnter,
     handleMouseLeave,
     handleAddTrackToPlaylist,
+    handleListenTrack,
   };
 };

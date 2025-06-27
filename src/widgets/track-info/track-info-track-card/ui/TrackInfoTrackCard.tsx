@@ -33,12 +33,17 @@ export const TrackInfoTrackCard = ({
     handleMouseLeave,
     addToMediaLibraryRef,
     handleAddTrackToPlaylist,
+    handleListenTrack,
   } = useTrackInfoTrackCard();
 
   return (
     <>
       <div className="relative flex items-center group hover:bg-[#333336] pr-4 pl-7">
-        <div className="absolute left-5 flex items-center gap-2">
+        <button
+          onClick={() => handleListenTrack(track)}
+          type="button"
+          className="absolute left-5 flex items-center gap-2"
+        >
           <p className="text-gray-400 text-lg group-hover:hidden font-semibold">
             {index + 1}
           </p>
@@ -50,7 +55,7 @@ export const TrackInfoTrackCard = ({
           >
             <SmallPlayIcon className="w-3 h-3 hidden group-hover:block" />
           </CustomTooltip>
-        </div>
+        </button>
         <TrackCard
           track={track}
           index={index}

@@ -35,11 +35,16 @@ export const ResultsTrackCard = ({
     handleMouseLeave,
     handleAddTrackToPlaylist,
     addToMediaLibraryRef,
+    handleListenTrack,
   } = useResultsTrackCard();
   return (
     <>
       <div className="relative flex items-center group hover:bg-[#333336] pr-4 rounded-md">
-        <div className="absolute left-5 flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => handleListenTrack(track)}
+          className="absolute left-5 flex items-center gap-2"
+        >
           <div className="w-10 h-10 bg-black/50 rounded-md hidden group-hover:block" />
           <CustomTooltip
             title={`Включить трек «${track.name}» исполнителя ${track.artists
@@ -49,7 +54,7 @@ export const ResultsTrackCard = ({
           >
             <SmallPlayIcon className="w-5 h-5 hidden group-hover:block absolute left-1/2 -translate-x-1/2 z-10" />
           </CustomTooltip>
-        </div>
+        </button>
         <TrackCard
           track={track}
           index={index}

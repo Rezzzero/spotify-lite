@@ -20,6 +20,7 @@ export const usePlaylistTrackCard = ({
     handleMouseEnter,
     handleMouseLeave,
     handleAddTrackToPlaylist,
+    handleListenTrack,
   } = useTrackCard();
 
   const handleDeleteTrack = async (trackDuration: number, entryId: string) => {
@@ -50,5 +51,6 @@ export const usePlaylistTrackCard = ({
     handleMouseEnter,
     handleMouseLeave,
     handleAddTrackToPlaylist,
+    handleListenTrack,
   };
 };

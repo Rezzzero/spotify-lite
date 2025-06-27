@@ -11,6 +11,7 @@ export const useCategoryResultsTrackCard = () => {
     handleMouseEnter,
     handleMouseLeave,
     handleAddTrackToPlaylist,
+    handleListenTrack,
   } = useTrackCard();
 
   return {
@@ -23,5 +24,6 @@ export const useCategoryResultsTrackCard = () => {
     handleMouseEnter,
     handleMouseLeave,
     handleAddTrackToPlaylist,
+    handleListenTrack,
   };
 };

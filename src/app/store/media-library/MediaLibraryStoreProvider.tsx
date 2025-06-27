@@ -5,6 +5,8 @@ import { SupabasePlaylist } from "@shared/types/playlist";
 import { API_URL } from "@shared/constants/constants";
 import { useUserStore } from "../user/useUser";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
+import { usePlayerStore } from "../player/usePlayerStore";
+import { Track } from "@shared/types/types";
 
 export const MediaLibraryStoreProvider = ({
   children,
@@ -12,6 +14,7 @@ export const MediaLibraryStoreProvider = ({
   children: ReactNode;
 }) => {
   const { user } = useUserStore();
+  const { handleSelectTrack } = usePlayerStore();
   const [playlists, setPlaylists] = useState<SupabasePlaylist[]>([]);
   const [playlistPreviewImages, setPlaylistPreviewImages] = useState<
     { id: string; previewImage: string }[]
@@ -177,6 +180,10 @@ export const MediaLibraryStoreProvider = ({
     }
   };
 
+  const selectTrackToListen = (track: Track) => {
+    handleSelectTrack(track);
+  };
+
   return (
     <MediaLibraryContext.Provider
       value={{
@@ -191,6 +198,7 @@ export const MediaLibraryStoreProvider = ({
         deletePlaylistImage,
         removePlaylistFromUser,
         addPlaylistToUser,
+        selectTrackToListen,
       }}
     >
       {children}
