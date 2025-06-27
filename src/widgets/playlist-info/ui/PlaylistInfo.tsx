@@ -273,7 +273,7 @@ export const PlaylistInfo = () => {
             <div>
               {tracks.map((track, index) => (
                 <PlaylistTrackCard
-                  key={track.id}
+                  key={`${track.id}-${index}`}
                   track={track}
                   index={index}
                   libraryFormat={playlistFormat}

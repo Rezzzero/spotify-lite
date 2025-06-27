@@ -4,6 +4,7 @@ import { formatMsToMinutesAndSeconds } from "../../lib/format/msToMinutesAndSeco
 import { CustomTooltip } from "../tooltip/CustomTooltip";
 import { memo } from "react";
 import { formatAddedAt } from "../../lib/format/formatAddedAt";
+import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 
 export const TrackCard = memo(
   ({
@@ -48,7 +49,11 @@ export const TrackCard = memo(
         <div className="flex items-center gap-4">
           {withImage && format !== "compact" && (
             <img
-              src={track.album.images[0].url}
+              src={
+                track.album.images[0] !== undefined
+                  ? track.album.images[0].url
+                  : PLAYLIST_PLACEHOLDER_URL
+              }
               alt={`${track.name} image`}
               className="w-10 h-10 rounded-md"
             />
