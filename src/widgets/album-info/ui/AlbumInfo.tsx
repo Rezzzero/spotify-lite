@@ -88,6 +88,7 @@ export const AlbumInfo = () => {
               index={index}
               playlists={playlists}
               userId={user?.user?.id}
+              album={albumData.album}
               isOwner={false}
             />
           ))}

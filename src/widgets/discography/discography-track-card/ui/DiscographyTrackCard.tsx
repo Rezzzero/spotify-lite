@@ -1,4 +1,4 @@
-import { Playlist, Track } from "@shared/types/types";
+import { Album, Playlist, Track } from "@shared/types/types";
 import { useDiscographyTrackCard } from "../model/useDiscographyTrackCard";
 import { SupabasePlaylist } from "@shared/types/playlist";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
@@ -18,14 +18,14 @@ export const DiscographyTrackCard = memo(
     isOwner,
     playlists,
     userId,
-    albumId,
+    album,
   }: {
     track: Track;
     index: number;
     isOwner: boolean;
     playlists: Playlist[] | SupabasePlaylist[];
     userId: string | undefined;
-    albumId: string;
+    album: Album;
   }) => {
     const {
       isMenuOpen,
@@ -37,7 +37,7 @@ export const DiscographyTrackCard = memo(
       handleMouseEnter,
       handleMouseLeave,
       handleAddTrackToPlaylist,
-    } = useDiscographyTrackCard();
+    } = useDiscographyTrackCard({ album });
     return (
       <>
         <div className="relative flex items-center group hover:bg-[#333336] pr-4 pl-7 rounded-md">
@@ -96,7 +96,7 @@ export const DiscographyTrackCard = memo(
                 )}
                 <Link
                   className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
-                  to={`/album/${albumId}`}
+                  to={`/album/${album.id}`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <ToAlbumIcon className="w-4 h-4 mr-2" />К альбому

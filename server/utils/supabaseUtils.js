@@ -392,6 +392,8 @@ export const addTrackToPlaylist = async (trackData, playlistId) => {
     throw new Error("Ошибка при добавлении трека в плейлист");
   }
 
+  const playlistName = await getPlaylistName(playlistId);
+
   return {
     track: {
       ...trackToReturn,
@@ -399,7 +401,23 @@ export const addTrackToPlaylist = async (trackData, playlistId) => {
       entry_id: playlistTrack.id,
     },
     playlistTrack,
+    playlistName,
   };
+};
+
+export const getPlaylistName = async (playlistId) => {
+  const { data, error } = await supabaseAdmin
+    .from("playlists")
+    .select("name")
+    .eq("id", playlistId)
+    .single();
+
+  if (error) {
+    console.error("Ошибка при получении названия плейлиста:", error.message);
+    throw new Error("Ошибка при получении названия плейлиста");
+  }
+
+  return data.name;
 };
 
 export const deleteTrackFromPlaylist = async (entryId) => {

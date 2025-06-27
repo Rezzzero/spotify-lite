@@ -1,6 +1,7 @@
 import { useTrackCard } from "@features/track-card/model/useTrackCard";
+import { Album } from "@shared/types/types";
 
-export const useAlbumInfoTrackCard = () => {
+export const useAlbumInfoTrackCard = ({ album }: { album: Album }) => {
   const {
     isMenuOpen,
     setIsMenuOpen,
@@ -11,7 +12,7 @@ export const useAlbumInfoTrackCard = () => {
     handleMouseEnter,
     handleMouseLeave,
     handleAddTrackToPlaylist,
-  } = useTrackCard();
+  } = useTrackCard({ album });
 
   return {
     isMenuOpen,

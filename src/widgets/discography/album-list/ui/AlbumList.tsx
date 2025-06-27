@@ -41,8 +41,6 @@ export const AlbumList = ({
     setActiveAlbum(activeAlbumName);
   }, [activeAlbumName, setActiveAlbum]);
 
-  console.log(albums);
-
   return (
     <div
       style={{
@@ -112,7 +110,7 @@ export const AlbumList = ({
                     isOwner={false}
                     playlists={playlists}
                     userId={userId}
-                    albumId={album.id}
+                    album={album}
                   />
                 ))}
               </div>

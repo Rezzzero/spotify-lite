@@ -1,4 +1,4 @@
-import { Playlist, Track } from "@shared/types/types";
+import { Album, Playlist, Track } from "@shared/types/types";
 import { useAlbumInfoTrackCard } from "../model/useAlbumInfoTrackCard";
 import { Link } from "react-router-dom";
 import { TrackCard } from "@shared/ui/track-card/TrackCard";
@@ -15,12 +15,14 @@ export const AlbumInfoTrackCard = ({
   isOwner,
   playlists,
   userId,
+  album,
 }: {
   track: Track;
   index: number;
   isOwner: boolean;
   playlists: Playlist[] | SupabasePlaylist[];
   userId: string | undefined;
+  album: Album;
 }) => {
   const {
     isMenuOpen,
@@ -32,7 +34,7 @@ export const AlbumInfoTrackCard = ({
     handleMouseLeave,
     addToMediaLibraryRef,
     handleAddTrackToPlaylist,
-  } = useAlbumInfoTrackCard();
+  } = useAlbumInfoTrackCard({ album });
 
   return (
     <>

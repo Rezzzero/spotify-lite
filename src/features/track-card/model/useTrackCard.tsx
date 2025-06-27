@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { Track } from "@shared/types/types";
+import { Album, Track } from "@shared/types/types";
 import { API_URL } from "@shared/constants/constants";
+import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { toast } from "react-toastify";
 
-export const useTrackCard = () => {
+export const useTrackCard = ({ album }: { album?: Album } = {}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAddToMediaLibraryModalOpen, setIsAddToMediaLibraryModalOpen] =
     useState(false);
@@ -44,15 +45,22 @@ export const useTrackCard = () => {
   };
 
   const handleAddTrackToPlaylist = async (playlistId: string, track: Track) => {
+    const albumData = album
+      ? {
+          id: album.id,
+          name: album.name,
+          images: album.images,
+        }
+      : {
+          id: track.album?.id ?? "",
+          name: track.album?.name ?? "",
+          images: track.album?.images ?? [],
+        };
     const trackToAdd = {
       id: track.id,
       name: track.name,
       duration_ms: track.duration_ms,
-      album: {
-        id: track.album?.id ?? "",
-        name: track.album?.name ?? "",
-        images: track.album?.images ?? [],
-      },
+      album: albumData,
       artists: track.artists ?? [],
       mp3_url: "",
     };
@@ -64,8 +72,24 @@ export const useTrackCard = () => {
       });
 
       setIsAddToMediaLibraryModalOpen(false);
-      toast("Трек добавлен в медиатеку");
-      console.log(response.data);
+      toast(
+        <div className="flex items-center">
+          <img
+            src={
+              response.data.track.album?.images[0]?.url ||
+              PLAYLIST_PLACEHOLDER_URL
+            }
+            alt="обложка"
+            className="w-6 h-6 mr-2 rounded-md"
+          />
+          <span className="font-bold">
+            Добавлено сюда: «{response.data.playlistName}»
+          </span>
+        </div>,
+        {
+          style: { width: "360px" },
+        }
+      );
     } catch (error) {
       console.error("Error adding track to playlist:", error);
     }
