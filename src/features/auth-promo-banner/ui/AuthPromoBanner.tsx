@@ -7,9 +7,7 @@ export const AuthPromoBanner = () => {
   const { user } = useUserStore();
   const navigate = useNavigate();
 
-  if (user) {
-    return null;
-  }
+  if (user) return null;
 
   return (
     <div

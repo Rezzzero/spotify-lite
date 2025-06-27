@@ -6,6 +6,7 @@ import { Outlet } from "react-router-dom";
 import { NavBar } from "@widgets/navbar/ui/NavBar";
 import { MediaLibrary } from "@widgets/media-library/ui/MediaLibrary";
 import { AuthPromoBanner } from "@features/auth-promo-banner/ui/AuthPromoBanner";
+import { Player } from "@widgets/player/ui/Player";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Outlet />
       </div>
       <AuthPromoBanner />
+      <Player />
       <ToastContainer
         position="bottom-center"
         autoClose={5000}
