@@ -1,14 +1,24 @@
 import { ReactNode, useState } from "react";
 import { PlayerContext } from "./PlayerContext";
-import { Track } from "@shared/types/types";
+import { TrackToAdd } from "@shared/types/types";
+import axios from "axios";
+import { API_URL } from "@shared/constants/constants";
 
 export const PlayerStoreProvider = ({ children }: { children: ReactNode }) => {
-  const [currentTrack, setCurrentTrack] = useState<Track | undefined>();
+  const [currentTrack, setCurrentTrack] = useState<TrackToAdd | undefined>();
 
-  const handleSelectTrack = (track: Track) => {
-    setCurrentTrack(track);
-  }
-  console.log(currentTrack)
+  const handleSelectTrack = async (track: TrackToAdd) => {
+    try {
+      const response = await axios.post(`${API_URL}/get-track`, {
+        track,
+      });
+
+      setCurrentTrack(response.data);
+    } catch (error) {
+      console.error("Error getting track:", error);
+    }
+  };
+  console.log(currentTrack);
 
   return (
     <PlayerContext.Provider value={{ currentTrack, handleSelectTrack }}>

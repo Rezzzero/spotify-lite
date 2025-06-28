@@ -3,21 +3,16 @@ import {
   getSoundCloudStream,
 } from "../../../utils/soundCloudUtils.js";
 import {
-  addTrackToPlaylist,
-  isTrackExistsInTrackTable,
   addTrackToTrackTable,
+  isTrackExistsInTrackTable,
 } from "../../../utils/supabaseUtils.js";
 
-export const addTrackHandler = async (req, res) => {
+export const getTrackHandler = async (req, res) => {
   try {
     const track = req.body.track;
-    const playlistId = req.body.playlist_id;
-
     const existsTrack = await isTrackExistsInTrackTable(track.id);
-
     if (existsTrack) {
-      const data = await addTrackToPlaylist(existsTrack, playlistId);
-      return res.json(data);
+      return res.json(existsTrack);
     }
 
     const soundcloudData = await getSoundCloudSearchResults(track.name);
@@ -35,10 +30,7 @@ export const addTrackHandler = async (req, res) => {
       ...track,
       mp3_url: mp3Url,
     };
-
-    const savedTrack = await addTrackToTrackTable(trackWithMp3);
-
-    const data = await addTrackToPlaylist(savedTrack, playlistId);
+    const data = await addTrackToTrackTable(trackWithMp3);
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });

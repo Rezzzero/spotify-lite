@@ -98,7 +98,27 @@ export const useTrackCard = ({ album }: { album?: Album } = {}) => {
   };
 
   const handleListenTrack = (track: Track) => {
-    selectTrackToListen(track);
+    const albumData = album
+      ? {
+          id: album.id,
+          name: album.name,
+          images: album.images,
+        }
+      : {
+          id: track.album?.id ?? "",
+          name: track.album?.name ?? "",
+          images: track.album?.images ?? [],
+        };
+    const trackToAdd = {
+      id: track.id,
+      name: track.name,
+      duration_ms: track.duration_ms,
+      album: albumData,
+      artists: track.artists ?? [],
+      mp3_url: "",
+    };
+
+    selectTrackToListen(trackToAdd);
   };
 
   return {

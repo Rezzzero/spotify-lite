@@ -115,3 +115,12 @@ export interface SearchResults {
     items: Episode[];
   };
 }
+
+export interface TrackToAdd {
+  id: string;
+  name: string;
+  duration_ms: number;
+  album: { id: string; name: string; images: Image[] };
+  artists: Artist[];
+  mp3_url: string;
+}

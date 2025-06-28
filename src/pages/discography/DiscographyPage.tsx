@@ -10,7 +10,7 @@ const DiscographyPage = () => {
   return (
     <div
       ref={scrollContainerRef}
-      className={`flex flex-col gap-20 bg-[#141414] w-[80%] h-[85vh] rounded-xl [&::-webkit-scrollbar]:hidden relative ${
+      className={`flex flex-col gap-20 bg-[#141414] w-[80%] h-[83vh] rounded-xl [&::-webkit-scrollbar]:hidden relative ${
         isFilterDropDownOpen || isSortDropDownOpen
           ? "overflow-hidden"
           : "overflow-y-auto"

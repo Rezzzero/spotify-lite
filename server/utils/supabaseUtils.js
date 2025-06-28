@@ -331,53 +331,12 @@ export const getPlaylistsOfUser = async (userId) => {
 };
 
 export const addTrackToPlaylist = async (trackData, playlistId) => {
-  const { data: existingTrack, error: checkError } = await supabaseAdmin
-    .from("tracks")
-    .select()
-    .eq("id", trackData.id)
-    .maybeSingle();
-
-  if (checkError) {
-    console.error("Ошибка при проверке трека:", checkError.message);
-    throw new Error("Ошибка при проверке трека");
-  }
-
-  let trackId = trackData.id;
-  let trackToReturn;
-
-  if (!existingTrack) {
-    const { data: newTrack, error: trackError } = await supabaseAdmin
-      .from("tracks")
-      .insert([
-        {
-          id: trackData.id,
-          name: trackData.name,
-          duration_ms: trackData.duration_ms,
-          album: trackData.album,
-          artists: trackData.artists,
-          mp3_url: trackData.mp3_url,
-        },
-      ])
-      .select()
-      .single();
-
-    if (trackError) {
-      console.error("Ошибка при добавлении трека:", trackError.message);
-      throw new Error("Ошибка при добавлении трека");
-    }
-
-    trackId = newTrack.id;
-    trackToReturn = newTrack;
-  } else {
-    trackToReturn = existingTrack;
-  }
-
   const { data: playlistTrack, error: playlistTrackError } = await supabaseAdmin
     .from("playlist_tracks")
     .insert([
       {
         playlist_id: playlistId,
-        track_id: trackId,
+        track_id: trackData.id,
         added_at: new Date().toISOString(),
       },
     ])
@@ -396,7 +355,7 @@ export const addTrackToPlaylist = async (trackData, playlistId) => {
 
   return {
     track: {
-      ...trackToReturn,
+      ...trackData,
       added_at: playlistTrack.added_at,
       entry_id: playlistTrack.id,
     },
@@ -544,4 +503,43 @@ export const deleteUserImage = async (userId) => {
     console.error("Ошибка при удалении изображения:", error.message);
     throw new Error("Ошибка при удалении изображения");
   }
+};
+
+export const isTrackExistsInTrackTable = async (trackId) => {
+  const { data: existingTrack, error: checkError } = await supabaseAdmin
+    .from("tracks")
+    .select()
+    .eq("id", trackId)
+    .maybeSingle();
+
+  if (checkError) {
+    console.error("Ошибка при проверке трека:", checkError.message);
+    throw new Error("Ошибка при проверке трека");
+  }
+
+  return existingTrack || null;
+};
+
+export const addTrackToTrackTable = async (trackData) => {
+  const { data: newTrack, error: trackError } = await supabaseAdmin
+    .from("tracks")
+    .insert([
+      {
+        id: trackData.id,
+        name: trackData.name,
+        duration_ms: trackData.duration_ms,
+        album: trackData.album,
+        artists: trackData.artists,
+        mp3_url: trackData.mp3_url,
+      },
+    ])
+    .select()
+    .single();
+
+  if (trackError) {
+    console.error("Ошибка при добавлении трека:", trackError.message);
+    throw new Error("Ошибка при добавлении трека");
+  }
+
+  return newTrack;
 };

@@ -6,7 +6,7 @@ import { API_URL } from "@shared/constants/constants";
 import { useUserStore } from "../user/useUser";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { usePlayerStore } from "../player/usePlayerStore";
-import { Track } from "@shared/types/types";
+import { TrackToAdd } from "@shared/types/types";
 
 export const MediaLibraryStoreProvider = ({
   children,
@@ -180,7 +180,7 @@ export const MediaLibraryStoreProvider = ({
     }
   };
 
-  const selectTrackToListen = (track: Track) => {
+  const selectTrackToListen = (track: TrackToAdd) => {
     handleSelectTrack(track);
   };
 

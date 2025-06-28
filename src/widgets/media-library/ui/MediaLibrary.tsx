@@ -49,7 +49,7 @@ export const MediaLibrary = () => {
     <div
       className={`flex flex-col bg-[#141414] ${
         isMediaLibraryOpen ? "w-[25%] p-2 group/mediaLibrary" : "w-20 p-1"
-      } h-[85vh] rounded-xl pb-8 relative`}
+      } h-[83vh] rounded-xl pb-8 relative`}
     >
       <div
         className={`flex ${
