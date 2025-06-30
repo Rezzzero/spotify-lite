@@ -5,6 +5,7 @@ import { useUserStore } from "@app/store/user/useUser";
 import { useForm } from "react-hook-form";
 import { maskEmail } from "@shared/lib/mask/maskEmail";
 import { API_URL } from "@shared/constants/constants";
+import { ERROR_MESSAGES } from "@shared/constants/errors";
 
 type FormValues = {
   email: string;
@@ -83,6 +84,21 @@ export const useLogin = () => {
   const sendOtp = async () => {
     trigger("email");
 
+    try {
+      const response = await axios.get(`${API_URL}/check-email`, {
+        params: { email: emailValue },
+      });
+
+      if (response.data && response.data.exists === false) {
+        console.log("email doesnt exist in supabase");
+        setError("email", { message: ERROR_MESSAGES.emailDoesntExist });
+        return;
+      }
+    } catch (error) {
+      console.error("Ошибка проверки email", error);
+      return;
+    }
+
     setVerifyStep(true);
     setWithPassword(false);
     setCoveredEmail(maskEmail(emailValue));
@@ -105,7 +121,7 @@ export const useLogin = () => {
           setError("email", { message });
         }
       }
-    }, 30000);
+    }, 15000);
   };
 
   const verifyOtp = async (newOtp: string) => {

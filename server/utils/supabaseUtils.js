@@ -52,35 +52,25 @@ export const signIn = async (userData) => {
 };
 
 export const sendOtp = async (email) => {
-  const exists = await checkEmail(email);
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: {
+      shouldCreateUser: false,
+    },
+  });
 
-  if (!exists) {
+  if (error) {
     const customError = new Error(
-      "Адрес электронной почты или имя пользователя не привязаны к учетной записи Spotify Lite"
+      "Ошибка при отправке кода. Попробуйте позже."
     );
-    customError.status = 400;
+    customError.status = 500;
     throw customError;
-  } else {
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: {
-        shouldCreateUser: false,
-      },
-    });
-
-    if (error) {
-      const customError = new Error(
-        "Ошибка при отправке кода. Попробуйте позже."
-      );
-      customError.status = 500;
-      throw customError;
-    }
-
-    return {
-      success: true,
-      message: "Код отправлен на вашу почту",
-    };
   }
+
+  return {
+    success: true,
+    message: "Код отправлен на вашу почту",
+  };
 };
 
 export const signInWithOtp = async (email, otp) => {

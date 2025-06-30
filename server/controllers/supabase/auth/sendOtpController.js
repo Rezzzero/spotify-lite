@@ -3,7 +3,6 @@ import { sendOtp } from "../../../utils/supabaseUtils.js";
 export const sendOtpHandler = async (req, res) => {
   try {
     const { email } = req.body;
-
     if (!email) {
       return res.status(400).json({
         error:
