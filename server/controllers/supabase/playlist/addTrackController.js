@@ -1,46 +1,19 @@
 import {
-  getSoundCloudSearchResults,
-  getSoundCloudStream,
-} from "../../../utils/soundCloudUtils.js";
-import {
   addTrackToPlaylist,
-  isTrackExistsInTrackTable,
-  addTrackToTrackTable,
+  getOrUpdateTrack,
 } from "../../../utils/supabaseUtils.js";
 
 export const addTrackHandler = async (req, res) => {
   try {
     const track = req.body.track;
     const playlistId = req.body.playlist_id;
-
-    const existsTrack = await isTrackExistsInTrackTable(track.id);
-
-    if (existsTrack) {
-      const data = await addTrackToPlaylist(existsTrack, playlistId);
-      return res.json(data);
-    }
-
-    const soundcloudData = await getSoundCloudSearchResults(track.name);
-    const streamInfo = soundcloudData.collection[0].media.transcodings.find(
-      (transcoding) => transcoding.format.protocol === "progressive"
-    );
-
-    if (!streamInfo) {
-      return res.status(400).json({ error: "Track isn't available" });
-    }
-
-    const mp3Url = await getSoundCloudStream(streamInfo.url);
-
-    const trackWithMp3 = {
-      ...track,
-      mp3_url: mp3Url,
-    };
-
-    const savedTrack = await addTrackToTrackTable(trackWithMp3);
-
+    const savedTrack = await getOrUpdateTrack(track);
     const data = await addTrackToPlaylist(savedTrack, playlistId);
     res.json(data);
   } catch (error) {
+    if (error.message === "Track isn't available") {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: error.message });
   }
 };
