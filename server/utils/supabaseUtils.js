@@ -568,11 +568,13 @@ export const updateTrackPreviewUrl = async (id, url) => {
 
 export const getOrUpdateTrack = async (track) => {
   const existsTrack = await isTrackExistsInTrackTable(track.id);
+
   if (existsTrack && existsTrack !== "TIME_LIMIT_EXCEEDED") {
     return existsTrack;
   }
 
   const query = `${track.artists[0].name} - ${track.name}`;
+
   const soundcloudData = await getSoundCloudSearchResults(query);
   const streamInfo = soundcloudData.collection[0].media.transcodings.find(
     (transcoding) => transcoding.format.protocol === "progressive"

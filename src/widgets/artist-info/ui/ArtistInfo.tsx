@@ -111,7 +111,7 @@ export const ArtistInfo = () => {
           itemType="playlist"
         />
       </div>
-      {artistInfo.otherArtists && (
+      {artistInfo.otherArtists.length > 0 && (
         <div className="flex flex-col gap-2 px-3">
           <h2 className="text-2xl font-bold px-2">Коллаборации с артистами</h2>
           <CardList
@@ -120,7 +120,7 @@ export const ArtistInfo = () => {
           />
         </div>
       )}
-      {artistInfo.moreWithArtist && (
+      {artistInfo.moreWithArtist.length > 0 && (
         <div className="flex flex-col gap-2 px-3">
           <h2 className="text-2xl font-bold px-2">Ещё с этим исполнителем</h2>
           <CardList

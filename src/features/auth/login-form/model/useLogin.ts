@@ -90,7 +90,6 @@ export const useLogin = () => {
       });
 
       if (response.data && response.data.exists === false) {
-        console.log("email doesnt exist in supabase");
         setError("email", { message: ERROR_MESSAGES.emailDoesntExist });
         return;
       }

@@ -52,6 +52,16 @@ export const getAccessToken = async () => {
   return cachedToken;
 };
 
+const getSpotifyRequestConfig = async () => {
+  const accessToken = await getAccessToken();
+  return {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Accept-Language": "ru",
+    },
+  };
+};
+
 export const getPopularTracks = async () => {
   try {
     const cached = await redisClient.get("popular-tracks");
@@ -60,15 +70,11 @@ export const getPopularTracks = async () => {
       return JSON.parse(cached);
     }
 
-    const accessToken = await getAccessToken();
+    const requestConfig = await getSpotifyRequestConfig();
 
     const response = await axios.get(
       "https://api.spotify.com/v1/playlists/7iFPfffm9ntC7LVqVt4O6f",
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
+      requestConfig
     );
     const tracks = response.data.tracks.items;
 
@@ -90,7 +96,7 @@ export const getPopularArtists = async () => {
       return JSON.parse(cached);
     }
 
-    const accessToken = await getAccessToken();
+    const requestConfig = await getSpotifyRequestConfig();
     const tracks = await getPopularTracks();
 
     const artistIds = tracks.map((track) => track.track.artists[0].id);
@@ -99,11 +105,7 @@ export const getPopularArtists = async () => {
 
     const response = await axios.get(
       `https://api.spotify.com/v1/artists?ids=${uniqueArtistIds.join(",")}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
+      requestConfig
     );
 
     const artists = response.data.artists;
@@ -126,15 +128,11 @@ export const getNewRealeses = async () => {
       return JSON.parse(cached);
     }
 
-    const accessToken = await getAccessToken();
+    const requestConfig = await getSpotifyRequestConfig();
 
     const response = await axios.get(
       "https://api.spotify.com/v1/browse/new-releases",
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
+      requestConfig
     );
 
     const releases = response.data.albums.items;
@@ -151,14 +149,10 @@ export const getNewRealeses = async () => {
 
 export const getArtist = async (id) => {
   try {
-    const accessToken = await getAccessToken();
+    const requestConfig = await getSpotifyRequestConfig();
     const response = await axios.get(
       `https://api.spotify.com/v1/artists/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
+      requestConfig
     );
     return response.data;
   } catch (error) {
@@ -171,17 +165,13 @@ export async function getSearchResults(query) {
     if (!query || typeof query !== "string") {
       throw new Error("Query must be a non-empty string");
     }
-    const accessToken = await getAccessToken();
+    const requestConfig = await getSpotifyRequestConfig();
 
     const response = await axios.get(
       `https://api.spotify.com/v1/search?q=${encodeURIComponent(
         query
       )}&type=track,artist,album,playlist,show,episode`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
+      requestConfig
     );
 
     return response.data;
@@ -192,14 +182,10 @@ export async function getSearchResults(query) {
 
 export const getArtistTopTracks = async (id) => {
   try {
-    const accessToken = await getAccessToken();
+    const requestConfig = await getSpotifyRequestConfig();
     const response = await axios.get(
       `https://api.spotify.com/v1/artists/${id}/top-tracks?market=UA`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
+      requestConfig
     );
     return response.data.tracks;
   } catch (error) {
@@ -209,14 +195,10 @@ export const getArtistTopTracks = async (id) => {
 
 export const getArtistAlbumsAndSingles = async (id, include) => {
   try {
-    const accessToken = await getAccessToken();
+    const requestConfig = await getSpotifyRequestConfig();
     const response = await axios.get(
       `https://api.spotify.com/v1/artists/${id}/albums?include_groups=${include}&limit=50`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
+      requestConfig
     );
     return response.data.items;
   } catch (error) {
@@ -226,22 +208,19 @@ export const getArtistAlbumsAndSingles = async (id, include) => {
 
 export const getSeveralArtists = async (ids) => {
   try {
-    const accessToken = await getAccessToken();
+    const requestConfig = await getSpotifyRequestConfig();
     const response = await axios.get(
       `https://api.spotify.com/v1/artists?ids=${ids.join(",")}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
+      requestConfig
     );
     return response.data.artists;
   } catch (error) {
     console.error("Error fetching several artists:", error);
   }
 };
+
 export const getSeveralAlbums = async (ids) => {
-  const accessToken = await getAccessToken();
+  const requestConfig = await getSpotifyRequestConfig();
   const chunkSize = 20;
   const result = [];
 
@@ -251,11 +230,7 @@ export const getSeveralAlbums = async (ids) => {
     try {
       const response = await axios.get(
         `https://api.spotify.com/v1/albums?ids=${chunk.join(",")}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
+        requestConfig
       );
 
       result.push(...response.data.albums);
@@ -272,14 +247,10 @@ export const getSeveralAlbums = async (ids) => {
 
 export const getMoreWithArtist = async (artistId) => {
   try {
-    const accessToken = await getAccessToken();
+    const requestConfig = await getSpotifyRequestConfig();
     const response = await axios.get(
       `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=appears_on`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
+      requestConfig
     );
     return response.data.items;
   } catch (error) {
@@ -289,14 +260,10 @@ export const getMoreWithArtist = async (artistId) => {
 
 export const getPlaylistsWithArtist = async (artist) => {
   try {
-    const accessToken = await getAccessToken();
+    const requestConfig = await getSpotifyRequestConfig();
     const response = await axios.get(
       `https://api.spotify.com/v1/search?q=${artist}&type=playlist`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
+      requestConfig
     );
     return response.data.playlists.items;
   } catch (error) {
@@ -306,14 +273,10 @@ export const getPlaylistsWithArtist = async (artist) => {
 
 export const getAlbum = async (id) => {
   try {
-    const accessToken = await getAccessToken();
+    const requestConfig = await getSpotifyRequestConfig();
     const response = await axios.get(
       `https://api.spotify.com/v1/albums/${id}?market=RU`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
+      requestConfig
     );
     return response.data;
   } catch (error) {
@@ -323,14 +286,10 @@ export const getAlbum = async (id) => {
 
 export const getTrack = async (id) => {
   try {
-    const accessToken = await getAccessToken();
+    const requestConfig = await getSpotifyRequestConfig();
     const response = await axios.get(
       `https://api.spotify.com/v1/tracks/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
+      requestConfig
     );
     return response.data;
   } catch (error) {

@@ -12,6 +12,12 @@ export const usePlayer = () => {
   const [currentTime, setCurrentTime] = useState(0);
 
   useEffect(() => {
+    setAudio(null);
+    setCurrentTime(0);
+    setIsPlaying(false);
+  }, [currentTrack]);
+
+  useEffect(() => {
     if (audio) {
       audio.volume = soundValue / 100;
     }
