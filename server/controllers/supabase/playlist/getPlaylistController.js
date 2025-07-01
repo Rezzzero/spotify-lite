@@ -7,8 +7,9 @@ import {
 export const getPlaylistHandler = async (req, res) => {
   try {
     const playlistId = req.params.playlistId;
+    const userId = req.body.userId;
     const accessToken = req.cookies.access_token;
-    const { playlist, tracks } = await getPlaylist(playlistId);
+    const { playlist, tracks } = await getPlaylist(playlistId, userId);
     const ownerData = await getUserById(playlist.user_id);
 
     let user;
@@ -36,7 +37,9 @@ export const getPlaylistHandler = async (req, res) => {
 
     res.json({ ...playlist, owner, tracks });
   } catch (error) {
-    console.log(error);
+    if (error.message === "NOT_FOUND") {
+      return res.status(404).json({ error: "Страница не найдена" });
+    }
     res.status(500).json({ error: error.message });
   }
 };

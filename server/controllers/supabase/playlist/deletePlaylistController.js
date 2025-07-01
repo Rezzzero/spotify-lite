@@ -8,9 +8,8 @@ import {
 export const deletePlaylistHandler = async (req, res) => {
   try {
     const playlistId = req.params.playlistId;
-    const userId = req.body.userId;
     await deleteAllTracksFromPlaylist(playlistId);
-    await deletePlaylistFromUser(playlistId, userId);
+    await deletePlaylistFromUser(playlistId);
     const data = await deletePlaylist(playlistId);
     await deletePlaylistImage(playlistId);
     res.json(data);

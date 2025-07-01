@@ -36,6 +36,7 @@ import deleteTrackRoutes from "./routes/supabase/playlist/deleteTrack.js";
 import deletePlaylistImageRoutes from "./routes/supabase/playlist/deletePlaylistImage.js";
 import addPlaylistRoutes from "./routes/supabase/playlist/addPlaylist.js";
 import deletePlaylistFromUserRoutes from "./routes/supabase/playlist/deletePlaylistFromUser.js";
+import togglePlaylistInProfileStatusRoutes from "./routes/supabase/playlist/togglePlaylistInProfileStatus.js";
 
 import getUserByIdRoutes from "./routes/supabase/user/getUserById.js";
 import uploadUserImageRoutes from "./routes/supabase/user/uploadUserImage.js";
@@ -91,6 +92,7 @@ app.use("/delete-track", deleteTrackRoutes);
 app.use("/delete-playlist-image", deletePlaylistImageRoutes);
 app.use("/add-playlist", addPlaylistRoutes);
 app.use("/delete-playlist-from-user", deletePlaylistFromUserRoutes);
+app.use("/toggle-playlist-profile-status", togglePlaylistInProfileStatusRoutes);
 
 app.use("/get-user-by-id", getUserByIdRoutes);
 app.use("/upload-user-image", uploadUserImageRoutes);

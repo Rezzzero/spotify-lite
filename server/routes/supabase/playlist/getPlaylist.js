@@ -3,6 +3,6 @@ import { getPlaylistHandler } from "../../../controllers/supabase/playlist/getPl
 
 const router = express.Router();
 
-router.get("/:playlistId", getPlaylistHandler);
+router.post("/:playlistId", getPlaylistHandler);
 
 export default router;

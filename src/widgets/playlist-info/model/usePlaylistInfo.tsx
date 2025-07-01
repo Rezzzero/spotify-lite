@@ -46,10 +46,13 @@ export const usePlaylistInfo = () => {
 
     const fetch = async () => {
       try {
-        const response = await axios.get(`${API_URL}/${endpoint}/${id}`, {
-          withCredentials: true,
-        });
-
+        const response = await axios.post(
+          `${API_URL}/${endpoint}/${id}`,
+          { userId: user?.user.id },
+          {
+            withCredentials: true,
+          }
+        );
         setPlaylistData({
           playlist: response.data,
           playlistName: response.data.name,

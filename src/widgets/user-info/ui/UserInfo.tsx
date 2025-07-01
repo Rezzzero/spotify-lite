@@ -7,6 +7,7 @@ import CrossIcon from "@shared/assets/cross-icon.svg?react";
 import CopyIcon from "@shared/assets/copy-icon.svg?react";
 import SubscibeIcon from "@shared/assets/subscribe-icon.svg?react";
 import { Loader } from "@shared/ui/loader/Loader";
+import { Link } from "react-router-dom";
 
 export const UserInfo = () => {
   const {
@@ -29,6 +30,7 @@ export const UserInfo = () => {
     menuModal,
     setMenuModal,
     menuModalRef,
+    handleCopyLink,
   } = useUserInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
@@ -144,12 +146,7 @@ export const UserInfo = () => {
                 )}
                 <button
                   type="button"
-                  onClick={() => {
-                    navigator.clipboard.writeText(
-                      `${window.location.origin}/user/${userInfo?.id}`
-                    );
-                    setMenuModal(false);
-                  }}
+                  onClick={() => handleCopyLink()}
                   className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
                 >
                   <CopyIcon className="w-4 h-4" />
@@ -159,6 +156,29 @@ export const UserInfo = () => {
             </div>
           )}
         </div>
+        {userInfo?.openedPlaylists && userInfo?.openedPlaylists.length > 0 && (
+          <div className="flex flex-col gap-4 px-5">
+            <h2 className="text-3xl font-bold">Открытые плейлисты</h2>
+            <div className="flex gap-3">
+              {userInfo.openedPlaylists.map((playlist) => (
+                <Link
+                  to={`/playlist/${playlist.id}`}
+                  className="flex flex-col gap-2 hover:bg-zinc-600 p-2 rounded-md"
+                >
+                  <img
+                    src={playlist.images[0].url}
+                    alt="playlist image"
+                    className="w-[175px] h-[175px] rounded-md"
+                  />
+                  <p className="font-bold">{playlist.name}</p>
+                  <p className="text-gray-400">
+                    {playlist.owner?.display_name}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
       {editModal && (
         <>

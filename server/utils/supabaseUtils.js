@@ -177,12 +177,11 @@ export const addPlaylistToUser = async (playlistId, userId) => {
   return playlist;
 };
 
-export const deletePlaylistFromUser = async (playlistId, userId) => {
+export const deletePlaylistFromUser = async (playlistId) => {
   const { error } = await supabaseAdmin
     .from("user_playlists")
     .delete()
-    .eq("playlist_id", playlistId)
-    .eq("user_id", userId);
+    .eq("playlist_id", playlistId);
 
   if (error) {
     console.error(
@@ -193,16 +192,36 @@ export const deletePlaylistFromUser = async (playlistId, userId) => {
   }
 };
 
-export const getPlaylist = async (playlistId) => {
+export const getPlaylist = async (playlistId, userId) => {
   const { data: playlist, error: playlistError } = await supabaseAdmin
     .from("playlists")
     .select("*")
     .eq("id", playlistId)
     .single();
 
-  if (playlistError) {
-    console.error("Ошибка при получении плейлиста:", playlistError.message);
-    throw new Error("Ошибка при получении плейлиста");
+  if (
+    playlistError &&
+    playlistError.message ===
+      "JSON object requested, multiple (or no) rows returned"
+  ) {
+    throw new Error("NOT_FOUND");
+  }
+  if (!playlist) {
+    throw new Error("NOT_FOUND");
+  }
+
+  let show_in_profile = false;
+  if (userId) {
+    const { data: playlistInProfileStatus, error: statusError } =
+      await supabaseAdmin
+        .from("user_playlists")
+        .select("show_in_profile")
+        .eq("playlist_id", playlistId)
+        .eq("user_id", userId)
+        .single();
+    if (!statusError && playlistInProfileStatus) {
+      show_in_profile = playlistInProfileStatus.show_in_profile;
+    }
   }
 
   const { data: tracks, error: tracksError } = await supabaseAdmin
@@ -233,6 +252,7 @@ export const getPlaylist = async (playlistId) => {
     playlist: {
       ...playlist,
       duration,
+      show_in_profile,
     },
     tracks: tracksWithAddedAt,
   };
@@ -594,4 +614,52 @@ export const getOrUpdateTrack = async (track) => {
     };
     return await addTrackToTrackTable(trackWithMp3);
   }
+};
+
+export const togglePlaylistInProfileStatus = async (playlistId, userId, status) => {
+  const { data, error } = await supabaseAdmin
+    .from("user_playlists")
+    .update({ show_in_profile: status })
+    .eq("playlist_id", playlistId)
+    .eq('user_id', userId)
+    .select()
+    .single();
+
+  if (error) {
+    console.log("Ошибка при добавлении плейлиста в профиль:", error.message);
+    throw new Error("Ошибка при добавлении плейлиста в профиль");
+  }
+
+  return data;
+};
+
+export const getOpenUserPlaylists = async (id) => {
+  const { data: userPlaylists, error: userPlaylistsError } = await supabaseAdmin
+    .from("user_playlists")
+    .select("playlist_id")
+    .eq("user_id", id)
+    .eq("show_in_profile", true);
+
+  if (userPlaylistsError) {
+    console.error(
+      "Ошибка при получении user_playlists:",
+      userPlaylistsError.message
+    );
+    throw new Error("Ошибка при получении user_playlists");
+  }
+
+  const playlistIds = userPlaylists.map((item) => item.playlist_id);
+  if (playlistIds.length === 0) return [];
+
+  const { data: playlists, error: playlistsError } = await supabaseAdmin
+    .from("playlists")
+    .select("*")
+    .in("id", playlistIds);
+
+  if (playlistsError) {
+    console.error("Ошибка при получении плейлистов:", playlistsError.message);
+    throw new Error("Ошибка при получении плейлистов");
+  }
+
+  return playlists;
 };

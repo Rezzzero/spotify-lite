@@ -45,6 +45,7 @@ export interface Playlist {
   };
   public: boolean;
   user_id?: string;
+  show_in_profile: boolean;
 }
 
 export interface Album {

@@ -68,7 +68,7 @@ export const PlaylistInfo = () => {
         <Loader />
       </div>
     );
-
+  console.log(USER_PLACEHOLDER_URL);
   return (
     <div className="flex flex-col">
       <div
@@ -134,8 +134,13 @@ export const PlaylistInfo = () => {
           <div className="flex items-center gap-1 mt-auto">
             <img
               src={
-                playlistData?.playlist?.owner?.imageUrl || USER_PLACEHOLDER_URL
+                playlistData?.playlist?.owner?.imageUrl
+                  ? playlistData.playlist.owner.imageUrl
+                  : USER_PLACEHOLDER_URL
               }
+              onError={(e) => {
+                e.currentTarget.src = USER_PLACEHOLDER_URL;
+              }}
               alt="playlist creator image"
               className="w-6 h-6 rounded-full"
             />
@@ -307,11 +312,13 @@ export const PlaylistInfo = () => {
           ))}
         {menuModal && (
           <PlaylistMenuModal
+            playlist={playlistData?.playlist}
             modalRef={menuModalRef}
             closeModal={() => setMenuModal(false)}
             openEditModal={() => setEditModal(true)}
             openDeleteModal={() => setDeletePlaylistModal(true)}
             isPublic={playlistData?.playlist.public}
+            isOwner={isOwner}
             setPlaylist={setPlaylistData}
           />
         )}
