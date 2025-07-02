@@ -1,5 +1,4 @@
 import { Album, Playlist, Track } from "@shared/types/types";
-import { useDiscographyTrackCard } from "../model/useDiscographyTrackCard";
 import { SupabasePlaylist } from "@shared/types/playlist";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import { TrackCard } from "@shared/ui/track-card/TrackCard";
@@ -10,6 +9,8 @@ import PlusIcon from "@shared/assets/plus-icon.svg?react";
 import DeleteTrackIcon from "@shared/assets/trash-fill-icon.svg?react";
 import ToAlbumIcon from "@shared/assets/album-to-icon.svg?react";
 import { memo } from "react";
+import { useTrackCard } from "@features/track-card/model/useTrackCard";
+import { AddToPlaylistModal } from "@shared/ui/add-to-playlist-modal/AddToPlaylistModal";
 
 export const DiscographyTrackCard = memo(
   ({
@@ -28,6 +29,7 @@ export const DiscographyTrackCard = memo(
     album: Album;
   }) => {
     const {
+      isCurrent,
       isMenuOpen,
       setIsMenuOpen,
       menuRef,
@@ -38,7 +40,8 @@ export const DiscographyTrackCard = memo(
       handleMouseLeave,
       handleAddTrackToPlaylist,
       handleListenTrack,
-    } = useDiscographyTrackCard({ album });
+    } = useTrackCard({ album, track });
+
     return (
       <>
         <div className="relative flex items-center group hover:bg-[#333336] pr-4 pl-7 rounded-md">
@@ -47,7 +50,11 @@ export const DiscographyTrackCard = memo(
             onClick={() => handleListenTrack(track)}
             className="absolute left-5 flex items-center gap-2"
           >
-            <p className="text-gray-400 text-lg group-hover:hidden font-semibold">
+            <p
+              className={`${
+                isCurrent ? "text-green-400" : "text-gray-400"
+              } text-lg group-hover:hidden font-semibold`}
+            >
               {index + 1}
             </p>
             <CustomTooltip
@@ -65,6 +72,7 @@ export const DiscographyTrackCard = memo(
             withArtists={true}
             grid={true}
             format="discography"
+            isCurrent={isCurrent}
           />
           <button
             ref={buttonRef}
@@ -110,26 +118,16 @@ export const DiscographyTrackCard = memo(
             </div>
           )}
           {isAddToMediaLibraryModalOpen && (
-            <div
+            <AddToPlaylistModal
               ref={addToMediaLibraryRef}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-              className={`absolute right-[342px] ${
-                isOwner ? "-top-[155px]" : "-top-[120px]"
-              } w-[260px] flex flex-col mt-2 bg-zinc-800 rounded-md shadow-lg z-50 p-1`}
-            >
-              {playlists
-                .filter((p) => p.user_id === userId)
-                .map((playlist) => (
-                  <button
-                    key={playlist.id}
-                    onClick={() => handleAddTrackToPlaylist(playlist.id, track)}
-                    className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
-                  >
-                    {playlist.name}
-                  </button>
-                ))}
-            </div>
+              handleMouseEnter={handleMouseEnter}
+              handleMouseLeave={handleMouseLeave}
+              isOwner={isOwner}
+              playlists={playlists}
+              handleAddTrackToPlaylist={handleAddTrackToPlaylist}
+              track={track}
+              userId={userId}
+            />
           )}
         </div>
       </>

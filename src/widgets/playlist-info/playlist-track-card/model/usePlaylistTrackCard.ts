@@ -4,13 +4,16 @@ import { API_URL } from "@shared/constants/constants";
 import { useTrackCard } from "@features/track-card/model/useTrackCard";
 
 export const usePlaylistTrackCard = ({
+  track,
   setTracks,
   handleUpdateDuration,
 }: {
+  track: Track;
   setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
   handleUpdateDuration: (trackDuration: number, isAdd: boolean) => void;
 }) => {
   const {
+    isCurrent,
     isMenuOpen,
     setIsMenuOpen,
     menuRef,
@@ -21,7 +24,7 @@ export const usePlaylistTrackCard = ({
     handleMouseLeave,
     handleAddTrackToPlaylist,
     handleListenTrack,
-  } = useTrackCard();
+  } = useTrackCard({ track });
 
   const handleDeleteTrack = async (trackDuration: number, entryId: string) => {
     try {
@@ -41,6 +44,7 @@ export const usePlaylistTrackCard = ({
   };
 
   return {
+    isCurrent,
     isMenuOpen,
     setIsMenuOpen,
     menuRef,

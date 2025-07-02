@@ -15,6 +15,7 @@ export const TrackCard = memo(
     grid,
     format,
     addedAt,
+    isCurrent,
   }: {
     track: Track;
     index: number;
@@ -24,6 +25,7 @@ export const TrackCard = memo(
     grid?: boolean;
     format?: string;
     addedAt?: string;
+    isCurrent: boolean;
   }) => {
     let gridCols = "";
     if (grid) {
@@ -60,7 +62,12 @@ export const TrackCard = memo(
           )}
           <div>
             <CustomTooltip title={track.name} placement="top">
-              <Link to={`/track/${track.id}`} className="hover:underline">
+              <Link
+                to={`/track/${track.id}`}
+                className={`hover:underline ${
+                  isCurrent ? "text-green-400" : "text-white"
+                }`}
+              >
                 {track.name}
               </Link>
             </CustomTooltip>

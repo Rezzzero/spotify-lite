@@ -1,13 +1,11 @@
 import { Album, Playlist, Track } from "@shared/types/types";
-import { useAlbumInfoTrackCard } from "../model/useAlbumInfoTrackCard";
-import { Link } from "react-router-dom";
 import { TrackCard } from "@shared/ui/track-card/TrackCard";
-import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
-import ToArtistIcon from "@shared/assets/artist-to-icon.svg?react";
-import PlusIcon from "@shared/assets/plus-icon.svg?react";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
-import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
 import { SupabasePlaylist } from "@shared/types/playlist";
+import { TrackPlayButton } from "@shared/ui/track-play-button/TrackPlayButton";
+import { useTrackCard } from "@features/track-card/model/useTrackCard";
+import { TrackContextMenu } from "@shared/ui/track-context-menu/TrackContextMenu";
+import { AddToPlaylistModal } from "@shared/ui/add-to-playlist-modal/AddToPlaylistModal";
 
 export const AlbumInfoTrackCard = ({
   track,
@@ -25,43 +23,34 @@ export const AlbumInfoTrackCard = ({
   album: Album;
 }) => {
   const {
+    isCurrent,
     isMenuOpen,
     setIsMenuOpen,
     menuRef,
     buttonRef,
     isAddToMediaLibraryModalOpen,
+    addToMediaLibraryRef,
     handleMouseEnter,
     handleMouseLeave,
-    addToMediaLibraryRef,
     handleAddTrackToPlaylist,
     handleListenTrack,
-  } = useAlbumInfoTrackCard({ album });
+  } = useTrackCard({ album, track });
 
   return (
     <>
       <div className="relative flex items-center group hover:bg-[#333336] pr-4 pl-10 rounded-md">
-        <button
-          onClick={() => handleListenTrack(track)}
-          type='button'
-          className="absolute left-5 flex items-center gap-2"
-        >
-          <p className="text-gray-400 text-lg group-hover:hidden font-semibold">
-            {index + 1}
-          </p>
-          <CustomTooltip
-            title={`Включить трек «${track.name}» исполнителя ${track.artists
-              .map((artist) => artist.name)
-              .join(", ")}`}
-            placement="top"
-          >
-            <SmallPlayIcon className="w-3 h-3 hidden group-hover:block" />
-          </CustomTooltip>
-        </button>
+        <TrackPlayButton
+          track={track}
+          index={index}
+          handleListenTrack={handleListenTrack}
+          isCurrent={isCurrent}
+        />
         <TrackCard
           track={track}
           index={index}
           withArtists={true}
           addedAt={track.added_at}
+          isCurrent={isCurrent}
         />
         <button
           ref={buttonRef}
@@ -72,50 +61,27 @@ export const AlbumInfoTrackCard = ({
         </button>
 
         {isMenuOpen && (
-          <div
-            ref={menuRef}
-            className="absolute right-3 bottom-14 mt-2 w-[330px] bg-zinc-800 rounded-md shadow-lg z-50"
-          >
-            <div className="p-1">
-              <button
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-                className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
-              >
-                <PlusIcon className="w-4 h-4 mr-2" />
-                Добавить в плейлист
-              </button>
-              <Link
-                className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
-                to={`/artist/${track.artists[0].id}`}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <ToArtistIcon className="w-4 h-4 mr-2" />К исполнителю
-              </Link>
-            </div>
-          </div>
+          <TrackContextMenu
+            menuRef={menuRef}
+            track={track}
+            handleMouseEnter={handleMouseEnter}
+            handleMouseLeave={handleMouseLeave}
+            isOwner={false}
+            setIsMenuOpen={setIsMenuOpen}
+            withoutAlbumLink={true}
+          />
         )}
         {isAddToMediaLibraryModalOpen && (
-          <div
+          <AddToPlaylistModal
             ref={addToMediaLibraryRef}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            className={`absolute right-[342px] ${
-              isOwner ? "-top-[155px]" : "-top-[120px]"
-            } w-[260px] flex flex-col mt-2 bg-zinc-800 rounded-md shadow-lg z-50 p-1`}
-          >
-            {playlists
-              .filter((p) => p.user_id === userId)
-              .map((playlist) => (
-                <button
-                  key={playlist.id}
-                  onClick={() => handleAddTrackToPlaylist(playlist.id, track)}
-                  className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
-                >
-                  {playlist.name}
-                </button>
-              ))}
-          </div>
+            handleMouseEnter={handleMouseEnter}
+            handleMouseLeave={handleMouseLeave}
+            isOwner={isOwner}
+            playlists={playlists}
+            handleAddTrackToPlaylist={handleAddTrackToPlaylist}
+            track={track}
+            userId={userId}
+          />
         )}
       </div>
     </>

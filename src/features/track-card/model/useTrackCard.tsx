@@ -5,9 +5,14 @@ import { API_URL } from "@shared/constants/constants";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { toast } from "react-toastify";
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
+import { usePlayerStore } from "@app/store/player/usePlayerStore";
 
-export const useTrackCard = ({ album }: { album?: Album } = {}) => {
+export const useTrackCard = ({
+  album,
+  track,
+}: { album?: Album; track?: Track } = {}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { currentTrack, currentTrackPageUrl } = usePlayerStore();
   const { selectTrackToListen } = useMediaLibraryStore();
   const [isAddToMediaLibraryModalOpen, setIsAddToMediaLibraryModalOpen] =
     useState(false);
@@ -15,6 +20,10 @@ export const useTrackCard = ({ album }: { album?: Album } = {}) => {
   const addToMediaLibraryRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const closeTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const isCurrent =
+    currentTrack?.id === track?.id &&
+    currentTrackPageUrl === window.location.href;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -122,6 +131,7 @@ export const useTrackCard = ({ album }: { album?: Album } = {}) => {
   };
 
   return {
+    isCurrent,
     isMenuOpen,
     setIsMenuOpen,
     menuRef,
