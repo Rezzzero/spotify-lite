@@ -3,7 +3,7 @@ import { SectionList } from "@widgets/section-list/ui/SectionList";
 
 const SectionPage = () => {
   return (
-    <div className="flex flex-col pb-4 pl-3 pr-5 bg-[#141414] w-[80%] h-[83vh] overflow-y-auto [&::-webkit-scrollbar]:hidden rounded-xl relative">
+    <div className="flex flex-col pb-4 pl-3 pr-5 bg-[#141414] w-full h-[83vh] overflow-y-auto [&::-webkit-scrollbar]:hidden rounded-xl relative">
       <SectionList />
       <Footer />
     </div>

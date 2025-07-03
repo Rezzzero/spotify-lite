@@ -9,7 +9,7 @@ const SearchPage = () => {
 
   if (!value) {
     return (
-      <div className="py-4 px-9 bg-[#141414] w-[80%]">
+      <div className="py-4 px-9 bg-[#141414] w-full">
         <h1 className="text-xl font-bold mb-4">Категории и подборки</h1>
       </div>
     );
@@ -19,7 +19,7 @@ const SearchPage = () => {
     <div
       className={`flex flex-col ${
         category ? "" : "gap-10"
-      } pb-4 pl-3 pr-5 bg-[#141414] w-[80%] h-[83vh] overflow-y-auto [&::-webkit-scrollbar]:hidden rounded-xl relative`}
+      } pb-4 pl-3 pr-5 bg-[#141414] w-full h-[83vh] overflow-y-auto [&::-webkit-scrollbar]:hidden rounded-xl relative`}
     >
       <CategoryList />
       {!category && <SearchResults />}

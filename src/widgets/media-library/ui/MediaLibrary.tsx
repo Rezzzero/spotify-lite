@@ -182,7 +182,8 @@ export const MediaLibrary = () => {
           )}
           <div
             className={`flex ${
-              libraryFormat === "grid" || libraryFormat === "compact-grid"
+              (libraryFormat === "grid" || libraryFormat === "compact-grid") &&
+              isMediaLibraryOpen
                 ? "grid grid-cols-3"
                 : "flex-col"
             } gap-1`}
@@ -191,7 +192,7 @@ export const MediaLibrary = () => {
               <PlaylistCard
                 key={playlist.id}
                 playlist={playlist}
-                libraryFormat={libraryFormat}
+                libraryFormat={!isMediaLibraryOpen ? "list" : libraryFormat}
                 isMediaLibraryOpen={isMediaLibraryOpen}
                 playlistPreviewImages={playlistPreviewImages}
                 id={id}
