@@ -10,7 +10,7 @@ export const CategoryList = () => {
   } = useCategoryList();
 
   return (
-    <div className="sticky top-0 left-0 bg-[#141414] flex gap-3 px-4 py-3 rounded-t-xl">
+    <div className="sticky top-0 left-0 bg-[#141414] flex gap-3 px-4 py-3 rounded-t-xl z-10">
       {Object.keys(CategoriesList).map((category) => (
         <Link
           key={category}

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Discography } from "@widgets/discography/ui/Discography";
 import { Footer } from "@widgets/footer/ui/Footer";
+import { PageLayout } from "@shared/ui/page-layout/PageLayout";
 
 const DiscographyPage = () => {
   const [isFilterDropDownOpen, setIsFilterDropDownOpen] = useState(false);
@@ -8,13 +9,10 @@ const DiscographyPage = () => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   return (
-    <div
-      ref={scrollContainerRef}
-      className={`flex flex-col gap-20 bg-[#141414] w-full h-[83vh] rounded-xl [&::-webkit-scrollbar]:hidden relative ${
-        isFilterDropDownOpen || isSortDropDownOpen
-          ? "overflow-hidden"
-          : "overflow-y-auto"
-      }`}
+    <PageLayout
+      scrollContainerRef={scrollContainerRef}
+      isFilterDropDownOpen={isFilterDropDownOpen}
+      isSortDropDownOpen={isSortDropDownOpen}
     >
       <Discography
         setIsFilterDropDownOpen={setIsFilterDropDownOpen}
@@ -22,7 +20,7 @@ const DiscographyPage = () => {
         scrollContainerRef={scrollContainerRef}
       />
       <Footer />
-    </div>
+    </PageLayout>
   );
 };
 

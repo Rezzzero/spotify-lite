@@ -3,6 +3,7 @@ import { SearchResults } from "@widgets/search-results/ui/SearchResults";
 import { Footer } from "@widgets/footer/ui/Footer";
 import { CategoryList } from "@widgets/category-list/ui/CategoryList";
 import { SearchCategoryResults } from "@widgets/search-category-results/ui/SearchCategoryResults";
+import { PageLayout } from "@shared/ui/page-layout/PageLayout";
 
 const SearchPage = () => {
   const { value, category } = useParams();
@@ -16,16 +17,12 @@ const SearchPage = () => {
   }
 
   return (
-    <div
-      className={`flex flex-col ${
-        category ? "" : "gap-10"
-      } pb-4 pl-3 pr-5 bg-[#141414] w-full h-[83vh] overflow-y-auto [&::-webkit-scrollbar]:hidden rounded-xl relative`}
-    >
+    <PageLayout isSearchPage={true} isSectionPage={true} category={category}>
       <CategoryList />
       {!category && <SearchResults />}
       {category && <SearchCategoryResults />}
       <Footer />
-    </div>
+    </PageLayout>
   );
 };
 
