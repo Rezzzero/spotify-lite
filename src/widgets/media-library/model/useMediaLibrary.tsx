@@ -100,6 +100,7 @@ export const useMediaLibrary = () => {
         owner: {
           display_name: user.user.user_metadata.userName,
         },
+        show_in_profile: false,
       };
 
       try {

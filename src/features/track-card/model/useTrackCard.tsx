@@ -28,10 +28,12 @@ export const useTrackCard = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target as Node) &&
         menuRef.current &&
         !menuRef.current.contains(event.target as Node) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target as Node)
+        (!addToMediaLibraryRef.current ||
+          !addToMediaLibraryRef.current.contains(event.target as Node))
       ) {
         setIsMenuOpen(false);
       }
@@ -39,7 +41,7 @@ export const useTrackCard = ({
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [isMenuOpen, isAddToMediaLibraryModalOpen]);
 
   const handleMouseEnter = () => {
     if (closeTimeout.current) {
@@ -81,7 +83,7 @@ export const useTrackCard = ({
         track: trackToAdd,
         playlist_id: playlistId,
       });
-
+      setIsMenuOpen(false);
       setIsAddToMediaLibraryModalOpen(false);
       toast(
         <div className="flex items-center">

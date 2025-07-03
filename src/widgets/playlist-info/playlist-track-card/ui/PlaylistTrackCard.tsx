@@ -5,8 +5,7 @@ import { SupabasePlaylist } from "@shared/types/playlist";
 import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import { TrackPlayButton } from "@shared/ui/track-play-button/TrackPlayButton";
 import { TrackContextMenu } from "@shared/ui/track-context-menu/TrackContextMenu";
-import { AddToPlaylistModal } from "@shared/ui/add-to-playlist-modal/AddToPlaylistModal";
-
+import { AddToPlaylistModal } from "@features/add-to-playlist-modal/ui/AddToPlaylistModal";
 export const PlaylistTrackCard = ({
   track,
   index,

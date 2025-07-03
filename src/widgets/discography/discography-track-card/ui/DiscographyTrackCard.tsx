@@ -10,8 +10,7 @@ import DeleteTrackIcon from "@shared/assets/trash-fill-icon.svg?react";
 import ToAlbumIcon from "@shared/assets/album-to-icon.svg?react";
 import { memo } from "react";
 import { useTrackCard } from "@features/track-card/model/useTrackCard";
-import { AddToPlaylistModal } from "@shared/ui/add-to-playlist-modal/AddToPlaylistModal";
-
+import { AddToPlaylistModal } from "@features/add-to-playlist-modal/ui/AddToPlaylistModal";
 export const DiscographyTrackCard = memo(
   ({
     track,

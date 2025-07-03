@@ -7,8 +7,7 @@ import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import { useTrackCard } from "@features/track-card/model/useTrackCard";
 import { TrackContextMenu } from "@shared/ui/track-context-menu/TrackContextMenu";
-import { AddToPlaylistModal } from "@shared/ui/add-to-playlist-modal/AddToPlaylistModal";
-
+import { AddToPlaylistModal } from "@features/add-to-playlist-modal/ui/AddToPlaylistModal";
 export const ResultsTrackCard = ({
   track,
   index,
