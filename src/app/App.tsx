@@ -7,6 +7,7 @@ import { NavBar } from "@widgets/navbar/ui/NavBar";
 import { MediaLibrary } from "@widgets/media-library/ui/MediaLibrary";
 import { AuthPromoBanner } from "@features/auth-promo-banner/ui/AuthPromoBanner";
 import { Player } from "@widgets/player/ui/Player";
+import { RequireAuthModal } from "@features/auth/require-auth-modal/ui/RequireAuthModal";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       </div>
       <AuthPromoBanner />
       <Player />
+      <RequireAuthModal />
       <ToastContainer
         position="bottom-center"
         autoClose={5000}

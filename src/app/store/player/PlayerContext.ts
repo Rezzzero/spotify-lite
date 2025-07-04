@@ -5,6 +5,9 @@ interface PlayerContextType {
   currentTrack: TrackToAdd | undefined;
   handleSelectTrack: (track: TrackToAdd) => void;
   currentTrackPageUrl: string;
+  isAuthModalOpen: boolean;
+  openAuthModal: () => void;
+  closeAuthModal: () => void;
 }
 
 export const PlayerContext = createContext({} as PlayerContextType);
