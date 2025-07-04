@@ -76,7 +76,7 @@ export const TrackCard = memo(
                 title={track.artists.map((artist) => artist.name).join(", ")}
                 placement="top"
               >
-                <div className="flex text-gray-400 flex-wrap">
+                <div className="flex text-gray-400 group-hover:text-white flex-wrap">
                   {track.artists.map((artist, index) => (
                     <div key={artist.id} className="flex items-center">
                       <Link
