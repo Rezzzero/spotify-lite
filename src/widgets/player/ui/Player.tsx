@@ -28,6 +28,7 @@ export const Player = () => {
     currentTrack,
     soundValue,
     handleChangeSoundValue,
+    handleChangeCurrentTime,
     currentTime,
   } = usePlayer();
 
@@ -129,6 +130,7 @@ export const Player = () => {
                       ? (currentTime / currentTrack.duration_ms) * 100
                       : 0
                   }
+                  onChange={handleChangeCurrentTime}
                   sx={{
                     "& .MuiSlider-thumb": {
                       opacity: 0,

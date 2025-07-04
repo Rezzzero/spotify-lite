@@ -4,16 +4,18 @@ import { Album, Track } from "@shared/types/types";
 import { API_URL } from "@shared/constants/constants";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { toast } from "react-toastify";
-import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 import { usePlayerStore } from "@app/store/player/usePlayerStore";
 
 export const useTrackCard = ({
   album,
   track,
-}: { album?: Album; track?: Track } = {}) => {
+}: {
+  album?: Album;
+  track: Track;
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { currentTrack, currentTrackPageUrl } = usePlayerStore();
-  const { selectTrackToListen } = useMediaLibraryStore();
+  const { currentTrack, currentTrackPageUrl, isPlaying, play, pause } =
+    usePlayerStore();
   const [isAddToMediaLibraryModalOpen, setIsAddToMediaLibraryModalOpen] =
     useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -108,7 +110,7 @@ export const useTrackCard = ({
     }
   };
 
-  const handleListenTrack = (track: Track) => {
+  const handleListenTrack = () => {
     const albumData = album
       ? {
           id: album.id,
@@ -129,13 +131,19 @@ export const useTrackCard = ({
       mp3_url: "",
     };
 
-    selectTrackToListen(trackToAdd);
+    if (isCurrent) {
+      play();
+    } else {
+      play(trackToAdd);
+    }
   };
 
   return {
     isCurrent,
     isMenuOpen,
     setIsMenuOpen,
+    isPlaying,
+    pause,
     menuRef,
     buttonRef,
     isAddToMediaLibraryModalOpen,

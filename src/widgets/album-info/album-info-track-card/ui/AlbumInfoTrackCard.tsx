@@ -25,6 +25,8 @@ export const AlbumInfoTrackCard = ({
     isCurrent,
     isMenuOpen,
     setIsMenuOpen,
+    isPlaying,
+    pause,
     menuRef,
     buttonRef,
     isAddToMediaLibraryModalOpen,
@@ -43,6 +45,8 @@ export const AlbumInfoTrackCard = ({
           index={index}
           handleListenTrack={handleListenTrack}
           isCurrent={isCurrent}
+          isPlaying={isPlaying}
+          pause={pause}
         />
         <TrackCard
           track={track}

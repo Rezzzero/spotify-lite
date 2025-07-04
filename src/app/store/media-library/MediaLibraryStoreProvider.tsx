@@ -180,10 +180,6 @@ export const MediaLibraryStoreProvider = ({
     }
   };
 
-  const selectTrackToListen = (track: TrackToAdd) => {
-    handleSelectTrack(track);
-  };
-
   return (
     <MediaLibraryContext.Provider
       value={{
@@ -198,7 +194,6 @@ export const MediaLibraryStoreProvider = ({
         deletePlaylistImage,
         removePlaylistFromUser,
         addPlaylistToUser,
-        selectTrackToListen,
       }}
     >
       {children}

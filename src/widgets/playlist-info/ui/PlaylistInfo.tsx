@@ -68,7 +68,7 @@ export const PlaylistInfo = () => {
         <Loader />
       </div>
     );
-  console.log(USER_PLACEHOLDER_URL);
+
   return (
     <div className="flex flex-col">
       <div

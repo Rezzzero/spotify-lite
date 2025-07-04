@@ -1,21 +1,36 @@
 import { Track } from "@shared/types/types";
 import { CustomTooltip } from "../tooltip/CustomTooltip";
 import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
+import SmallPauseIcon from "@shared/assets/small-pause-icon.svg?react";
 
 export const TrackPlayButton = ({
   track,
   handleListenTrack,
   index,
   isCurrent,
+  isPlaying,
+  pause,
 }: {
   track: Track;
   index: number;
-  handleListenTrack: (track: Track) => void;
+  handleListenTrack: () => void;
   isCurrent: boolean;
+  isPlaying: boolean;
+  pause: () => void;
 }) => {
   return (
     <button
-      onClick={() => handleListenTrack(track)}
+      onClick={() => {
+        if (isCurrent) {
+          if (isPlaying) {
+            pause();
+          } else {
+            handleListenTrack();
+          }
+        } else {
+          handleListenTrack();
+        }
+      }}
       type="button"
       className="absolute left-5 flex items-center gap-2"
     >
@@ -32,7 +47,18 @@ export const TrackPlayButton = ({
           .join(", ")}`}
         placement="top"
       >
-        <SmallPlayIcon className="w-3 h-3 hidden group-hover:block" />
+        <span>
+          <SmallPlayIcon
+            className={`w-3 h-3 hidden ${
+              isPlaying && isCurrent ? "" : "group-hover:block"
+            }`}
+          />
+          <SmallPauseIcon
+            className={`w-3 h-3 hidden ${
+              isPlaying && isCurrent ? "group-hover:block" : ""
+            }`}
+          />
+        </span>
       </CustomTooltip>
     </button>
   );

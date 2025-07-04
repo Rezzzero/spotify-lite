@@ -1,9 +1,7 @@
 import { Album, Playlist, Track } from "@shared/types/types";
 import { SupabasePlaylist } from "@shared/types/playlist";
-import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import { Link } from "react-router-dom";
-import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import PlusIcon from "@shared/assets/plus-icon.svg?react";
 import DeleteTrackIcon from "@shared/assets/trash-fill-icon.svg?react";
@@ -11,6 +9,7 @@ import ToAlbumIcon from "@shared/assets/album-to-icon.svg?react";
 import { memo } from "react";
 import { useTrackCard } from "@features/track-card/model/useTrackCard";
 import { AddToPlaylistModal } from "@features/add-to-playlist-modal/ui/AddToPlaylistModal";
+import { TrackPlayButton } from "@shared/ui/track-play-button/TrackPlayButton";
 export const DiscographyTrackCard = memo(
   ({
     track,
@@ -31,6 +30,8 @@ export const DiscographyTrackCard = memo(
       isCurrent,
       isMenuOpen,
       setIsMenuOpen,
+      isPlaying,
+      pause,
       menuRef,
       buttonRef,
       isAddToMediaLibraryModalOpen,
@@ -44,27 +45,14 @@ export const DiscographyTrackCard = memo(
     return (
       <>
         <div className="relative flex items-center group hover:bg-[#333336] pr-4 pl-7 rounded-md">
-          <button
-            type="button"
-            onClick={() => handleListenTrack(track)}
-            className="absolute left-5 flex items-center gap-2"
-          >
-            <p
-              className={`${
-                isCurrent ? "text-green-400" : "text-gray-400"
-              } text-lg group-hover:hidden font-semibold`}
-            >
-              {index + 1}
-            </p>
-            <CustomTooltip
-              title={`Включить трек «${track.name}» исполнителя ${track.artists
-                .map((artist) => artist.name)
-                .join(", ")}`}
-              placement="top"
-            >
-              <SmallPlayIcon className="w-3 h-3 hidden group-hover:block" />
-            </CustomTooltip>
-          </button>
+          <TrackPlayButton
+            track={track}
+            index={index}
+            handleListenTrack={handleListenTrack}
+            isCurrent={isCurrent}
+            isPlaying={isPlaying}
+            pause={pause}
+          />
           <TrackCard
             track={track}
             index={index}

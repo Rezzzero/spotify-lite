@@ -29,6 +29,8 @@ export const PlaylistTrackCard = ({
     isCurrent,
     isMenuOpen,
     setIsMenuOpen,
+    isPlaying,
+    pause,
     menuRef,
     buttonRef,
     handleDeleteTrack,
@@ -48,6 +50,8 @@ export const PlaylistTrackCard = ({
           index={index}
           handleListenTrack={handleListenTrack}
           isCurrent={isCurrent}
+          isPlaying={isPlaying}
+          pause={pause}
         />
         <TrackCard
           track={track}

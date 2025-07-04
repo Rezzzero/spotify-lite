@@ -4,6 +4,7 @@ import { Playlist } from "@shared/types/types";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
+import SmallPauseIcon from "@shared/assets/small-pause-icon.svg?react";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import { useTrackCard } from "@features/track-card/model/useTrackCard";
 import { TrackContextMenu } from "@shared/ui/track-context-menu/TrackContextMenu";
@@ -25,6 +26,8 @@ export const ResultsTrackCard = ({
     isCurrent,
     isMenuOpen,
     setIsMenuOpen,
+    isPlaying,
+    pause,
     menuRef,
     buttonRef,
     isAddToMediaLibraryModalOpen,
@@ -40,7 +43,13 @@ export const ResultsTrackCard = ({
       <div className="relative flex items-center group hover:bg-[#333336] pr-4 rounded-md">
         <button
           type="button"
-          onClick={() => handleListenTrack(track)}
+          onClick={() => {
+            if (!isPlaying || (isPlaying && !isCurrent)) {
+              handleListenTrack();
+            } else {
+              pause();
+            }
+          }}
           className="absolute left-5 flex items-center gap-2"
         >
           <div className="w-10 h-10 bg-black/50 rounded-md hidden group-hover:block" />
@@ -50,7 +59,18 @@ export const ResultsTrackCard = ({
               .join(", ")}`}
             placement="top"
           >
-            <SmallPlayIcon className="w-5 h-5 hidden group-hover:block absolute left-1/2 -translate-x-1/2 z-10" />
+            <span>
+              <SmallPlayIcon
+                className={`w-5 h-5 hidden ${
+                  isPlaying ? "" : "group-hover:block"
+                } absolute left-1/2 -translate-x-1/2 z-10`}
+              />
+              <SmallPauseIcon
+                className={`w-5 h-5 hidden ${
+                  isPlaying ? "group-hover:block" : ""
+                } absolute left-1/2 -translate-x-1/2 z-10`}
+              />
+            </span>
           </CustomTooltip>
         </button>
         <TrackCard
