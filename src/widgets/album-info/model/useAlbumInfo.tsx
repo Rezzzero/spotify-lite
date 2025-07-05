@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Album, Artist } from "@shared/types/types";
 import { useParams } from "react-router-dom";
@@ -23,6 +23,11 @@ export const useAlbumInfo = () => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const { imageColors } = useGetColors(imageUrl);
   const { id } = useParams();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [menuModal, setMenuModal] = useState(false);
+  const [changeFormatModal, setChangeFormatModal] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const changeFormatButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const fetch = async () => {
@@ -66,13 +71,23 @@ export const useAlbumInfo = () => {
     }
   };
 
+  const handleListenPlaylist = () => {
+    setIsPlaying((prev) => !prev);
+  };
+
   return {
     albumData,
     imageColors,
     loading,
     playlists,
     user,
+    changeFormatButtonRef,
+    isPlaying,
+    menuButtonRef,
     handleDeleteFromMediaLibrary,
     handleAddToMediaLibrary,
+    setMenuModal,
+    setChangeFormatModal,
+    handleListenPlaylist,
   };
 };

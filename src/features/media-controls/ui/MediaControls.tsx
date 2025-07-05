@@ -7,13 +7,17 @@ import CompactListIcon from "@shared/assets/compact-list-icon.svg?react";
 import ListIcon from "@shared/assets/drop-down/list-icon.svg?react";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import { useMediaControls } from "../model/useMediaControls";
-import { Playlist, Track } from "@shared/types/types";
+import { Album, Playlist, Track } from "@shared/types/types";
 import { SupabasePlaylist } from "@shared/types/playlist";
 import React from "react";
 
 interface MediaControlsProps {
   isOwner: boolean;
-  mediaData: SupabasePlaylist | (Playlist & { duration: number }) | undefined;
+  mediaData:
+    | SupabasePlaylist
+    | (Playlist & { duration: number })
+    | Album
+    | undefined;
   isPlaying: boolean;
   format: string;
   tracks: Track[];
