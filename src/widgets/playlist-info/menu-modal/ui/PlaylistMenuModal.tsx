@@ -55,7 +55,10 @@ export const PlaylistMenuModal = ({
       ref={modalRef}
       className="absolute top-20 left-7 w-[330px] rounded-sm bg-[#2d2d2e] p-1"
     >
-      {!isPublic ? null : isPlaylistInProfile ? (
+      {!isPublic ||
+      !playlists.some(
+        (playlist) => playlist.id === id
+      ) ? null : isPlaylistInProfile ? (
         <div className="flex flex-col gap-1">
           <button
             type="button"

@@ -34,6 +34,7 @@ export const usePlaylistInfo = () => {
   const editModalRef = useRef<HTMLDivElement>(null);
   const changeFormatModalRef = useRef<HTMLDivElement>(null);
   const changeFormatButtonRef = useRef<HTMLButtonElement>(null);
+  const deleteModalRef = useRef<HTMLDivElement>(null);
   const { imageColors } = useGetColors(playlistData?.imageUrl || null);
   const { id } = useParams();
   const source = id?.startsWith("sp_") ? "supabase" : "spotify";
@@ -110,13 +111,21 @@ export const usePlaylistInfo = () => {
       ) {
         setChangeFormatModal(false);
       }
+
+      if (
+        deletePlaylistModal &&
+        deleteModalRef.current &&
+        !deleteModalRef.current.contains(event.target as Node)
+      ) {
+        setDeletePlaylistModal(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [menuModal, editModal, changeFormatModal]);
+  }, [menuModal, editModal, changeFormatModal, deletePlaylistModal]);
 
   const handleUpdateDuration = (trackDuration: number, isAdd: boolean) => {
     setPlaylistData((prevPlaylistData) => {
@@ -198,5 +207,6 @@ export const usePlaylistInfo = () => {
     handleListenPlaylist,
     isPlaying,
     handleAddPlaylistToMediaLibrary,
+    deleteModalRef,
   };
 };

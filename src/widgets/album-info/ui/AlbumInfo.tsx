@@ -7,9 +7,25 @@ import { CardList } from "@shared/ui/card-list/CardList";
 import { truncateText } from "@shared/lib/format/truncateText";
 import { Loader } from "@shared/ui/loader/Loader";
 import { AlbumInfoTrackCard } from "../album-info-track-card/ui/AlbumInfoTrackCard";
+import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
+import ListenIcon from "@shared/assets/play-icon.svg?react";
+import PauseIcon from "@shared/assets/playlist/pause-icon.svg?react";
+import InMediaLibraryIcon from "@shared/assets/playlist/playlist-in-media-library-icon.svg?react";
+import AddToMediaLibraryIcon from "@shared/assets/playlist/add-to-media-library-icon.svg?react";
+import MenuIcon from "@shared/assets/menu-icon.svg?react";
+import ListIcon from "@shared/assets/drop-down/list-icon.svg?react";
+import CompactListIcon from "@shared/assets/compact-list-icon.svg?react";
 
 export const AlbumInfo = () => {
-  const { albumData, imageColors, loading, playlists, user } = useAlbumInfo();
+  const {
+    albumData,
+    imageColors,
+    loading,
+    playlists,
+    user,
+    handleDeleteFromMediaLibrary,
+    handleAddToMediaLibrary,
+  } = useAlbumInfo();
   if (loading || !albumData)
     return (
       <div className="flex justify-center items-center h-full">
@@ -29,8 +45,12 @@ export const AlbumInfo = () => {
   const totalTracks = albumData.album.tracks.total;
   const duration = formatMsToMinutesAndSeconds(sumOfDuration, true);
 
+  const isPlaying = false;
+
+  const format = "compact";
+
   return (
-    <div className="flex flex-col gap-15">
+    <div className="flex flex-col gap-5">
       <div
         style={{ background: headerGradient }}
         className="flex items-center gap-7 py-7 pl-7"
@@ -69,6 +89,82 @@ export const AlbumInfo = () => {
             </p>
           </div>
         </div>
+      </div>
+      <div className="flex items-center pt-3 px-8 justify-between w-full">
+        <div className="flex items-center gap-4">
+          {albumData.album.tracks.items.length > 0 && (
+            <CustomTooltip
+              title={isPlaying ? `Поставить на паузу` : `Слушать`}
+              placement="top"
+              customFontSize={13}
+            >
+              <button type="button">
+                {isPlaying ? (
+                  <PauseIcon className="w-12 h-12 text-green-500 hover:text-green-400 cursor-pointer hover:scale-105" />
+                ) : (
+                  <ListenIcon className="w-12 h-12 text-green-500 hover:text-green-400 cursor-pointer hover:scale-105" />
+                )}
+              </button>
+            </CustomTooltip>
+          )}
+          {playlists.find((p) => p.id === albumData?.album.id) ? (
+            <CustomTooltip
+              title={`Удалить из медиатеки`}
+              placement="top"
+              customFontSize={13}
+            >
+              <button
+                type="button"
+                onClick={() =>
+                  handleDeleteFromMediaLibrary(albumData?.album.id as string)
+                }
+              >
+                <InMediaLibraryIcon className="w-7 h-7 text-gray-400 hover:text-white cursor-pointer hover:scale-105" />
+              </button>
+            </CustomTooltip>
+          ) : (
+            <CustomTooltip
+              title={`Добавить в медиатеку`}
+              placement="top"
+              customFontSize={13}
+            >
+              <button
+                type="button"
+                onClick={() =>
+                  handleAddToMediaLibrary(albumData?.album.id as string)
+                }
+              >
+                <AddToMediaLibraryIcon className="w-7 h-7 text-gray-400 hover:text-white cursor-pointer hover:scale-105" />
+              </button>
+            </CustomTooltip>
+          )}
+
+          <CustomTooltip
+            title={`Открыть контекстное меню: ${albumData.album.name}`}
+            placement="top"
+            customFontSize={13}
+          >
+            <button type="button">
+              <MenuIcon className="w-10 h-10 text-gray-400 hover:text-white cursor-pointer hover:scale-105" />
+            </button>
+          </CustomTooltip>
+        </div>
+        <button
+          type="button"
+          className="flex gap-2 text-sm font-semibold items-center text-gray-400 group hover:text-white cursor-pointer"
+        >
+          {format === "compact" ? (
+            <>
+              <span>Компактный</span>
+              <CompactListIcon className="w-3 h-3 text-gray-400 group-hover:text-white" />
+            </>
+          ) : (
+            <>
+              <span>Список</span>
+              <ListIcon className="w-3 h-3 text-gray-400 group-hover:text-white" />
+            </>
+          )}
+        </button>
       </div>
       <div className="px-7">
         <div className="grid w-full items-center text-sm border-b border-zinc-800 text-gray-400 py-2 pr-10 grid-cols-[50px_2fr_1fr_auto]">

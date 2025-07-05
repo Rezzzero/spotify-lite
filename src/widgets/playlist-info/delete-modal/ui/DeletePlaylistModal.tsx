@@ -3,15 +3,20 @@ import { useDeletePlaylistModal } from "../model/useDeletePlaylistModal";
 export const DeletePlaylistModal = ({
   closeModal,
   playlistName,
+  ref,
 }: {
   closeModal: () => void;
   playlistName: string | undefined;
+  ref: React.RefObject<HTMLDivElement | null>;
 }) => {
   const { handleDeletePlaylist } = useDeletePlaylistModal(closeModal);
   return (
     <>
       <div className="bg-black/80 fixed inset-0 z-10" />
-      <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 z-30 p-7 bg-white text-black rounded-md">
+      <div
+        ref={ref}
+        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 z-30 p-7 bg-white text-black rounded-md"
+      >
         <h2 className="font-bold text-2xl">Удалить из медиатеки?</h2>
         <p className="text-sm max-w-[305px] pr-5">
           Контент (<b>{playlistName}</b>) будет удален из <b>медиатеки</b>.

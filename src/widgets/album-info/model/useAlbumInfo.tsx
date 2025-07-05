@@ -6,6 +6,7 @@ import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import { API_URL } from "@shared/constants/constants";
 import { useUserStore } from "@app/store/user/useUser";
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
+import { toast } from "react-toastify";
 
 interface AlbumDataType {
   album: Album;
@@ -15,7 +16,8 @@ interface AlbumDataType {
 
 export const useAlbumInfo = () => {
   const { user } = useUserStore();
-  const { playlists } = useMediaLibraryStore();
+  const { playlists, removePlaylistFromUser, addPlaylistToUser } =
+    useMediaLibraryStore();
   const [albumData, setAlbumData] = useState<AlbumDataType | null>(null);
   const [loading, setLoading] = useState(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -40,5 +42,37 @@ export const useAlbumInfo = () => {
     fetch();
   }, [id]);
 
-  return { albumData, imageColors, loading, playlists, user };
+  const handleDeleteFromMediaLibrary = async (id: string) => {
+    if (!user) return;
+    try {
+      await removePlaylistFromUser(id);
+      toast(<p className="font-semibold">Удалено из медиатеки</p>, {
+        style: { width: "210px" },
+      });
+    } catch (error) {
+      console.error("Error deleting playlist:", error);
+    }
+  };
+
+  const handleAddToMediaLibrary = async (id: string) => {
+    if (!user) return;
+    try {
+      await addPlaylistToUser(id);
+      toast(<p className="font-semibold">Добавлено в медиатеку</p>, {
+        style: { width: "220px" },
+      });
+    } catch (error) {
+      console.error("Error adding playlist to media library:", error);
+    }
+  };
+
+  return {
+    albumData,
+    imageColors,
+    loading,
+    playlists,
+    user,
+    handleDeleteFromMediaLibrary,
+    handleAddToMediaLibrary,
+  };
 };
