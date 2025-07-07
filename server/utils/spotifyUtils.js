@@ -62,6 +62,12 @@ const getSpotifyRequestConfig = async () => {
   };
 };
 
+const spotifyRequest = async (endpoint) => {
+  const requestConfig = await getSpotifyRequestConfig();
+  const url = `https://api.spotify.com/v1/${endpoint}`;
+  return axios.get(url, requestConfig);
+};
+
 export const getPopularTracks = async () => {
   try {
     const cached = await redisClient.get("popular-tracks");
@@ -70,12 +76,7 @@ export const getPopularTracks = async () => {
       return JSON.parse(cached);
     }
 
-    const requestConfig = await getSpotifyRequestConfig();
-
-    const response = await axios.get(
-      "https://api.spotify.com/v1/playlists/7iFPfffm9ntC7LVqVt4O6f",
-      requestConfig
-    );
+    const response = await spotifyRequest("playlists/7iFPfffm9ntC7LVqVt4O6f");
     const tracks = response.data.tracks.items;
 
     await redisClient.set("popular-tracks", JSON.stringify(tracks), {
@@ -96,16 +97,14 @@ export const getPopularArtists = async () => {
       return JSON.parse(cached);
     }
 
-    const requestConfig = await getSpotifyRequestConfig();
     const tracks = await getPopularTracks();
 
     const artistIds = tracks.map((track) => track.track.artists[0].id);
 
     const uniqueArtistIds = [...new Set(artistIds)];
 
-    const response = await axios.get(
-      `https://api.spotify.com/v1/artists?ids=${uniqueArtistIds.join(",")}`,
-      requestConfig
+    const response = await spotifyRequest(
+      `artists?ids=${uniqueArtistIds.join(",")}`
     );
 
     const artists = response.data.artists;
@@ -128,12 +127,7 @@ export const getNewRealeses = async () => {
       return JSON.parse(cached);
     }
 
-    const requestConfig = await getSpotifyRequestConfig();
-
-    const response = await axios.get(
-      "https://api.spotify.com/v1/browse/new-releases",
-      requestConfig
-    );
+    const response = await spotifyRequest(`browse/new-releases`);
 
     const releases = response.data.albums.items;
 
@@ -149,11 +143,7 @@ export const getNewRealeses = async () => {
 
 export const getArtist = async (id) => {
   try {
-    const requestConfig = await getSpotifyRequestConfig();
-    const response = await axios.get(
-      `https://api.spotify.com/v1/artists/${id}`,
-      requestConfig
-    );
+    const response = await spotifyRequest(`artists/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching artist:", error);
@@ -165,13 +155,11 @@ export async function getSearchResults(query) {
     if (!query || typeof query !== "string") {
       throw new Error("Query must be a non-empty string");
     }
-    const requestConfig = await getSpotifyRequestConfig();
 
-    const response = await axios.get(
-      `https://api.spotify.com/v1/search?q=${encodeURIComponent(
+    const response = await spotifyRequest(
+      `search?q=${encodeURIComponent(
         query
-      )}&type=track,artist,album,playlist,show,episode`,
-      requestConfig
+      )}&type=track,artist,album,playlist,show,episode`
     );
 
     return response.data;
@@ -182,11 +170,7 @@ export async function getSearchResults(query) {
 
 export const getArtistTopTracks = async (id) => {
   try {
-    const requestConfig = await getSpotifyRequestConfig();
-    const response = await axios.get(
-      `https://api.spotify.com/v1/artists/${id}/top-tracks?market=UA`,
-      requestConfig
-    );
+    const response = await spotifyRequest(`artists/${id}/top-tracks?market=UA`);
     return response.data.tracks;
   } catch (error) {
     console.error("Error fetching artist's top tracks:", error);
@@ -195,10 +179,8 @@ export const getArtistTopTracks = async (id) => {
 
 export const getArtistAlbumsAndSingles = async (id, include) => {
   try {
-    const requestConfig = await getSpotifyRequestConfig();
-    const response = await axios.get(
-      `https://api.spotify.com/v1/artists/${id}/albums?include_groups=${include}&limit=50`,
-      requestConfig
+    const response = await spotifyRequest(
+      `artists/${id}/albums?include_groups=${include}&limit=50`
     );
     return response.data.items;
   } catch (error) {
@@ -208,11 +190,7 @@ export const getArtistAlbumsAndSingles = async (id, include) => {
 
 export const getSeveralArtists = async (ids) => {
   try {
-    const requestConfig = await getSpotifyRequestConfig();
-    const response = await axios.get(
-      `https://api.spotify.com/v1/artists?ids=${ids.join(",")}`,
-      requestConfig
-    );
+    const response = await spotifyRequest(`artists?ids=${ids.join(",")}`);
     return response.data.artists;
   } catch (error) {
     console.error("Error fetching several artists:", error);
@@ -220,7 +198,6 @@ export const getSeveralArtists = async (ids) => {
 };
 
 export const getSeveralAlbums = async (ids) => {
-  const requestConfig = await getSpotifyRequestConfig();
   const chunkSize = 20;
   const result = [];
 
@@ -228,10 +205,7 @@ export const getSeveralAlbums = async (ids) => {
     const chunk = ids.slice(i, i + chunkSize);
 
     try {
-      const response = await axios.get(
-        `https://api.spotify.com/v1/albums?ids=${chunk.join(",")}`,
-        requestConfig
-      );
+      const response = await spotifyRequest(`albums?ids=${chunk.join(",")}`);
 
       result.push(...response.data.albums);
     } catch (error) {
@@ -247,10 +221,8 @@ export const getSeveralAlbums = async (ids) => {
 
 export const getMoreWithArtist = async (artistId) => {
   try {
-    const requestConfig = await getSpotifyRequestConfig();
-    const response = await axios.get(
-      `https://api.spotify.com/v1/artists/${artistId}/albums?include_groups=appears_on`,
-      requestConfig
+    const response = await spotifyRequest(
+      `artists/${artistId}/albums?include_groups=appears_on`
     );
     return response.data.items;
   } catch (error) {
@@ -260,11 +232,7 @@ export const getMoreWithArtist = async (artistId) => {
 
 export const getPlaylistsWithArtist = async (artist) => {
   try {
-    const requestConfig = await getSpotifyRequestConfig();
-    const response = await axios.get(
-      `https://api.spotify.com/v1/search?q=${artist}&type=playlist`,
-      requestConfig
-    );
+    const response = await spotifyRequest(`search?q=${artist}&type=playlist`);
     return response.data.playlists.items;
   } catch (error) {
     console.error("Error fetching playlist with artist:", error);
@@ -273,11 +241,7 @@ export const getPlaylistsWithArtist = async (artist) => {
 
 export const getAlbum = async (id) => {
   try {
-    const requestConfig = await getSpotifyRequestConfig();
-    const response = await axios.get(
-      `https://api.spotify.com/v1/albums/${id}?market=RU`,
-      requestConfig
-    );
+    const response = await spotifyRequest(`albums/${id}?market=RU`);
     return response.data;
   } catch (error) {
     console.error("Error fetching album:", error);
@@ -286,11 +250,7 @@ export const getAlbum = async (id) => {
 
 export const getTrack = async (id) => {
   try {
-    const requestConfig = await getSpotifyRequestConfig();
-    const response = await axios.get(
-      `https://api.spotify.com/v1/tracks/${id}`,
-      requestConfig
-    );
+    const response = await spotifyRequest(`tracks/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching track:", error);
