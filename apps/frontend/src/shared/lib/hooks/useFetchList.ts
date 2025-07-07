@@ -29,7 +29,7 @@ export const useFetchList = <T extends SectionName>(sectionName: T) => {
         setLoading(true);
         const res = await axios.get(`${API_URL}/api/${sectionName}`);
         const rawData = res.data;
-
+        console.log(res.data);
         if (sectionName === "popular-tracks") {
           setList(rawData.tracks.map((item: { track: Track }) => item.track));
         } else {

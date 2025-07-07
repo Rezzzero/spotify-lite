@@ -18,7 +18,6 @@ export const NavBar = () => {
     userMenuRef,
     handleUserMenuOpen,
   } = useNavbar();
-
   return (
     <div
       className={`bg-black flex items-center ${
