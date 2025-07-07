@@ -17,6 +17,7 @@ app.use(
     credentials: true,
   })
 );
+console.log("CLIENT_URL from env:", process.env.CLIENT_URL);
 app.use(express.json());
 routes.forEach(([path, router]) => {
   app.use(path, router);
