@@ -4,7 +4,7 @@ import GridIcon from "@shared/assets/drop-down/grid-icon.svg?react";
 import CompactListIcon from "@shared/assets/compact-list-icon.svg?react";
 import CompactGridIcon from "@shared/assets/compact-grid-icon.svg?react";
 export const API_URL = import.meta.env.VITE_API_URL;
-
+console.log(API_URL);
 export const Route = {
   HOME: "/",
   SEARCH: "/search/:value?",
