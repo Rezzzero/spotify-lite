@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-table";
 import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
 import { Link } from "react-router-dom";
+import { useMemo, useRef, useState } from "react";
 
 interface TablesTrack {
   name: string;
@@ -116,9 +117,10 @@ const data = [
 const columns: ColumnDef<TablesTrack>[] = [
   {
     id: "index",
-    header: () => <span className="cursor-text">#</span>,
+    header: () => <span className="cursor-text text-lg mx-2">#</span>,
     size: 40,
-    cell: ({ row }) => row.index + 1,
+    maxSize: 40,
+    cell: ({ row }) => <span className="text-lg mx-2">{row.index + 1}</span>,
     enableResizing: false,
   },
   {
@@ -177,7 +179,7 @@ const columns: ColumnDef<TablesTrack>[] = [
     accessorKey: "added_at",
     header: () => <span className="hover:text-white">Дата добавления</span>,
     size: 295,
-    minSize: 200,
+    minSize: 140,
     enableResizing: true,
     cell: ({ row }) => (
       <p className="text-zinc-400">{formatAddedAt(row.original.added_at)}</p>
@@ -187,12 +189,13 @@ const columns: ColumnDef<TablesTrack>[] = [
     accessorKey: "duration_ms",
     header: () => (
       <div className="flex justify-end w-full">
-        <ClockIcon className="w-5 h-5 hover:text-white " />
+        <ClockIcon className="w-5 h-5 hover:text-white mr-7" />
       </div>
     ),
-    size: 125,
+    size: 155,
+    minSize: 155,
     cell: ({ row }) => (
-      <div className="text-right w-full">
+      <div className="text-right mr-7">
         {formatMsToMinutesAndSeconds(row.original.duration_ms)}
       </div>
     ),
@@ -201,25 +204,127 @@ const columns: ColumnDef<TablesTrack>[] = [
 ];
 
 export const Table = () => {
+  const [colSizes, setColSizes] = useState([40, 565, 390, 295, 155]);
+
+  const sizedColumns = useMemo(
+    () =>
+      columns.map((col, i) => ({
+        ...col,
+        size: colSizes[i],
+      })),
+    [columns, colSizes]
+  );
+  const minSizes = [40, 180, 120, 140, 155];
   const table = useReactTable({
     data,
-    columns,
+    columns: sizedColumns,
     getCoreRowModel: getCoreRowModel(),
     columnResizeMode: "onChange",
   });
+  const resizingCol = useRef<number | null>(null);
+  const startX = useRef<number>(0);
+  const startSizes = useRef<number[]>([]);
+
+  const handleResizeEnd = () => {
+    resizingCol.current = null;
+    document.removeEventListener("mousemove", handleResizeMove as any);
+    document.removeEventListener("touchmove", handleResizeMove as any);
+    document.removeEventListener("mouseup", handleResizeEnd as any);
+    document.removeEventListener("touchend", handleResizeEnd as any);
+  };
+
+  const resizeColumns = ({
+    sizes,
+    index,
+    deltaX,
+  }: {
+    sizes: number[];
+    index: number;
+    deltaX: number;
+  }) => {
+    let newSizes = [...sizes];
+
+    if (deltaX < 0) {
+      let remain = -deltaX;
+      let i = index;
+      let totalShrink = 0;
+
+      const min = minSizes[i];
+      const canShrink = newSizes[i] - min;
+      const shrink = Math.min(canShrink, remain);
+      newSizes[i] -= shrink;
+      totalShrink += shrink;
+      remain -= shrink;
+
+      let left = i - 1;
+      while (remain > 0 && left >= 0) {
+        const minLeft = minSizes[left];
+        const canShrinkLeft = newSizes[left] - minLeft;
+        const shrinkLeft = Math.min(canShrinkLeft, remain);
+        newSizes[left] -= shrinkLeft;
+        totalShrink += shrinkLeft;
+        remain -= shrinkLeft;
+        left--;
+      }
+
+      if (index + 1 < newSizes.length) {
+        newSizes[index + 1] += totalShrink;
+      }
+    } else {
+      let remain = deltaX;
+      let right = index + 1;
+      let totalShrink = 0;
+      while (remain > 0 && right < newSizes.length) {
+        const min = minSizes[right];
+        const canShrink = newSizes[right] - min;
+        const shrink = Math.min(canShrink, remain);
+        newSizes[right] -= shrink;
+        totalShrink += shrink;
+        remain -= shrink;
+        right++;
+      }
+      newSizes[index] += totalShrink;
+    }
+    return newSizes;
+  };
+
+  const handleResizeMove = (e: MouseEvent | TouchEvent) => {
+    if (resizingCol.current === null) return;
+    const currentX = "touches" in e ? e.touches[0].clientX : e.clientX;
+    const deltaX = currentX - startX.current;
+    const idx = resizingCol.current;
+    const newSizes = resizeColumns({
+      sizes: startSizes.current,
+      index: idx,
+      deltaX,
+    });
+    setColSizes(newSizes);
+  };
+
+  const handleResizeStart = (colIdx: number, e: any) => {
+    resizingCol.current = colIdx;
+    startX.current = "touches" in e ? e.touches[0].clientX : e.clientX;
+    startSizes.current = [...colSizes];
+    document.addEventListener("mousemove", handleResizeMove as any);
+    document.addEventListener("touchmove", handleResizeMove as any, {
+      passive: false,
+    });
+    document.addEventListener("mouseup", handleResizeEnd as any);
+    document.addEventListener("touchend", handleResizeEnd as any);
+  };
 
   return (
-    <div className="overflow-x-auto p-2 relative">
+    <div className="relative">
       <div className="absolute top-10 left-0 bg-zinc-600/70 w-full h-[1px]" />
-      <table>
+      <table className="w-full">
         <thead className="group">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
+              {headerGroup.headers.map((header, i) => (
                 <th
                   key={header.id}
                   className={`
-                    h-6 text-left px-3 font-medium text-sm text-gray-400 cursor-default relative
+                    text-left px-3 font-medium text-sm text-gray-400 cursor-default relative
                     group-hover:border-r group-hover:border-zinc-500 first:border-none last:border-r-0
                   `}
                   style={{
@@ -233,8 +338,8 @@ export const Table = () => {
                   )}
                   {header.column.getCanResize() && (
                     <div
-                      onMouseDown={header.getResizeHandler()}
-                      onTouchStart={header.getResizeHandler()}
+                      onMouseDown={(e) => handleResizeStart(i, e.nativeEvent)}
+                      onTouchStart={(e) => handleResizeStart(i, e.nativeEvent)}
                       style={{
                         position: "absolute",
                         right: 0,
@@ -243,6 +348,7 @@ export const Table = () => {
                         width: "5px",
                         cursor: "col-resize",
                         userSelect: "none",
+                        zIndex: 10,
                       }}
                     />
                   )}
