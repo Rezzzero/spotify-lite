@@ -222,8 +222,7 @@ export const Table = () => {
     columnResizeMode: "onChange",
   });
   const resizingCol = useRef<number | null>(null);
-  const startX = useRef<number>(0);
-  const startSizes = useRef<number[]>([]);
+  const prevX = useRef<number | null>(null);
 
   const handleResizeEnd = () => {
     resizingCol.current = null;
@@ -291,20 +290,24 @@ export const Table = () => {
   const handleResizeMove = (e: MouseEvent | TouchEvent) => {
     if (resizingCol.current === null) return;
     const currentX = "touches" in e ? e.touches[0].clientX : e.clientX;
-    const deltaX = currentX - startX.current;
-    const idx = resizingCol.current;
-    const newSizes = resizeColumns({
-      sizes: startSizes.current,
-      index: idx,
-      deltaX,
-    });
-    setColSizes(newSizes);
+    const index = resizingCol.current;
+
+    if (prevX.current !== null) {
+      const deltaX = currentX - prevX.current;
+      setColSizes((prevSizes) =>
+        resizeColumns({
+          sizes: prevSizes,
+          index,
+          deltaX,
+        })
+      );
+    }
+    prevX.current = currentX;
   };
 
   const handleResizeStart = (colIdx: number, e: any) => {
     resizingCol.current = colIdx;
-    startX.current = "touches" in e ? e.touches[0].clientX : e.clientX;
-    startSizes.current = [...colSizes];
+    prevX.current = "touches" in e ? e.touches[0].clientX : e.clientX;
     document.addEventListener("mousemove", handleResizeMove as any);
     document.addEventListener("touchmove", handleResizeMove as any, {
       passive: false,
