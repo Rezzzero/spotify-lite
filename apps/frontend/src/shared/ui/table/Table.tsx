@@ -1,6 +1,7 @@
 import { formatAddedAt } from "@shared/lib/format/formatAddedAt";
 import { Album, TablesTrack } from "@shared/types/types";
 import ClockIcon from "@shared/assets/clock-icon.svg?react";
+import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -111,8 +112,15 @@ export const Table = ({
       size: 155,
       minSize: 155,
       cell: ({ row }: CellContext<TablesTrack, unknown>) => (
-        <div className="text-right mr-7">
+        <div className="text-right mr-7 relative">
           {formatMsToMinutesAndSeconds(row.original.duration_ms)}
+          <button
+            // ref={buttonRef}
+            // onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="absolute bottom-1/2 translate-y-1/2 translate-x-1/2 -right-5 hidden group-hover:block hover:scale-105 cursor-pointer"
+          >
+            <MenuIcon className="w-7 h-7 text-white text-gray-400" />
+          </button>
         </div>
       ),
       enableResizing: false,

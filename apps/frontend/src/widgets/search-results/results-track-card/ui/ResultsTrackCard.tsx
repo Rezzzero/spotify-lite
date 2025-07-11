@@ -1,6 +1,4 @@
 import { Track } from "@shared/types/types";
-import { SupabasePlaylist } from "@shared/types/playlist";
-import { Playlist } from "@shared/types/types";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
@@ -12,15 +10,9 @@ import { AddToPlaylistModal } from "@features/add-to-playlist-modal/ui/AddToPlay
 export const ResultsTrackCard = ({
   track,
   index,
-  isOwner,
-  playlists,
-  userId,
 }: {
   track: Track;
   index: number;
-  isOwner: boolean;
-  playlists: Playlist[] | SupabasePlaylist[];
-  userId: string | undefined;
 }) => {
   const {
     isCurrent,
@@ -96,7 +88,6 @@ export const ResultsTrackCard = ({
             menuRef={menuRef}
             handleMouseEnter={handleMouseEnter}
             handleMouseLeave={handleMouseLeave}
-            isOwner={isOwner}
             track={track}
             setIsMenuOpen={setIsMenuOpen}
           />
@@ -106,11 +97,8 @@ export const ResultsTrackCard = ({
             ref={addToMediaLibraryRef}
             handleMouseEnter={handleMouseEnter}
             handleMouseLeave={handleMouseLeave}
-            isOwner={isOwner}
-            playlists={playlists}
             handleAddTrackToPlaylist={handleAddTrackToPlaylist}
             track={track}
-            userId={userId}
           />
         )}
       </div>

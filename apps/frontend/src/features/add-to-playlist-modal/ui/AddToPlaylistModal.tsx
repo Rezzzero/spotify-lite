@@ -1,19 +1,17 @@
-import { SupabasePlaylist } from "@shared/types/playlist";
-import { Playlist, Track } from "@shared/types/types";
+import { Track } from "@shared/types/types";
 import PlusIcon from "@shared/assets/plus-icon.svg?react";
 import SearchIcon from "@shared/assets/search-icon.svg?react";
 import { useAddToPlaylistModal } from "../model/useAddToPlaylistModal";
 import { highlightMatch } from "@shared/ui/highlight-match/HighlightMatchText";
+import { useUserStore } from "@app/store/user/useUser";
 
 type AddToPlaylistModalTypes = {
   ref: React.RefObject<HTMLDivElement | null>;
   handleMouseEnter: () => void;
   handleMouseLeave: () => void;
-  isOwner: boolean;
-  playlists: Playlist[] | SupabasePlaylist[];
+  isOwner?: boolean;
   handleAddTrackToPlaylist: (id: string, track: Track) => void;
   track: Track;
-  userId: string | undefined;
 };
 
 export const AddToPlaylistModal = ({
@@ -21,16 +19,13 @@ export const AddToPlaylistModal = ({
   handleMouseEnter,
   handleMouseLeave,
   isOwner,
-  playlists,
   handleAddTrackToPlaylist,
   track,
-  userId,
 }: AddToPlaylistModalTypes) => {
+  const { user } = useUserStore();
   const { search, setSearch, filteredPlaylists, handleCreatePlaylist } =
     useAddToPlaylistModal({
-      playlists,
       track,
-      userId,
       handleAddTrackToPlaylist,
     });
   return (
@@ -63,7 +58,7 @@ export const AddToPlaylistModal = ({
       </button>
       <div className="flex flex-col">
         {filteredPlaylists
-          .filter((p) => p.user_id === userId)
+          .filter((p) => p.user_id === user?.user.id)
           .map((playlist) => (
             <button
               key={playlist.id}

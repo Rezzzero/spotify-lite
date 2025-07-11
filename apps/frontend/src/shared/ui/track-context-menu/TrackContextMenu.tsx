@@ -10,7 +10,7 @@ type TrackContextMenuProps = {
   handleMouseEnter: () => void;
   handleMouseLeave: () => void;
   setIsMenuOpen: (open: boolean) => void;
-  isOwner: boolean;
+  isOwner?: boolean;
   track: Track;
   withoutAlbumLink?: boolean;
   withoutArtistLink?: boolean;

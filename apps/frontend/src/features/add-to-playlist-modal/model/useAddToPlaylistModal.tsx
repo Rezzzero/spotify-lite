@@ -2,34 +2,29 @@ import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibrarySt
 import { useUserStore } from "@app/store/user/useUser";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { generateId } from "@shared/lib/id/generateId";
-import { SupabasePlaylist } from "@shared/types/playlist";
-import { Playlist, Track } from "@shared/types/types";
+import { Track } from "@shared/types/types";
 import { useState, useMemo } from "react";
 
 export function useAddToPlaylistModal({
-  playlists,
-  userId,
   track,
   handleAddTrackToPlaylist,
 }: {
-  playlists: Playlist[] | SupabasePlaylist[];
-  userId: string | undefined;
   track: Track;
   handleAddTrackToPlaylist: (id: string, track: Track) => void;
 }) {
   const { user } = useUserStore();
-  const { addPlaylist } = useMediaLibraryStore();
+  const { addPlaylist, playlists } = useMediaLibraryStore();
   const [search, setSearch] = useState("");
   const filteredPlaylists = useMemo(
     () =>
       playlists?.filter((p) => {
-        if (p.user_id !== userId) return false;
+        if (p.user_id !== user?.user.id) return false;
         const searchLower = search.trim().toLowerCase();
         if (!searchLower) return true;
         const words = p.name.toLowerCase().split(/\s+/);
         return words.some((word) => word.startsWith(searchLower));
       }),
-    [playlists, search, userId]
+    [playlists, search, user?.user.id]
   );
 
   const handleCreatePlaylist = async () => {

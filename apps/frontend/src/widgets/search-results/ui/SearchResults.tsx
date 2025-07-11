@@ -5,7 +5,7 @@ import { Loader } from "@shared/ui/loader/Loader";
 import { ResultsTrackCard } from "../results-track-card/ui/ResultsTrackCard";
 
 export const SearchResults = () => {
-  const { searchResults, loading, playlists, user } = useSearchResults();
+  const { searchResults, loading } = useSearchResults();
   const bestResult = searchResults?.tracks?.items?.[0];
   if (!searchResults || loading) {
     return (
@@ -45,14 +45,7 @@ export const SearchResults = () => {
           </Link>
           <div className="flex flex-col">
             {searchResults?.tracks?.items?.slice(0, 4).map((track, index) => (
-              <ResultsTrackCard
-                key={track.id}
-                track={track}
-                index={index}
-                isOwner={false}
-                playlists={playlists}
-                userId={user?.user?.id}
-              />
+              <ResultsTrackCard key={track.id} track={track} index={index} />
             ))}
           </div>
         </div>

@@ -7,8 +7,7 @@ import { Loader } from "@shared/ui/loader/Loader";
 import { TrackInfoTrackCard } from "../track-info-track-card/ui/TrackInfoTrackCard";
 
 export const TrackInfo = () => {
-  const { trackData, albums, singles, imageColors, loading, playlists, user } =
-    useTrackInfo();
+  const { trackData, albums, singles, imageColors, loading } = useTrackInfo();
   if (loading || !trackData)
     return (
       <div className="flex justify-center items-center h-full">
@@ -75,14 +74,7 @@ export const TrackInfo = () => {
         <h2 className="text-2xl font-bold">{trackData.artist.name}</h2>
         <div className="flex flex-col">
           {trackData.topTracks.map((track, index) => (
-            <TrackInfoTrackCard
-              key={track.id}
-              track={track}
-              index={index}
-              isOwner={false}
-              playlists={playlists}
-              userId={user?.user?.id}
-            />
+            <TrackInfoTrackCard key={track.id} track={track} index={index} />
           ))}
         </div>
       </div>

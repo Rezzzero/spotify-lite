@@ -13,8 +13,6 @@ export const ArtistInfo = () => {
     selectedFilter,
     filtredAlbumsAndSingles,
     loading,
-    playlists,
-    user,
   } = useArtistInfo();
   if (loading || !artistInfo)
     return (
@@ -47,11 +45,8 @@ export const ArtistInfo = () => {
               key={track.id}
               track={track}
               index={index}
-              isOwner={false}
               format="list"
               withImage={true}
-              playlists={playlists}
-              userId={user?.user?.id}
             />
           ))}
         </div>
