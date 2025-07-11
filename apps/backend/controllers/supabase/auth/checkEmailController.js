@@ -1,4 +1,4 @@
-import { checkEmail } from "../../../utils/supabaseUtils.js";
+import { checkEmail } from "#utils/supabaseUtils";
 
 export const checkEmailHandler = async (req, res) => {
   const email = req.query.email;

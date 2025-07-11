@@ -1,5 +1,5 @@
 import express from "express";
-import { albumHandler } from "../../controllers/spotify/albumController.js";
+import { albumHandler } from "#controllers/spotify/albumController";
 
 const router = express.Router();
 

@@ -1,5 +1,5 @@
 import express from "express";
-import { updateUserNameHandler } from "../../../controllers/supabase/user/updateUserNameController.js";
+import { updateUserNameHandler } from "#controllers/supabase/user/updateUserNameController";
 
 const router = express.Router();
 

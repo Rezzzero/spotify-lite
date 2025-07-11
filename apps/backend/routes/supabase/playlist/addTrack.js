@@ -1,5 +1,5 @@
 import express from "express";
-import { addTrackHandler } from "../../../controllers/supabase/playlist/addTrackController.js";
+import { addTrackHandler } from "#controllers/supabase/playlist/addTrackController";
 
 const router = express.Router();
 

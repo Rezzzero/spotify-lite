@@ -1,5 +1,5 @@
 import express from "express";
-import { deletePlaylistFromUserHandler } from "../../../controllers/supabase/playlist/deletePlaylistFromUserController.js";
+import { deletePlaylistFromUserHandler } from "#controllers/supabase/playlist/deletePlaylistFromUserController";
 
 const router = express.Router();
 

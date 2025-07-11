@@ -1,4 +1,4 @@
-import { getPlaylistsOfUser } from "../../../utils/supabaseUtils.js";
+import { getPlaylistsOfUser } from "#utils/supabaseUtils";
 
 export const getPlaylistsOfUserHandler = async (req, res) => {
   try {

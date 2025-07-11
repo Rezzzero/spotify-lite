@@ -1,5 +1,5 @@
 import express from "express";
-import { searchHandler } from "../../controllers/spotify/searchController.js";
+import { searchHandler } from "#controllers/spotify/searchController";
 
 const router = express.Router();
 

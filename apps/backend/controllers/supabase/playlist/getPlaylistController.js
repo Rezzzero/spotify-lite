@@ -2,7 +2,7 @@ import {
   getPlaylist,
   getUserByAccessToken,
   getUserById,
-} from "../../../utils/supabaseUtils.js";
+} from "#utils/supabaseUtils";
 
 export const getPlaylistHandler = async (req, res) => {
   try {

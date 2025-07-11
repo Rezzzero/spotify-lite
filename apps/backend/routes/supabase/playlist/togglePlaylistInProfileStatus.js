@@ -1,5 +1,5 @@
 import express from "express";
-import { togglePlaylistInProfileStatusHandler } from "../../../controllers/supabase/playlist/togglePlaylistInProfileStatusController.js";
+import { togglePlaylistInProfileStatusHandler } from "#controllers/supabase/playlist/togglePlaylistInProfileStatusController";
 
 const router = express.Router();
 

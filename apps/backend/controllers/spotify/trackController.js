@@ -3,7 +3,7 @@ import {
   getArtistAlbumsAndSingles,
   getArtistTopTracks,
   getTrack,
-} from "../../utils/spotifyUtils.js";
+} from "#utils/spotifyUtils";
 
 export const trackHandler = async (req, res) => {
   const id = req.params.id;

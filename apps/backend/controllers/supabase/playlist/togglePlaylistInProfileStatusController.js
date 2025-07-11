@@ -1,4 +1,4 @@
-import { togglePlaylistInProfileStatus } from "../../../utils/supabaseUtils.js";
+import { togglePlaylistInProfileStatus } from "#utils/supabaseUtils";
 
 export const togglePlaylistInProfileStatusHandler = async (req, res) => {
   try {

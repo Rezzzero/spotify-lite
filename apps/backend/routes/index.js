@@ -7,7 +7,7 @@ import albumRoutes from "./spotify/album.js";
 import trackRoutes from "./spotify/track.js";
 import discographyRoutes from "./spotify/discography.js";
 import soundcloudSearchRoutes from "./soundcloud/search.js";
-import streamRoutes from ".//soundcloud/stream.js";
+import streamRoutes from "./soundcloud/stream.js";
 import artistTopTracksRoutes from "./spotify/artistTopTracks.js";
 import artistAlbumsRoutes from "./spotify/artistAlbums.js";
 import albumTracksRoutes from "./spotify/albumTracks.js";

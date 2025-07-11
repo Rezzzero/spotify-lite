@@ -2,7 +2,7 @@ import {
   getAlbum,
   getArtist,
   getArtistAlbumsAndSingles,
-} from "../../utils/spotifyUtils.js";
+} from "#utils/spotifyUtils";
 
 export const albumHandler = async (req, res) => {
   const id = req.params.id;

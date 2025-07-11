@@ -1,4 +1,4 @@
-import { getNewRealeses } from "../../utils/spotifyUtils.js";
+import { getNewRealeses } from "#utils/spotifyUtils";
 
 export async function getNewReleasesHandler(_, res) {
   try {

@@ -1,7 +1,7 @@
 import {
   getArtistAlbumsAndSingles,
   getSeveralAlbums,
-} from "../../utils/spotifyUtils.js";
+} from "#utils/spotifyUtils";
 
 export const discographyHandler = async (req, res) => {
   const artistId = req.params.artistId;

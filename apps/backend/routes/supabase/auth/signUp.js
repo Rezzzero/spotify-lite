@@ -1,5 +1,5 @@
 import express from "express";
-import { signUpHandler } from "../../../controllers/supabase/auth/singUpController.js";
+import { signUpHandler } from "#controllers/supabase/auth/singUpController";
 
 const router = express.Router();
 

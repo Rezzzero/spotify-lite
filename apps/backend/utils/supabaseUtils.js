@@ -2,7 +2,7 @@ import { supabase, supabaseAdmin } from "../clients/supabase/supabaseClient.js";
 import {
   getSoundCloudSearchResults,
   getSoundCloudStream,
-} from "../utils/soundCloudUtils.js";
+} from "#utils/soundCloudUtils";
 
 export const checkEmail = async (email) => {
   const { data, error } = await supabaseAdmin.rpc("check_email_exists", {
@@ -616,12 +616,16 @@ export const getOrUpdateTrack = async (track) => {
   }
 };
 
-export const togglePlaylistInProfileStatus = async (playlistId, userId, status) => {
+export const togglePlaylistInProfileStatus = async (
+  playlistId,
+  userId,
+  status
+) => {
   const { data, error } = await supabaseAdmin
     .from("user_playlists")
     .update({ show_in_profile: status })
     .eq("playlist_id", playlistId)
-    .eq('user_id', userId)
+    .eq("user_id", userId)
     .select()
     .single();
 

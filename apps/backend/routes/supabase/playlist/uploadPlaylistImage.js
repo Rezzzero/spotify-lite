@@ -1,7 +1,7 @@
 import express from "express";
 import multer from "multer";
 
-import { uploadPlaylistImageHandler } from "../../../controllers/supabase/playlist/uploadPlaylistImageController.js";
+import { uploadPlaylistImageHandler } from "#controllers/supabase/playlist/uploadPlaylistImageController";
 
 const router = express.Router();
 const upload = multer();

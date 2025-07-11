@@ -1,7 +1,4 @@
-import {
-  createPlaylist,
-  addPlaylistToUser,
-} from "../../../utils/supabaseUtils.js";
+import { createPlaylist, addPlaylistToUser } from "#utils/supabaseUtils";
 
 export const createPlaylistHandler = async (req, res) => {
   try {

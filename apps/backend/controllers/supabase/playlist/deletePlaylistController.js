@@ -3,7 +3,7 @@ import {
   deletePlaylistImage,
   deleteAllTracksFromPlaylist,
   deletePlaylistFromUser,
-} from "../../../utils/supabaseUtils.js";
+} from "#utils/supabaseUtils";
 
 export const deletePlaylistHandler = async (req, res) => {
   try {

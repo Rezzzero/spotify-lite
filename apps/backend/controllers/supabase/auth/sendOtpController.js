@@ -1,4 +1,4 @@
-import { sendOtp } from "../../../utils/supabaseUtils.js";
+import { sendOtp } from "#utils/supabaseUtils";
 
 export const sendOtpHandler = async (req, res) => {
   try {

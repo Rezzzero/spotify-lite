@@ -1,5 +1,5 @@
 import express from "express";
-import { deleteUserImageHandler } from "../../../controllers/supabase/user/deleteUserImageController.js";
+import { deleteUserImageHandler } from "#controllers/supabase/user/deleteUserImageController";
 
 const router = express.Router();
 

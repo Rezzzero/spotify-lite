@@ -1,4 +1,4 @@
-import { getSoundCloudStream } from "../../utils/soundCloudUtils.js";
+import { getSoundCloudStream } from "#utils/soundCloudUtils";
 
 export const streamHandler = async (req, res) => {
   const url = req.query.url;

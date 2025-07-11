@@ -1,4 +1,4 @@
-import { updateUserName } from "../../../utils/supabaseUtils.js";
+import { updateUserName } from "#utils/supabaseUtils";
 
 export const updateUserNameHandler = async (req, res) => {
   const { id } = req.params;

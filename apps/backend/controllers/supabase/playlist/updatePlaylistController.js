@@ -1,7 +1,4 @@
-import {
-  updatePlaylist,
-  getUserImageUrl,
-} from "../../../utils/supabaseUtils.js";
+import { updatePlaylist, getUserImageUrl } from "#utils/supabaseUtils";
 
 export const updatePlaylistHandler = async (req, res) => {
   try {

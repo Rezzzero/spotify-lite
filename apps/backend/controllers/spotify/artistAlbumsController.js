@@ -1,4 +1,4 @@
-import { getArtistAlbumsAndSingles } from "../../utils/spotifyUtils.js";
+import { getArtistAlbumsAndSingles } from "#utils/spotifyUtils";
 
 export const artistAlbumsHandler = async (req, res) => {
   const id = req.params.id;

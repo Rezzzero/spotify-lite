@@ -1,4 +1,4 @@
-import { getPopularTracks } from "../../utils/spotifyUtils.js";
+import { getPopularTracks } from "#utils/spotifyUtils";
 
 export async function getPopularTracksHandler(_, res) {
   try {

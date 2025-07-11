@@ -1,5 +1,5 @@
 import express from "express";
-import { getNewReleasesHandler } from "../../controllers/spotify/newReleasesController.js";
+import { getNewReleasesHandler } from "#controllers/spotify/newReleasesController";
 
 const router = express.Router();
 

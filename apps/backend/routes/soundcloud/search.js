@@ -1,5 +1,5 @@
 import express from "express";
-import { soundcloudSearchHandler } from "../../controllers/soundcloud/searchController.js";
+import { soundcloudSearchHandler } from "#controllers/soundcloud/searchController";
 
 const router = express.Router();
 

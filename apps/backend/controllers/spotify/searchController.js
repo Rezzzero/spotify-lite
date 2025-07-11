@@ -1,4 +1,4 @@
-import { getSearchResults } from "../../utils/spotifyUtils.js";
+import { getSearchResults } from "#utils/spotifyUtils";
 
 export const searchHandler = async (req, res) => {
   const query = req.query.q;

@@ -1,5 +1,5 @@
 import express from "express";
-import { getPopularTracksHandler } from '../../controllers/spotify/popularTracksController.js';
+import { getPopularTracksHandler } from "#controllers/spotify/popularTracksController";
 
 const router = express.Router();
 

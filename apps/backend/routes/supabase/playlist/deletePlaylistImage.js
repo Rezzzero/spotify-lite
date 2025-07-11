@@ -1,5 +1,5 @@
 import express from "express";
-import { deletePlaylistImageHandler } from "../../../controllers/supabase/playlist/deletePlaylistImageController.js";
+import { deletePlaylistImageHandler } from "#controllers/supabase/playlist/deletePlaylistImageController";
 
 const router = express.Router();
 

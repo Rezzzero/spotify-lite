@@ -1,5 +1,5 @@
 import express from "express";
-import { artistHandler } from "../../controllers/spotify/artistController.js";
+import { artistHandler } from "#controllers/spotify/artistController";
 
 const router = express.Router();
 

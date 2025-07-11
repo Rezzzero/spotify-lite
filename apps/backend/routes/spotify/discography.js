@@ -1,5 +1,5 @@
 import express from "express";
-import { discographyHandler } from "../../controllers/spotify/discographyController.js";
+import { discographyHandler } from "#controllers/spotify/discographyController";
 
 const router = express.Router();
 

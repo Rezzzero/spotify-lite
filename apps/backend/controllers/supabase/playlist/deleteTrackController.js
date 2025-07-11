@@ -1,4 +1,4 @@
-import { deleteTrackFromPlaylist } from "../../../utils/supabaseUtils.js";
+import { deleteTrackFromPlaylist } from "#utils/supabaseUtils";
 
 export const deleteTrackHandler = async (req, res) => {
   try {

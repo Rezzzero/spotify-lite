@@ -1,4 +1,4 @@
-import { getSoundCloudSearchResults } from "../../utils/soundCloudUtils.js";
+import { getSoundCloudSearchResults } from "#utils/soundCloudUtils";
 
 export const soundcloudSearchHandler = async (req, res) => {
   const query = req.query.q;
