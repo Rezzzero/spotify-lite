@@ -22,8 +22,6 @@ export const Discography = ({
   scrollContainerRef: React.RefObject<HTMLDivElement | null>;
 }) => {
   const {
-    playlists,
-    user,
     filteredDiscography: discography,
     selectedFilterByType,
     handleChangeFilter,
@@ -114,8 +112,6 @@ export const Discography = ({
             albums={discography}
             scrollContainerRef={scrollContainerRef}
             setActiveAlbum={setActiveAlbum}
-            playlists={playlists}
-            userId={user?.user?.id}
           />
         </div>
       )}

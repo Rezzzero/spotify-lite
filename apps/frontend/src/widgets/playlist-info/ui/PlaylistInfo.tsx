@@ -1,13 +1,11 @@
 import { usePlaylistInfo } from "../model/usePlaylistInfo";
 import EditIcon from "@shared/assets/playlist/edit-icon.svg?react";
-import ClockIcon from "@shared/assets/clock-icon.svg?react";
 import { Link } from "react-router-dom";
 import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
 import { DeletePlaylistModal } from "../delete-modal/ui/DeletePlaylistModal";
 import { EditPlaylistModal } from "../edit-modal/ui/EditPlaylistModal";
 import { PlaylistMenuModal } from "../menu-modal/ui/PlaylistMenuModal";
 import { AddTrackSearch } from "../add-track-search/ui/AddTrackSearch";
-import { PlaylistTrackCard } from "../playlist-track-card/ui/PlaylistTrackCard";
 import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
 import {
   PLAYLIST_PLACEHOLDER_URL,
@@ -15,11 +13,10 @@ import {
 } from "@shared/constants/urls";
 import { Loader } from "@shared/ui/loader/Loader";
 import { MediaControls } from "@features/media-controls/ui/MediaControls";
+import { Table } from "@shared/ui/table/Table";
 
 export const PlaylistInfo = () => {
   const {
-    user,
-    playlists,
     playlistPreviewImages,
     playlistData,
     setPlaylistData,
@@ -183,37 +180,12 @@ export const PlaylistInfo = () => {
           onOpenFormatModal={() => setChangeFormatModal((prev) => !prev)}
         />
         {tracks.length > 0 && (
-          <div className="flex flex-col gap-2">
-            <div
-              className={`grid ${
-                playlistFormat === "compact"
-                  ? "grid-cols-[30px_2fr_1fr_1fr_1fr_auto]"
-                  : "grid-cols-[30px_2fr_1fr_1fr_auto]"
-              } px-5 pr-9 py-2 border-b border-zinc-700`}
-            >
-              <span>#</span>
-              <span>Название</span>
-              {playlistFormat === "compact" && <span>Исполнитель</span>}
-              <span>Альбом</span>
-              <span>Дата добавления</span>
-              <ClockIcon className="w-5 h-5 mr-1" />
-            </div>
-            <div>
-              {tracks.map((track, index) => (
-                <PlaylistTrackCard
-                  key={`${track.id}-${index}`}
-                  track={track}
-                  index={index}
-                  libraryFormat={playlistFormat}
-                  setTracks={setTracks}
-                  handleUpdateDuration={handleUpdateDuration}
-                  isOwner={isOwner}
-                  playlists={playlists}
-                  userId={user?.user?.id}
-                />
-              ))}
-            </div>
-          </div>
+          <Table
+            tracks={tracks}
+            withImage={true}
+            withAddedAt={true}
+            withAlbum={true}
+          />
         )}
         {isOwner &&
           (openSearch ? (

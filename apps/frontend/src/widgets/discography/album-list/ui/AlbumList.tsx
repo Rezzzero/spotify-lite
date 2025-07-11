@@ -1,23 +1,17 @@
-import { Album, Playlist } from "@shared/types/types";
-import clockIcon from "@shared/assets/clock-icon.svg";
+import { Album } from "@shared/types/types";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import { SupabasePlaylist } from "@shared/types/playlist";
-import { DiscographyTrackCard } from "@widgets/discography/discography-track-card/ui/DiscographyTrackCard";
+import { Table } from "@shared/ui/table/Table";
 
 export const AlbumList = ({
   albums,
   scrollContainerRef,
   setActiveAlbum,
-  playlists,
-  userId,
 }: {
   albums: Album[];
   scrollContainerRef: React.RefObject<HTMLDivElement | null>;
   setActiveAlbum: React.Dispatch<React.SetStateAction<string | null>>;
-  playlists: Playlist[] | SupabasePlaylist[];
-  userId: string | undefined;
 }) => {
   const rowVirtualizer = useVirtualizer({
     count: albums.length,
@@ -92,28 +86,7 @@ export const AlbumList = ({
                   </p>
                 </div>
               </div>
-              <div className="grid w-full items-center text-sm border-b border-zinc-800 text-gray-400 py-2 pr-10 grid-cols-[50px_2fr_1fr_auto]">
-                <p className="text-lg pl-5 pr-4">#</p>
-                <p>Название</p>
-                <img
-                  src={clockIcon}
-                  alt="clock icon"
-                  className="w-5 h-5 justify-self-end"
-                />
-              </div>
-              <div className="flex flex-col">
-                {album.tracks.items.map((track, index) => (
-                  <DiscographyTrackCard
-                    key={track.id}
-                    track={track}
-                    index={index}
-                    isOwner={false}
-                    playlists={playlists}
-                    userId={userId}
-                    album={album}
-                  />
-                ))}
-              </div>
+              <Table tracks={album.tracks.items} album={album} />
             </div>
           </div>
         );

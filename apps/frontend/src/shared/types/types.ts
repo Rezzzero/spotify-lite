@@ -74,6 +74,28 @@ export interface Track {
   entry_id?: string;
 }
 
+export interface TablesTrack {
+  name: string;
+  added_at?: string;
+  id: string;
+  duration_ms: number;
+  album: {
+    id: string;
+    name: string;
+    images: Image[];
+  };
+  artists: {
+    id: string;
+    uri: string;
+    href: string;
+    name: string;
+    type: string;
+    external_urls: {
+      spotify: string;
+    };
+  }[];
+}
+
 export interface Show {
   id: string;
   name: string;
@@ -122,6 +144,17 @@ export interface TrackToAdd {
   name: string;
   duration_ms: number;
   album: { id: string; name: string; images: Image[] };
-  artists: Artist[];
+  artists:
+    | Artist[]
+    | {
+        id: string;
+        uri: string;
+        href: string;
+        name: string;
+        type: string;
+        external_urls: {
+          spotify: string;
+        };
+      }[];
   mp3_url: string;
 }

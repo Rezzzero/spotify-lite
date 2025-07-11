@@ -23,8 +23,6 @@ export const TrackInfoTrackCard = ({
     isCurrent,
     isMenuOpen,
     setIsMenuOpen,
-    isPlaying,
-    pause,
     menuRef,
     buttonRef,
     isAddToMediaLibraryModalOpen,
@@ -32,20 +30,12 @@ export const TrackInfoTrackCard = ({
     handleMouseEnter,
     handleMouseLeave,
     handleAddTrackToPlaylist,
-    handleListenTrack,
   } = useTrackCard({ track });
 
   return (
     <>
       <div className="relative flex items-center group hover:bg-[#333336] pr-4 pl-7">
-        <TrackPlayButton
-          track={track}
-          index={index}
-          handleListenTrack={handleListenTrack}
-          isCurrent={isCurrent}
-          isPlaying={isPlaying}
-          pause={pause}
-        />
+        <TrackPlayButton track={track} index={index} />
         <TrackCard
           track={track}
           index={index}

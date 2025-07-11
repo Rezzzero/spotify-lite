@@ -1,209 +1,123 @@
 import { formatAddedAt } from "@shared/lib/format/formatAddedAt";
-import { Image } from "@shared/types/types";
+import { Album, TablesTrack } from "@shared/types/types";
 import ClockIcon from "@shared/assets/clock-icon.svg?react";
 import {
   useReactTable,
   getCoreRowModel,
   flexRender,
   ColumnDef,
+  CellContext,
 } from "@tanstack/react-table";
 import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
 import { Link } from "react-router-dom";
 import { useMemo, useRef, useState } from "react";
+import { TrackPlayButton } from "../track-play-button/TrackPlayButton";
 
-interface TablesTrack {
-  name: string;
-  added_at: string;
-  id: string;
-  duration_ms: number;
-  album: {
-    id: string;
-    name: string;
-    images: Image[];
-  };
-  artists: {
-    id: string;
-    uri: string;
-    href: string;
-    name: string;
-    type: string;
-    external_urls: {
-      spotify: string;
-    };
-  }[];
-}
-
-const data = [
-  {
-    album: {
-      id: "0x4WtpS8RL49nXoHlMgQsW",
-      name: "Часть чего-то большего",
-      images: [
-        {
-          url: "https://i.scdn.co/image/ab67616d0000b27387c79d18003e31d79fb7485c",
-          width: 640,
-          height: 640,
-        },
-        {
-          url: "https://i.scdn.co/image/ab67616d00001e0287c79d18003e31d79fb7485c",
-          width: 300,
-          height: 300,
-        },
-        {
-          url: "https://i.scdn.co/image/ab67616d0000485187c79d18003e31d79fb7485c",
-          width: 64,
-          height: 64,
-        },
-      ],
+export const Table = ({
+  tracks,
+  album,
+  withAlbum,
+  withAddedAt,
+  withImage,
+}: {
+  tracks: TablesTrack[];
+  album?: Album;
+  withAlbum?: boolean;
+  withAddedAt?: boolean;
+  withImage?: boolean;
+}) => {
+  const columns = [
+    {
+      id: "index",
+      header: () => <span className="cursor-text text-lg mx-2">#</span>,
+      size: 40,
+      maxSize: 40,
+      cell: ({ row }: CellContext<TablesTrack, unknown>) => (
+        <TrackPlayButton track={row.original} index={row.index} album={album} />
+      ),
+      enableResizing: false,
     },
-    artists: [
-      {
-        id: "2zYmwYLeJvcr8vRQe5pQRa",
-        uri: "spotify:artist:2zYmwYLeJvcr8vRQe5pQRa",
-        href: "https://api.spotify.com/v1/artists/2zYmwYLeJvcr8vRQe5pQRa",
-        name: "Валентин Стрыкало",
-        type: "artist",
-        external_urls: {
-          spotify: "https://open.spotify.com/artist/2zYmwYLeJvcr8vRQe5pQRa",
-        },
-      },
-    ],
-    duration_ms: 352191,
-    id: "2x41NYjqXQJjgkGSr4q95h",
-    name: "Кладбище самолетов",
-    added_at: "2025-06-30 12:17:03.007446+00",
-  },
-  {
-    album: {
-      id: "0x4WtpS8RL49nXoHlMgQsW",
-      name: "Часть чего-то большего",
-      images: [
-        {
-          url: "https://i.scdn.co/image/ab67616d0000b27387c79d18003e31d79fb7485c",
-          width: 640,
-          height: 640,
-        },
-        {
-          url: "https://i.scdn.co/image/ab67616d00001e0287c79d18003e31d79fb7485c",
-          width: 300,
-          height: 300,
-        },
-        {
-          url: "https://i.scdn.co/image/ab67616d0000485187c79d18003e31d79fb7485c",
-          width: 64,
-          height: 64,
-        },
-      ],
-    },
-    artists: [
-      {
-        id: "2zYmwYLeJvcr8vRQe5pQRa",
-        uri: "spotify:artist:2zYmwYLeJvcr8vRQe5pQRa",
-        href: "https://api.spotify.com/v1/artists/2zYmwYLeJvcr8vRQe5pQRa",
-        name: "Валентин Стрыкало",
-        type: "artist",
-        external_urls: {
-          spotify: "https://open.spotify.com/artist/2zYmwYLeJvcr8vRQe5pQRa",
-        },
-      },
-    ],
-    duration_ms: 258989,
-    id: "4k8pab2VcnRFoEotbGav0g",
-    name: "Улица Сталеваров",
-    added_at: "2025-07-04 11:12:29.337+00",
-  },
-];
-
-const columns: ColumnDef<TablesTrack>[] = [
-  {
-    id: "index",
-    header: () => <span className="cursor-text text-lg mx-2">#</span>,
-    size: 40,
-    maxSize: 40,
-    cell: ({ row }) => <span className="text-lg mx-2">{row.index + 1}</span>,
-    enableResizing: false,
-  },
-  {
-    accessorKey: "name",
-    header: () => <span className="hover:text-white">Название</span>,
-    size: 565,
-    minSize: 180,
-    enableResizing: true,
-    cell: ({ row }) => {
-      const track = row.original;
-      const imageUrl = track.album.images[0]?.url;
-      const artistName = track.artists?.[0]?.name || "";
-      return (
-        <div className="flex items-center gap-3 min-w-0">
-          {imageUrl && (
-            <img
-              src={imageUrl}
-              alt={track.name}
-              className="w-10 h-10 rounded object-cover flex-shrink-0"
-            />
-          )}
-          <div className="flex flex-col min-w-0">
-            <Link
-              to={`/track/${track.id}`}
-              className="font-medium text-white hover:underline"
-            >
-              {track.name}
-            </Link>
-            <Link
-              to={`/artist/${track.artists[0].id}`}
-              className="text-zinc-400 group-hover:text-white hover:underline text-sm"
-            >
-              {artistName}
-            </Link>
+    {
+      accessorKey: "name",
+      header: () => <span className="hover:text-white">Название</span>,
+      size: 565,
+      minSize: 180,
+      enableResizing: true,
+      cell: ({ row }: CellContext<TablesTrack, unknown>) => {
+        const track = row.original;
+        const imageUrl = track.album?.images[0]?.url || "";
+        const artistName = track.artists?.[0]?.name || "";
+        return (
+          <div className="flex items-center gap-3 min-w-0">
+            {imageUrl && withImage && (
+              <img
+                src={imageUrl}
+                alt={track.name}
+                className="w-10 h-10 rounded object-cover flex-shrink-0"
+              />
+            )}
+            <div className="flex flex-col min-w-0">
+              <Link
+                to={`/track/${track.id}`}
+                className="font-medium text-white hover:underline"
+              >
+                {track.name}
+              </Link>
+              <Link
+                to={`/artist/${track.artists[0].id}`}
+                className="text-zinc-400 group-hover:text-white hover:underline text-sm"
+              >
+                {artistName}
+              </Link>
+            </div>
           </div>
-        </div>
-      );
+        );
+      },
     },
-  },
-  {
-    accessorKey: "album",
-    header: () => <span className="hover:text-white">Альбом</span>,
-    size: 390,
-    minSize: 120,
-    enableResizing: true,
-    cell: ({ row }) => (
-      <Link
-        to={`/album/${row.original.album.id}`}
-        className="text-zinc-400 hover:underline group-hover:text-white"
-      >
-        {row.original.album.name}
-      </Link>
-    ),
-  },
-  {
-    accessorKey: "added_at",
-    header: () => <span className="hover:text-white">Дата добавления</span>,
-    size: 295,
-    minSize: 140,
-    enableResizing: true,
-    cell: ({ row }) => (
-      <p className="text-zinc-400">{formatAddedAt(row.original.added_at)}</p>
-    ),
-  },
-  {
-    accessorKey: "duration_ms",
-    header: () => (
-      <div className="flex justify-end w-full">
-        <ClockIcon className="w-5 h-5 hover:text-white mr-7" />
-      </div>
-    ),
-    size: 155,
-    minSize: 155,
-    cell: ({ row }) => (
-      <div className="text-right mr-7">
-        {formatMsToMinutesAndSeconds(row.original.duration_ms)}
-      </div>
-    ),
-    enableResizing: false,
-  },
-];
-
-export const Table = () => {
+    withAlbum && {
+      accessorKey: "album",
+      header: () => <span className="hover:text-white">Альбом</span>,
+      size: 390,
+      minSize: 120,
+      enableResizing: true,
+      cell: ({ row }: CellContext<TablesTrack, unknown>) => (
+        <Link
+          to={`/album/${row.original.album.id}`}
+          className="text-zinc-400 text-sm font-medium hover:underline group-hover:text-white"
+        >
+          {row.original.album.name}
+        </Link>
+      ),
+    },
+    withAddedAt && {
+      accessorKey: "added_at",
+      header: () => <span className="hover:text-white">Дата добавления</span>,
+      size: 295,
+      minSize: 140,
+      enableResizing: true,
+      cell: ({ row }: CellContext<TablesTrack, unknown>) => (
+        <p className="text-zinc-400 text-sm font-medium">
+          {formatAddedAt(row.original.added_at ? row.original.added_at : "")}
+        </p>
+      ),
+    },
+    {
+      accessorKey: "duration_ms",
+      header: () => (
+        <div className="flex justify-end w-full">
+          <ClockIcon className="w-5 h-5 hover:text-white mr-7" />
+        </div>
+      ),
+      size: 155,
+      minSize: 155,
+      cell: ({ row }: CellContext<TablesTrack, unknown>) => (
+        <div className="text-right mr-7">
+          {formatMsToMinutesAndSeconds(row.original.duration_ms)}
+        </div>
+      ),
+      enableResizing: false,
+    },
+  ].filter(Boolean) as ColumnDef<TablesTrack>[];
   const [colSizes, setColSizes] = useState([40, 565, 390, 295, 155]);
 
   const sizedColumns = useMemo(
@@ -216,7 +130,7 @@ export const Table = () => {
   );
   const minSizes = [40, 180, 120, 140, 155];
   const table = useReactTable({
-    data,
+    data: tracks,
     columns: sizedColumns,
     getCoreRowModel: getCoreRowModel(),
     columnResizeMode: "onChange",
@@ -373,7 +287,7 @@ export const Table = () => {
             />
           </tr>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="group hover:bg-zinc-800">
+            <tr key={row.id} className="group hover:bg-zinc-800 relative">
               {row.getVisibleCells().map((cell, i) => (
                 <td
                   key={cell.id}

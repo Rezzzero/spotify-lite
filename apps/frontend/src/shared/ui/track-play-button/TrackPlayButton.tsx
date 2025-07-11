@@ -1,23 +1,51 @@
-import { Track } from "@shared/types/types";
+import { Album, TablesTrack, Track } from "@shared/types/types";
 import { CustomTooltip } from "../tooltip/CustomTooltip";
 import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
 import SmallPauseIcon from "@shared/assets/small-pause-icon.svg?react";
+import { usePlayerStore } from "@app/store/player/usePlayerStore";
 
 export const TrackPlayButton = ({
   track,
-  handleListenTrack,
   index,
-  isCurrent,
-  isPlaying,
-  pause,
+  album,
 }: {
-  track: Track;
+  track: Track | TablesTrack;
   index: number;
-  handleListenTrack: () => void;
-  isCurrent: boolean;
-  isPlaying: boolean;
-  pause: () => void;
+  album?: Album;
 }) => {
+  const { currentTrack, currentTrackPageUrl, isPlaying, play, pause } =
+    usePlayerStore();
+  const isCurrent =
+    currentTrack?.id === track?.id &&
+    currentTrackPageUrl === window.location.href;
+
+  const handleListenTrack = () => {
+    const albumData = album
+      ? {
+          id: album.id,
+          name: album.name,
+          images: album.images,
+        }
+      : {
+          id: track.album?.id ?? "",
+          name: track.album?.name ?? "",
+          images: track.album?.images ?? [],
+        };
+    const trackToAdd = {
+      id: track.id,
+      name: track.name,
+      duration_ms: track.duration_ms,
+      album: albumData,
+      artists: track.artists ?? [],
+      mp3_url: "",
+    };
+
+    if (isCurrent) {
+      play();
+    } else {
+      play(trackToAdd);
+    }
+  };
   return (
     <button
       onClick={() => {
@@ -32,7 +60,7 @@ export const TrackPlayButton = ({
         }
       }}
       type="button"
-      className="absolute left-5 flex items-center gap-2"
+      className="absolute top-4 left-5 group-hover:top-[22px] group-hover:left-4 flex items-center gap-2"
     >
       <p
         className={`${
@@ -49,12 +77,12 @@ export const TrackPlayButton = ({
       >
         <span>
           <SmallPlayIcon
-            className={`w-3 h-3 hidden ${
+            className={`w-5 h-4 hidden ${
               isPlaying && isCurrent ? "" : "group-hover:block"
             }`}
           />
           <SmallPauseIcon
-            className={`w-3 h-3 hidden ${
+            className={`w-5 h-4 hidden ${
               isPlaying && isCurrent ? "group-hover:block" : ""
             }`}
           />
