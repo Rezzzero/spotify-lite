@@ -67,16 +67,18 @@ export const Table = ({
                 className="w-10 h-10 rounded object-cover flex-shrink-0"
               />
             )}
-            <div className="flex flex-col min-w-0">
+            <div className="flex flex-col min-w-0 flex-1">
               <Link
                 to={`/track/${track.id}`}
-                className="font-medium text-white hover:underline"
+                className="font-medium text-white hover:underline truncate block"
+                title={track.name}
               >
                 {track.name}
               </Link>
               <Link
                 to={`/artist/${track.artists[0].id}`}
-                className="text-zinc-400 group-hover:text-white hover:underline text-sm"
+                className="text-zinc-400 group-hover:text-white hover:underline text-sm truncate block"
+                title={artistName}
               >
                 {artistName}
               </Link>
@@ -94,7 +96,8 @@ export const Table = ({
       cell: ({ row }: CellContext<TablesTrack, unknown>) => (
         <Link
           to={`/album/${row.original.album.id}`}
-          className="text-zinc-400 text-sm font-medium hover:underline group-hover:text-white"
+          className="text-zinc-400 text-sm font-medium hover:underline group-hover:text-white truncate block w-full"
+          title={row.original.album.name}
         >
           {row.original.album.name}
         </Link>
@@ -104,7 +107,7 @@ export const Table = ({
       accessorKey: "added_at",
       header: () => <span className="hover:text-white">Дата добавления</span>,
       size: 295,
-      minSize: 140,
+      minSize: 165,
       enableResizing: true,
       cell: ({ row }: CellContext<TablesTrack, unknown>) => (
         <p className="text-zinc-400 text-sm font-medium">
@@ -318,6 +321,11 @@ export const Table = ({
                     i === row.getVisibleCells().length - 1 ? "rounded-r-sm" : ""
                   }
                 `}
+                  style={{
+                    width: cell.column.getSize(),
+                    maxWidth: cell.column.getSize(),
+                    overflow: "hidden",
+                  }}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
