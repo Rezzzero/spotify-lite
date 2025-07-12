@@ -105,7 +105,7 @@ export const AlbumInfo = () => {
         />
       </div>
       <div className="px-7">
-        <Table tracks={albumData.album.tracks.items} album={albumData.album} />
+        <Table tracks={albumData.album.tracks.items} album={albumData.album} withoutAlbumLink={true} />
       </div>
       <div className="flex flex-col font-semibold text-[11px] text-zinc-400 px-7">
         <p className="font-bold text-sm">

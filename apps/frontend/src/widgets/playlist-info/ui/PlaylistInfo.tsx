@@ -182,6 +182,9 @@ export const PlaylistInfo = () => {
         {tracks.length > 0 && (
           <Table
             tracks={tracks}
+            setTracks={setTracks}
+            handleUpdateDuration={handleUpdateDuration}
+            isOwner={isOwner}
             withImage={true}
             withAddedAt={true}
             withAlbum={true}

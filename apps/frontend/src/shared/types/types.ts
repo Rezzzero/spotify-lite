@@ -79,6 +79,7 @@ export interface TablesTrack {
   added_at?: string;
   id: string;
   duration_ms: number;
+  entry_id?: string;
   album: {
     id: string;
     name: string;

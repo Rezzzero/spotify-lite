@@ -1,4 +1,4 @@
-import { Track } from "@shared/types/types";
+import { TablesTrack, Track } from "@shared/types/types";
 import PlusIcon from "@shared/assets/plus-icon.svg?react";
 import SearchIcon from "@shared/assets/search-icon.svg?react";
 import { useAddToPlaylistModal } from "../model/useAddToPlaylistModal";
@@ -10,8 +10,8 @@ type AddToPlaylistModalTypes = {
   handleMouseEnter: () => void;
   handleMouseLeave: () => void;
   isOwner?: boolean;
-  handleAddTrackToPlaylist: (id: string, track: Track) => void;
-  track: Track;
+  handleAddTrackToPlaylist: (id: string, track: Track | TablesTrack) => void;
+  track: Track | TablesTrack;
 };
 
 export const AddToPlaylistModal = ({

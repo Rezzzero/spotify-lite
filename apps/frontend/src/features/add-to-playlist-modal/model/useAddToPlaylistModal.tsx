@@ -2,15 +2,15 @@ import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibrarySt
 import { useUserStore } from "@app/store/user/useUser";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { generateId } from "@shared/lib/id/generateId";
-import { Track } from "@shared/types/types";
+import { TablesTrack, Track } from "@shared/types/types";
 import { useState, useMemo } from "react";
 
 export function useAddToPlaylistModal({
   track,
   handleAddTrackToPlaylist,
 }: {
-  track: Track;
-  handleAddTrackToPlaylist: (id: string, track: Track) => void;
+  track: Track | TablesTrack;
+  handleAddTrackToPlaylist: (id: string, track: Track | TablesTrack) => void;
 }) {
   const { user } = useUserStore();
   const { addPlaylist, playlists } = useMediaLibraryStore();

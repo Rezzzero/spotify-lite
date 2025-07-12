@@ -3,7 +3,7 @@ import ToArtistIcon from "@shared/assets/artist-to-icon.svg?react";
 import ToAlbumIcon from "@shared/assets/album-to-icon.svg?react";
 import PlusIcon from "@shared/assets/plus-icon.svg?react";
 import DeleteTrackIcon from "@shared/assets/trash-fill-icon.svg?react";
-import { Track } from "@shared/types/types";
+import { Album, TablesTrack, Track } from "@shared/types/types";
 
 type TrackContextMenuProps = {
   menuRef: React.RefObject<HTMLDivElement | null>;
@@ -11,7 +11,14 @@ type TrackContextMenuProps = {
   handleMouseLeave: () => void;
   setIsMenuOpen: (open: boolean) => void;
   isOwner?: boolean;
-  track: Track;
+  track: Track | TablesTrack;
+  album?:
+    | Album
+    | {
+        id: string;
+        name: string;
+        images: { url: string; width: number; height: number }[];
+      };
   withoutAlbumLink?: boolean;
   withoutArtistLink?: boolean;
   handleDeleteTrack?: (duration: number, id: string) => void;
@@ -24,6 +31,7 @@ export const TrackContextMenu = ({
   setIsMenuOpen,
   isOwner,
   track,
+  album,
   withoutAlbumLink,
   withoutArtistLink,
   handleDeleteTrack,
@@ -69,7 +77,7 @@ export const TrackContextMenu = ({
         {!withoutAlbumLink && (
           <Link
             className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
-            to={`/album/${track.album.id}`}
+            to={`/album/${album ? album.id : track.album.id}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <ToAlbumIcon className="w-4 h-4 mr-2" />К альбому

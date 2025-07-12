@@ -86,7 +86,11 @@ export const AlbumList = ({
                   </p>
                 </div>
               </div>
-              <Table tracks={album.tracks.items} album={album} />
+              <Table
+                tracks={album.tracks.items}
+                album={album}
+                withoutArtistLink={true}
+              />
             </div>
           </div>
         );

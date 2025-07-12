@@ -1,7 +1,6 @@
 import { formatAddedAt } from "@shared/lib/format/formatAddedAt";
-import { Album, TablesTrack } from "@shared/types/types";
+import { Album, TablesTrack, Track } from "@shared/types/types";
 import ClockIcon from "@shared/assets/clock-icon.svg?react";
-import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -13,6 +12,7 @@ import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSe
 import { Link } from "react-router-dom";
 import { useMemo, useRef, useState } from "react";
 import { TrackPlayButton } from "../track-play-button/TrackPlayButton";
+import { TrackMenuButton } from "../track-menu-button/TrackMenuButton";
 
 export const Table = ({
   tracks,
@@ -20,12 +20,22 @@ export const Table = ({
   withAlbum,
   withAddedAt,
   withImage,
+  isOwner,
+  withoutAlbumLink,
+  withoutArtistLink,
+  setTracks,
+  handleUpdateDuration,
 }: {
   tracks: TablesTrack[];
   album?: Album;
   withAlbum?: boolean;
   withAddedAt?: boolean;
   withImage?: boolean;
+  isOwner?: boolean;
+  withoutAlbumLink?: boolean;
+  withoutArtistLink?: boolean;
+  setTracks?: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
+  handleUpdateDuration?: (trackDuration: number, isAdd: boolean) => void;
 }) => {
   const columns = [
     {
@@ -114,13 +124,15 @@ export const Table = ({
       cell: ({ row }: CellContext<TablesTrack, unknown>) => (
         <div className="text-right mr-7 relative">
           {formatMsToMinutesAndSeconds(row.original.duration_ms)}
-          <button
-            // ref={buttonRef}
-            // onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="absolute bottom-1/2 translate-y-1/2 translate-x-1/2 -right-5 hidden group-hover:block hover:scale-105 cursor-pointer"
-          >
-            <MenuIcon className="w-7 h-7 text-white text-gray-400" />
-          </button>
+          <TrackMenuButton
+            track={row.original}
+            album={album}
+            setTracks={setTracks}
+            handleUpdateDuration={handleUpdateDuration}
+            isOwner={isOwner}
+            withoutAlbumLink={withoutAlbumLink}
+            withoutArtistLink={withoutArtistLink}
+          />
         </div>
       ),
       enableResizing: false,
