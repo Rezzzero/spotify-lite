@@ -10,12 +10,15 @@ import {
 } from "@tanstack/react-table";
 import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
 import { Link } from "react-router-dom";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { TrackPlayButton } from "../track-play-button/TrackPlayButton";
 import { TrackMenuButton } from "../track-menu-button/TrackMenuButton";
+import { TableRow } from "../table-row/TableRow";
+import { useTableStore } from "@app/store/table/useTableStore";
 
 export const Table = ({
   tracks,
+  tableKey,
   album,
   withAlbum,
   withAddedAt,
@@ -27,6 +30,7 @@ export const Table = ({
   handleUpdateDuration,
 }: {
   tracks: TablesTrack[];
+  tableKey: string;
   album?: Album;
   withAlbum?: boolean;
   withAddedAt?: boolean;
@@ -37,11 +41,12 @@ export const Table = ({
   setTracks?: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
   handleUpdateDuration?: (trackDuration: number, isAdd: boolean) => void;
 }) => {
+  const { colSizes, setColSizes } = useTableStore();
+  const [localColSize, setLocalColSize] = useState(colSizes[tableKey]);
   const columns = [
     {
       id: "index",
       header: () => <span className="cursor-text text-lg mx-2">#</span>,
-      size: 40,
       maxSize: 40,
       cell: ({ row }: CellContext<TablesTrack, unknown>) => (
         <TrackPlayButton track={row.original} index={row.index} album={album} />
@@ -51,7 +56,6 @@ export const Table = ({
     {
       accessorKey: "name",
       header: () => <span className="hover:text-white">Название</span>,
-      size: 565,
       minSize: 180,
       enableResizing: true,
       cell: ({ row }: CellContext<TablesTrack, unknown>) => {
@@ -90,7 +94,6 @@ export const Table = ({
     withAlbum && {
       accessorKey: "album",
       header: () => <span className="hover:text-white">Альбом</span>,
-      size: 390,
       minSize: 120,
       enableResizing: true,
       cell: ({ row }: CellContext<TablesTrack, unknown>) => (
@@ -106,7 +109,6 @@ export const Table = ({
     withAddedAt && {
       accessorKey: "added_at",
       header: () => <span className="hover:text-white">Дата добавления</span>,
-      size: 295,
       minSize: 165,
       enableResizing: true,
       cell: ({ row }: CellContext<TablesTrack, unknown>) => (
@@ -122,7 +124,6 @@ export const Table = ({
           <ClockIcon className="w-5 h-5 hover:text-white mr-7" />
         </div>
       ),
-      size: 155,
       minSize: 155,
       cell: ({ row }: CellContext<TablesTrack, unknown>) => (
         <div className="text-right mr-7 relative">
@@ -141,15 +142,18 @@ export const Table = ({
       enableResizing: false,
     },
   ].filter(Boolean) as ColumnDef<TablesTrack>[];
-  const [colSizes, setColSizes] = useState([40, 565, 390, 295, 155]);
+
+  useEffect(() => {
+    setLocalColSize(colSizes[tableKey]);
+  }, [colSizes, tableKey]);
 
   const sizedColumns = useMemo(
     () =>
       columns.map((col, i) => ({
         ...col,
-        size: colSizes[i],
+        size: localColSize[i],
       })),
-    [columns, colSizes]
+    [columns, localColSize]
   );
   const minSizes = [40, 180, 120, 140, 155];
   const table = useReactTable({
@@ -160,9 +164,17 @@ export const Table = ({
   });
   const resizingCol = useRef<number | null>(null);
   const prevX = useRef<number | null>(null);
+  const localColSizeRef = useRef(localColSize);
+
+  useEffect(() => {
+    localColSizeRef.current = localColSize;
+  }, [localColSize]);
 
   const handleResizeEnd = () => {
-    resizingCol.current = null;
+    setColSizes((prev) => ({
+      ...prev,
+      [tableKey]: [...localColSizeRef.current],
+    }));
     document.removeEventListener("mousemove", handleResizeMove as any);
     document.removeEventListener("touchmove", handleResizeMove as any);
     document.removeEventListener("mouseup", handleResizeEnd as any);
@@ -231,9 +243,9 @@ export const Table = ({
 
     if (prevX.current !== null) {
       const deltaX = currentX - prevX.current;
-      setColSizes((prevSizes) =>
+      setLocalColSize((prevLocalSize) =>
         resizeColumns({
-          sizes: prevSizes,
+          sizes: prevLocalSize,
           index,
           deltaX,
         })
@@ -310,27 +322,7 @@ export const Table = ({
             />
           </tr>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="group hover:bg-zinc-800 relative">
-              {row.getVisibleCells().map((cell, i) => (
-                <td
-                  key={cell.id}
-                  className={`
-                  px-3 py-2
-                  ${i === 0 ? "rounded-l-sm" : ""}
-                  ${
-                    i === row.getVisibleCells().length - 1 ? "rounded-r-sm" : ""
-                  }
-                `}
-                  style={{
-                    width: cell.column.getSize(),
-                    maxWidth: cell.column.getSize(),
-                    overflow: "hidden",
-                  }}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
+            <TableRow key={row.id} row={row} colSizes={localColSize} />
           ))}
         </tbody>
       </table>

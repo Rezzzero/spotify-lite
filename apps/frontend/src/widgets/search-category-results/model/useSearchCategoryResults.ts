@@ -2,11 +2,9 @@ import { useParams } from "react-router-dom";
 import { useSearchStore } from "../../../app/store/search/useSearchStore";
 import { CardItem, SearchResults } from "@shared/types/types";
 import { useUserStore } from "@app/store/user/useUser";
-import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 
 export const useSearchCategoryResults = () => {
   const { user } = useUserStore();
-  const { playlists } = useMediaLibraryStore();
   const { searchResults } = useSearchStore();
   const { category } = useParams<{ category?: keyof SearchResults }>();
 
@@ -35,7 +33,6 @@ export const useSearchCategoryResults = () => {
   return {
     items: filteredItems,
     category,
-    playlists,
     user,
   };
 };

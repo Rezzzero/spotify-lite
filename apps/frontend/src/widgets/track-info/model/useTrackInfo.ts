@@ -4,8 +4,6 @@ import { useParams } from "react-router-dom";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import { Album, Artist, Track } from "@shared/types/types";
 import { API_URL } from "@shared/constants/constants";
-import { useUserStore } from "@app/store/user/useUser";
-import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 
 interface TrackDataType {
   track: Track;
@@ -15,8 +13,6 @@ interface TrackDataType {
 }
 
 export const useTrackInfo = () => {
-  const { user } = useUserStore();
-  const { playlists } = useMediaLibraryStore();
   const [trackData, setTrackData] = useState<TrackDataType | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [albums, setAlbums] = useState<Album[]>([]);
@@ -48,5 +44,5 @@ export const useTrackInfo = () => {
     fetch();
   }, [id]);
 
-  return { trackData, albums, singles, imageColors, loading, playlists, user };
+  return { trackData, albums, singles, imageColors, loading };
 };

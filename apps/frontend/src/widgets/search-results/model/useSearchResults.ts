@@ -3,12 +3,8 @@ import { useSearchStore } from "../../../app/store/search/useSearchStore";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { API_URL } from "@shared/constants/constants";
-import { useUserStore } from "@app/store/user/useUser";
-import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 
 export const useSearchResults = () => {
-  const { user } = useUserStore();
-  const { playlists } = useMediaLibraryStore();
   const { value: queryFromParams } = useParams();
   const { searchResults, setSearchResults } = useSearchStore();
   const [loading, setLoading] = useState(true);
@@ -38,5 +34,5 @@ export const useSearchResults = () => {
     }
   }, [searchResults, setSearchResults, queryFromParams]);
 
-  return { searchResults, loading, playlists, user };
+  return { searchResults, loading };
 };

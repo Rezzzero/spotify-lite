@@ -182,6 +182,7 @@ export const PlaylistInfo = () => {
         {tracks.length > 0 && (
           <Table
             tracks={tracks}
+            tableKey="default"
             setTracks={setTracks}
             handleUpdateDuration={handleUpdateDuration}
             isOwner={isOwner}

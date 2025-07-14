@@ -39,7 +39,6 @@ export const TrackMenuButton: React.FC<TrackMenuButtonProps> = ({
     handleDeleteTrack,
     setIsMenuOpen,
   } = useTrackCard({ track, album, setTracks, handleUpdateDuration });
-
   return (
     <>
       <button

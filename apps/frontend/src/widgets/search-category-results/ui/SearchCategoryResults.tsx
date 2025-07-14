@@ -9,7 +9,12 @@ export const SearchCategoryResults = () => {
   if (category === "tracks")
     return (
       <div className="flex flex-col w-full gap-5 px-3 mb-10">
-        <Table tracks={items as Track[]} withImage={true} withAlbum={true} />
+        <Table
+          tracks={items as Track[]}
+          tableKey="withoutAddedAt"
+          withImage={true}
+          withAlbum={true}
+        />
       </div>
     );
 

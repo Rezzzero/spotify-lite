@@ -16,8 +16,7 @@ interface AlbumDataType {
 
 export const useAlbumInfo = () => {
   const { user } = useUserStore();
-  const { playlists, removePlaylistFromUser, addPlaylistToUser } =
-    useMediaLibraryStore();
+  const { removePlaylistFromUser, addPlaylistToUser } = useMediaLibraryStore();
   const [albumData, setAlbumData] = useState<AlbumDataType | null>(null);
   const [loading, setLoading] = useState(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -79,7 +78,6 @@ export const useAlbumInfo = () => {
     albumData,
     imageColors,
     loading,
-    playlists,
     user,
     changeFormatButtonRef,
     isPlaying,

@@ -17,7 +17,7 @@ export const AlbumList = ({
     count: albums.length,
     getScrollElement: () => scrollContainerRef.current,
     estimateSize: () => 300,
-    overscan: 5,
+    overscan: 3,
   });
 
   const scrollOffset = rowVirtualizer.scrollOffset ?? 0;
@@ -88,6 +88,7 @@ export const AlbumList = ({
               </div>
               <Table
                 tracks={album.tracks.items}
+                tableKey="withoutAlbum"
                 album={album}
                 withoutArtistLink={true}
               />
