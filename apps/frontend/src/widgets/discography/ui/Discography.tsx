@@ -125,7 +125,7 @@ export const Discography = ({
       {showFilterDropDown && (
         <div
           ref={filterDropDownRef}
-          className="absolute top-20 right-10 bg-zinc-800 p-1 rounded-md flex flex-col items-start"
+          className="fixed top-45 right-20 bg-zinc-800 p-1 rounded-md flex flex-col items-start"
         >
           {Object.values(artistMusicFilterList).map((filter) => (
             <button
@@ -147,7 +147,7 @@ export const Discography = ({
       {showSortDropDown && (
         <div
           ref={sortDropDownRef}
-          className="absolute top-30 right-10 bg-zinc-800 p-1 rounded-md flex flex-col"
+          className="fixed top-45 right-5 bg-zinc-800 p-1 rounded-md flex flex-col"
         >
           <SelectSortFilter sorting={sorting} setSorting={sortDiscography} />
           <SelectLibraryFormat

@@ -1,4 +1,4 @@
-import { TablesTrack, Track } from "@shared/types/types";
+import { ShortenedAlbumType, TablesTrack, Track } from "@shared/types/types";
 import { TrackContextMenu } from "@shared/ui/track-context-menu/TrackContextMenu";
 import { AddToPlaylistModal } from "@features/add-to-playlist-modal/ui/AddToPlaylistModal";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
@@ -6,11 +6,7 @@ import { useTrackCard } from "@features/track-card/model/useTrackCard";
 
 interface TrackMenuButtonProps {
   track: Track | TablesTrack;
-  album?: {
-    id: string;
-    name: string;
-    images: { url: string; width: number; height: number }[];
-  };
+  album?: ShortenedAlbumType;
   isOwner?: boolean;
   withoutAlbumLink?: boolean;
   withoutArtistLink?: boolean;
@@ -39,6 +35,7 @@ export const TrackMenuButton: React.FC<TrackMenuButtonProps> = ({
     handleDeleteTrack,
     setIsMenuOpen,
   } = useTrackCard({ track, album, setTracks, handleUpdateDuration });
+  //добавить направление чтобы отображать модалки трека НАД или ПОД кнопкой меню
   return (
     <>
       <button

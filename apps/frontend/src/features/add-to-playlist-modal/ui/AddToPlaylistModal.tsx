@@ -9,7 +9,6 @@ type AddToPlaylistModalTypes = {
   ref: React.RefObject<HTMLDivElement | null>;
   handleMouseEnter: () => void;
   handleMouseLeave: () => void;
-  isOwner?: boolean;
   handleAddTrackToPlaylist: (id: string, track: Track | TablesTrack) => void;
   track: Track | TablesTrack;
 };
@@ -18,7 +17,6 @@ export const AddToPlaylistModal = ({
   ref,
   handleMouseEnter,
   handleMouseLeave,
-  isOwner,
   handleAddTrackToPlaylist,
   track,
 }: AddToPlaylistModalTypes) => {
@@ -33,9 +31,7 @@ export const AddToPlaylistModal = ({
       ref={ref}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`absolute right-[342px] ${
-        isOwner ? "-top-[155px]" : "-top-[120px]"
-      } w-[260px] flex flex-col mt-2 bg-zinc-800 rounded-xs shadow-lg z-50 p-1`}
+      className="absolute right-[302px] top-[25px] w-[260px] flex flex-col mt-2 bg-zinc-800 rounded-xs shadow-lg z-50 p-1"
     >
       <div className="flex px-2 py-1 gap-2 items-center rounded-xs bg-zinc-700">
         <SearchIcon className="w-4 h-4 cursor-pointer text-[#bababa] group-hover:text-white group-focus-within:text-white" />

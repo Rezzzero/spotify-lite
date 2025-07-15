@@ -126,7 +126,7 @@ export const Table = ({
       ),
       minSize: 155,
       cell: ({ row }: CellContext<TablesTrack, unknown>) => (
-        <div className="text-right mr-7 relative">
+        <div className="text-right text-zinc-400 mr-7 relative">
           {formatMsToMinutesAndSeconds(row.original.duration_ms)}
           <TrackMenuButton
             track={row.original}

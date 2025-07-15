@@ -18,7 +18,6 @@ export const TrackCard = memo(
     isCurrent,
   }: {
     track: Track;
-    index: number;
     withAlbumName?: boolean;
     withImage?: boolean;
     withArtists?: boolean;

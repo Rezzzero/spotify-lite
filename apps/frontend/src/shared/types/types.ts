@@ -64,6 +64,12 @@ export interface Album {
   label: string;
 }
 
+export interface ShortenedAlbumType {
+  id: string;
+  name: string;
+  images: Image[];
+}
+
 export interface Track {
   album: Album;
   artists: Artist[];
@@ -80,11 +86,7 @@ export interface TablesTrack {
   id: string;
   duration_ms: number;
   entry_id?: string;
-  album: {
-    id: string;
-    name: string;
-    images: Image[];
-  };
+  album: ShortenedAlbumType;
   artists: {
     id: string;
     uri: string;

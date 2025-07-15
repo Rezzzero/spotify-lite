@@ -46,7 +46,6 @@ export const ArtistInfo = () => {
               track={track}
               index={index}
               format="list"
-              withImage={true}
             />
           ))}
         </div>

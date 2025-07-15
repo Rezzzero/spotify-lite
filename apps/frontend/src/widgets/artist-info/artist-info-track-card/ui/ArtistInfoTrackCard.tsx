@@ -1,33 +1,18 @@
 import { Track } from "@shared/types/types";
 import { TrackCard } from "@shared/ui/track-card/TrackCard";
-import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import { TrackPlayButton } from "@shared/ui/track-play-button/TrackPlayButton";
 import { useTrackCard } from "@features/track-card/model/useTrackCard";
-import { TrackContextMenu } from "@shared/ui/track-context-menu/TrackContextMenu";
-import { AddToPlaylistModal } from "@features/add-to-playlist-modal/ui/AddToPlaylistModal";
+import { TrackMenuButton } from "@shared/ui/track-menu-button/TrackMenuButton";
 export const ArtistInfoTrackCard = ({
   track,
   index,
   format,
-  withImage,
 }: {
   track: Track;
   index: number;
   format: string;
-  withImage: boolean;
 }) => {
-  const {
-    isCurrent,
-    isMenuOpen,
-    setIsMenuOpen,
-    menuRef,
-    buttonRef,
-    isAddToMediaLibraryModalOpen,
-    addToMediaLibraryRef,
-    handleMouseEnter,
-    handleMouseLeave,
-    handleAddTrackToPlaylist,
-  } = useTrackCard({ track });
+  const { isCurrent } = useTrackCard({ track });
 
   return (
     <>
@@ -35,40 +20,15 @@ export const ArtistInfoTrackCard = ({
         <TrackPlayButton track={track} index={index} />
         <TrackCard
           track={track}
-          index={index}
           withArtists={true}
           addedAt={track.added_at}
           format={format}
-          withImage={withImage}
+          withImage={true}
           isCurrent={isCurrent}
         />
-        <button
-          ref={buttonRef}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="absolute right-1 hidden group-hover:block hover:scale-105 cursor-pointer"
-        >
-          <MenuIcon className="w-7 h-7 text-white text-gray-400" />
-        </button>
-
-        {isMenuOpen && (
-          <TrackContextMenu
-            menuRef={menuRef}
-            track={track}
-            setIsMenuOpen={setIsMenuOpen}
-            handleMouseEnter={handleMouseEnter}
-            handleMouseLeave={handleMouseLeave}
-            withoutArtistLink={true}
-          />
-        )}
-        {isAddToMediaLibraryModalOpen && (
-          <AddToPlaylistModal
-            ref={addToMediaLibraryRef}
-            handleMouseEnter={handleMouseEnter}
-            handleMouseLeave={handleMouseLeave}
-            handleAddTrackToPlaylist={handleAddTrackToPlaylist}
-            track={track}
-          />
-        )}
+        <div className="absolite right-6 bottom-0 relative">
+          <TrackMenuButton track={track} />
+        </div>
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useRef, useState } from "react";
-import { Album, TablesTrack, Track } from "@shared/types/types";
+import { Album, ShortenedAlbumType, TablesTrack, Track } from "@shared/types/types";
 import { API_URL } from "@shared/constants/constants";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { toast } from "react-toastify";
@@ -15,11 +15,7 @@ export const useTrackCard = ({
 }: {
   album?:
     | Album
-    | {
-        id: string;
-        name: string;
-        images: { url: string; width: number; height: number }[];
-      };
+    | ShortenedAlbumType;
   track: Track | TablesTrack;
   setTracks?: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
   handleUpdateDuration?: (trackDuration: number, isAdd: boolean) => void;

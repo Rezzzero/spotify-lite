@@ -3,7 +3,12 @@ import ToArtistIcon from "@shared/assets/artist-to-icon.svg?react";
 import ToAlbumIcon from "@shared/assets/album-to-icon.svg?react";
 import PlusIcon from "@shared/assets/plus-icon.svg?react";
 import DeleteTrackIcon from "@shared/assets/trash-fill-icon.svg?react";
-import { Album, TablesTrack, Track } from "@shared/types/types";
+import {
+  Album,
+  ShortenedAlbumType,
+  TablesTrack,
+  Track,
+} from "@shared/types/types";
 
 type TrackContextMenuProps = {
   menuRef: React.RefObject<HTMLDivElement | null>;
@@ -12,13 +17,7 @@ type TrackContextMenuProps = {
   setIsMenuOpen: (open: boolean) => void;
   isOwner?: boolean;
   track: Track | TablesTrack;
-  album?:
-    | Album
-    | {
-        id: string;
-        name: string;
-        images: { url: string; width: number; height: number }[];
-      };
+  album?: Album | ShortenedAlbumType;
   withoutAlbumLink?: boolean;
   withoutArtistLink?: boolean;
   handleDeleteTrack?: (duration: number, id: string) => void;
@@ -39,7 +38,7 @@ export const TrackContextMenu = ({
   return (
     <div
       ref={menuRef}
-      className="absolute right-3 bottom-0 mt-2 w-[330px] bg-zinc-800 rounded-md shadow-lg z-50"
+      className="absolute -right-7 top-5 mt-2 w-[330px] bg-zinc-800 rounded-md shadow-lg z-50"
     >
       <div className="p-1">
         <button

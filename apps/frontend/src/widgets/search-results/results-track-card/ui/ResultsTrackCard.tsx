@@ -3,32 +3,12 @@ import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import { TrackCard } from "@shared/ui/track-card/TrackCard";
 import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
 import SmallPauseIcon from "@shared/assets/small-pause-icon.svg?react";
-import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import { useTrackCard } from "@features/track-card/model/useTrackCard";
-import { TrackContextMenu } from "@shared/ui/track-context-menu/TrackContextMenu";
-import { AddToPlaylistModal } from "@features/add-to-playlist-modal/ui/AddToPlaylistModal";
-export const ResultsTrackCard = ({
-  track,
-  index,
-}: {
-  track: Track;
-  index: number;
-}) => {
-  const {
-    isCurrent,
-    isMenuOpen,
-    setIsMenuOpen,
-    isPlaying,
-    pause,
-    menuRef,
-    buttonRef,
-    isAddToMediaLibraryModalOpen,
-    addToMediaLibraryRef,
-    handleMouseEnter,
-    handleMouseLeave,
-    handleAddTrackToPlaylist,
-    handleListenTrack,
-  } = useTrackCard({ track });
+import { TrackMenuButton } from "@shared/ui/track-menu-button/TrackMenuButton";
+export const ResultsTrackCard = ({ track }: { track: Track }) => {
+  const { isCurrent, isPlaying, pause, handleListenTrack } = useTrackCard({
+    track,
+  });
 
   return (
     <>
@@ -55,19 +35,18 @@ export const ResultsTrackCard = ({
               <SmallPlayIcon
                 className={`w-5 h-5 hidden ${
                   isPlaying ? "" : "group-hover:block"
-                } absolute left-1/2 -translate-x-1/2 z-10`}
+                } absolute top-1/2 left-1/4 -translate-y-1/2 z-10`}
               />
               <SmallPauseIcon
                 className={`w-5 h-5 hidden ${
                   isPlaying ? "group-hover:block" : ""
-                } absolute left-1/2 -translate-x-1/2 z-10`}
+                } absolute top-1/2 left-1/4 -translate-y-1/2 z-10`}
               />
             </span>
           </CustomTooltip>
         </button>
         <TrackCard
           track={track}
-          index={index}
           withImage={true}
           withArtists={true}
           format="search"
@@ -75,32 +54,9 @@ export const ResultsTrackCard = ({
           addedAt={track.added_at}
           isCurrent={isCurrent}
         />
-        <button
-          ref={buttonRef}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="absolute right-1 hidden group-hover:block hover:scale-105 cursor-pointer"
-        >
-          <MenuIcon className="w-7 h-7 text-white text-gray-400" />
-        </button>
-
-        {isMenuOpen && (
-          <TrackContextMenu
-            menuRef={menuRef}
-            handleMouseEnter={handleMouseEnter}
-            handleMouseLeave={handleMouseLeave}
-            track={track}
-            setIsMenuOpen={setIsMenuOpen}
-          />
-        )}
-        {isAddToMediaLibraryModalOpen && (
-          <AddToPlaylistModal
-            ref={addToMediaLibraryRef}
-            handleMouseEnter={handleMouseEnter}
-            handleMouseLeave={handleMouseLeave}
-            handleAddTrackToPlaylist={handleAddTrackToPlaylist}
-            track={track}
-          />
-        )}
+        <div className="absolite right-6 bottom-0 relative">
+          <TrackMenuButton track={track} />
+        </div>
       </div>
     </>
   );
