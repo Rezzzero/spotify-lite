@@ -1,40 +1,24 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { useClickOutside } from "./useClickOutside";
 
 export const useDropdown = (onToggle: (open: boolean) => void = () => {}) => {
   const [open, setOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const dropDownRef = useRef<HTMLDivElement>(null);
-
-  const show = useCallback(() => {
+  useClickOutside({
+    refs: [buttonRef, dropDownRef],
+    handler: () => hide(),
+    enabled: open,
+  });
+  const show = () => {
     setOpen(true);
     onToggle(true);
-  }, [onToggle]);
+  };
 
-  const hide = useCallback(() => {
+  const hide = () => {
     setOpen(false);
     onToggle(false);
-  }, [onToggle]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropDownRef.current &&
-        !dropDownRef.current.contains(event.target as Node) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target as Node)
-      ) {
-        hide();
-      }
-    };
-
-    if (open) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [open, hide]);
+  };
 
   return {
     open,

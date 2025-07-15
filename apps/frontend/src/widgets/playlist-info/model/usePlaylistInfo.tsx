@@ -9,6 +9,7 @@ import { Track } from "@shared/types/types";
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 import { useUserStore } from "@app/store/user/useUser";
 import { toast } from "react-toastify";
+import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
 
 export const usePlaylistInfo = () => {
   const { user } = useUserStore();
@@ -39,6 +40,26 @@ export const usePlaylistInfo = () => {
   const { id } = useParams();
   const source = id?.startsWith("sp_") ? "supabase" : "spotify";
   const navigate = useNavigate();
+  useClickOutside({
+    refs: [menuModalRef, menuButtonRef],
+    handler: () => setMenuModal(false),
+    enabled: menuModal,
+  });
+  useClickOutside({
+    refs: [editModalRef],
+    handler: () => setEditModal(false),
+    enabled: editModal,
+  });
+  useClickOutside({
+    refs: [changeFormatModalRef, changeFormatButtonRef],
+    handler: () => setChangeFormatModal(false),
+    enabled: changeFormatModal,
+  });
+  useClickOutside({
+    refs: [deleteModalRef],
+    handler: () => setDeletePlaylistModal(false),
+    enabled: deletePlaylistModal,
+  });
 
   useEffect(() => {
     setLoading(true);
@@ -81,51 +102,6 @@ export const usePlaylistInfo = () => {
 
     fetch();
   }, [id, source, navigate, user]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        menuModal &&
-        menuModalRef.current &&
-        !menuModalRef.current.contains(event.target as Node) &&
-        menuButtonRef.current &&
-        !menuButtonRef.current?.contains(event.target as Node)
-      ) {
-        setMenuModal(false);
-      }
-
-      if (
-        editModal &&
-        editModalRef.current &&
-        !editModalRef.current.contains(event.target as Node)
-      ) {
-        setEditModal(false);
-      }
-
-      if (
-        changeFormatModal &&
-        changeFormatModalRef.current &&
-        !changeFormatModalRef.current.contains(event.target as Node) &&
-        changeFormatButtonRef.current &&
-        !changeFormatButtonRef.current?.contains(event.target as Node)
-      ) {
-        setChangeFormatModal(false);
-      }
-
-      if (
-        deletePlaylistModal &&
-        deleteModalRef.current &&
-        !deleteModalRef.current.contains(event.target as Node)
-      ) {
-        setDeletePlaylistModal(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [menuModal, editModal, changeFormatModal, deletePlaylistModal]);
 
   const handleUpdateDuration = (trackDuration: number, isAdd: boolean) => {
     setPlaylistData((prevPlaylistData) => {

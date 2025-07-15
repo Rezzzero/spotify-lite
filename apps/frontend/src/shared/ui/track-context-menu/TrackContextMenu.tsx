@@ -39,7 +39,7 @@ export const TrackContextMenu = ({
   return (
     <div
       ref={menuRef}
-      className="absolute right-3 bottom-14 mt-2 w-[330px] bg-zinc-800 rounded-md shadow-lg z-50"
+      className="absolute right-3 bottom-0 mt-2 w-[330px] bg-zinc-800 rounded-md shadow-lg z-50"
     >
       <div className="p-1">
         <button

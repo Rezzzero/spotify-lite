@@ -1,10 +1,11 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Album, TablesTrack, Track } from "@shared/types/types";
 import { API_URL } from "@shared/constants/constants";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { toast } from "react-toastify";
 import { usePlayerStore } from "@app/store/player/usePlayerStore";
+import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
 
 export const useTrackCard = ({
   album,
@@ -32,28 +33,15 @@ export const useTrackCard = ({
   const addToMediaLibraryRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const closeTimeout = useRef<NodeJS.Timeout | null>(null);
+  useClickOutside({
+    refs: [menuRef, buttonRef, addToMediaLibraryRef],
+    handler: () => setIsMenuOpen(false),
+    enabled: isMenuOpen,
+  });
 
   const isCurrent =
     currentTrack?.id === track?.id &&
     currentTrackPageUrl === window.location.href;
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target as Node) &&
-        menuRef.current &&
-        !menuRef.current.contains(event.target as Node) &&
-        (!addToMediaLibraryRef.current ||
-          !addToMediaLibraryRef.current.contains(event.target as Node))
-      ) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isMenuOpen, isAddToMediaLibraryModalOpen]);
 
   const handleMouseEnter = () => {
     if (closeTimeout.current) {

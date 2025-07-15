@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo } from "react";
 import { useUserStore } from "@app/store/user/useUser";
 import { useNavigate, useParams } from "react-router-dom";
 import { generateId } from "@shared/lib/id/generateId";
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { toast } from "react-toastify";
+import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
 
 export const useMediaLibrary = () => {
   const { user } = useUserStore();
@@ -23,6 +24,21 @@ export const useMediaLibrary = () => {
   const filterModalRef = useRef<HTMLDivElement>(null);
   const filterModalButtonRef = useRef<HTMLButtonElement>(null);
   const { id } = useParams();
+  useClickOutside({
+    refs: [createPlaylistRef, createPlaylistButtonRef],
+    handler: () => setCreatePlaylistModal(false),
+    enabled: createPlaylistModal,
+  });
+  useClickOutside({
+    refs: [loginPromptRef],
+    handler: () => setLoginPromptModal(false),
+    enabled: LoginPromptModal,
+  });
+  useClickOutside({
+    refs: [filterModalRef, filterModalButtonRef],
+    handler: () => setIsFilterModalOpen(false),
+    enabled: isFilterModalOpen,
+  });
 
   const sortedPlaylists = useMemo(() => {
     if (!playlists) return [];
@@ -44,41 +60,6 @@ export const useMediaLibrary = () => {
         return playlists;
     }
   }, [playlists, sortBy]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        createPlaylistModal &&
-        createPlaylistRef.current &&
-        !createPlaylistRef.current.contains(event.target as Node) &&
-        createPlaylistButtonRef.current &&
-        !createPlaylistButtonRef.current?.contains(event.target as Node)
-      ) {
-        setCreatePlaylistModal(false);
-      }
-
-      if (
-        LoginPromptModal &&
-        loginPromptRef.current &&
-        !loginPromptRef.current.contains(event.target as Node)
-      ) {
-        setLoginPromptModal(false);
-      }
-
-      if (
-        isFilterModalOpen &&
-        filterModalRef.current &&
-        !filterModalRef.current.contains(event.target as Node) &&
-        filterModalButtonRef.current &&
-        !filterModalButtonRef.current?.contains(event.target as Node)
-      ) {
-        setIsFilterModalOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [createPlaylistModal, LoginPromptModal, isFilterModalOpen]);
 
   const handleCreatePlaylist = async () => {
     setCreatePlaylistModal(false);

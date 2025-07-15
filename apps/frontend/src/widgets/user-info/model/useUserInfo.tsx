@@ -9,6 +9,7 @@ import { USER_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { toast } from "react-toastify";
 import { SupabasePlaylist } from "@shared/types/playlist";
 import { Playlist } from "@shared/types/types";
+import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
 
 interface UserInfo {
   id: string;
@@ -36,6 +37,16 @@ export const useUserInfo = () => {
   const editModalRef = useRef<HTMLDivElement>(null);
   const menuModalRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  useClickOutside({
+    refs: [editModalRef],
+    handler: () => setEditModal(false),
+    enabled: editModal,
+  });
+  useClickOutside({
+    refs: [menuModalRef],
+    handler: () => setMenuModal(false),
+    enabled: menuModal,
+  });
 
   useEffect(() => {
     setLoading(true);
@@ -53,29 +64,6 @@ export const useUserInfo = () => {
     };
     fetchUserInfo();
   }, [id, source]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        editModal &&
-        editModalRef.current &&
-        !editModalRef.current.contains(event.target as Node)
-      ) {
-        setEditModal(false);
-      }
-      if (
-        menuModal &&
-        menuModalRef.current &&
-        !menuModalRef.current.contains(event.target as Node)
-      ) {
-        setMenuModal(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [editModal, menuModal]);
 
   const handleSelectImage = () => {
     if (fileInputRef.current) {

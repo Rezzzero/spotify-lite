@@ -53,7 +53,7 @@ export const PlaylistMenuModal = ({
   return (
     <div
       ref={modalRef}
-      className="absolute top-20 left-7 w-[330px] rounded-sm bg-[#2d2d2e] p-1"
+      className="absolute top-20 left-20 w-[330px] rounded-sm bg-[#2d2d2e] p-1"
     >
       {!isPublic ||
       !playlists.some(

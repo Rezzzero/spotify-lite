@@ -1,4 +1,5 @@
 import { usePlayerStore } from "@app/store/player/usePlayerStore";
+import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import { useEffect, useRef, useState } from "react";
 
@@ -9,6 +10,11 @@ export const useRequireAuthModal = () => {
   const { imageColors } = useGetColors(
     currentTrack ? currentTrack.album.images[0].url : ""
   );
+  useClickOutside({
+    refs: [modalRef],
+    handler: () => closeAuthModal(),
+    enabled: isAuthModalOpen,
+  });
 
   useEffect(() => {
     if (isAuthModalOpen) {
@@ -17,20 +23,6 @@ export const useRequireAuthModal = () => {
       setIsVisible(false);
     }
   }, [isAuthModalOpen]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
-        closeAuthModal();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [closeAuthModal]);
 
   return {
     currentTrack,
