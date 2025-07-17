@@ -5,7 +5,7 @@ import { generateId } from "@shared/lib/id/generateId";
 import { TablesTrack, Track } from "@shared/types/types";
 import { useState, useMemo } from "react";
 
-export function useAddToPlaylistModal({
+export function useAddToPlaylistMenu({
   track,
   handleAddTrackToPlaylist,
 }: {

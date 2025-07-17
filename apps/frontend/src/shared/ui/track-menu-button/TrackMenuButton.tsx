@@ -1,8 +1,9 @@
 import { ShortenedAlbumType, TablesTrack, Track } from "@shared/types/types";
 import { TrackContextMenu } from "@shared/ui/track-context-menu/TrackContextMenu";
-import { AddToPlaylistModal } from "@features/add-to-playlist-modal/ui/AddToPlaylistModal";
 import MenuIcon from "@shared/assets/menu-icon.svg?react";
 import { useTrackCard } from "@features/track-card/model/useTrackCard";
+import { Popper } from "@mui/material";
+import { AddToPlaylistMenu } from "@features/add-to-playlist-menu/ui/AddToPlaylistMenu";
 
 interface TrackMenuButtonProps {
   track: Track | TablesTrack;
@@ -14,7 +15,7 @@ interface TrackMenuButtonProps {
   handleUpdateDuration?: (trackDuration: number, isAdd: boolean) => void;
 }
 
-export const TrackMenuButton: React.FC<TrackMenuButtonProps> = ({
+export const TrackMenuButton = ({
   track,
   album,
   isOwner,
@@ -22,7 +23,7 @@ export const TrackMenuButton: React.FC<TrackMenuButtonProps> = ({
   withoutArtistLink,
   setTracks,
   handleUpdateDuration,
-}) => {
+}: TrackMenuButtonProps) => {
   const {
     menuRef,
     buttonRef,
@@ -34,19 +35,23 @@ export const TrackMenuButton: React.FC<TrackMenuButtonProps> = ({
     handleAddTrackToPlaylist,
     handleDeleteTrack,
     setIsMenuOpen,
+    anchorEl,
+    subAnchorEl,
+    handleOpenMenu,
   } = useTrackCard({ track, album, setTracks, handleUpdateDuration });
-  //добавить направление чтобы отображать модалки трека НАД или ПОД кнопкой меню
   return (
     <>
       <button
         ref={buttonRef}
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-        className={`absolute bottom-1/2 translate-y-1/2 translate-x-1/2 -right-5 hidden group-hover:block hover:scale-105 cursor-pointer`}
+        onClick={(e) => handleOpenMenu(e)}
+        className={`absolute bottom-1/2 translate-y-1/2 translate-x-1/2 -right-5 ${
+          isMenuOpen ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+        } hover:scale-105 cursor-pointer`}
       >
         <MenuIcon className="w-7 h-7 text-white text-gray-400" />
       </button>
 
-      {isMenuOpen && (
+      <Popper open={isMenuOpen} anchorEl={anchorEl} placement="bottom-end">
         <TrackContextMenu
           menuRef={menuRef}
           handleMouseEnter={handleMouseEnter}
@@ -61,17 +66,20 @@ export const TrackMenuButton: React.FC<TrackMenuButtonProps> = ({
             setTracks && handleUpdateDuration ? handleDeleteTrack : undefined
           }
         />
-      )}
-
-      {isAddToMediaLibraryModalOpen && (
-        <AddToPlaylistModal
+      </Popper>
+      <Popper
+        open={isAddToMediaLibraryModalOpen}
+        anchorEl={subAnchorEl}
+        placement="left-start"
+      >
+        <AddToPlaylistMenu
           ref={addToMediaLibraryRef}
           handleMouseEnter={handleMouseEnter}
           handleMouseLeave={handleMouseLeave}
           handleAddTrackToPlaylist={handleAddTrackToPlaylist}
           track={track}
         />
-      )}
+      </Popper>
     </>
   );
 };

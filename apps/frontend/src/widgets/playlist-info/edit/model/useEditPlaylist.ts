@@ -1,11 +1,11 @@
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { PlaylistData } from "@widgets/playlist-info/types/types";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
 
-export const useEditPlaylistModal = ({
+export const useEditPlaylist = ({
   closeModal,
   playlistName,
   playlistDescription,

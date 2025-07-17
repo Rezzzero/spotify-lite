@@ -2,9 +2,6 @@ import { usePlaylistInfo } from "../model/usePlaylistInfo";
 import EditIcon from "@shared/assets/playlist/edit-icon.svg?react";
 import { Link } from "react-router-dom";
 import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
-import { DeletePlaylistModal } from "../delete-modal/ui/DeletePlaylistModal";
-import { EditPlaylistModal } from "../edit-modal/ui/EditPlaylistModal";
-import { PlaylistMenuModal } from "../menu-modal/ui/PlaylistMenuModal";
 import { AddTrackSearch } from "../add-track-search/ui/AddTrackSearch";
 import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
 import {
@@ -14,6 +11,18 @@ import {
 import { Loader } from "@shared/ui/loader/Loader";
 import { MediaControls } from "@features/media-controls/ui/MediaControls";
 import { Table } from "@shared/ui/table/Table";
+import { Box, Modal, Popper } from "@mui/material";
+import { EditPlaylist } from "../edit/ui/EditPlaylist";
+import { DeletePlaylist } from "../delete/ui/DeletePlaylist";
+import { PlaylistMenu } from "../menu/ui/PlaylistMenu";
+
+const modalBoxStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  outline: 0,
+};
 
 export const PlaylistInfo = () => {
   const {
@@ -29,10 +38,8 @@ export const PlaylistInfo = () => {
     menuButtonRef,
     editModal,
     setEditModal,
-    editModalRef,
     loading,
     changeFormatModal,
-    setChangeFormatModal,
     changeFormatModalRef,
     playlistFormat,
     setPlaylistFormat,
@@ -47,7 +54,10 @@ export const PlaylistInfo = () => {
     handleListenPlaylist,
     isPlaying,
     handleAddPlaylistToMediaLibrary,
-    deleteModalRef,
+    handleOpenMenu,
+    menuAnchor,
+    changeFormatAnchor,
+    handleOpenFormatChangeMenu,
   } = usePlaylistInfo();
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
@@ -63,7 +73,7 @@ export const PlaylistInfo = () => {
   return (
     <div className="flex flex-col">
       <div
-        style={{ background: headerGradient }}
+        style={{ background: headerGradient }} //вынести хедер в отдельный компонент
         className="flex items-center gap-7 p-7"
       >
         <div
@@ -176,8 +186,8 @@ export const PlaylistInfo = () => {
               playlistData?.playlist.id as string
             )
           }
-          onOpenMenu={() => setMenuModal((prev) => !prev)}
-          onOpenFormatModal={() => setChangeFormatModal((prev) => !prev)}
+          onOpenMenu={(e) => handleOpenMenu(e)}
+          onOpenFormatModal={(e) => handleOpenFormatChangeMenu(e)}
         />
         {tracks.length > 0 && (
           <Table
@@ -209,22 +219,29 @@ export const PlaylistInfo = () => {
               </button>
             </div>
           ))}
-        {menuModal && (
-          <PlaylistMenuModal
+        <Popper open={menuModal} anchorEl={menuAnchor} placement="bottom-start">
+          <PlaylistMenu
             playlist={playlistData?.playlist}
             modalRef={menuModalRef}
             closeModal={() => setMenuModal(false)}
             openEditModal={() => setEditModal(true)}
-            openDeleteModal={() => setDeletePlaylistModal(true)}
+            openDeleteModal={() => {
+              setDeletePlaylistModal(true);
+              setMenuModal(false);
+            }}
             isPublic={playlistData?.playlist.public}
             isOwner={isOwner}
             setPlaylist={setPlaylistData}
           />
-        )}
-        {changeFormatModal && (
+        </Popper>
+        <Popper
+          open={changeFormatModal}
+          anchorEl={changeFormatAnchor}
+          placement="bottom-start"
+        >
           <div
             ref={changeFormatModalRef}
-            className="absolute top-18 right-5 bg-zinc-800 p-1 rounded-md"
+            className="mt-2 bg-zinc-800 p-1 rounded-md"
           >
             <SelectLibraryFormat
               libraryFormat={playlistFormat}
@@ -232,29 +249,34 @@ export const PlaylistInfo = () => {
               playlist
             />
           </div>
-        )}
+        </Popper>
       </div>
-      {editModal && (
-        <EditPlaylistModal
-          editModalRef={editModalRef}
-          closeModal={() => setEditModal(false)}
-          playlistName={playlistData?.playlistName}
-          playlistDescription={playlistData?.playlistDescription}
-          playlistImage={
-            playlistData?.playlist.images[0]?.url ||
-            playlistData?.imageUrl ||
-            PLAYLIST_PLACEHOLDER_URL
-          }
-          setPlaylist={setPlaylistData}
-        />
-      )}
-      {deletePlaylistModal && (
-        <DeletePlaylistModal
-          playlistName={playlistData?.playlistName}
-          closeModal={() => setDeletePlaylistModal(false)}
-          ref={deleteModalRef}
-        />
-      )}
+      <Modal open={editModal} onClose={() => setEditModal(false)}>
+        <Box sx={modalBoxStyle}>
+          <EditPlaylist
+            closeModal={() => setEditModal(false)}
+            playlistName={playlistData?.playlistName}
+            playlistDescription={playlistData?.playlistDescription}
+            playlistImage={
+              playlistData?.playlist.images[0]?.url ||
+              playlistData?.imageUrl ||
+              PLAYLIST_PLACEHOLDER_URL
+            }
+            setPlaylist={setPlaylistData}
+          />
+        </Box>
+      </Modal>
+      <Modal
+        open={deletePlaylistModal}
+        onClose={() => setDeletePlaylistModal(false)}
+      >
+        <Box sx={modalBoxStyle}>
+          <DeletePlaylist
+            playlistName={playlistData?.playlistName}
+            closeModal={() => setDeletePlaylistModal(false)}
+          />
+        </Box>
+      </Modal>
     </div>
   );
 };

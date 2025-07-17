@@ -7,12 +7,12 @@ import PlaylistInMediaLibraryIcon from "@shared/assets/playlist/playlist-in-medi
 import CopyIcon from "@shared/assets/copy-icon.svg?react";
 import ShareIcon from "@shared/assets/playlist/share-icon.svg?react";
 import ProfileIcon from "@shared/assets/user-icon.svg?react";
-import { usePlaylistMenuModal } from "../model/usePlaylistMenuModal";
 import { PlaylistData } from "@widgets/playlist-info/types/types";
 import { SupabasePlaylist } from "@shared/types/playlist";
 import { Playlist } from "@shared/types/types";
+import { usePlaylistMenu } from "../model/usePlaylistMenu";
 
-export const PlaylistMenuModal = ({
+export const PlaylistMenu = ({
   playlist,
   modalRef,
   closeModal,
@@ -44,17 +44,14 @@ export const PlaylistMenuModal = ({
     handleCopyLink,
     togglePlaylistInProfileStatus,
     isPlaylistInProfile,
-  } = usePlaylistMenuModal({
+  } = usePlaylistMenu({
     isPublic,
     playlist,
     closeModal,
     setPlaylist,
   });
   return (
-    <div
-      ref={modalRef}
-      className="absolute top-20 left-20 w-[330px] rounded-sm bg-[#2d2d2e] p-1"
-    >
+    <div ref={modalRef} className=" w-[330px] rounded-sm bg-[#2d2d2e] p-1">
       {!isPublic ||
       !playlists.some(
         (playlist) => playlist.id === id

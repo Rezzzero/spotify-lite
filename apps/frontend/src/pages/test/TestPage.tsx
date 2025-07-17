@@ -1,10 +1,12 @@
+import { Popper } from "@mui/material";
+import { PageLayout } from "@shared/ui/page-layout/PageLayout";
 import { SoundCloudSearch } from "@widgets/sound-cloud-test/SoundCloud";
 
 const TestPage = () => {
   return (
-    <div className="flex flex-col gap-10 w-full">
+    <PageLayout>
       <SoundCloudSearch />
-    </div>
+    </PageLayout>
   );
 };
 

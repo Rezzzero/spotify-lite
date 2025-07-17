@@ -9,7 +9,7 @@ import { SupabasePlaylist } from "@shared/types/playlist";
 import { Playlist } from "@shared/types/types";
 import { useUserStore } from "@app/store/user/useUser";
 
-export const usePlaylistMenuModal = ({
+export const usePlaylistMenu = ({
   isPublic,
   closeModal,
   setPlaylist,

@@ -26,8 +26,8 @@ interface MediaControlsProps {
   onPlay: () => void;
   onAddToLibrary: () => void;
   onRemoveFromLibrary: () => void;
-  onOpenMenu: () => void;
-  onOpenFormatModal: () => void;
+  onOpenMenu: (e: React.MouseEvent<HTMLElement | null>) => void;
+  onOpenFormatModal: (e: React.MouseEvent<HTMLElement | null>) => void;
 }
 
 export const MediaControls = ({
@@ -99,7 +99,7 @@ export const MediaControls = ({
             <button
               ref={menuButtonRef}
               type="button"
-              onClick={() => onOpenMenu()}
+              onClick={(e) => onOpenMenu(e)}
             >
               <MenuIcon className="w-10 h-10 text-gray-400 hover:text-white cursor-pointer hover:scale-105" />
             </button>
@@ -108,7 +108,7 @@ export const MediaControls = ({
         <button
           type="button"
           ref={changeFormatButtonRef}
-          onClick={() => onOpenFormatModal()}
+          onClick={(e) => onOpenFormatModal(e)}
           className="flex gap-2 text-sm font-semibold items-center text-gray-400 group hover:text-white cursor-pointer"
         >
           {format === "compact" ? (

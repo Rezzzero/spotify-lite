@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 import { toast } from "react-toastify";
 
-export const useDeletePlaylistModal = (closeModal: () => void) => {
+export const useDeletePlaylist = (closeModal: () => void) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { removePlaylist } = useMediaLibraryStore();

@@ -9,10 +9,11 @@ import {
   TablesTrack,
   Track,
 } from "@shared/types/types";
+import React from "react";
 
 type TrackContextMenuProps = {
   menuRef: React.RefObject<HTMLDivElement | null>;
-  handleMouseEnter: () => void;
+  handleMouseEnter: React.MouseEventHandler<Element>;
   handleMouseLeave: () => void;
   setIsMenuOpen: (open: boolean) => void;
   isOwner?: boolean;
@@ -22,6 +23,9 @@ type TrackContextMenuProps = {
   withoutArtistLink?: boolean;
   handleDeleteTrack?: (duration: number, id: string) => void;
 };
+
+const menuItemClass =
+  "w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors";
 
 export const TrackContextMenu = ({
   menuRef,
@@ -38,20 +42,20 @@ export const TrackContextMenu = ({
   return (
     <div
       ref={menuRef}
-      className="absolute -right-7 top-5 mt-2 w-[330px] bg-zinc-800 rounded-md shadow-lg z-50"
+      className="mt-2 w-[330px] bg-zinc-800 rounded-md shadow-lg"
     >
       <div className="p-1">
         <button
-          onMouseEnter={handleMouseEnter}
+          onMouseEnter={(e) => handleMouseEnter(e)}
           onMouseLeave={handleMouseLeave}
-          className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
+          className={menuItemClass}
         >
           <PlusIcon className="w-4 h-4 mr-2" />
           Добавить в плейлист
         </button>
         {isOwner && (
           <button
-            className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
+            className={menuItemClass}
             onClick={() => {
               if (handleDeleteTrack) {
                 handleDeleteTrack(track.duration_ms, track.entry_id || "");
@@ -66,7 +70,7 @@ export const TrackContextMenu = ({
         )}
         {!withoutArtistLink && (
           <Link
-            className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
+            className={menuItemClass}
             to={`/artist/${track.artists[0].id}`}
             onClick={() => setIsMenuOpen(false)}
           >
@@ -75,7 +79,7 @@ export const TrackContextMenu = ({
         )}
         {!withoutAlbumLink && (
           <Link
-            className="w-full flex gap-2 items-center rounded-md px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
+            className={menuItemClass}
             to={`/album/${album ? album.id : track.album.id}`}
             onClick={() => setIsMenuOpen(false)}
           >

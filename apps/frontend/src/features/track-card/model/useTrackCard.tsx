@@ -1,11 +1,18 @@
 import axios from "axios";
 import { useRef, useState } from "react";
-import { Album, ShortenedAlbumType, TablesTrack, Track } from "@shared/types/types";
+import {
+  Album,
+  ShortenedAlbumType,
+  TablesTrack,
+  Track,
+} from "@shared/types/types";
 import { API_URL } from "@shared/constants/constants";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { toast } from "react-toastify";
 import { usePlayerStore } from "@app/store/player/usePlayerStore";
 import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
+import { closeMenuOrModal } from "@shared/lib/utils/closeMenuOrModal";
+import { openMenuOrModal } from "@shared/lib/utils/openMenuOrModal";
 
 export const useTrackCard = ({
   album,
@@ -13,9 +20,7 @@ export const useTrackCard = ({
   setTracks,
   handleUpdateDuration,
 }: {
-  album?:
-    | Album
-    | ShortenedAlbumType;
+  album?: Album | ShortenedAlbumType;
   track: Track | TablesTrack;
   setTracks?: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
   handleUpdateDuration?: (trackDuration: number, isAdd: boolean) => void;
@@ -29,9 +34,11 @@ export const useTrackCard = ({
   const addToMediaLibraryRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const closeTimeout = useRef<NodeJS.Timeout | null>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [subAnchorEl, setSubAnchorEl] = useState<null | HTMLElement>(null);
   useClickOutside({
     refs: [menuRef, buttonRef, addToMediaLibraryRef],
-    handler: () => setIsMenuOpen(false),
+    handler: () => closeMenuOrModal(setIsMenuOpen, setAnchorEl),
     enabled: isMenuOpen,
   });
 
@@ -39,10 +46,14 @@ export const useTrackCard = ({
     currentTrack?.id === track?.id &&
     currentTrackPageUrl === window.location.href;
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
     if (closeTimeout.current) {
       clearTimeout(closeTimeout.current);
       closeTimeout.current = null;
+    }
+
+    if (!subAnchorEl) {
+      setSubAnchorEl(e.currentTarget);
     }
     setIsAddToMediaLibraryModalOpen(true);
   };
@@ -50,6 +61,7 @@ export const useTrackCard = ({
   const handleMouseLeave = () => {
     closeTimeout.current = setTimeout(() => {
       setIsAddToMediaLibraryModalOpen(false);
+      setSubAnchorEl(null);
     }, 200);
   };
 
@@ -154,6 +166,10 @@ export const useTrackCard = ({
     }
   };
 
+  const handleOpenMenu = (e: React.MouseEvent<HTMLElement>) => {
+    openMenuOrModal(e, setIsMenuOpen, setAnchorEl);
+  };
+
   return {
     isCurrent,
     isMenuOpen,
@@ -163,6 +179,8 @@ export const useTrackCard = ({
     menuRef,
     buttonRef,
     isAddToMediaLibraryModalOpen,
+    anchorEl,
+    subAnchorEl,
     setIsAddToMediaLibraryModalOpen,
     addToMediaLibraryRef,
     handleMouseEnter,
@@ -170,5 +188,6 @@ export const useTrackCard = ({
     handleAddTrackToPlaylist,
     handleListenTrack,
     handleDeleteTrack,
+    handleOpenMenu,
   };
 };

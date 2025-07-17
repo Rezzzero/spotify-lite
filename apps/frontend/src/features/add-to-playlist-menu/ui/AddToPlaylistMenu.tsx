@@ -1,37 +1,38 @@
 import { TablesTrack, Track } from "@shared/types/types";
 import PlusIcon from "@shared/assets/plus-icon.svg?react";
 import SearchIcon from "@shared/assets/search-icon.svg?react";
-import { useAddToPlaylistModal } from "../model/useAddToPlaylistModal";
 import { highlightMatch } from "@shared/ui/highlight-match/HighlightMatchText";
 import { useUserStore } from "@app/store/user/useUser";
+import React from "react";
+import { useAddToPlaylistMenu } from "../model/useAddToPlaylistMenu";
 
-type AddToPlaylistModalTypes = {
+type AddToPlaylistMenuTypes = {
   ref: React.RefObject<HTMLDivElement | null>;
-  handleMouseEnter: () => void;
+  handleMouseEnter: React.MouseEventHandler<Element>;
   handleMouseLeave: () => void;
   handleAddTrackToPlaylist: (id: string, track: Track | TablesTrack) => void;
   track: Track | TablesTrack;
 };
 
-export const AddToPlaylistModal = ({
+export const AddToPlaylistMenu = ({
   ref,
   handleMouseEnter,
   handleMouseLeave,
   handleAddTrackToPlaylist,
   track,
-}: AddToPlaylistModalTypes) => {
+}: AddToPlaylistMenuTypes) => {
   const { user } = useUserStore();
   const { search, setSearch, filteredPlaylists, handleCreatePlaylist } =
-    useAddToPlaylistModal({
+    useAddToPlaylistMenu({
       track,
       handleAddTrackToPlaylist,
     });
   return (
     <div
       ref={ref}
-      onMouseEnter={handleMouseEnter}
+      onMouseEnter={(e) => handleMouseEnter(e)}
       onMouseLeave={handleMouseLeave}
-      className="absolute right-[302px] top-[25px] w-[260px] flex flex-col mt-2 bg-zinc-800 rounded-xs shadow-lg z-50 p-1"
+      className="w-[260px] flex flex-col mt-2 bg-zinc-800 rounded-xs shadow-lg p-1"
     >
       <div className="flex px-2 py-1 gap-2 items-center rounded-xs bg-zinc-700">
         <SearchIcon className="w-4 h-4 cursor-pointer text-[#bababa] group-hover:text-white group-focus-within:text-white" />

@@ -32,7 +32,7 @@ export const PageLayout = ({
   return (
     <div
       ref={scrollContainerRef}
-      className={`flex flex-col ${paddingClass} ${gapClass} bg-[#141414] w-full h-[83vh] rounded-xl [&::-webkit-scrollbar]:hidden relative ${
+      className={`flex flex-col ${paddingClass} ${gapClass} bg-[#141414] w-full h-[83vh] rounded-xl page-content [&::-webkit-scrollbar]:hidden relative ${
         isAnyDropDownOpen ? "overflow-hidden" : "overflow-y-auto"
       }`}
     >

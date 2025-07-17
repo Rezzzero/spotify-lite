@@ -1,7 +1,7 @@
 import { Route, API_URL } from "@shared/constants/constants";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import axios, { AxiosError } from "axios";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { PlaylistData } from "../types/types";
@@ -10,6 +10,8 @@ import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibrarySt
 import { useUserStore } from "@app/store/user/useUser";
 import { toast } from "react-toastify";
 import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
+import { closeMenuOrModal } from "@shared/lib/utils/closeMenuOrModal";
+import { openMenuOrModal } from "@shared/lib/utils/openMenuOrModal";
 
 export const usePlaylistInfo = () => {
   const { user } = useUserStore();
@@ -30,36 +32,39 @@ export const usePlaylistInfo = () => {
   const [changeFormatModal, setChangeFormatModal] = useState(false);
   const [deletePlaylistModal, setDeletePlaylistModal] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
+  const [menuAnchor, setMenuAnchorEl] = useState<HTMLElement | null>(null);
+  const [changeFormatAnchor, setChangeFormatAnchor] =
+    useState<HTMLElement | null>(null);
   const menuModalRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const editModalRef = useRef<HTMLDivElement>(null);
   const changeFormatModalRef = useRef<HTMLDivElement>(null);
   const changeFormatButtonRef = useRef<HTMLButtonElement>(null);
-  const deleteModalRef = useRef<HTMLDivElement>(null);
   const { imageColors } = useGetColors(playlistData?.imageUrl || null);
   const { id } = useParams();
   const source = id?.startsWith("sp_") ? "supabase" : "spotify";
   const navigate = useNavigate();
+
   useClickOutside({
     refs: [menuModalRef, menuButtonRef],
-    handler: () => setMenuModal(false),
+    handler: () => closeMenuOrModal(setMenuModal, setMenuAnchorEl),
     enabled: menuModal,
   });
   useClickOutside({
-    refs: [editModalRef],
-    handler: () => setEditModal(false),
-    enabled: editModal,
-  });
-  useClickOutside({
     refs: [changeFormatModalRef, changeFormatButtonRef],
-    handler: () => setChangeFormatModal(false),
+    handler: () =>
+      closeMenuOrModal(setChangeFormatModal, setChangeFormatAnchor),
     enabled: changeFormatModal,
   });
-  useClickOutside({
-    refs: [deleteModalRef],
-    handler: () => setDeletePlaylistModal(false),
-    enabled: deletePlaylistModal,
-  });
+
+  const handleOpenMenu = (e: React.MouseEvent<HTMLElement | null>) => {
+    openMenuOrModal(e, setMenuModal, setMenuAnchorEl);
+  };
+
+  const handleOpenFormatChangeMenu = (
+    e: React.MouseEvent<HTMLElement | null>
+  ) => {
+    openMenuOrModal(e, setChangeFormatModal, setChangeFormatAnchor);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -164,7 +169,6 @@ export const usePlaylistInfo = () => {
     menuButtonRef,
     editModal,
     setEditModal,
-    editModalRef,
     loading,
     changeFormatModal,
     setChangeFormatModal,
@@ -178,11 +182,14 @@ export const usePlaylistInfo = () => {
     tracks,
     setTracks,
     handleUpdateDuration,
+    handleOpenMenu,
+    menuAnchor,
+    changeFormatAnchor,
+    handleOpenFormatChangeMenu,
     handleDeletePlaylistFromMediaLibrary,
     isOwner,
     handleListenPlaylist,
     isPlaying,
     handleAddPlaylistToMediaLibrary,
-    deleteModalRef,
   };
 };
