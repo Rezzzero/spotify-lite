@@ -1,7 +1,10 @@
 import { usePlaylistInfo } from "../model/usePlaylistInfo";
 import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
 import { AddTrackSearch } from "../add-track-search/ui/AddTrackSearch";
-import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
+import {
+  PLAYLIST_PLACEHOLDER_URL,
+  USER_PLACEHOLDER_URL,
+} from "@shared/constants/urls";
 import { Loader } from "@shared/ui/loader/Loader";
 import { MediaControls } from "@features/media-controls/ui/MediaControls";
 import { Table } from "@shared/ui/table/Table";
@@ -62,15 +65,30 @@ export const PlaylistInfo = () => {
       </div>
     );
 
+  const mainImage =
+    playlistPreviewImages.find((p) => p.id === playlistData?.playlist.id)
+      ?.previewImage ||
+    playlistData?.playlist.images[0]?.url ||
+    playlistData?.imageUrl ||
+    PLAYLIST_PLACEHOLDER_URL;
+  const ownerImage = playlistData?.playlist?.owner?.imageUrl
+    ? playlistData.playlist.owner.imageUrl
+    : USER_PLACEHOLDER_URL;
+
   return (
     <div className="flex flex-col">
       <MediaHeader
+        mainImage={mainImage}
+        mainName={playlistData?.playlistName}
+        ownerName={playlistData?.playlist.owner?.display_name}
+        ownerImage={ownerImage}
         isOwner={isOwner}
-        openEditModal={setEditModal}
-        playlistData={playlistData}
-        playlistPreviewImages={playlistPreviewImages}
-        tracks={tracks}
+        totalTracks={tracks.length}
         imageColors={imageColors}
+        duration={playlistData?.playlist?.duration}
+        openEditModal={setEditModal}
+        isPublic={playlistData?.playlist?.public}
+        link={`/user/${playlistData?.playlist?.owner?.id}`}
       />
       <div className="flex flex-col gap-5 w-full pl-5 pr-8 relative">
         <MediaControls

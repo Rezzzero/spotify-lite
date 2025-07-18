@@ -2,36 +2,54 @@ import {
   PLAYLIST_PLACEHOLDER_URL,
   USER_PLACEHOLDER_URL,
 } from "@shared/constants/urls";
-import React, { SetStateAction } from "react";
-import { Link } from "react-router-dom";
+import { SetStateAction } from "react";
 import EditIcon from "@shared/assets/playlist/edit-icon.svg?react";
-import { Track } from "@shared/types/types";
+import { Link } from "react-router-dom";
 import { formatMsToMinutesAndSeconds } from "@shared/lib/format/msToMinutesAndSeconds";
-import { PlaylistData } from "@widgets/playlist-info/types/types";
 
 interface MediaHeaderProps {
   imageColors: string[] | null;
-  isOwner: boolean;
-  playlistData: PlaylistData | null;
-  playlistPreviewImages: {
-    id: string;
-    previewImage: string;
-  }[];
+  mainImage: string;
+  mainName: string | undefined;
+  isPublic?: boolean;
+  ownerName?: string;
+  ownerImage?: string;
+  duration?: number;
+  isOwner?: boolean;
+  totalTracks?: number;
   openEditModal?: React.Dispatch<SetStateAction<boolean>>;
-  tracks: Track[];
+  link?: string;
+  roundedFull?: boolean;
+  releaseYear?: string;
+  albumType?: string;
+  albumName?: string;
+  albumLink?: string;
+  user?: boolean;
 }
-//нужно доделать чтобы он принимал пропсы ещё с страниц Альбомов, Артистов, Треков и Пользователей
+
 export const MediaHeader = ({
   imageColors,
+  mainImage,
+  mainName,
+  isPublic,
+  ownerName,
+  ownerImage,
+  duration,
   isOwner,
-  playlistData,
-  playlistPreviewImages,
+  totalTracks,
+  link,
   openEditModal,
-  tracks,
+  roundedFull,
+  releaseYear,
+  albumType,
+  albumName,
+  albumLink,
+  user,
 }: MediaHeaderProps) => {
   const headerGradient = imageColors
     ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
     : "linear-gradient(to bottom, #333, #222)";
+  const opacityTwenty = mainImage !== PLAYLIST_PLACEHOLDER_URL;
   return (
     <div
       style={{ background: headerGradient }}
@@ -43,26 +61,19 @@ export const MediaHeader = ({
             openEditModal((prev) => !prev);
           }
         }}
-        className="flex items-center bg-zinc-900 rounded-md w-[232px] h-[232px] shadow-xl group relative"
+        className={`flex items-center ${
+          roundedFull ? "rounded-full" : "rounded-md"
+        } bg-zinc-900 w-[232px] h-[232px] shadow-xl group relative`}
       >
         {isOwner ? (
           <>
             <img
-              src={
-                playlistPreviewImages.find(
-                  (p) => p.id === playlistData?.playlist.id
-                )?.previewImage ||
-                playlistData?.playlist.images[0]?.url ||
-                playlistData?.imageUrl ||
-                PLAYLIST_PLACEHOLDER_URL
-              }
-              alt="playlist image"
-              className={`w-full h-full object-cover rounded-md ${
-                playlistPreviewImages.find(
-                  (p) => p.id === playlistData?.playlist.id
-                )?.previewImage ||
-                playlistData?.playlist.images[0]?.url ||
-                playlistData?.imageUrl
+              src={mainImage}
+              alt="header main image"
+              className={`w-full h-full object-cover ${
+                roundedFull ? "rounded-full" : "rounded-md"
+              } ${
+                opacityTwenty
                   ? "group-hover:opacity-20"
                   : "group-hover:opacity-0"
               } transition-opacity duration-200`}
@@ -74,56 +85,76 @@ export const MediaHeader = ({
           </>
         ) : (
           <img
-            src={
-              playlistData?.playlist.images[0]?.url ||
-              playlistData?.imageUrl ||
-              PLAYLIST_PLACEHOLDER_URL
-            }
+            src={mainImage}
             alt="playlist image"
-            className="w-full h-full object-cover rounded-md"
+            className={`w-full h-full object-cover ${
+              roundedFull ? "rounded-full" : "rounded-md"
+            }`}
           />
         )}
       </div>
       <div className="flex flex-col gap-3 pt-12 h-full">
-        <h2>
-          {playlistData?.playlist?.public
-            ? "Открытый плейлист"
-            : "Закрытый плейлист"}
-        </h2>
-        <h1 className="text-[90px] font-bold leading-none">
-          {playlistData?.playlist?.name}
-        </h1>
+        {user && <p className="text-sm font-semibold">Профиль</p>}
+        {albumName && <p className="font-bold">Трек</p>}
+        {albumType && <p>{albumType === "album" ? "Альбом" : "Сингл"}</p>}
+        {isPublic !== undefined && isPublic !== null && (
+          <h2>{isPublic ? "Открытый плейлист" : "Закрытый плейлист"}</h2>
+        )}
+        <h1 className="text-[90px] font-bold leading-none">{mainName}</h1>
         <div className="flex items-center gap-1 mt-auto">
-          <img
-            src={
-              playlistData?.playlist?.owner?.imageUrl
-                ? playlistData.playlist.owner.imageUrl
-                : USER_PLACEHOLDER_URL
-            }
-            onError={(e) => {
-              e.currentTarget.src = USER_PLACEHOLDER_URL;
-            }}
-            alt="playlist creator image"
-            className="w-6 h-6 rounded-full"
-          />
-          <Link
-            to={`/user/${playlistData?.playlist?.owner?.id}`}
-            className="font-bold text-sm hover:underline"
-          >
-            {playlistData
-              ? playlistData.playlist?.owner?.display_name
-              : "owner"}
-          </Link>
-          {playlistData?.playlist?.duration && tracks.length > 0 ? (
-            <p className="font-semibold opacity-70 text-sm pb-1">
-              <span className="text-xl font-bold relative top-[1px] mx-1">
+          {link !== undefined && link !== null && (
+            <>
+              <img
+                src={ownerImage}
+                onError={(e) => {
+                  e.currentTarget.src = USER_PLACEHOLDER_URL;
+                }}
+                alt="playlist creator image"
+                className="w-6 h-6 rounded-full"
+              />
+              <Link
+                to={link ? link : ""}
+                className="font-bold text-sm hover:underline"
+              >
+                {ownerName ? ownerName : "owner"}
+              </Link>
+            </>
+          )}
+          {duration ? (
+            <p className="font-semibold text-sm pb-1">
+              {albumName && (
+                <>
+                  <span className="text-xl opacity-70 font-bold relative top-[1px] mx-1">
+                    ·
+                  </span>
+                  <Link
+                    to={albumLink || ""}
+                    className="hover:underline opacity-90  text-white"
+                  >
+                    {albumName}
+                  </Link>
+                </>
+              )}
+              {releaseYear && (
+                <>
+                  <span className="text-xl font-bold relative top-[1px] mx-1">
+                    ·
+                  </span>
+                  <span className="opacity-70">{releaseYear}</span>
+                </>
+              )}
+              <span className="text-xl opacity-70 font-bold relative top-[1px] mx-1">
                 ·
               </span>
-              {tracks.length} треков,{" "}
-              {formatMsToMinutesAndSeconds(
-                playlistData?.playlist?.duration,
-                true
+              {totalTracks && totalTracks > 0 && (
+                <span className="opacity-70">{totalTracks} треков, </span>
               )}
+              <span className="opacity-70">
+                {formatMsToMinutesAndSeconds(
+                  duration,
+                  albumName ? false : true
+                )}
+              </span>
             </p>
           ) : null}
         </div>

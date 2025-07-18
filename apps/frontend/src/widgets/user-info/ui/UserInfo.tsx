@@ -8,6 +8,7 @@ import CopyIcon from "@shared/assets/copy-icon.svg?react";
 import SubscibeIcon from "@shared/assets/subscribe-icon.svg?react";
 import { Loader } from "@shared/ui/loader/Loader";
 import { Link } from "react-router-dom";
+import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
 
 export const UserInfo = () => {
   const {
@@ -32,9 +33,6 @@ export const UserInfo = () => {
     menuModalRef,
     handleCopyLink,
   } = useUserInfo();
-  const headerGradient = imageColors
-    ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
-    : "linear-gradient(to bottom, #333, #222)";
   if (loading)
     return (
       <div className="flex justify-center items-center h-full">
@@ -42,56 +40,21 @@ export const UserInfo = () => {
       </div>
     );
 
+  const mainImage =
+    userImagePreview || userInfo?.imageUrl || USER_PLACEHOLDER_URL;
+
   return (
     <>
       <div className="flex flex-col gap-2 relative">
-        <div
-          style={{ background: headerGradient }}
-          className="flex items-center gap-7 p-7"
-        >
-          <div
-            onClick={() => {
-              if (isOwner) {
-                setEditModal((prev) => !prev);
-              }
-            }}
-            className="flex items-center bg-zinc-900 rounded-full w-[232px] h-[232px] shadow-xl group relative"
-          >
-            {isOwner ? (
-              <>
-                <img
-                  src={
-                    userImagePreview ||
-                    userInfo?.imageUrl ||
-                    USER_PLACEHOLDER_URL
-                  }
-                  alt="playlist image"
-                  className={`w-full h-full object-cover rounded-full ${
-                    userInfo?.imageUrl
-                      ? "group-hover:opacity-20"
-                      : "group-hover:opacity-0"
-                  } transition-opacity duration-200`}
-                />
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <EditIcon className="w-13 h-13" />
-                  <p className="font-bold">Выбрать фото</p>
-                </div>
-              </>
-            ) : (
-              <img
-                src={userInfo?.imageUrl || USER_PLACEHOLDER_URL}
-                alt="playlist image"
-                className="w-full h-full object-cover rounded-full"
-              />
-            )}
-          </div>
-          <div className="flex flex-col gap-3 pt-12 h-full">
-            <p className="text-sm font-semibold">Профиль</p>
-            <h1 className="text-[90px] font-bold leading-none">
-              {userInfo?.userName}
-            </h1>
-          </div>
-        </div>
+        <MediaHeader
+          imageColors={imageColors}
+          mainImage={mainImage}
+          mainName={userInfo?.userName}
+          isOwner={isOwner}
+          user={true}
+          openEditModal={setEditModal}
+          roundedFull={true}
+        />
         <div className="flex items-center gap-3 px-5 py-7 relative">
           {!isOwner && (
             <button className="text-sm font-semibold border border-gray-600 hover:border-white rounded-full px-4 h-8 hover:scale-105 cursor-pointer">

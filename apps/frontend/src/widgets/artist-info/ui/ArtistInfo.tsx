@@ -4,6 +4,7 @@ import { useArtistInfo } from "../model/useArtistInfo";
 import { artistMusicFilterList } from "@shared/constants/constants";
 import { Loader } from "@shared/ui/loader/Loader";
 import { ArtistInfoTrackCard } from "../artist-info-track-card/ui/ArtistInfoTrackCard";
+import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
 
 export const ArtistInfo = () => {
   const {
@@ -20,23 +21,15 @@ export const ArtistInfo = () => {
         <Loader />
       </div>
     );
-  const headerGradient = imageColors
-    ? `linear-gradient(to bottom, ${imageColors[0]}, ${imageColors[1]})`
-    : "linear-gradient(to bottom, #333, #222)";
 
   return (
     <div className="flex flex-col gap-15">
-      <div
-        style={{ background: headerGradient }}
-        className="flex items-center gap-7 p-7"
-      >
-        <img
-          src={artistInfo.artist.images[0].url}
-          alt={artistInfo.artist.name + " image"}
-          className="rounded-full w-[232px] h-[232px] shadow-[0px_7px_58px_-2px_rgba(0,_0,_0,_0.6)]"
-        />
-        <h2 className="text-[100px] font-bold">{artistInfo.artist.name}</h2>
-      </div>
+      <MediaHeader
+        imageColors={imageColors}
+        mainImage={artistInfo.artist.images[0].url}
+        mainName={artistInfo.artist.name}
+        roundedFull={true}
+      />
       <div className="flex flex-col gap-2 p-5">
         <h2 className="text-2xl font-bold">Популярные треки</h2>
         <div className="flex flex-col w-[70%]">
