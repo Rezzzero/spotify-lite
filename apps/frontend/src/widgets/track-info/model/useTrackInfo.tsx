@@ -1,9 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import { Album, Artist, Track } from "@shared/types/types";
 import { API_URL } from "@shared/constants/constants";
+import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
+import { closeMenuOrModal } from "@shared/lib/utils/closeMenuOrModal";
+import { openMenuOrModal } from "@shared/lib/utils/openMenuOrModal";
 
 interface TrackDataType {
   track: Track;
@@ -20,6 +23,21 @@ export const useTrackInfo = () => {
   const { imageColors } = useGetColors(imageUrl);
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
+  const [menuModal, setMenuModal] = useState(false);
+  const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
+  const menuModalRef = useRef<HTMLDivElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useClickOutside({
+    refs: [menuModalRef, menuButtonRef],
+    handler: () => closeMenuOrModal(setMenuModal, setMenuAnchor),
+    enabled: menuModal,
+  });
+
+  const handleOpenMenu = (e: React.MouseEvent<HTMLElement | null>) => {
+    openMenuOrModal(e, setMenuModal, setMenuAnchor);
+  };
 
   useEffect(() => {
     const fetch = async () => {
@@ -44,5 +62,22 @@ export const useTrackInfo = () => {
     fetch();
   }, [id]);
 
-  return { trackData, albums, singles, imageColors, loading };
+  const handleListenPlaylist = () => {
+    setIsPlaying((prev) => !prev);
+  };
+
+  return {
+    trackData,
+    albums,
+    singles,
+    imageColors,
+    loading,
+    menuModal,
+    menuAnchor,
+    menuModalRef,
+    menuButtonRef,
+    isPlaying,
+    handleListenPlaylist,
+    handleOpenMenu,
+  };
 };

@@ -6,22 +6,32 @@ import { truncateText } from "@shared/lib/format/truncateText";
 import { Loader } from "@shared/ui/loader/Loader";
 import { MediaControls } from "@features/media-controls/ui/MediaControls";
 import { Table } from "@shared/ui/table/Table";
-import { TestMediaHeader } from "@shared/ui/test-media-header/TestMediaHeader";
 import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
+import { Popper } from "@mui/material";
+import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
 
 export const AlbumInfo = () => {
   const {
     albumData,
+    menuModal,
+    changeFormatModal,
     imageColors,
     loading,
     isPlaying,
     handleDeleteFromMediaLibrary,
     handleAddToMediaLibrary,
-    setMenuModal,
-    setChangeFormatModal,
+    format,
+    setFormat,
+    // setMenuModal,
+    // setChangeFormatModal,
     handleListenPlaylist,
     changeFormatButtonRef,
     menuButtonRef,
+    menuAnchor,
+    changeFormatModalRef,
+    changeFormatAnchor,
+    handleOpenMenu,
+    handleOpenFormatChangeMenu,
   } = useAlbumInfo();
   if (loading || !albumData)
     return (
@@ -37,8 +47,6 @@ export const AlbumInfo = () => {
 
   const releaseYear = albumData.album.release_date.split("-")[0];
   const totalTracks = albumData.album.tracks.total;
-
-  const format = "compact";
 
   return (
     <div className="flex flex-col gap-5">
@@ -59,7 +67,8 @@ export const AlbumInfo = () => {
           isOwner={false}
           isPlaying={isPlaying}
           format={format}
-          mediaData={albumData.album}
+          mediaId={albumData.album.id}
+          mediaName={albumData.album.name}
           tracks={albumData.album.tracks.items}
           menuButtonRef={menuButtonRef}
           changeFormatButtonRef={changeFormatButtonRef}
@@ -70,10 +79,29 @@ export const AlbumInfo = () => {
           onAddToLibrary={() =>
             handleAddToMediaLibrary(albumData?.album.id as string)
           }
-          onOpenMenu={() => setMenuModal((prev) => !prev)}
-          onOpenFormatModal={() => setChangeFormatModal((prev) => !prev)}
+          onOpenMenu={(e) => handleOpenMenu(e)}
+          onOpenFormatModal={(e) => handleOpenFormatChangeMenu(e)}
         />
       </div>
+      <Popper open={menuModal} anchorEl={menuAnchor} placement="bottom-start">
+        <div className="w-[300px] h-[400px] bg-zinc-800">menu</div>
+      </Popper>
+      <Popper
+        open={changeFormatModal}
+        anchorEl={changeFormatAnchor}
+        placement="bottom-start"
+      >
+        <div
+          ref={changeFormatModalRef}
+          className="mt-2 bg-zinc-800 p-1 rounded-md"
+        >
+          <SelectLibraryFormat
+            libraryFormat={format}
+            setLibraryFormat={setFormat}
+            playlist
+          />
+        </div>
+      </Popper>
       <div className="px-7">
         <Table
           tracks={albumData.album.tracks.items}

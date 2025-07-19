@@ -50,6 +50,7 @@ export const PlaylistMenu = ({
     closeModal,
     setPlaylist,
   });
+  //сделать меню для артистов, альбомов, треков(страниц)
   return (
     <div ref={modalRef} className=" w-[330px] rounded-sm bg-[#2d2d2e] p-1">
       {!isPublic ||

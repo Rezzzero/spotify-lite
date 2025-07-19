@@ -7,32 +7,28 @@ import CompactListIcon from "@shared/assets/compact-list-icon.svg?react";
 import ListIcon from "@shared/assets/drop-down/list-icon.svg?react";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import { useMediaControls } from "../model/useMediaControls";
-import { Album, Playlist, Track } from "@shared/types/types";
-import { SupabasePlaylist } from "@shared/types/playlist";
+import { Track } from "@shared/types/types";
 import React from "react";
 
 interface MediaControlsProps {
   isOwner: boolean;
-  mediaData:
-    | SupabasePlaylist
-    | (Playlist & { duration: number })
-    | Album
-    | undefined;
+  mediaName: string | undefined;
+  mediaId: string | undefined;
   isPlaying: boolean;
-  format: string;
+  format?: string;
   tracks: Track[];
   menuButtonRef: React.RefObject<HTMLButtonElement | null>;
-  changeFormatButtonRef: React.RefObject<HTMLButtonElement | null>;
+  changeFormatButtonRef?: React.RefObject<HTMLButtonElement | null>;
   onPlay: () => void;
-  onAddToLibrary: () => void;
-  onRemoveFromLibrary: () => void;
+  onAddToLibrary?: () => void;
+  onRemoveFromLibrary?: () => void;
   onOpenMenu: (e: React.MouseEvent<HTMLElement | null>) => void;
-  onOpenFormatModal: (e: React.MouseEvent<HTMLElement | null>) => void;
+  onOpenFormatModal?: (e: React.MouseEvent<HTMLElement | null>) => void;
 }
-
 export const MediaControls = ({
   isOwner,
-  mediaData,
+  mediaName,
+  mediaId,
   isPlaying,
   format,
   tracks,
@@ -53,8 +49,8 @@ export const MediaControls = ({
             <CustomTooltip
               title={
                 isPlaying
-                  ? `Поставить на паузу плейлист ${mediaData?.name}`
-                  : `Слушать плейлист ${mediaData?.name}`
+                  ? `Поставить на паузу плейлист ${mediaName}`
+                  : `Слушать плейлист ${mediaName}`
               }
               placement="top"
               customFontSize={13}
@@ -69,7 +65,9 @@ export const MediaControls = ({
             </CustomTooltip>
           )}
           {!isOwner &&
-            (playlists.find((p) => p.id === mediaData?.id) ? (
+            onRemoveFromLibrary &&
+            onAddToLibrary &&
+            (playlists.find((p) => p.id === mediaId) ? (
               <CustomTooltip
                 title={`Удалить из медиатеки`}
                 placement="top"
@@ -92,7 +90,7 @@ export const MediaControls = ({
             ))}
 
           <CustomTooltip
-            title={`Открыть контекстное меню: ${mediaData?.name}`}
+            title={`Открыть контекстное меню: ${mediaName}`}
             placement="top"
             customFontSize={13}
           >
@@ -105,24 +103,26 @@ export const MediaControls = ({
             </button>
           </CustomTooltip>
         </div>
-        <button
-          type="button"
-          ref={changeFormatButtonRef}
-          onClick={(e) => onOpenFormatModal(e)}
-          className="flex gap-2 text-sm font-semibold items-center text-gray-400 group hover:text-white cursor-pointer"
-        >
-          {format === "compact" ? (
-            <>
-              <span>Компактный</span>
-              <CompactListIcon className="w-3 h-3 text-gray-400 group-hover:text-white" />
-            </>
-          ) : (
-            <>
-              <span>Список</span>
-              <ListIcon className="w-3 h-3 text-gray-400 group-hover:text-white" />
-            </>
-          )}
-        </button>
+        {format && onOpenFormatModal && (
+          <button
+            type="button"
+            ref={changeFormatButtonRef}
+            onClick={(e) => onOpenFormatModal(e)}
+            className="flex gap-2 text-sm font-semibold items-center text-gray-400 group hover:text-white cursor-pointer"
+          >
+            {format === "compact" ? (
+              <>
+                <span>Компактный</span>
+                <CompactListIcon className="w-3 h-3 text-gray-400 group-hover:text-white" />
+              </>
+            ) : (
+              <>
+                <span>Список</span>
+                <ListIcon className="w-3 h-3 text-gray-400 group-hover:text-white" />
+              </>
+            )}
+          </button>
+        )}
       </div>
     </>
   );

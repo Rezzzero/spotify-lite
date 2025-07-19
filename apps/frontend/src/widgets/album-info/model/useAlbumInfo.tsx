@@ -7,6 +7,9 @@ import { API_URL } from "@shared/constants/constants";
 import { useUserStore } from "@app/store/user/useUser";
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 import { toast } from "react-toastify";
+import { openMenuOrModal } from "@shared/lib/utils/openMenuOrModal";
+import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
+import { closeMenuOrModal } from "@shared/lib/utils/closeMenuOrModal";
 
 interface AlbumDataType {
   album: Album;
@@ -25,8 +28,36 @@ export const useAlbumInfo = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [menuModal, setMenuModal] = useState(false);
   const [changeFormatModal, setChangeFormatModal] = useState(false);
+  const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
+  const [changeFormatAnchor, setChangeFormatAnchor] =
+    useState<HTMLElement | null>(null);
+  const [format, setFormat] = useState("compact");
+  const menuModalRef = useRef<HTMLDivElement>(null);
+  const changeFormatModalRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const changeFormatButtonRef = useRef<HTMLButtonElement>(null);
+
+  useClickOutside({
+    refs: [menuModalRef, menuButtonRef],
+    handler: () => closeMenuOrModal(setMenuModal, setMenuAnchor),
+    enabled: menuModal,
+  });
+  useClickOutside({
+    refs: [changeFormatModalRef, changeFormatButtonRef],
+    handler: () =>
+      closeMenuOrModal(setChangeFormatModal, setChangeFormatAnchor),
+    enabled: changeFormatModal,
+  });
+
+  const handleOpenMenu = (e: React.MouseEvent<HTMLElement | null>) => {
+    openMenuOrModal(e, setMenuModal, setMenuAnchor);
+  };
+
+  const handleOpenFormatChangeMenu = (
+    e: React.MouseEvent<HTMLElement | null>
+  ) => {
+    openMenuOrModal(e, setChangeFormatModal, setChangeFormatAnchor);
+  };
 
   useEffect(() => {
     const fetch = async () => {
@@ -75,13 +106,22 @@ export const useAlbumInfo = () => {
   };
 
   return {
+    menuModal,
     albumData,
     imageColors,
     loading,
     user,
+    changeFormatModal,
     changeFormatButtonRef,
+    changeFormatModalRef,
     isPlaying,
     menuButtonRef,
+    menuAnchor,
+    changeFormatAnchor,
+    format,
+    setFormat,
+    handleOpenMenu,
+    handleOpenFormatChangeMenu,
     handleDeleteFromMediaLibrary,
     handleAddToMediaLibrary,
     setMenuModal,

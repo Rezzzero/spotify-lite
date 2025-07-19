@@ -5,9 +5,24 @@ import { truncateText } from "@shared/lib/format/truncateText";
 import { Loader } from "@shared/ui/loader/Loader";
 import { TrackInfoTrackCard } from "../track-info-track-card/ui/TrackInfoTrackCard";
 import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
+import { MediaControls } from "@features/media-controls/ui/MediaControls";
+import { Popper } from "@mui/material";
 
 export const TrackInfo = () => {
-  const { trackData, albums, singles, imageColors, loading } = useTrackInfo();
+  const {
+    trackData,
+    albums,
+    singles,
+    imageColors,
+    loading,
+    menuModal,
+    menuAnchor,
+    // menuModalRef,
+    menuButtonRef,
+    isPlaying,
+    handleListenPlaylist,
+    handleOpenMenu,
+  } = useTrackInfo();
   if (loading || !trackData)
     return (
       <div className="flex justify-center items-center h-full">
@@ -17,7 +32,7 @@ export const TrackInfo = () => {
   const releaseYear = trackData.track.album.release_date.split("-")[0];
 
   return (
-    <div className="flex flex-col gap-15">
+    <div className="flex flex-col">
       <MediaHeader
         imageColors={imageColors}
         mainImage={trackData.track.album.images[0].url}
@@ -31,6 +46,19 @@ export const TrackInfo = () => {
         albumLink={`/album/${trackData.track.album.id}`}
       />
       <div className="flex flex-col gap-3 px-7">
+        <MediaControls
+          isOwner={false}
+          isPlaying={isPlaying}
+          mediaId={trackData.track.id}
+          mediaName={trackData.track.name}
+          tracks={trackData.topTracks}
+          menuButtonRef={menuButtonRef}
+          onPlay={() => handleListenPlaylist()}
+          onOpenMenu={(e) => handleOpenMenu(e)}
+        />
+        <Popper open={menuModal} anchorEl={menuAnchor} placement="bottom-start">
+          <div className="w-[300px] h-[400px] bg-zinc-800">menu</div>
+        </Popper>
         <p className="text-[14px] font-semibold text-zinc-400">
           Популярные треки исполнителя
         </p>

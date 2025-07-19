@@ -5,6 +5,8 @@ import { artistMusicFilterList } from "@shared/constants/constants";
 import { Loader } from "@shared/ui/loader/Loader";
 import { ArtistInfoTrackCard } from "../artist-info-track-card/ui/ArtistInfoTrackCard";
 import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
+import { MediaControls } from "@features/media-controls/ui/MediaControls";
+import { Popper } from "@mui/material";
 
 export const ArtistInfo = () => {
   const {
@@ -14,6 +16,12 @@ export const ArtistInfo = () => {
     selectedFilter,
     filtredAlbumsAndSingles,
     loading,
+    isPlaying,
+    handleListenPlaylist,
+    menuModal,
+    menuButtonRef,
+    menuAnchor,
+    handleOpenMenu,
   } = useArtistInfo();
   if (loading || !artistInfo)
     return (
@@ -23,14 +31,27 @@ export const ArtistInfo = () => {
     );
 
   return (
-    <div className="flex flex-col gap-15">
+    <div className="flex flex-col">
       <MediaHeader
         imageColors={imageColors}
         mainImage={artistInfo.artist.images[0].url}
         mainName={artistInfo.artist.name}
         roundedFull={true}
       />
-      <div className="flex flex-col gap-2 p-5">
+      <div className="flex flex-col p-5">
+        <MediaControls
+          mediaId={artistInfo.artist.id}
+          mediaName={artistInfo.artist.name}
+          isOwner={false}
+          tracks={artistInfo.topTracks}
+          menuButtonRef={menuButtonRef}
+          isPlaying={isPlaying}
+          onOpenMenu={(e) => handleOpenMenu(e)}
+          onPlay={() => handleListenPlaylist()}
+        />
+        <Popper open={menuModal} anchorEl={menuAnchor} placement="bottom-start">
+          <div className="w-[300px] h-[400px] bg-zinc-800">menu</div>
+        </Popper>
         <h2 className="text-2xl font-bold">Популярные треки</h2>
         <div className="flex flex-col w-[70%]">
           {artistInfo.topTracks.map((track, index) => (

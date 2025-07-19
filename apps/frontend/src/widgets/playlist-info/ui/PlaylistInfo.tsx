@@ -93,7 +93,8 @@ export const PlaylistInfo = () => {
       <div className="flex flex-col gap-5 w-full pl-5 pr-8 relative">
         <MediaControls
           isOwner={isOwner}
-          mediaData={playlistData?.playlist}
+          mediaName={playlistData?.playlistName}
+          mediaId={playlistData?.playlist.id}
           isPlaying={isPlaying}
           format={playlistFormat}
           tracks={tracks}
