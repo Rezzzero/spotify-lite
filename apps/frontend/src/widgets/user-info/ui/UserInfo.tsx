@@ -9,6 +9,7 @@ import SubscibeIcon from "@shared/assets/subscribe-icon.svg?react";
 import { Loader } from "@shared/ui/loader/Loader";
 import { Link } from "react-router-dom";
 import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
+import { Popper } from "@mui/material";
 
 export const UserInfo = () => {
   const {
@@ -32,6 +33,8 @@ export const UserInfo = () => {
     setMenuModal,
     menuModalRef,
     handleCopyLink,
+    handleOpenMenu,
+    menuAnchor,
   } = useUserInfo();
   if (loading)
     return (
@@ -66,16 +69,56 @@ export const UserInfo = () => {
             placement="top"
             customFontSize={13}
           >
-            <button
-              type="button"
-              onClick={() => {
-                setMenuModal((prev) => !prev);
-              }}
-            >
+            <button type="button" onClick={(e) => handleOpenMenu(e)}>
               <MenuIcon className="w-10 h-10 text-gray-400 hover:text-white cursor-pointer hover:scale-105" />
             </button>
           </CustomTooltip>
-          {menuModal && (
+          <Popper
+            open={menuModal}
+            anchorEl={menuAnchor}
+            placement="bottom-start"
+          >
+            <div
+              ref={menuModalRef}
+              className="mt-2 rounded-sm bg-[#2d2d2e] p-1"
+            >
+              <div className="flex flex-col gap-1">
+                {isOwner ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMenuModal(false);
+                      setEditModal((prev) => !prev);
+                    }}
+                    className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
+                  >
+                    <EditIcon className="w-4 h-4" />
+                    Изменение профиля
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMenuModal(false);
+                    }}
+                    className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
+                  >
+                    <SubscibeIcon className="w-4 h-4" />
+                    Подписаться
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => handleCopyLink()}
+                  className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
+                >
+                  <CopyIcon className="w-4 h-4" />
+                  Копировать ссылку на профиль
+                </button>
+              </div>
+            </div>
+          </Popper>
+          {/* {menuModal && (
             <div
               ref={menuModalRef}
               className={`absolute top-22 ${
@@ -117,7 +160,7 @@ export const UserInfo = () => {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
         </div>
         {userInfo?.openedPlaylists && userInfo?.openedPlaylists.length > 0 && (
           <div className="flex flex-col gap-4 px-5">

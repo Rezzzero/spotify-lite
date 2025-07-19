@@ -7,6 +7,7 @@ import { USER_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { SearchInput } from "../../search-input/ui/SearchInput";
 import { useNavbar } from "../model/useNavBar";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
+import { Popper } from "@mui/material";
 
 export const NavBar = () => {
   const {
@@ -15,8 +16,10 @@ export const NavBar = () => {
     handleSignOut,
     userImagePreview,
     isUserMenuOpen,
+    userMenuAnchor,
     userMenuRef,
-    handleUserMenuOpen,
+    handleOpenUserMenu,
+    handleCloseMenu,
   } = useNavbar();
   return (
     <div
@@ -69,7 +72,7 @@ export const NavBar = () => {
           <button
             type="button"
             className="cursor-pointer p-2 bg-zinc-800 rounded-full"
-            onClick={handleUserMenuOpen}
+            onClick={handleOpenUserMenu}
           >
             <img
               src={
@@ -83,22 +86,26 @@ export const NavBar = () => {
           </button>
         </div>
       )}
-      {isUserMenuOpen && (
+      <Popper
+        open={isUserMenuOpen}
+        anchorEl={userMenuAnchor}
+        sx={{ zIndex: 10 }}
+      >
         <div
-          className="absolute top-16 right-3 text-sm font-semibold bg-zinc-800 z-10 w-[190px] rounded-sm p-1 flex flex-col items-start"
+          className="mt-2 mr-[10px] text-sm font-semibold bg-zinc-800 w-[190px] rounded-sm p-1 flex flex-col items-start"
           ref={userMenuRef}
         >
           <div className="flex w-full flex-col border-b border-zinc-700">
             <Link
               to={`/user/${user?.user.id}`}
-              onClick={handleUserMenuOpen}
+              onClick={handleCloseMenu}
               className="text-white pl-2 py-2 w-full hover:underline hover:bg-zinc-700 rounded-xs cursor-default"
             >
               Профиль
             </Link>
             <Link
               to={`/user/${user?.user.id}`}
-              onClick={handleUserMenuOpen}
+              onClick={handleCloseMenu}
               className="text-white pl-2 py-2 w-full hover:underline hover:bg-zinc-700 rounded-xs cursor-default"
             >
               Настройки
@@ -112,7 +119,37 @@ export const NavBar = () => {
             Выйти
           </button>
         </div>
-      )}
+      </Popper>
+      {/* {isUserMenuOpen && (
+        <div
+          className="absolute top-16 right-3 text-sm font-semibold bg-zinc-800 z-10 w-[190px] rounded-sm p-1 flex flex-col items-start"
+          ref={userMenuRef}
+        >
+          <div className="flex w-full flex-col border-b border-zinc-700">
+            <Link
+              to={`/user/${user?.user.id}`}
+              onClick={handleCloseMenu}
+              className="text-white pl-2 py-2 w-full hover:underline hover:bg-zinc-700 rounded-xs cursor-default"
+            >
+              Профиль
+            </Link>
+            <Link
+              to={`/user/${user?.user.id}`}
+              onClick={handleCloseMenu}
+              className="text-white pl-2 py-2 w-full hover:underline hover:bg-zinc-700 rounded-xs cursor-default"
+            >
+              Настройки
+            </Link>
+          </div>
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="text-white text-start pl-2 py-2 w-full hover:bg-zinc-700 rounded-xs cursor-default"
+          >
+            Выйти
+          </button>
+        </div>
+      )} */}
     </div>
   );
 };

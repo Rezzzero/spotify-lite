@@ -13,12 +13,12 @@ import { PlaylistCard } from "../playlist-card/ui/PlaylistCard";
 import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
 import { SelectSortFilter } from "@shared/ui/select-sort-filter/SelectSortFilter";
 import { libraryFormatList } from "@shared/constants/constants";
+import { Popper } from "@mui/material";
 
 export const MediaLibrary = () => {
   const {
     user,
     createPlaylistModal,
-    setCreatePlaylistModal,
     handleCreatePlaylist,
     LoginPromptModal,
     setLoginPromptModal,
@@ -35,10 +35,13 @@ export const MediaLibrary = () => {
     sortBy,
     handleChangeSortBy,
     isFilterModalOpen,
-    handleFilterModalOpen,
     filterModalRef,
     filterModalButtonRef,
     sortedPlaylists,
+    handleOpenCreatePlaylistMenu,
+    createPlaylistAnchor,
+    handleOpenFilterMenu,
+    filterAnchor,
   } = useMediaLibrary();
 
   const selectedFormat = libraryFormatList.find(
@@ -90,7 +93,7 @@ export const MediaLibrary = () => {
           <button
             type="button"
             ref={createPlaylistButtonRef}
-            onClick={() => setCreatePlaylistModal((prev) => !prev)}
+            onClick={(e) => handleOpenCreatePlaylistMenu(e)}
             className={`rounded-full flex items-center justify-center ${
               user
                 ? `bg-zinc-800 hover:bg-zinc-700 py-[8px] ${
@@ -169,7 +172,7 @@ export const MediaLibrary = () => {
                 type="button"
                 ref={filterModalButtonRef}
                 className="flex items-center group gap-2 cursor-pointer hover:scale-105 duration-200"
-                onClick={handleFilterModalOpen}
+                onClick={(e) => handleOpenFilterMenu(e)}
               >
                 <span className="text-sm text-zinc-400 group-hover:text-white">
                   {sortBy.name}
@@ -201,12 +204,15 @@ export const MediaLibrary = () => {
           </div>
         </>
       )}
-      {createPlaylistModal && (
+      <Popper
+        open={createPlaylistModal}
+        anchorEl={createPlaylistAnchor}
+        placement={user ? "bottom-start" : "bottom-end"}
+        sx={{ zIndex: 10 }}
+      >
         <div
           ref={createPlaylistRef}
-          className={`absolute ${
-            user ? "top-14 -right-36" : "top-12 right-4"
-          } bg-[#292929] p-1 rounded-md shadow-[1px_23px_30px_-9px_rgba(0,_0,_0,_0.8)] z-20`}
+          className="bg-[#292929] mt-2 p-1 rounded-md shadow-[1px_23px_30px_-9px_rgba(0,_0,_0,_0.8)]"
         >
           {!user && (
             <button
@@ -253,7 +259,7 @@ export const MediaLibrary = () => {
             </>
           )}
         </div>
-      )}
+      </Popper>
       {LoginPromptModal && (
         <div
           ref={loginPromptRef}
@@ -282,10 +288,14 @@ export const MediaLibrary = () => {
           </div>
         </div>
       )}
-      {isFilterModalOpen && (
+      <Popper
+        open={isFilterModalOpen}
+        anchorEl={filterAnchor}
+        placement="bottom-end"
+      >
         <div
           ref={filterModalRef}
-          className="absolute top-33 right-5 text-sm flex flex-col gap-2 bg-zinc-800 p-1 rounded-md z-20 shadow-md"
+          className="text-sm mt-2 flex flex-col gap-2 bg-zinc-800 p-1 rounded-md shadow-md"
         >
           <SelectSortFilter
             isMediaLibrary
@@ -298,7 +308,7 @@ export const MediaLibrary = () => {
             onlyIcons
           />
         </div>
-      )}
+      </Popper>
     </div>
   );
 };

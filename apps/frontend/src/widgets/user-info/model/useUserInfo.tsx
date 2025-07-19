@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getUserSource } from "@shared/lib/source/getUserSource";
 import axios from "axios";
@@ -10,6 +10,8 @@ import { toast } from "react-toastify";
 import { SupabasePlaylist } from "@shared/types/playlist";
 import { Playlist } from "@shared/types/types";
 import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
+import { openMenuOrModal } from "@shared/lib/utils/openMenuOrModal";
+import { closeMenuOrModal } from "@shared/lib/utils/closeMenuOrModal";
 
 interface UserInfo {
   id: string;
@@ -32,6 +34,7 @@ export const useUserInfo = () => {
   const [loading, setLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
   const { id } = useParams();
   const source = getUserSource(id || "");
   const editModalRef = useRef<HTMLDivElement>(null);
@@ -44,9 +47,13 @@ export const useUserInfo = () => {
   });
   useClickOutside({
     refs: [menuModalRef],
-    handler: () => setMenuModal(false),
+    handler: () => closeMenuOrModal(setMenuModal, setMenuAnchor),
     enabled: menuModal,
   });
+
+  const handleOpenMenu = (e: React.MouseEvent<HTMLElement>) => {
+    openMenuOrModal(e, setMenuModal, setMenuAnchor);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -183,5 +190,7 @@ export const useUserInfo = () => {
     setMenuModal,
     menuModalRef,
     handleCopyLink,
+    handleOpenMenu,
+    menuAnchor,
   };
 };
