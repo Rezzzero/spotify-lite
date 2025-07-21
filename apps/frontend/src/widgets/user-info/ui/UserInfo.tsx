@@ -118,49 +118,6 @@ export const UserInfo = () => {
               </div>
             </div>
           </Popper>
-          {/* {menuModal && (
-            <div
-              ref={menuModalRef}
-              className={`absolute top-22 ${
-                isOwner ? "left-5" : "left-[150px]"
-              } rounded-sm bg-[#2d2d2e] p-1`}
-            >
-              <div className="flex flex-col gap-1">
-                {isOwner ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMenuModal(false);
-                      setEditModal((prev) => !prev);
-                    }}
-                    className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
-                  >
-                    <EditIcon className="w-4 h-4" />
-                    Изменение профиля
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMenuModal(false);
-                    }}
-                    className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
-                  >
-                    <SubscibeIcon className="w-4 h-4" />
-                    Подписаться
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={() => handleCopyLink()}
-                  className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
-                >
-                  <CopyIcon className="w-4 h-4" />
-                  Копировать ссылку на профиль
-                </button>
-              </div>
-            </div>
-          )} */}
         </div>
         {userInfo?.openedPlaylists && userInfo?.openedPlaylists.length > 0 && (
           <div className="flex flex-col gap-4 px-5">
@@ -168,6 +125,7 @@ export const UserInfo = () => {
             <div className="flex gap-3">
               {userInfo.openedPlaylists.map((playlist) => (
                 <Link
+                  key={playlist.id}
                   to={`/playlist/${playlist.id}`}
                   className="flex flex-col gap-2 hover:bg-zinc-600 p-2 rounded-md"
                 >

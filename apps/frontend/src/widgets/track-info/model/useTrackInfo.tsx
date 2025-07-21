@@ -73,6 +73,7 @@ export const useTrackInfo = () => {
     imageColors,
     loading,
     menuModal,
+    setMenuModal,
     menuAnchor,
     menuModalRef,
     menuButtonRef,

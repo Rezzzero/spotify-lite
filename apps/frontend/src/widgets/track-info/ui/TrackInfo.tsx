@@ -7,6 +7,7 @@ import { TrackInfoTrackCard } from "../track-info-track-card/ui/TrackInfoTrackCa
 import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
 import { MediaControls } from "@features/media-controls/ui/MediaControls";
 import { Popper } from "@mui/material";
+import { MediaMenu } from "@features/media-menu/ui/MediaMenu";
 
 export const TrackInfo = () => {
   const {
@@ -16,8 +17,9 @@ export const TrackInfo = () => {
     imageColors,
     loading,
     menuModal,
+    setMenuModal,
     menuAnchor,
-    // menuModalRef,
+    menuModalRef,
     menuButtonRef,
     isPlaying,
     handleListenPlaylist,
@@ -57,7 +59,12 @@ export const TrackInfo = () => {
           onOpenMenu={(e) => handleOpenMenu(e)}
         />
         <Popper open={menuModal} anchorEl={menuAnchor} placement="bottom-start">
-          <div className="w-[300px] h-[400px] bg-zinc-800">menu</div>
+          <MediaMenu
+            menuRef={menuModalRef}
+            closeMenu={() => setMenuModal(false)}
+            mediaType="track"
+            track={trackData.track}
+          />
         </Popper>
         <p className="text-[14px] font-semibold text-zinc-400">
           Популярные треки исполнителя

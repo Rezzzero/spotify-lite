@@ -12,6 +12,7 @@ type AddToPlaylistMenuTypes = {
   handleMouseLeave: () => void;
   handleAddTrackToPlaylist: (id: string, track: Track | TablesTrack) => void;
   track: Track | TablesTrack;
+  closeMenu?: () => void;
 };
 
 export const AddToPlaylistMenu = ({
@@ -20,6 +21,7 @@ export const AddToPlaylistMenu = ({
   handleMouseLeave,
   handleAddTrackToPlaylist,
   track,
+  closeMenu,
 }: AddToPlaylistMenuTypes) => {
   const { user } = useUserStore();
   const { search, setSearch, filteredPlaylists, handleCreatePlaylist } =
@@ -59,7 +61,12 @@ export const AddToPlaylistMenu = ({
           .map((playlist) => (
             <button
               key={playlist.id}
-              onClick={() => handleAddTrackToPlaylist(playlist.id, track)}
+              onClick={() => {
+                handleAddTrackToPlaylist(playlist.id, track);
+                if (closeMenu) {
+                  closeMenu();
+                }
+              }}
               className="w-full flex items-center rounded-xs px-4 py-2 text-left text-sm text-gray-300 hover:bg-zinc-700 transition-colors"
             >
               {highlightMatch(playlist.name, search)}

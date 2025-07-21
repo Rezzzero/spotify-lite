@@ -7,6 +7,7 @@ import { ArtistInfoTrackCard } from "../artist-info-track-card/ui/ArtistInfoTrac
 import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
 import { MediaControls } from "@features/media-controls/ui/MediaControls";
 import { Popper } from "@mui/material";
+import { MediaMenu } from "@features/media-menu/ui/MediaMenu";
 
 export const ArtistInfo = () => {
   const {
@@ -19,6 +20,8 @@ export const ArtistInfo = () => {
     isPlaying,
     handleListenPlaylist,
     menuModal,
+    setMenuModal,
+    menuModalRef,
     menuButtonRef,
     menuAnchor,
     handleOpenMenu,
@@ -50,7 +53,11 @@ export const ArtistInfo = () => {
           onPlay={() => handleListenPlaylist()}
         />
         <Popper open={menuModal} anchorEl={menuAnchor} placement="bottom-start">
-          <div className="w-[300px] h-[400px] bg-zinc-800">menu</div>
+          <MediaMenu
+            menuRef={menuModalRef}
+            closeMenu={() => setMenuModal(false)}
+            mediaType="artist"
+          />
         </Popper>
         <h2 className="text-2xl font-bold">Популярные треки</h2>
         <div className="flex flex-col w-[70%]">

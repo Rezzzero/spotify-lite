@@ -120,6 +120,8 @@ export const useArtistInfo = () => {
     handleListenPlaylist,
     loading,
     menuModal,
+    setMenuModal,
+    menuModalRef,
     menuButtonRef,
     menuAnchor,
     handleOpenMenu,

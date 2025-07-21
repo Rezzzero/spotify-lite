@@ -21,7 +21,7 @@ export const useTrackCard = ({
   handleUpdateDuration,
 }: {
   album?: Album | ShortenedAlbumType;
-  track: Track | TablesTrack;
+  track?: Track | TablesTrack;
   setTracks?: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
   handleUpdateDuration?: (trackDuration: number, isAdd: boolean) => void;
 }) => {
@@ -120,6 +120,7 @@ export const useTrackCard = ({
   };
 
   const handleListenTrack = () => {
+    if (!track) return;
     const albumData = album
       ? {
           id: album.id,

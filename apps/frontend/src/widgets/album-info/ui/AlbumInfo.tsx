@@ -9,6 +9,7 @@ import { Table } from "@shared/ui/table/Table";
 import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
 import { Popper } from "@mui/material";
 import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
+import { MediaMenu } from "@features/media-menu/ui/MediaMenu";
 
 export const AlbumInfo = () => {
   const {
@@ -22,7 +23,8 @@ export const AlbumInfo = () => {
     handleAddToMediaLibrary,
     format,
     setFormat,
-    // setMenuModal,
+    setMenuModal,
+    menuModalRef,
     // setChangeFormatModal,
     handleListenPlaylist,
     changeFormatButtonRef,
@@ -84,7 +86,12 @@ export const AlbumInfo = () => {
         />
       </div>
       <Popper open={menuModal} anchorEl={menuAnchor} placement="bottom-start">
-        <div className="w-[300px] h-[400px] bg-zinc-800">menu</div>
+        <MediaMenu
+          menuRef={menuModalRef}
+          closeMenu={() => setMenuModal(false)}
+          mediaType="album"
+          track={albumData.album.tracks.items[0]}
+        />
       </Popper>
       <Popper
         open={changeFormatModal}

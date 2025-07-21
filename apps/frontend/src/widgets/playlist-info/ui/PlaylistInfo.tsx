@@ -11,8 +11,8 @@ import { Table } from "@shared/ui/table/Table";
 import { Box, Modal, Popper } from "@mui/material";
 import { EditPlaylist } from "../edit/ui/EditPlaylist";
 import { DeletePlaylist } from "../delete/ui/DeletePlaylist";
-import { PlaylistMenu } from "../menu/ui/PlaylistMenu";
 import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
+import { MediaMenu } from "@features/media-menu/ui/MediaMenu";
 
 const modalBoxStyle = {
   position: "absolute",
@@ -143,18 +143,19 @@ export const PlaylistInfo = () => {
             </div>
           ))}
         <Popper open={menuModal} anchorEl={menuAnchor} placement="bottom-start">
-          <PlaylistMenu
-            playlist={playlistData?.playlist}
-            modalRef={menuModalRef}
-            closeModal={() => setMenuModal(false)}
-            openEditModal={() => setEditModal(true)}
+          <MediaMenu
+            menuRef={menuModalRef}
+            isOwner={isOwner}
+            isPublic={playlistData?.playlist.public}
+            closeMenu={() => setMenuModal(false)}
+            openEditMenu={() => setEditModal(true)}
             openDeleteModal={() => {
               setDeletePlaylistModal(true);
               setMenuModal(false);
             }}
-            isPublic={playlistData?.playlist.public}
-            isOwner={isOwner}
             setPlaylist={setPlaylistData}
+            isInProfile={playlistData?.playlist.show_in_profile}
+            mediaType="playlist"
           />
         </Popper>
         <Popper
