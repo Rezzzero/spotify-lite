@@ -667,3 +667,31 @@ export const getOpenUserPlaylists = async (id) => {
 
   return playlists;
 };
+
+export const subscibeToArtist = async (artistData) => {
+  const { data, error } = await supabaseAdmin
+    .from("user_artist_subscriptions")
+    .insert([artistData])
+    .select();
+
+  if (error) {
+    console.error("Ошибка при подписке:", error.message);
+    throw new Error("Ошибка при подписке");
+  }
+  return data;
+};
+
+export const unsubscribeFromArtist = async (artistId, userId) => {
+  const { data, error } = await supabaseAdmin
+    .from("user_artist_subscriptions")
+    .delete()
+    .eq("artist_id", artistId)
+    .eq("user_id", userId)
+    .select();
+
+  if (error) {
+    console.error("Ошибка при отписке:", error.message);
+    throw new Error("Ошибка при отписке");
+  }
+  return data;
+};

@@ -25,6 +25,9 @@ export const ArtistInfo = () => {
     menuButtonRef,
     menuAnchor,
     handleOpenMenu,
+    handleSubscribe,
+    handleUnsubscribe,
+    isSubscribed,
   } = useArtistInfo();
   if (loading || !artistInfo)
     return (
@@ -51,6 +54,10 @@ export const ArtistInfo = () => {
           isPlaying={isPlaying}
           onOpenMenu={(e) => handleOpenMenu(e)}
           onPlay={() => handleListenPlaylist()}
+          handleSub={handleSubscribe}
+          handleUnsub={handleUnsubscribe}
+          isSubscribed={isSubscribed}
+          isArtist
         />
         <Popper open={menuModal} anchorEl={menuAnchor} placement="bottom-start">
           <MediaMenu

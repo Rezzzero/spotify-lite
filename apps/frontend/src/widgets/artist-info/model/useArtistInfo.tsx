@@ -39,6 +39,7 @@ export const useArtistInfo = () => {
   const [menuAnchor, setMenuAnchorEl] = useState<HTMLElement | null>(null);
   const menuModalRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const [isSubscribed, setIsSubscribed] = useState(false); //временно. проверка подписки будет через просмотр есть ли артист в медиа библиотеке
 
   useClickOutside({
     refs: [menuModalRef, menuButtonRef],
@@ -110,6 +111,46 @@ export const useArtistInfo = () => {
     setIsPlaying((prev) => !prev);
   };
 
+  const handleSubscribe = async () => {
+    if (!user) return;
+    const artistData = {
+      artist_id: artistInfo?.artist.id,
+      user_id: user.user.id,
+      artist_name: artistInfo?.artist.name,
+      artists_images: [
+        {
+          url: artistInfo?.artist.images[0].url,
+          height: artistInfo?.artist.images[0].height,
+          width: artistInfo?.artist.images[0].width,
+        },
+      ],
+    };
+    try {
+      const response = await axios.post(
+        `${API_URL}/subscribe-artist`,
+        artistData
+      );
+      setIsSubscribed(true);
+      console.log(response.data);
+    } catch {
+      console.log("Ошибка при попытке подписаться");
+    }
+  };
+
+  const handleUnsubscribe = async () => {
+    if (!user) return;
+    try {
+      const response = await axios.post(
+        `${API_URL}/unsubscribe-artist/${artistInfo?.artist.id}`,
+        { userId: user.user.id }
+      );
+      setIsSubscribed(false);
+      console.log(response.data);
+    } catch {
+      console.log("Ошибка при попытке отписаться");
+    }
+  };
+
   return {
     artistInfo,
     imageColors,
@@ -127,5 +168,8 @@ export const useArtistInfo = () => {
     handleOpenMenu,
     handleDeletePlaylistFromMediaLibrary,
     handleAddPlaylistToMediaLibrary,
+    handleSubscribe,
+    handleUnsubscribe,
+    isSubscribed,
   };
 };

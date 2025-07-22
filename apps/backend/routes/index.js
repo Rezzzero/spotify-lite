@@ -40,6 +40,9 @@ import deleteUserImageRoutes from "./supabase/user/deleteUserImage.js";
 
 import getTrackRoutes from "./supabase/player/getTrack.js";
 
+import subscribeArtistRoutes from "./supabase/artist/subscribe.js";
+import unsubscribeArtistRoutes from "./supabase/artist/unsubscribe.js";
+
 export default [
   ["/api/popular-tracks", popularTracksRoutes],
   ["/api/popular-artists", popularArtistsRoutes],
@@ -78,4 +81,6 @@ export default [
   ["/update-user-name", updateUserNameRoutes],
   ["/delete-user-image", deleteUserImageRoutes],
   ["/get-track", getTrackRoutes],
+  ["/subscribe-artist", subscribeArtistRoutes],
+  ["/unsubscribe-artist", unsubscribeArtistRoutes],
 ];

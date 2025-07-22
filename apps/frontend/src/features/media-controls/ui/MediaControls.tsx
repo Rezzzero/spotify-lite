@@ -24,6 +24,10 @@ interface MediaControlsProps {
   onRemoveFromLibrary?: () => void;
   onOpenMenu: (e: React.MouseEvent<HTMLElement | null>) => void;
   onOpenFormatModal?: (e: React.MouseEvent<HTMLElement | null>) => void;
+  handleSub?: () => void;
+  handleUnsub?: () => void;
+  isArtist?: boolean;
+  isSubscribed?: boolean;
 }
 export const MediaControls = ({
   isOwner,
@@ -39,6 +43,10 @@ export const MediaControls = ({
   onRemoveFromLibrary,
   onOpenMenu,
   onOpenFormatModal,
+  handleSub,
+  handleUnsub,
+  isArtist,
+  isSubscribed,
 }: MediaControlsProps) => {
   const { playlists } = useMediaControls();
   return (
@@ -64,6 +72,21 @@ export const MediaControls = ({
               </button>
             </CustomTooltip>
           )}
+          {isArtist && handleUnsub && handleSub && (
+            <button
+              type="button"
+              onClick={() => {
+                if (isSubscribed) {
+                  handleUnsub();
+                } else {
+                  handleSub();
+                }
+              }}
+              className="text-sm font-semibold border border-gray-600 hover:border-white rounded-full px-4 h-8 hover:scale-105 cursor-pointer"
+            >
+              {isSubscribed ? "Уже подписаны" : "Подписаться"}
+            </button>
+          )}
           {!isOwner &&
             onRemoveFromLibrary &&
             onAddToLibrary &&
@@ -88,7 +111,6 @@ export const MediaControls = ({
                 </button>
               </CustomTooltip>
             ))}
-
           <CustomTooltip
             title={`Открыть контекстное меню: ${mediaName}`}
             placement="top"
