@@ -8,6 +8,7 @@ import CopyIcon from "@shared/assets/copy-icon.svg?react";
 import ShareIcon from "@shared/assets/playlist/share-icon.svg?react";
 import ProfileIcon from "@shared/assets/user-icon.svg?react";
 import PlusIcon from "@shared/assets/plus-icon.svg?react";
+import SubscibeIcon from "@shared/assets/subscribe-icon.svg?react";
 import { useMediaMenu } from "../model/useMediaMenu";
 import { PlaylistData } from "@widgets/playlist-info/types/types";
 import { Popper } from "@mui/material";
@@ -30,6 +31,28 @@ interface MediaMenuProps {
 
 const buttonClass =
   "flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs";
+
+const MediaNames = {
+  playlist: {
+    copy: "Копировать ссылку на плейлист",
+    edit: "Изменение сведений",
+  },
+  track: {
+    copy: "Скопировать ссылку на трек",
+  },
+  album: {
+    copy: "Скопировать ссылку на альбом",
+  },
+  user: {
+    copy: "Копировать ссылку на профиль",
+    edit: "Изменение профиля",
+  },
+  artist: {
+    copy: "Копировать ссылку на исполнителя",
+  },
+} as {
+  [key: string]: { [key: string]: string };
+};
 
 export const MediaMenu = ({
   menuRef,
@@ -76,10 +99,17 @@ export const MediaMenu = ({
 
   const isPlaylistInLibrary = playlists.some((playlist) => playlist.id === id);
   const shouldShowLibraryButtons =
-    !isOwner && mediaType !== "artist" && mediaType !== "track";
+    !isOwner &&
+    mediaType !== "artist" &&
+    mediaType !== "track" &&
+    mediaType !== "user";
   const shouldShowAddToPlaylist =
     track && (mediaType === "album" || mediaType === "track");
+  const shouldShowSubscibeButton =
+    !isOwner && (mediaType === "user" || mediaType === "artist");
 
+  const editBtnName = MediaNames[mediaType].edit;
+  const copyBtnName = MediaNames[mediaType].copy;
   return (
     <div ref={menuRef} className=" w-[330px] rounded-sm bg-[#2d2d2e] p-1">
       {canShowProfileButton && setPlaylist && (
@@ -95,28 +125,44 @@ export const MediaMenu = ({
         </div>
       )}
       <div className="flex flex-col gap-1 border-y border-zinc-600">
-        {isOwner && openEditMenu && openDeleteModal && (
+        {isOwner && (
           <>
-            <button
-              type="button"
-              onClick={() => {
-                closeMenu();
-                openEditMenu();
-              }}
-              className={buttonClass}
-            >
-              <EditIcon className="w-4 h-4" />
-              Изменение сведений
-            </button>
-            <button
-              type="button"
-              onClick={() => openDeleteModal()}
-              className={buttonClass}
-            >
-              <DeleteIcon className="w-4 h-4" />
-              Удалить
-            </button>
+            {openEditMenu && (
+              <button
+                type="button"
+                onClick={() => {
+                  closeMenu();
+                  openEditMenu();
+                }}
+                className={buttonClass}
+              >
+                <EditIcon className="w-4 h-4" />
+                {editBtnName}
+              </button>
+            )}
+            {openDeleteModal && (
+              <button
+                type="button"
+                onClick={() => openDeleteModal()}
+                className={buttonClass}
+              >
+                <DeleteIcon className="w-4 h-4" />
+                Удалить
+              </button>
+            )}
           </>
+        )}
+        {shouldShowSubscibeButton && (
+          <button
+            type="button"
+            onClick={() => {
+              closeMenu();
+            }}
+            className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
+          >
+            <SubscibeIcon className="w-4 h-4" />
+            Подписаться
+          </button>
         )}
         {shouldShowLibraryButtons &&
           (isPlaylistInLibrary ? (
@@ -139,7 +185,7 @@ export const MediaMenu = ({
             </button>
           ))}
       </div>
-      {isOwner && (
+      {isOwner && mediaType === "playlist" && (
         <div className="flex flex-col gap-1 border-b border-zinc-600">
           <button
             type="button"
@@ -182,36 +228,47 @@ export const MediaMenu = ({
           </Popper>
         </div>
       )}
-      <div
-        onMouseEnter={(e) => handleShareMouseEnter(e)}
-        onMouseLeave={() => handleShareMouseLeave()}
-      >
-        <button type="button" className={buttonClass}>
-          <ShareIcon className="w-4 h-4" />
-          Поделиться
-        </button>
-        <Popper
-          open={shareModal}
-          anchorEl={shareAnchor}
-          placement="right"
-          container={menuRef.current}
+      {mediaType === "user" ? (
+        <button
+          type="button"
+          onClick={() => handleCopyLink()}
+          className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
         >
-          <div
-            ref={shareModalRef}
-            className="bg-[#2d2d2e] rounded-xs p-1 cursor-default"
+          <CopyIcon className="w-4 h-4" />
+          {copyBtnName}
+        </button>
+      ) : (
+        <div
+          onMouseEnter={(e) => handleShareMouseEnter(e)}
+          onMouseLeave={() => handleShareMouseLeave()}
+        >
+          <button type="button" className={buttonClass}>
+            <ShareIcon className="w-4 h-4" />
+            Поделиться
+          </button>
+          <Popper
+            open={shareModal}
+            anchorEl={shareAnchor}
+            placement="right"
+            container={menuRef.current}
           >
-            <button
-              onClick={() => {
-                handleCopyLink();
-              }}
-              className="flex gap-2 items-center px-3 py-2 hover:bg-zinc-600 rounded-xs"
+            <div
+              ref={shareModalRef}
+              className="bg-[#2d2d2e] rounded-xs p-1 cursor-default"
             >
-              <CopyIcon className="w-4 h-4" />
-              <p className="text-sm">Копировать ссылку на плейлист</p>
-            </button>
-          </div>
-        </Popper>
-      </div>
+              <button
+                onClick={() => {
+                  handleCopyLink();
+                }}
+                className="flex gap-2 items-center px-3 py-2 hover:bg-zinc-600 rounded-xs"
+              >
+                <CopyIcon className="w-4 h-4" />
+                <p className="text-sm">{copyBtnName}</p>
+              </button>
+            </div>
+          </Popper>
+        </div>
+      )}
     </div>
   );
 };

@@ -6,7 +6,6 @@ import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import { useUserStore } from "@app/store/user/useUser";
 import { API_URL } from "@shared/constants/constants";
 import { USER_PLACEHOLDER_URL } from "@shared/constants/urls";
-import { toast } from "react-toastify";
 import { SupabasePlaylist } from "@shared/types/playlist";
 import { Playlist } from "@shared/types/types";
 import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
@@ -156,16 +155,6 @@ export const useUserInfo = () => {
     }
   };
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(
-      `${window.location.origin}/user/${userInfo?.id}`
-    );
-    setMenuModal(false);
-    toast(<p>Ссылка скопирована в буфер обмена</p>, {
-      style: { width: "310px" },
-    });
-  };
-
   const isOwner = userInfo?.id === user?.user.id;
 
   return {
@@ -189,7 +178,6 @@ export const useUserInfo = () => {
     menuModal,
     setMenuModal,
     menuModalRef,
-    handleCopyLink,
     handleOpenMenu,
     menuAnchor,
   };
