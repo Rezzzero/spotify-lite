@@ -1,10 +1,10 @@
-import { unsubscribeFromArtist } from "#utils/supabaseUtils";
+import { unsubscribeFromUser } from "#utils/supabaseUtils";
 
 export const unsubscribeHandler = async (req, res) => {
+  const targetId = req.params.id;
   const userId = req.body.userId;
-  const artistId = req.params.id;
   try {
-    const data = await unsubscribeFromArtist(artistId, userId);
+    const data = await unsubscribeFromUser(userId, targetId);
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });

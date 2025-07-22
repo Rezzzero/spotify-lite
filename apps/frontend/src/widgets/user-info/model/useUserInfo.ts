@@ -39,6 +39,7 @@ export const useUserInfo = () => {
   const editModalRef = useRef<HTMLDivElement>(null);
   const menuModalRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isSubscribe, setIsSubscribe] = useState(false);
   useClickOutside({
     refs: [editModalRef],
     handler: () => setEditModal(false),
@@ -155,6 +156,39 @@ export const useUserInfo = () => {
     }
   };
 
+  const handleSubscribe = async () => {
+    if (!user) return;
+    const userData = {
+      user_name: userInfo?.userName,
+      user_id: user.user.id,
+      target_user_id: userInfo?.id,
+      images: {
+        url: userInfo?.imageUrl || "",
+      },
+    };
+    try {
+      const response = await axios.post(`${API_URL}/subscribe-user`, userData);
+      setIsSubscribe(true);
+      console.log(response.data);
+    } catch {
+      console.log("Ошибка при попытке подписаться");
+    }
+  };
+
+  const handleUnsubscribe = async () => {
+    if (!user) return;
+    try {
+      const response = await axios.post(
+        `${API_URL}/unsubscribe-user/${userInfo?.id}`,
+        { userId: user.user.id }
+      );
+      setIsSubscribe(false);
+      console.log(response.data);
+    } catch {
+      console.log("Ошибка при попытке отписаться");
+    }
+  };
+
   const isOwner = userInfo?.id === user?.user.id;
 
   return {
@@ -180,5 +214,8 @@ export const useUserInfo = () => {
     menuModalRef,
     handleOpenMenu,
     menuAnchor,
+    handleSubscribe,
+    handleUnsubscribe,
+    isSubscribe,
   };
 };

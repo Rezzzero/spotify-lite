@@ -33,6 +33,9 @@ export const UserInfo = () => {
     menuModalRef,
     handleOpenMenu,
     menuAnchor,
+    isSubscribe,
+    handleSubscribe,
+    handleUnsubscribe,
   } = useUserInfo();
   if (loading)
     return (
@@ -58,8 +61,18 @@ export const UserInfo = () => {
         />
         <div className="flex items-center gap-3 px-5 py-7 relative">
           {!isOwner && (
-            <button className="text-sm font-semibold border border-gray-600 hover:border-white rounded-full px-4 h-8 hover:scale-105 cursor-pointer">
-              Подписаться
+            <button
+              type="button"
+              onClick={() => {
+                if (isSubscribe) {
+                  handleUnsubscribe();
+                } else {
+                  handleSubscribe();
+                }
+              }}
+              className="text-sm font-semibold border border-gray-600 hover:border-white rounded-full px-4 h-8 hover:scale-105 cursor-pointer"
+            >
+              {isSubscribe ? "Уже подписаны" : "Подписаться"}
             </button>
           )}
           <CustomTooltip

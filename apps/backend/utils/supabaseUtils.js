@@ -675,8 +675,8 @@ export const subscibeToArtist = async (artistData) => {
     .select();
 
   if (error) {
-    console.error("Ошибка при подписке:", error.message);
-    throw new Error("Ошибка при подписке");
+    console.error("Ошибка при подписке на артиста:", error.message);
+    throw new Error("Ошибка при подписке на артиста");
   }
   return data;
 };
@@ -690,8 +690,36 @@ export const unsubscribeFromArtist = async (artistId, userId) => {
     .select();
 
   if (error) {
-    console.error("Ошибка при отписке:", error.message);
-    throw new Error("Ошибка при отписке");
+    console.error("Ошибка при отписке от артиста:", error.message);
+    throw new Error("Ошибка при отписке от артиста");
+  }
+  return data;
+};
+
+export const subscribeToUser = async (userData) => {
+  const { data, error } = await supabaseAdmin
+    .from("user_user_subscriptions")
+    .insert([userData])
+    .select();
+
+  if (error) {
+    console.error("Ошибка при подписке на пользователя:", error.message);
+    throw new Error("Ошибка при подписке на пользователя");
+  }
+  return data;
+};
+
+export const unsubscribeFromUser = async (userId, targetUserId) => {
+  const { data, error } = await supabaseAdmin
+    .from("user_user_subscriptions")
+    .delete()
+    .eq("user_id", userId)
+    .eq("target_user_id", targetUserId)
+    .select();
+
+  if (error) {
+    console.error("Ошибка при отписке от пользователя:", error.message);
+    throw new Error("Ошибка при отписке от пользователя");
   }
   return data;
 };

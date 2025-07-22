@@ -37,6 +37,8 @@ import getUserByIdRoutes from "./supabase/user/getUserById.js";
 import uploadUserImageRoutes from "./supabase/user/uploadUserImage.js";
 import updateUserNameRoutes from "./supabase/user/updateUserName.js";
 import deleteUserImageRoutes from "./supabase/user/deleteUserImage.js";
+import subscribeUserRoutes from "./supabase/user/subscribe.js";
+import unsubscribeUserRoutes from "./supabase/user/unsubscribe.js";
 
 import getTrackRoutes from "./supabase/player/getTrack.js";
 
@@ -80,6 +82,8 @@ export default [
   ["/upload-user-image", uploadUserImageRoutes],
   ["/update-user-name", updateUserNameRoutes],
   ["/delete-user-image", deleteUserImageRoutes],
+  ["/subscribe-user", subscribeUserRoutes],
+  ["/unsubscribe-user", unsubscribeUserRoutes],
   ["/get-track", getTrackRoutes],
   ["/subscribe-artist", subscribeArtistRoutes],
   ["/unsubscribe-artist", unsubscribeArtistRoutes],
