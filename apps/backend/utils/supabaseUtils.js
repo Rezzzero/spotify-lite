@@ -723,3 +723,27 @@ export const unsubscribeFromUser = async (userId, targetUserId) => {
   }
   return data;
 };
+
+export const getUserSubscriptions = async (userId) => {
+  const { data: userToUserSubs, error: userSubsError } = await supabaseAdmin
+    .from("user_user_subscriptions")
+    .select("*")
+    .eq("user_id", userId);
+
+  if (userSubsError) {
+    console.error("Ошибка при получении подписок пользователя:", error.message);
+    throw new Error("Ошибка при получении подписок пользователя");
+  }
+
+  const { data: userToArtistSubs, error: artistSubsError } = await supabaseAdmin
+    .from("user_artist_subscriptions")
+    .select("*")
+    .eq("user_id", userId);
+
+  if (artistSubsError) {
+    console.error("Ошибка при получении подписок пользователя:", error.message);
+    throw new Error("Ошибка при получении подписок пользователя");
+  }
+
+  return { userToUserSubs, userToArtistSubs };
+};

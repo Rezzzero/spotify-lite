@@ -35,7 +35,6 @@ export const ArtistInfo = () => {
         <Loader />
       </div>
     );
-
   return (
     <div className="flex flex-col">
       <MediaHeader

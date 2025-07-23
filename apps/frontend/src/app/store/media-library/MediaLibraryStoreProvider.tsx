@@ -5,18 +5,18 @@ import { SupabasePlaylist } from "@shared/types/playlist";
 import { API_URL } from "@shared/constants/constants";
 import { useUserStore } from "../user/useUser";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
+import { UserToArtistSubs } from "@shared/types/user";
 
 export const MediaLibraryStoreProvider = ({
   children,
 }: {
   children: ReactNode;
 }) => {
-  const { user } = useUserStore();
+  const { user, artists, setArtists } = useUserStore();
   const [playlists, setPlaylists] = useState<SupabasePlaylist[]>([]);
   const [playlistPreviewImages, setPlaylistPreviewImages] = useState<
     { id: string; previewImage: string }[]
   >([]);
-
   useEffect(() => {
     if (user) {
       const fetchPlaylists = async (userId: string) => {
@@ -177,6 +177,30 @@ export const MediaLibraryStoreProvider = ({
     }
   };
 
+  const subscribe = async (artistData: UserToArtistSubs) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/subscribe-artist`,
+        artistData
+      );
+      setArtists([...artists, response.data[0]]);
+    } catch {
+      console.log("Ошибка при попытке подписаться");
+    }
+  };
+
+  const unsubscribe = async (artistId: string) => {
+    if (!user) return;
+    try {
+      await axios.post(`${API_URL}/unsubscribe-artist/${artistId}`, {
+        userId: user.user.id,
+      });
+      setArtists(artists.filter((artist) => artist.artist_id !== artistId));
+    } catch {
+      console.log("Ошибка при попытке отписаться");
+    }
+  };
+
   return (
     <MediaLibraryContext.Provider
       value={{
@@ -191,6 +215,8 @@ export const MediaLibraryStoreProvider = ({
         deletePlaylistImage,
         removePlaylistFromUser,
         addPlaylistToUser,
+        subscribe,
+        unsubscribe,
       }}
     >
       {children}

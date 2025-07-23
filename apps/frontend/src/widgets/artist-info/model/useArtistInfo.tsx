@@ -21,8 +21,9 @@ interface ArtistInfoType {
 }
 
 export const useArtistInfo = () => {
-  const { user } = useUserStore();
-  const { removePlaylistFromUser, addPlaylistToUser } = useMediaLibraryStore();
+  const { user, artists } = useUserStore();
+  const { removePlaylistFromUser, addPlaylistToUser, subscribe, unsubscribe } =
+    useMediaLibraryStore();
   const [artistInfo, setArtistInfo] = useState<ArtistInfoType | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -35,11 +36,11 @@ export const useArtistInfo = () => {
     Album[]
   >([]);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState(false);
   const [menuModal, setMenuModal] = useState(false);
   const [menuAnchor, setMenuAnchorEl] = useState<HTMLElement | null>(null);
   const menuModalRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const [isSubscribed, setIsSubscribed] = useState(false); //временно. проверка подписки будет через просмотр есть ли артист в медиа библиотеке
 
   useClickOutside({
     refs: [menuModalRef, menuButtonRef],
@@ -61,13 +62,18 @@ export const useArtistInfo = () => {
         if (data.artist.images[1].url) {
           setImageUrl(data.artist.images[1].url);
         }
+        if (user) {
+          setIsSubscribed(
+            artists.some((artist) => artist.artist_id === data.artist.id)
+          );
+        }
         setLoading(false);
       } catch (error) {
         console.error("Error fetching artist info:", error);
       }
     };
     fetch();
-  }, [id]);
+  }, [id, user]);
 
   const handleChangeFilter = (filter: string) => {
     setSelectedFilter(filter);
@@ -112,43 +118,27 @@ export const useArtistInfo = () => {
   };
 
   const handleSubscribe = async () => {
-    if (!user) return;
+    if (!user || !artistInfo) return;
     const artistData = {
-      artist_id: artistInfo?.artist.id,
+      artist_id: artistInfo.artist.id,
       user_id: user.user.id,
-      artist_name: artistInfo?.artist.name,
+      artist_name: artistInfo.artist.name,
       artists_images: [
         {
-          url: artistInfo?.artist.images[0].url,
-          height: artistInfo?.artist.images[0].height,
-          width: artistInfo?.artist.images[0].width,
+          url: artistInfo.artist.images[0].url,
+          height: artistInfo.artist.images[0].height,
+          width: artistInfo.artist.images[0].width,
         },
       ],
     };
-    try {
-      const response = await axios.post(
-        `${API_URL}/subscribe-artist`,
-        artistData
-      );
-      setIsSubscribed(true);
-      console.log(response.data);
-    } catch {
-      console.log("Ошибка при попытке подписаться");
-    }
+    subscribe(artistData);
+    setIsSubscribed(true);
   };
 
   const handleUnsubscribe = async () => {
-    if (!user) return;
-    try {
-      const response = await axios.post(
-        `${API_URL}/unsubscribe-artist/${artistInfo?.artist.id}`,
-        { userId: user.user.id }
-      );
-      setIsSubscribed(false);
-      console.log(response.data);
-    } catch {
-      console.log("Ошибка при попытке отписаться");
-    }
+    if (!user || !artistInfo) return;
+    unsubscribe(artistInfo.artist.id);
+    setIsSubscribed(false);
   };
 
   return {

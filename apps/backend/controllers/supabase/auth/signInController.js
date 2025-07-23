@@ -1,4 +1,4 @@
-import { signIn } from "#utils/supabaseUtils";
+import { getUserSubscriptions, signIn } from "#utils/supabaseUtils";
 
 export const signInHandler = async (req, res) => {
   try {
@@ -9,15 +9,16 @@ export const signInHandler = async (req, res) => {
     }
     const data = await signIn({ email, password });
 
+    const subscriptions = await getUserSubscriptions(data.user.id);
     res.cookie("access_token", data.session.access_token, {
       httpOnly: true,
       secure: false,
-      maxAge: data.session.expires_in * 1000,
+      maxAge: data.session.expires_in * 2000,
       sameSite: "lax",
       path: "/",
     });
 
-    res.json(data);
+    res.json({ user: data.session.user, subscriptions });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

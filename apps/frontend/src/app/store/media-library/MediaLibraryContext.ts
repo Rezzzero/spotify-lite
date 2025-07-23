@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import { SupabasePlaylist } from "@shared/types/playlist";
+import { UserToArtistSubs } from "@shared/types/user";
 
 interface MediaLibraryContextType {
   playlists: SupabasePlaylist[];
@@ -26,6 +27,8 @@ interface MediaLibraryContextType {
   deletePlaylistImage: (id: string) => Promise<void>;
   removePlaylistFromUser: (playlistId: string) => Promise<void>;
   addPlaylistToUser: (playlistId: string) => Promise<void>;
+  subscribe: (artistData: UserToArtistSubs) => Promise<void>;
+  unsubscribe: (artistId: string) => Promise<void>;
 }
 
 export const MediaLibraryContext = createContext({} as MediaLibraryContextType);

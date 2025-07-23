@@ -36,7 +36,7 @@ export const useLogin = () => {
     message: "",
   });
   const navigate = useNavigate();
-  const { setUser } = useUserStore();
+  const { setUser, setArtists } = useUserStore();
   const emailValue = watch("email", "");
   const passwordValue = watch("password", "");
   const withPasswordRef = useRef(false);
@@ -156,8 +156,9 @@ export const useLogin = () => {
       );
       setLoading(false);
 
-      setUser(res.data.session);
-
+      setUser(res.data);
+      setArtists(res.data.subscriptions.userToArtistSubs);
+      console.log(res.data);
       navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -190,8 +191,9 @@ export const useLogin = () => {
       setLoading(false);
       setSignInError({ status: false, message: "" });
 
-      setUser(res.data.session);
-
+      setUser(res.data);
+      setArtists(res.data.subscriptions.userToArtistSubs);
+      console.log(res.data);
       navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error)) {
