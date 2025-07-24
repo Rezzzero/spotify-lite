@@ -33,7 +33,7 @@ export const UserInfo = () => {
     menuModalRef,
     handleOpenMenu,
     menuAnchor,
-    isSubscribe,
+    isSubscribed,
     handleSubscribe,
     handleUnsubscribe,
   } = useUserInfo();
@@ -64,7 +64,7 @@ export const UserInfo = () => {
             <button
               type="button"
               onClick={() => {
-                if (isSubscribe) {
+                if (isSubscribed) {
                   handleUnsubscribe();
                 } else {
                   handleSubscribe();
@@ -72,7 +72,7 @@ export const UserInfo = () => {
               }}
               className="text-sm font-semibold border border-gray-600 hover:border-white rounded-full px-4 h-8 hover:scale-105 cursor-pointer"
             >
-              {isSubscribe ? "Уже подписаны" : "Подписаться"}
+              {isSubscribed ? "Уже подписаны" : "Подписаться"}
             </button>
           )}
           <CustomTooltip

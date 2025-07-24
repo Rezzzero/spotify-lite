@@ -36,7 +36,7 @@ export const useLogin = () => {
     message: "",
   });
   const navigate = useNavigate();
-  const { setUser, setArtists } = useUserStore();
+  const { setUser, setUserToArtistsSubs, setUserToUsersSubs } = useUserStore();
   const emailValue = watch("email", "");
   const passwordValue = watch("password", "");
   const withPasswordRef = useRef(false);
@@ -157,7 +157,8 @@ export const useLogin = () => {
       setLoading(false);
 
       setUser(res.data);
-      setArtists(res.data.subscriptions.userToArtistSubs);
+      setUserToArtistsSubs(res.data.subscriptions.userToArtistSubs);
+      setUserToUsersSubs(res.data.subscriptions.userToUserSubs);
       console.log(res.data);
       navigate("/");
     } catch (error) {
@@ -192,7 +193,8 @@ export const useLogin = () => {
       setSignInError({ status: false, message: "" });
 
       setUser(res.data);
-      setArtists(res.data.subscriptions.userToArtistSubs);
+      setUserToArtistsSubs(res.data.subscriptions.userToArtistSubs);
+      setUserToUsersSubs(res.data.subscriptions.userToUserSubs);
       console.log(res.data);
       navigate("/");
     } catch (error) {

@@ -1,4 +1,8 @@
-import { getUserSubscriptions, signIn } from "#utils/supabaseUtils";
+import {
+  getUserToArtistSubscriptions,
+  getUserToUserSubscriptions,
+  signIn,
+} from "#utils/supabaseUtils";
 
 export const signInHandler = async (req, res) => {
   try {
@@ -9,7 +13,12 @@ export const signInHandler = async (req, res) => {
     }
     const data = await signIn({ email, password });
 
-    const subscriptions = await getUserSubscriptions(data.user.id);
+    const userToArtistSubs = await getUserToArtistSubscriptions(data.user.id);
+    const userToUserSubs = await getUserToUserSubscriptions(data.user.id);
+    const subscriptions = {
+      userToArtistSubs,
+      userToUserSubs,
+    };
     res.cookie("access_token", data.session.access_token, {
       httpOnly: true,
       secure: false,

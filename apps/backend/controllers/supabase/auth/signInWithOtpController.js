@@ -1,11 +1,24 @@
-import { getUserSubscriptions, signInWithOtp } from "#utils/supabaseUtils";
+import {
+  getUserToArtistSubscriptions,
+  getUserToUserSubscriptions,
+  signInWithOtp,
+} from "#utils/supabaseUtils";
 
 export const signInWithOtpHandler = async (req, res) => {
   try {
     const { email, otp } = req.body;
     const result = await signInWithOtp(email, otp);
-    const subscriptions = await getUserSubscriptions(result.session.user.id);
+    const userToArtistSubs = await getUserToArtistSubscriptions(
+      result.session.user.id
+    );
+    const userToUserSubs = await getUserToUserSubscriptions(
+      result.session.user.id
+    );
 
+    const subscriptions = {
+      userToArtistSubs,
+      userToUserSubs,
+    };
     res.cookie("access_token", result.session.access_token, {
       httpOnly: true,
       secure: false,

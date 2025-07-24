@@ -3,6 +3,7 @@ import {
   getSoundCloudSearchResults,
   getSoundCloudStream,
 } from "#utils/soundCloudUtils";
+import { getSeveralArtists } from "./spotifyUtils.js";
 
 export const checkEmail = async (email) => {
   const { data, error } = await supabaseAdmin.rpc("check_email_exists", {
@@ -45,6 +46,7 @@ export const signIn = async (userData) => {
   });
 
   if (error) {
+    console.error("Ошибка авторизации:", error.message);
     throw new Error("Неверный email или пароль");
   }
 
@@ -724,26 +726,41 @@ export const unsubscribeFromUser = async (userId, targetUserId) => {
   return data;
 };
 
-export const getUserSubscriptions = async (userId) => {
-  const { data: userToUserSubs, error: userSubsError } = await supabaseAdmin
+export const getUserToUserSubscriptions = async (userId) => {
+  const { data, error } = await supabaseAdmin
     .from("user_user_subscriptions")
-    .select("*")
+    .select("target_user_id")
     .eq("user_id", userId);
 
-  if (userSubsError) {
+  if (error) {
     console.error("Ошибка при получении подписок пользователя:", error.message);
     throw new Error("Ошибка при получении подписок пользователя");
   }
 
-  const { data: userToArtistSubs, error: artistSubsError } = await supabaseAdmin
+  const ids = data.map((item) => item.target_user_id);
+
+  const users = await supabaseAdmin.from("users").select("*").in("id", ids);
+
+  return users.data;
+};
+
+export const getUserToArtistSubscriptions = async (userId) => {
+  const { data, error } = await supabaseAdmin
     .from("user_artist_subscriptions")
-    .select("*")
+    .select("artist_id, added_at")
     .eq("user_id", userId);
 
-  if (artistSubsError) {
+  if (error) {
     console.error("Ошибка при получении подписок пользователя:", error.message);
     throw new Error("Ошибка при получении подписок пользователя");
   }
 
-  return { userToUserSubs, userToArtistSubs };
+  const ids = data.map((item) => item.artist_id);
+
+  const artists = await getSeveralArtists(ids);
+
+  return artists.map((artist) => ({
+    ...artist,
+    added_at: data.find((item) => item.artist_id === artist.id).added_at,
+  }));
 };

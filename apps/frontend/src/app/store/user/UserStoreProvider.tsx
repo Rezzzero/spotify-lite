@@ -6,10 +6,13 @@ import { API_URL } from "@shared/constants/constants";
 
 export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserData | null>(null);
-  const [artists, setArtists] = useState<UserToArtistSubs[]>([]);
-
+  const [userToArtistsSubs, setUserToArtistsSubs] = useState<
+    UserToArtistSubs[]
+  >([]);
+  const [userToUsersSubs, setUserToUsersSubs] = useState<
+    { id: string; name: string; avatar_url: string }[]
+  >([]);
   const [userImagePreview, setUserImagePreview] = useState<string | null>(null);
-
   useEffect(() => {
     const initialUser = async () => {
       try {
@@ -17,7 +20,8 @@ export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
           withCredentials: true,
         });
         setUser(response.data);
-        setArtists(response.data.subscriptions.userToArtistSubs);
+        setUserToArtistsSubs(response.data.subscriptions.userToArtistSubs);
+        setUserToUsersSubs(response.data.subscriptions.userToUserSubs);
       } catch {
         setUser(null);
       }
@@ -26,6 +30,37 @@ export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
     initialUser();
   }, []);
 
+  const subscribeUser = async (subscribeData: {
+    user_id: string;
+    target_user_id: string;
+  }) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/subscribe-user`,
+        subscribeData
+      );
+      console.log("subscribeUser", response.data);
+      setUserToUsersSubs([...userToUsersSubs, response.data[0]]);
+    } catch {
+      setUser(null);
+    }
+  };
+
+  const unsubscribeUser = async (target_user_id: string) => {
+    try {
+      const response = await axios.post(
+        `${API_URL}/unsubscribe-user/${target_user_id}`,
+        { userId: user?.user.id }
+      );
+      console.log("unsubscribeUser", response.data);
+      setUserToUsersSubs(
+        userToUsersSubs.filter((user) => user.id !== response.data.id)
+      );
+    } catch {
+      setUser(null);
+    }
+  };
+  console.log(userToUsersSubs);
   return (
     <UserContext.Provider
       value={{
@@ -33,8 +68,12 @@ export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
         setUser,
         userImagePreview,
         setUserImagePreview,
-        artists,
-        setArtists,
+        userToArtistsSubs,
+        setUserToArtistsSubs,
+        userToUsersSubs,
+        setUserToUsersSubs,
+        subscribeUser,
+        unsubscribeUser,
       }}
     >
       {children}

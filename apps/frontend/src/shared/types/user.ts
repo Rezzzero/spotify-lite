@@ -1,5 +1,3 @@
-import { Image } from "./types";
-
 export interface UserData {
   session: {
     access_token: string;
@@ -42,8 +40,6 @@ export interface UserData {
 export interface UserToArtistSubs {
   id?: string;
   artist_id: string;
-  artists_images: Image[];
-  artist_name: string;
   added_at?: string;
   user_id: string;
 }

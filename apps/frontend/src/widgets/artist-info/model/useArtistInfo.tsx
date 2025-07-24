@@ -21,9 +21,13 @@ interface ArtistInfoType {
 }
 
 export const useArtistInfo = () => {
-  const { user, artists } = useUserStore();
-  const { removePlaylistFromUser, addPlaylistToUser, subscribe, unsubscribe } =
-    useMediaLibraryStore();
+  const { user, userToArtistsSubs } = useUserStore();
+  const {
+    removePlaylistFromUser,
+    addPlaylistToUser,
+    subscribeArtist,
+    unsubscribeArtist,
+  } = useMediaLibraryStore();
   const [artistInfo, setArtistInfo] = useState<ArtistInfoType | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -64,7 +68,7 @@ export const useArtistInfo = () => {
         }
         if (user) {
           setIsSubscribed(
-            artists.some((artist) => artist.artist_id === data.artist.id)
+            userToArtistsSubs.some((artist) => artist.id === data.artist.id)
           );
         }
         setLoading(false);
@@ -122,22 +126,14 @@ export const useArtistInfo = () => {
     const artistData = {
       artist_id: artistInfo.artist.id,
       user_id: user.user.id,
-      artist_name: artistInfo.artist.name,
-      artists_images: [
-        {
-          url: artistInfo.artist.images[0].url,
-          height: artistInfo.artist.images[0].height,
-          width: artistInfo.artist.images[0].width,
-        },
-      ],
     };
-    subscribe(artistData);
+    subscribeArtist(artistData);
     setIsSubscribed(true);
   };
 
   const handleUnsubscribe = async () => {
     if (!user || !artistInfo) return;
-    unsubscribe(artistInfo.artist.id);
+    unsubscribeArtist(artistInfo.artist.id);
     setIsSubscribed(false);
   };
 
