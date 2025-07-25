@@ -2,7 +2,7 @@ import { PageLayout } from "@shared/ui/page-layout/PageLayout";
 import { Footer } from "@widgets/footer/ui/Footer";
 import { UserInfo } from "@widgets/user-info/ui/UserInfo";
 
-export const UserPage = () => {
+const UserPage = () => {
   return (
     <PageLayout>
       <UserInfo />

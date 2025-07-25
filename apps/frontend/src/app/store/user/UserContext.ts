@@ -1,23 +1,18 @@
 import { createContext } from "react";
-import { UserData, UserToArtistSubs } from "@shared/types/user";
+import { UserData, UserToUserSubs } from "@shared/types/user";
+import { Artist } from "@shared/types/types";
 
 export type UserContextType = {
   user: UserData | null;
   setUser: React.Dispatch<React.SetStateAction<UserData | null>>;
   userImagePreview: string | null;
   setUserImagePreview: React.Dispatch<React.SetStateAction<string | null>>;
-  userToArtistsSubs: UserToArtistSubs[];
+  userToArtistsSubs: (Artist & { added_at: string })[];
   setUserToArtistsSubs: React.Dispatch<
-    React.SetStateAction<UserToArtistSubs[]>
+    React.SetStateAction<(Artist & { added_at: string })[]>
   >;
-  userToUsersSubs: {
-    id: string;
-    name: string;
-    avatar_url: string;
-  }[];
-  setUserToUsersSubs: React.Dispatch<
-    React.SetStateAction<{ id: string; name: string; avatar_url: string }[]>
-  >;
+  userToUsersSubs: UserToUserSubs[];
+  setUserToUsersSubs: React.Dispatch<React.SetStateAction<UserToUserSubs[]>>;
   subscribeUser: (subscribeData: {
     user_id: string;
     target_user_id: string;

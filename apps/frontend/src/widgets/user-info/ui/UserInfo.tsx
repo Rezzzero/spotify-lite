@@ -36,6 +36,7 @@ export const UserInfo = () => {
     isSubscribed,
     handleSubscribe,
     handleUnsubscribe,
+    sortedObject,
   } = useUserInfo();
   if (loading)
     return (
@@ -101,23 +102,65 @@ export const UserInfo = () => {
           </Popper>
         </div>
         {userInfo?.openedPlaylists && userInfo?.openedPlaylists.length > 0 && (
-          <div className="flex flex-col gap-4 px-5">
-            <h2 className="text-3xl font-bold">Открытые плейлисты</h2>
+          <div className="flex flex-col gap-4 px-3 mb-10">
+            <Link
+              to={`/user/${userInfo.id}/playlists`}
+              className="text-2xl font-bold px-2 hover:underline"
+            >
+              Открытые плейлисты
+            </Link>
             <div className="flex gap-3">
               {userInfo.openedPlaylists.map((playlist) => (
                 <Link
                   key={playlist.id}
                   to={`/playlist/${playlist.id}`}
-                  className="flex flex-col gap-2 hover:bg-zinc-600 p-2 rounded-md"
+                  className="flex flex-col gap-2 hover:bg-[#242426] p-2 rounded-md"
                 >
                   <img
                     src={playlist.images[0].url}
                     alt="playlist image"
                     className="w-[175px] h-[175px] rounded-md"
                   />
-                  <p className="font-bold">{playlist.name}</p>
+                  <p className="font-normal hover:underline">{playlist.name}</p>
                   <p className="text-gray-400">
                     {playlist.owner?.display_name}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+        {isOwner && sortedObject.length > 0 && userInfo && (
+          <div className="flex flex-col gap-4 px-3">
+            <Link
+              to={`/user/${userInfo.id}/following`}
+              className="text-2xl font-bold px-2 hover:underline"
+            >
+              Уже подписаны
+            </Link>
+            <div className="flex gap-3">
+              {sortedObject.map((sub) => (
+                <Link
+                  key={sub.id}
+                  to={
+                    sub.type === "artist"
+                      ? `/artist/${sub.id}`
+                      : `/user/${sub.id}`
+                  }
+                  className="flex flex-col gap-2 hover:bg-[#242426] p-2 rounded-md"
+                >
+                  <img
+                    src={
+                      sub.type === "artist"
+                        ? sub.images[0].url
+                        : sub.avatar_url || USER_PLACEHOLDER_URL
+                    }
+                    alt="artist image"
+                    className="w-[175px] h-[175px] rounded-full"
+                  />
+                  <p className="font-normal hover:underline">{sub.name}</p>
+                  <p className="text-gray-400 text-sm">
+                    {sub.type === "artist" ? "Испольнитель" : "Профиль"}
                   </p>
                 </Link>
               ))}

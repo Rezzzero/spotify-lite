@@ -196,7 +196,7 @@ export const MediaLibraryStoreProvider = ({
         userId: user.user.id,
       });
       setUserToArtistsSubs(
-        userToArtistsSubs.filter((artist) => artist.artist_id !== artistId)
+        userToArtistsSubs.filter((artist) => artist.id !== artistId)
       );
     } catch {
       console.log("Ошибка при попытке отписаться");

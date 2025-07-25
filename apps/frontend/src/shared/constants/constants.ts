@@ -21,6 +21,9 @@ export const Route = {
   NOT_FOUND: "/not-found",
   TEST: "/test",
   USER: "/user/:id",
+  USER_FOLLOWING: "/user/:id/following",
+  USER_FOLLOWERS: "/user/:id/followers",
+  USER_PLAYLISTS: "/user/:id/playlists",
 };
 
 export const MediaLibraryLinks = [

@@ -20,6 +20,15 @@ const RegistationPage = lazy(
 const PlaylistPage = lazy(() => import("@pages/playlist/PlaylistPage"));
 const NotFoundPage = lazy(() => import("@pages/not-found/NotFoundPage"));
 const UserPage = lazy(() => import("@pages/user/UserPage"));
+const UserFollowingPage = lazy(
+  () => import("@pages/user/following/UserFollowingPage")
+);
+const UserFollowersPage = lazy(
+  () => import("@pages/user/followers/UserFollowersPage")
+);
+const UserPlaylistsPage = lazy(
+  () => import("@pages/user/playlists/UserPlaylistsPage")
+);
 
 export const router = createBrowserRouter([
   {
@@ -69,6 +78,18 @@ export const router = createBrowserRouter([
       {
         path: Route.USER,
         element: <UserPage />,
+      },
+      {
+        path: Route.USER_FOLLOWING,
+        element: <UserFollowingPage />,
+      },
+      {
+        path: Route.USER_FOLLOWERS,
+        element: <UserFollowersPage />,
+      },
+      {
+        path: Route.USER_PLAYLISTS,
+        element: <UserPlaylistsPage />,
       },
     ],
   },

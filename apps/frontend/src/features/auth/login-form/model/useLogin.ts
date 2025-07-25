@@ -159,7 +159,6 @@ export const useLogin = () => {
       setUser(res.data);
       setUserToArtistsSubs(res.data.subscriptions.userToArtistSubs);
       setUserToUsersSubs(res.data.subscriptions.userToUserSubs);
-      console.log(res.data);
       navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -195,7 +194,6 @@ export const useLogin = () => {
       setUser(res.data);
       setUserToArtistsSubs(res.data.subscriptions.userToArtistSubs);
       setUserToUsersSubs(res.data.subscriptions.userToUserSubs);
-      console.log(res.data);
       navigate("/");
     } catch (error) {
       if (axios.isAxiosError(error)) {

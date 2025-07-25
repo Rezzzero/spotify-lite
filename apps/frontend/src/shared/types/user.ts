@@ -43,3 +43,11 @@ export interface UserToArtistSubs {
   added_at?: string;
   user_id: string;
 }
+
+export interface UserToUserSubs {
+  id: string;
+  name: string;
+  avatar_url: string;
+  added_at: string;
+  type: "user";
+}

@@ -729,7 +729,7 @@ export const unsubscribeFromUser = async (userId, targetUserId) => {
 export const getUserToUserSubscriptions = async (userId) => {
   const { data, error } = await supabaseAdmin
     .from("user_user_subscriptions")
-    .select("target_user_id")
+    .select("target_user_id, added_at")
     .eq("user_id", userId);
 
   if (error) {
@@ -741,7 +741,11 @@ export const getUserToUserSubscriptions = async (userId) => {
 
   const users = await supabaseAdmin.from("users").select("*").in("id", ids);
 
-  return users.data;
+  return users.data.map((user) => ({
+    ...user,
+    added_at: data.find((item) => item.target_user_id === user.id).added_at,
+    type: "user",
+  }));
 };
 
 export const getUserToArtistSubscriptions = async (userId) => {

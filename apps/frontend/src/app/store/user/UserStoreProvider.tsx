@@ -1,17 +1,16 @@
 import { useState, ReactNode, useEffect } from "react";
 import { UserContext } from "./UserContext";
-import { UserData, UserToArtistSubs } from "@shared/types/user";
+import { UserData, UserToUserSubs } from "@shared/types/user";
 import axios from "axios";
 import { API_URL } from "@shared/constants/constants";
+import { Artist } from "@shared/types/types";
 
 export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserData | null>(null);
   const [userToArtistsSubs, setUserToArtistsSubs] = useState<
-    UserToArtistSubs[]
+    (Artist & { added_at: string })[]
   >([]);
-  const [userToUsersSubs, setUserToUsersSubs] = useState<
-    { id: string; name: string; avatar_url: string }[]
-  >([]);
+  const [userToUsersSubs, setUserToUsersSubs] = useState<UserToUserSubs[]>([]);
   const [userImagePreview, setUserImagePreview] = useState<string | null>(null);
   useEffect(() => {
     const initialUser = async () => {
@@ -39,7 +38,6 @@ export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
         `${API_URL}/subscribe-user`,
         subscribeData
       );
-      console.log("subscribeUser", response.data);
       setUserToUsersSubs([...userToUsersSubs, response.data[0]]);
     } catch {
       setUser(null);
@@ -52,7 +50,6 @@ export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
         `${API_URL}/unsubscribe-user/${target_user_id}`,
         { userId: user?.user.id }
       );
-      console.log("unsubscribeUser", response.data);
       setUserToUsersSubs(
         userToUsersSubs.filter((user) => user.id !== response.data.id)
       );
@@ -60,7 +57,7 @@ export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
       setUser(null);
     }
   };
-  console.log(userToUsersSubs);
+
   return (
     <UserContext.Provider
       value={{

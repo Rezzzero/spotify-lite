@@ -44,6 +44,7 @@ import getTrackRoutes from "./supabase/player/getTrack.js";
 
 import subscribeArtistRoutes from "./supabase/artist/subscribe.js";
 import unsubscribeArtistRoutes from "./supabase/artist/unsubscribe.js";
+import getUserSubscriptionsRoutes from "./supabase/user/getUserSubscriptions.js";
 
 export default [
   ["/api/popular-tracks", popularTracksRoutes],
@@ -87,4 +88,5 @@ export default [
   ["/get-track", getTrackRoutes],
   ["/subscribe-artist", subscribeArtistRoutes],
   ["/unsubscribe-artist", unsubscribeArtistRoutes],
+  ["/get-user-subscriptions", getUserSubscriptionsRoutes],
 ];

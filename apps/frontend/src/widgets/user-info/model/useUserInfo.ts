@@ -29,6 +29,7 @@ export const useUserInfo = () => {
     setUserImagePreview,
     userImagePreview,
     userToUsersSubs,
+    userToArtistsSubs,
     subscribeUser,
     unsubscribeUser,
   } = useUserStore();
@@ -75,8 +76,6 @@ export const useUserInfo = () => {
       setUserInfo(response.data);
       setUserName(response.data.userName);
       if (user) {
-        console.log("user is true");
-        console.log(userToUsersSubs);
         setIsSubscribed(
           userToUsersSubs.some((user) => user.id === response.data.id)
         );
@@ -188,6 +187,15 @@ export const useUserInfo = () => {
 
   const isOwner = userInfo?.id === user?.user.id;
 
+  const mergedObject = [...userToArtistsSubs, ...userToUsersSubs];
+  const sortedObject = mergedObject.sort((a, b) => {
+    const aWithAddedAt = a as { added_at: string };
+    const bWithAddedAt = b as { added_at: string };
+    const dateA = new Date(aWithAddedAt.added_at);
+    const dateB = new Date(bWithAddedAt.added_at);
+    return dateB.getTime() - dateA.getTime();
+  });
+
   return {
     userInfo,
     setUserInfo,
@@ -214,5 +222,6 @@ export const useUserInfo = () => {
     handleSubscribe,
     handleUnsubscribe,
     isSubscribed,
+    sortedObject,
   };
 };
