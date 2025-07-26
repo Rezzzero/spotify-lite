@@ -37,6 +37,7 @@ export const UserInfo = () => {
     handleSubscribe,
     handleUnsubscribe,
     sortedObject,
+    openedPlaylists,
   } = useUserInfo();
   if (loading)
     return (
@@ -101,7 +102,7 @@ export const UserInfo = () => {
             />
           </Popper>
         </div>
-        {userInfo?.openedPlaylists && userInfo?.openedPlaylists.length > 0 && (
+        {userInfo && openedPlaylists && openedPlaylists.length > 0 && (
           <div className="flex flex-col gap-4 px-3 mb-10">
             <Link
               to={`/user/${userInfo.id}/playlists`}
@@ -110,11 +111,11 @@ export const UserInfo = () => {
               Открытые плейлисты
             </Link>
             <div className="flex gap-3">
-              {userInfo.openedPlaylists.map((playlist) => (
+              {openedPlaylists.map((playlist) => (
                 <Link
                   key={playlist.id}
                   to={`/playlist/${playlist.id}`}
-                  className="flex flex-col gap-2 hover:bg-[#242426] p-2 rounded-md"
+                  className="flex flex-col gap-2 hover:bg-[#242426] cursor-pointer p-2 rounded-md"
                 >
                   <img
                     src={playlist.images[0].url}

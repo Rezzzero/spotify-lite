@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import { UserData, UserToUserSubs } from "@shared/types/user";
-import { Artist } from "@shared/types/types";
+import { Artist, Playlist } from "@shared/types/types";
+import { SupabasePlaylist } from "@shared/types/playlist";
 
 export type UserContextType = {
   user: UserData | null;
@@ -18,6 +19,19 @@ export type UserContextType = {
     target_user_id: string;
   }) => Promise<void>;
   unsubscribeUser: (target_user_id: string) => Promise<void>;
+  userStoredFollowers: { id: string; name: string; avatar_url: string }[];
+  setUserStoredFollowers: React.Dispatch<
+    React.SetStateAction<{ id: string; name: string; avatar_url: string }[]>
+  >;
+  userStoredOpenPlaylists:
+    | SupabasePlaylist[]
+    | (Playlist & { duration: number })[]
+    | null;
+  setUserStoredOpenPlaylists: React.Dispatch<
+    React.SetStateAction<
+      SupabasePlaylist[] | (Playlist & { duration: number })[] | null
+    >
+  >;
 };
 
 export const UserContext = createContext({} as UserContextType);

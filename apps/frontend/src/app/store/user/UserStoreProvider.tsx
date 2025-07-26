@@ -3,7 +3,8 @@ import { UserContext } from "./UserContext";
 import { UserData, UserToUserSubs } from "@shared/types/user";
 import axios from "axios";
 import { API_URL } from "@shared/constants/constants";
-import { Artist } from "@shared/types/types";
+import { Artist, Playlist } from "@shared/types/types";
+import { SupabasePlaylist } from "@shared/types/playlist";
 
 export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserData | null>(null);
@@ -12,6 +13,12 @@ export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
   >([]);
   const [userToUsersSubs, setUserToUsersSubs] = useState<UserToUserSubs[]>([]);
   const [userImagePreview, setUserImagePreview] = useState<string | null>(null);
+  const [userStoredFollowers, setUserStoredFollowers] = useState<
+    { id: string; name: string; avatar_url: string }[]
+  >([]);
+  const [userStoredOpenPlaylists, setUserStoredOpenPlaylists] = useState<
+    SupabasePlaylist[] | (Playlist & { duration: number })[] | null
+  >([]);
   useEffect(() => {
     const initialUser = async () => {
       try {
@@ -71,6 +78,10 @@ export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
         setUserToUsersSubs,
         subscribeUser,
         unsubscribeUser,
+        userStoredFollowers,
+        setUserStoredFollowers,
+        userStoredOpenPlaylists,
+        setUserStoredOpenPlaylists,
       }}
     >
       {children}

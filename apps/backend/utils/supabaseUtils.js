@@ -768,3 +768,20 @@ export const getUserToArtistSubscriptions = async (userId) => {
     added_at: data.find((item) => item.artist_id === artist.id).added_at,
   }));
 };
+
+export const getUserFollowers = async (userId) =>{
+  const { data, error } = await supabaseAdmin
+    .from("user_user_subscriptions")
+    .select("user_id")
+    .eq("target_user_id", userId);
+
+  if (error) {
+    throw new Error('Ошибка при получении id подписчиков пользователя');
+  }
+
+  const ids = data.map((item) => item.user_id);
+
+  const users = await supabaseAdmin.from("users").select("*").in("id", ids);
+
+  return users.data.map((user) => user);
+}

@@ -16,10 +16,6 @@ interface UserInfo {
   id: string;
   userName: string;
   imageUrl: string;
-  openedPlaylists:
-    | SupabasePlaylist[]
-    | (Playlist & { duration: number })[]
-    | null;
 }
 
 export const useUserInfo = () => {
@@ -32,6 +28,8 @@ export const useUserInfo = () => {
     userToArtistsSubs,
     subscribeUser,
     unsubscribeUser,
+    setUserStoredFollowers,
+    setUserStoredOpenPlaylists,
   } = useUserStore();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [editModal, setEditModal] = useState(false);
@@ -48,6 +46,10 @@ export const useUserInfo = () => {
   const menuModalRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [userFollowers, setUserFollowers] = useState([]);
+  const [openedPlaylists, setOpenedPlaylists] = useState<
+    SupabasePlaylist[] | (Playlist & { duration: number })[] | null
+  >([]);
   useClickOutside({
     refs: [editModalRef],
     handler: () => setEditModal(false),
@@ -79,6 +81,12 @@ export const useUserInfo = () => {
         setIsSubscribed(
           userToUsersSubs.some((user) => user.id === response.data.id)
         );
+      }
+      if (source === "supabase") {
+        setUserFollowers(response.data.followers);
+        setOpenedPlaylists(response.data.openedPlaylists);
+        setUserStoredOpenPlaylists(response.data.openedPlaylists);
+        setUserStoredFollowers(response.data.followers);
       }
       setLoading(false);
     };
@@ -223,5 +231,7 @@ export const useUserInfo = () => {
     handleUnsubscribe,
     isSubscribed,
     sortedObject,
+    userFollowers,
+    openedPlaylists,
   };
 };

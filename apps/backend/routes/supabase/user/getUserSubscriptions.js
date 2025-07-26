@@ -1,5 +1,5 @@
 import express from "express";
-import { getUserSubscriptionsHandler } from "#controllers/supabase/user/getUserSubscriptions";
+import { getUserSubscriptionsHandler } from "#controllers/supabase/user/getUserSubscriptionsController";
 
 const router = express.Router();
 
