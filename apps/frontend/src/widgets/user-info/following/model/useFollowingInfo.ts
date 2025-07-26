@@ -3,8 +3,10 @@ import { UserToUserSubs } from "@shared/types/user";
 import { Artist } from "@shared/types/types";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useUserStore } from "@app/store/user/useUser";
 
 export const useFollowingInfo = () => {
+  const { user } = useUserStore();
   const [userFollowings, setUserFollowings] = useState<
     (UserToUserSubs | (Artist & { added_at: string }))[]
   >([]);
@@ -36,5 +38,11 @@ export const useFollowingInfo = () => {
     }
   };
 
-  return { filteredFollowings, loading, currentFilter, handleSelectFilter };
+  return {
+    user,
+    filteredFollowings,
+    loading,
+    currentFilter,
+    handleSelectFilter,
+  };
 };

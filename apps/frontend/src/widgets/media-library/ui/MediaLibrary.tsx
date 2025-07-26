@@ -51,7 +51,9 @@ export const MediaLibrary = () => {
   return (
     <div
       className={`flex flex-col bg-[#141414] ${
-        isMediaLibraryOpen ? "w-[25%] p-2 group/mediaLibrary" : "w-20 p-1"
+        isMediaLibraryOpen
+          ? `w-[25%] p-2 ${user ? "group/mediaLibrary" : ""}`
+          : "w-20 p-1"
       } h-[83vh] rounded-xl pb-8 relative`}
     >
       <div
@@ -66,12 +68,15 @@ export const MediaLibrary = () => {
             isMediaLibraryOpen ? "Закрыть мою медиатеку" : "Открыть медиатеку"
           }`}
           placement="right"
+          disableHoverListener={!user}
         >
           <button
             type="button"
             onClick={() => setIsMediaLibraryOpen(!isMediaLibraryOpen)}
-            className={`flex items-center gap-2 font-bold cursor-pointer relative ${
-              isMediaLibraryOpen ? "group/mediaLibrary" : "group"
+            className={`flex items-center gap-2 font-bold relative ${
+              isMediaLibraryOpen && user
+                ? "group/mediaLibrary cursor-pointer"
+                : "group"
             }`}
           >
             {isMediaLibraryOpen ? (

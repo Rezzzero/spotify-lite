@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useFollowingInfo } from "../model/useFollowingInfo";
 import { USER_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { Loader } from "@shared/ui/loader/Loader";
+import PageNotFoundIcon from "@shared/assets/page-not-found-icon.svg?react";
 
 const filterList = [
   {
@@ -19,13 +20,29 @@ const filterList = [
 ];
 
 export const FollowingInfo = () => {
-  const { filteredFollowings, loading, currentFilter, handleSelectFilter } =
-    useFollowingInfo();
+  const {
+    user,
+    filteredFollowings,
+    loading,
+    currentFilter,
+    handleSelectFilter,
+  } = useFollowingInfo();
 
   if (loading)
     return (
       <div className="flex justify-center items-center h-full">
         <Loader />
+      </div>
+    );
+
+  if (!user)
+    return (
+      <div className="flex flex-col items-center gap-5 px-3 py-70">
+        <PageNotFoundIcon className="w-14 h-14" />
+        <h2 className="font-bold text-3xl">Не удалось найти страницу</h2>
+        <p className="font-semibold text-gray-200">
+          Попробуй поискать что-нибудь другое.
+        </p>
       </div>
     );
 
