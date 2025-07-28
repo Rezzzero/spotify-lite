@@ -332,7 +332,7 @@ export const deletePlaylistImage = async (playlistId) => {
 export const getPlaylistsOfUser = async (userId) => {
   const { data, error } = await supabaseAdmin
     .from("user_playlists")
-    .select("playlists(*)")
+    .select("*, playlists(*)")
     .eq("user_id", userId);
 
   if (error) {
@@ -342,8 +342,13 @@ export const getPlaylistsOfUser = async (userId) => {
     );
     throw new Error("Ошибка при получении плейлистов пользователя");
   }
-
-  return data.map((item) => item.playlists);
+  return data.map((item) => {
+    return {
+      ...item.playlists,
+      added_at: item.added_at,
+      show_in_profile: item.show_in_profile,
+    };
+  });
 };
 
 export const addTrackToPlaylist = async (trackData, playlistId) => {
@@ -769,14 +774,14 @@ export const getUserToArtistSubscriptions = async (userId) => {
   }));
 };
 
-export const getUserFollowers = async (userId) =>{
+export const getUserFollowers = async (userId) => {
   const { data, error } = await supabaseAdmin
     .from("user_user_subscriptions")
     .select("user_id")
     .eq("target_user_id", userId);
 
   if (error) {
-    throw new Error('Ошибка при получении id подписчиков пользователя');
+    throw new Error("Ошибка при получении id подписчиков пользователя");
   }
 
   const ids = data.map((item) => item.user_id);
@@ -784,4 +789,4 @@ export const getUserFollowers = async (userId) =>{
   const users = await supabaseAdmin.from("users").select("*").in("id", ids);
 
   return users.data.map((user) => user);
-}
+};

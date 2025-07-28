@@ -10,7 +10,7 @@ import { openMenuOrModal } from "@shared/lib/utils/openMenuOrModal";
 import { closeMenuOrModal } from "@shared/lib/utils/closeMenuOrModal";
 
 export const useMediaLibrary = () => {
-  const { user } = useUserStore();
+  const { user, userToArtistsSubs } = useUserStore();
   const { playlists, addPlaylist, playlistPreviewImages } =
     useMediaLibraryStore();
   const [createPlaylistModal, setCreatePlaylistModal] = useState(false);
@@ -69,7 +69,11 @@ export const useMediaLibrary = () => {
             0
         );
       case "recent-added":
-        return playlists;
+        return [...playlists].sort(
+          (a, b) =>
+            new Date(b.added_at ?? 0).getTime() -
+            new Date(a.added_at ?? 0).getTime()
+        );
       default:
         return playlists;
     }
@@ -148,5 +152,6 @@ export const useMediaLibrary = () => {
     createPlaylistAnchor,
     handleOpenFilterMenu,
     filterAnchor,
+    userToArtistsSubs,
   };
 };

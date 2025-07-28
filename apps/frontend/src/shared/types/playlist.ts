@@ -13,5 +13,6 @@ export interface SupabasePlaylist {
     imageUrl?: string;
   };
   duration?: number;
+  added_at?: string;
   show_in_profile: boolean;
 }

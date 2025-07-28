@@ -42,6 +42,7 @@ export const MediaLibrary = () => {
     createPlaylistAnchor,
     handleOpenFilterMenu,
     filterAnchor,
+    userToArtistsSubs,
   } = useMediaLibrary();
 
   const selectedFormat = libraryFormatList.find(
@@ -206,6 +207,27 @@ export const MediaLibrary = () => {
                 id={id}
               />
             ))}
+            {userToArtistsSubs.length > 0 && (
+              <div className="flex flex-col gap-1">
+                {userToArtistsSubs.map((subscribe) => (
+                  <Link
+                    key={subscribe.id}
+                    to={`/artist/${subscribe.id}`}
+                    className="w-full flex gap-3 hover:bg-zinc-800 p-2 rounded-md"
+                  >
+                    <img
+                      src={subscribe.images[0].url}
+                      alt={subscribe.name}
+                      className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                    />
+                    <div className="flex flex-col gap-1 flex-1">
+                      <p className="font-semibold">{subscribe.name}</p>
+                      <p className="text-gray-400 text-sm">Исполнитель</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </>
       )}
