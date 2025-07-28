@@ -42,7 +42,6 @@ export const useUserInfo = () => {
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
   const { id } = useParams();
   const source = getUserSource(id || "");
-  const editModalRef = useRef<HTMLDivElement>(null);
   const menuModalRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -50,11 +49,6 @@ export const useUserInfo = () => {
   const [openedPlaylists, setOpenedPlaylists] = useState<
     SupabasePlaylist[] | (Playlist & { duration: number })[] | null
   >([]);
-  useClickOutside({
-    refs: [editModalRef],
-    handler: () => setEditModal(false),
-    enabled: editModal,
-  });
   useClickOutside({
     refs: [menuModalRef],
     handler: () => closeMenuOrModal(setMenuModal, setMenuAnchor),
@@ -212,7 +206,6 @@ export const useUserInfo = () => {
     editModal,
     setEditModal,
     isOwner,
-    editModalRef,
     fileInputRef,
     previewImage,
     handleImageChange,

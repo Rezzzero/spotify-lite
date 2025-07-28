@@ -1,13 +1,13 @@
 import { Route } from "@shared/constants/constants";
 import { useRequireAuthModal } from "../model/useRequireAuthModal";
 import { Link } from "react-router-dom";
+import { Modal } from "@mui/material";
 
 export const RequireAuthModal = () => {
   const {
     currentTrack,
     imageColors,
     isAuthModalOpen,
-    modalRef,
     closeAuthModal,
     isVisible,
   } = useRequireAuthModal();
@@ -18,15 +18,23 @@ export const RequireAuthModal = () => {
 
   return (
     <>
-      {isAuthModalOpen && (
+      <Modal
+        open={isAuthModalOpen}
+        onClose={closeAuthModal}
+        closeAfterTransition
+        slotProps={{
+          backdrop: {
+            sx: {
+              backgroundColor: isVisible
+                ? "rgba(0,0,0,0.9)"
+                : "rgba(0,0,0,0.7)",
+              transition: "background-color 300ms ease",
+            },
+          },
+        }}
+      >
         <>
           <div
-            className={`${
-              isVisible ? "bg-black/90" : "bg-black/70"
-            } duration-300 fixed inset-0 z-10`}
-          />
-          <div
-            ref={modalRef}
             style={{ background: gradient }}
             className={`fixed top-1/5 left-1/2 transform -translate-x-1/2 ${
               isVisible
@@ -47,32 +55,16 @@ export const RequireAuthModal = () => {
               </h2>
               <Link
                 to={Route.REGISTRATION}
-                className="
-                flex justify-center
-                bg-green-500 text-black py-3
-                hover:bg-green-400
-                transition-transform transition-colors duration-200
-                rounded-full
-                hover:scale-105
-                will-change-transform
-                mb-5
-                w-[225px]
+                className="flex justify-center bg-green-500 text-black py-3 hover:bg-green-400 transition-transform transition-colors duration-200
+                rounded-full hover:scale-105 will-change-transform mb-5 w-[225px]
               "
               >
                 Зарегистрироваться
               </Link>
               <Link
                 to={"/"}
-                className="
-                flex justify-center py-3
-                border border-gray-400
-                hover:border-white
-                transition-transform transition-colors duration-200
-                rounded-full
-                hover:scale-105
-                will-change-transform
-                w-[225px]
-                mb-8
+                className="flex justify-center py-3 border border-gray-400 hover:border-white transition-transform transition-colors duration-200
+                rounded-full hover:scale-105 will-change-transform w-[225px] mb-8
               "
               >
                 Скачать приложение
@@ -96,7 +88,7 @@ export const RequireAuthModal = () => {
             Закрыть
           </button>
         </>
-      )}
+      </Modal>
     </>
   );
 };
