@@ -1,6 +1,6 @@
 import React, { useRef, useState, useMemo } from "react";
 import { useUserStore } from "@app/store/user/useUser";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { generateId } from "@shared/lib/id/generateId";
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
@@ -8,6 +8,16 @@ import { toast } from "react-toastify";
 import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
 import { openMenuOrModal } from "@shared/lib/utils/openMenuOrModal";
 import { closeMenuOrModal } from "@shared/lib/utils/closeMenuOrModal";
+
+type MediaItemProps = {
+  id: string;
+  type: "artist" | "playlist" | "album";
+  name: string;
+  image: string;
+  ownerName?: string;
+  playlistPreviewImages?: { id: string; previewImage: string }[];
+  added_at?: string;
+};
 
 export const useMediaLibrary = () => {
   const { user, userToArtistsSubs } = useUserStore();
@@ -28,7 +38,6 @@ export const useMediaLibrary = () => {
   const [createPlaylistAnchor, setCreatePlaylistAnchor] =
     useState<HTMLElement | null>(null);
   const [filterAnchor, setFilterAnchor] = useState<HTMLElement | null>(null);
-  const { id } = useParams();
   useClickOutside({
     refs: [createPlaylistRef, createPlaylistButtonRef],
     handler: () =>
@@ -54,30 +63,65 @@ export const useMediaLibrary = () => {
     openMenuOrModal(e, setIsFilterModalOpen, setFilterAnchor);
   };
 
-  const sortedPlaylists = useMemo(() => {
-    if (!playlists) return [];
+  const mergedLibraryList = [...playlists, ...userToArtistsSubs];
+  const normalizeLibraryList: MediaItemProps[] = mergedLibraryList.map(
+    (item) => {
+      const isPlaylist = "owner" in item;
+
+      if (isPlaylist) {
+        return {
+          image: item.images?.[0]?.url ?? "",
+          name: item.name,
+          id: item.id,
+          ownerName: item?.owner?.display_name,
+          type: "playlist",
+          playlistPreviewImages: playlistPreviewImages.filter(
+            (image) => image.id === item.id
+          ),
+          added_at: item.added_at,
+        };
+      } else {
+        return {
+          image: item.images?.[0]?.url ?? "",
+          name: item.name,
+          id: item.id,
+          type: "artist",
+          added_at: item.added_at,
+        };
+      }
+    }
+  );
+  const sortedItems = useMemo(() => {
+    if (!normalizeLibraryList) return [];
 
     switch (sortBy.value) {
       case "recent":
-        return playlists;
+        return normalizeLibraryList;
       case "alphabet":
-        return [...playlists].sort((a, b) => a.name.localeCompare(b.name));
-      case "owner-name":
-        return [...playlists].sort(
-          (a, b) =>
-            a.owner?.display_name?.localeCompare(b.owner?.display_name || "") ||
-            0
+        return [...normalizeLibraryList].sort((a, b) =>
+          a.name.localeCompare(b.name)
         );
+      case "owner-name":
+        return [...normalizeLibraryList].sort((a, b) => {
+          const aHasOwner = !!a.ownerName;
+          const bHasOwner = !!b.ownerName;
+
+          if (aHasOwner && !bHasOwner) return -1;
+          if (!aHasOwner && bHasOwner) return 1;
+          if (!aHasOwner && !bHasOwner) return 0;
+
+          return a.ownerName!.localeCompare(b.ownerName!);
+        });
       case "recent-added":
-        return [...playlists].sort(
+        return [...normalizeLibraryList].sort(
           (a, b) =>
             new Date(b.added_at ?? 0).getTime() -
             new Date(a.added_at ?? 0).getTime()
         );
       default:
-        return playlists;
+        return normalizeLibraryList;
     }
-  }, [playlists, sortBy]);
+  }, [playlists, normalizeLibraryList, sortBy]);
 
   const handleCreatePlaylist = async () => {
     closeMenuOrModal(setCreatePlaylistModal, setCreatePlaylistAnchor);
@@ -136,7 +180,6 @@ export const useMediaLibrary = () => {
     loginPromptRef,
     createPlaylistButtonRef,
     playlists,
-    id,
     isMediaLibraryOpen,
     setIsMediaLibraryOpen,
     playlistPreviewImages,
@@ -147,7 +190,7 @@ export const useMediaLibrary = () => {
     isFilterModalOpen,
     filterModalRef,
     filterModalButtonRef,
-    sortedPlaylists,
+    sortedItems,
     handleOpenCreatePlaylistMenu,
     createPlaylistAnchor,
     handleOpenFilterMenu,

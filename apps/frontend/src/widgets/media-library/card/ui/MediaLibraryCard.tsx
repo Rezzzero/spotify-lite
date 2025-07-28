@@ -1,37 +1,51 @@
-import { Playlist } from "@shared/types/types";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
-import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { Link } from "react-router-dom";
-import { SupabasePlaylist } from "@shared/types/playlist";
+import { useMediaLibraryCard } from "../model/useMediaLibraryCard";
+import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { truncateText } from "@shared/lib/format/truncateText";
 import PlayIcon from "@shared/assets/play-icon.svg?react";
 import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
 
-interface PlaylistCardProps {
-  playlist: Playlist | SupabasePlaylist;
+interface MediaLibraryCardProps {
+  image: string;
+  name: string;
+  id: string;
+  ownerName?: string;
+  type: "artist" | "playlist" | "album";
   isMediaLibraryOpen: boolean;
-  playlistPreviewImages: { id: string; previewImage: string }[];
-  id: string | undefined;
   libraryFormat: string;
+  playlistPreviewImages?: { id: string; previewImage: string }[];
 }
 
-export const PlaylistCard = ({
-  playlist,
-  isMediaLibraryOpen,
-  playlistPreviewImages,
+export const MediaLibraryCard = ({
+  image,
+  name,
   id,
+  ownerName,
+  type,
+  isMediaLibraryOpen,
   libraryFormat,
-}: PlaylistCardProps) => {
+  playlistPreviewImages,
+}: MediaLibraryCardProps) => {
+  const { currentId } = useMediaLibraryCard();
+
+  const mainImage =
+    type === "playlist"
+      ? playlistPreviewImages?.find((p) => p.id === id)?.previewImage ||
+        image ||
+        PLAYLIST_PLACEHOLDER_URL
+      : image;
+
   return (
     <CustomTooltip
-      key={playlist.id}
+      key={id}
       title={
         <>
-          <h1 className="font-bold">{playlist.name}</h1>
+          <h1 className="font-bold">{name}</h1>
           <span className="flex gap-1 font-normal text-sm text-gray-400">
             Плейлист{" "}
             <p className="font-bold mt-[3px] text-lg leading-none">·</p>
-            {playlist.owner?.display_name}
+            {ownerName}
           </span>
         </>
       }
@@ -41,30 +55,25 @@ export const PlaylistCard = ({
       }
     >
       <Link
-        to={`/playlist/${playlist.id}`}
+        to={`/${type}/${id}`}
         className={`${
-          id === playlist.id
+          id === currentId
             ? "bg-zinc-800 hover:bg-zinc-700"
             : "hover:bg-zinc-800"
         } flex items-center ${
           !isMediaLibraryOpen ? "justify-center" : "gap-3"
-        } rounded-md transition-colors group/playlistCard relative ${
+        } rounded-md transition-colors group/card relative ${
           libraryFormat === "grid" && "flex-col"
         } ${libraryFormat === "compact-list" ? "p-1 pl-0" : "p-2"}`}
       >
         <img
-          src={
-            playlistPreviewImages.find((p) => p.id === playlist.id)
-              ?.previewImage ||
-            playlist.images[0]?.url ||
-            PLAYLIST_PLACEHOLDER_URL
-          }
-          alt={playlist.name}
+          src={mainImage}
+          alt={`${name} image`}
           className={`${libraryFormat === "compact-list" && "hidden"} ${
             libraryFormat === "compact-grid" || libraryFormat === "grid"
               ? "w-full h-25"
               : "w-12 h-12"
-          } rounded-md`}
+          } ${type === "artist" ? "rounded-full" : "rounded-md"}`}
         />
         {isMediaLibraryOpen && libraryFormat !== "compact-grid" && (
           <div
@@ -75,9 +84,7 @@ export const PlaylistCard = ({
             }`}
           >
             <h1 className="font-bold text-sm">
-              {libraryFormat === "grid"
-                ? truncateText(playlist.name, 11)
-                : playlist.name}
+              {libraryFormat === "grid" ? truncateText(name, 11) : name}
             </h1>
             <p className="flex gap-1 font-semibold text-sm text-gray-400">
               <span
@@ -101,8 +108,8 @@ export const PlaylistCard = ({
                 }`}
               >
                 {libraryFormat === "grid"
-                  ? truncateText(playlist.owner?.display_name || "", 3)
-                  : playlist.owner?.display_name}
+                  ? truncateText(ownerName || "", 3)
+                  : ownerName}
               </span>
             </p>
           </div>

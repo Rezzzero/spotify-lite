@@ -9,11 +9,11 @@ import { useMediaLibrary } from "../model/useMediaLibrary";
 import CloseMediaLibraryIcon from "@shared/assets/media-library/close-media-library.svg?react";
 import OpenMediaLibraryIcon from "@shared/assets/media-library/open-media-library.svg?react";
 import ClosedMediaLibraryIcon from "@shared/assets/media-library/closed-media-library.svg?react";
-import { PlaylistCard } from "../playlist-card/ui/PlaylistCard";
 import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
 import { SelectSortFilter } from "@shared/ui/select-sort-filter/SelectSortFilter";
 import { libraryFormatList } from "@shared/constants/constants";
 import { Popper } from "@mui/material";
+import { MediaLibraryCard } from "../card/ui/MediaLibraryCard";
 
 export const MediaLibrary = () => {
   const {
@@ -26,10 +26,8 @@ export const MediaLibrary = () => {
     loginPromptRef,
     createPlaylistButtonRef,
     playlists,
-    id,
     isMediaLibraryOpen,
     setIsMediaLibraryOpen,
-    playlistPreviewImages,
     libraryFormat,
     handleChangeLibraryFormat,
     sortBy,
@@ -37,12 +35,11 @@ export const MediaLibrary = () => {
     isFilterModalOpen,
     filterModalRef,
     filterModalButtonRef,
-    sortedPlaylists,
+    sortedItems,
     handleOpenCreatePlaylistMenu,
     createPlaylistAnchor,
     handleOpenFilterMenu,
     filterAnchor,
-    userToArtistsSubs,
   } = useMediaLibrary();
 
   const selectedFormat = libraryFormatList.find(
@@ -197,37 +194,14 @@ export const MediaLibrary = () => {
                 : "flex-col"
             } gap-1`}
           >
-            {sortedPlaylists.map((playlist) => (
-              <PlaylistCard
-                key={playlist.id}
-                playlist={playlist}
+            {sortedItems.map((mediaItem) => (
+              <MediaLibraryCard
+                key={mediaItem.id}
+                {...mediaItem}
                 libraryFormat={!isMediaLibraryOpen ? "list" : libraryFormat}
                 isMediaLibraryOpen={isMediaLibraryOpen}
-                playlistPreviewImages={playlistPreviewImages}
-                id={id}
               />
             ))}
-            {userToArtistsSubs.length > 0 && (
-              <div className="flex flex-col gap-1">
-                {userToArtistsSubs.map((subscribe) => (
-                  <Link
-                    key={subscribe.id}
-                    to={`/artist/${subscribe.id}`}
-                    className="w-full flex gap-3 hover:bg-zinc-800 p-2 rounded-md"
-                  >
-                    <img
-                      src={subscribe.images[0].url}
-                      alt={subscribe.name}
-                      className="w-12 h-12 rounded-full object-cover flex-shrink-0"
-                    />
-                    <div className="flex flex-col gap-1 flex-1">
-                      <p className="font-semibold">{subscribe.name}</p>
-                      <p className="text-gray-400 text-sm">Исполнитель</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
           </div>
         </>
       )}

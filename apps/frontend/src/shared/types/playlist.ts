@@ -15,4 +15,5 @@ export interface SupabasePlaylist {
   duration?: number;
   added_at?: string;
   show_in_profile: boolean;
+  type?: string;
 }
