@@ -109,7 +109,7 @@ export const AlbumInfo = () => {
           />
         </div>
       </Popper>
-      <div className="px-7">
+      <div className="px-7 mb-5">
         <Table
           tracks={albumData.album.tracks.items}
           tableKey="withoutAddedAt"
@@ -117,7 +117,7 @@ export const AlbumInfo = () => {
           withoutAlbumLink={true}
         />
       </div>
-      <div className="flex flex-col font-semibold text-[11px] text-zinc-400 px-7">
+      <div className="flex flex-col font-semibold text-[11px] text-zinc-400 px-7 mb-7">
         <p className="font-bold text-sm">
           {formatReleaseDate(albumData.album.release_date, true)}
         </p>

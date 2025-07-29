@@ -9,25 +9,27 @@ export const Card = ({
   link,
   isSearchPage,
   cardType,
+  withArtist,
 }: {
   item: CardItem;
   link: string;
   isSearchPage?: boolean;
   cardType?: string;
+  withArtist?: boolean;
 }) => {
   const navigate = useNavigate();
   const year = item.release_date?.slice(0, 4);
   return (
     <div
       onClick={() => navigate(link)}
-      className="flex flex-col gap-3 rounded-md cursor-pointer p-3 w-[192px] h-[310px] hover:bg-[#1d1e1f]"
+      className="flex flex-col gap-1 rounded-md cursor-pointer p-3 w-[192px] h-[310px] hover:bg-[#1d1e1f]"
     >
       <img
         src={item.images[0].url}
         alt={`${item.name} image`}
         className={`${cardType === "artist" ? "rounded-full" : "rounded-xl"} ${
           isSearchPage ? "w-39 h-39" : "w-42 h-42"
-        }`}
+        } object-cover`}
       />
 
       <CustomTooltip title={item.name} withBorder>
@@ -68,14 +70,18 @@ export const Card = ({
       {cardType === "album" && (
         <div className="flex gap-1 text-gray-400">
           <p>{year}</p>
-          <p className="font-bold">·</p>
-          <Link
-            to={`/artist/${item.artists?.[0].id}`}
-            onClick={(e) => e.stopPropagation()}
-            className="hover:underline"
-          >
-            {item.artists?.[0].name}
-          </Link>
+          {withArtist && (
+            <>
+              <p className="font-bold">·</p>
+              <Link
+                to={`/artist/${item.artists?.[0].id}`}
+                onClick={(e) => e.stopPropagation()}
+                className="hover:underline"
+              >
+                {item.artists?.[0].name}
+              </Link>
+            </>
+          )}
         </div>
       )}
       {cardType === "playlist" && (

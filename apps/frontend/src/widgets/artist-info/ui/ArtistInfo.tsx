@@ -43,7 +43,7 @@ export const ArtistInfo = () => {
         mainName={artistInfo.artist.name}
         roundedFull={true}
       />
-      <div className="flex flex-col p-5">
+      <div className="flex flex-col px-5 mb-10">
         <MediaControls
           mediaId={artistInfo.artist.id}
           mediaName={artistInfo.artist.name}
@@ -65,7 +65,7 @@ export const ArtistInfo = () => {
             mediaType="artist"
           />
         </Popper>
-        <h2 className="text-2xl font-bold">Популярные треки</h2>
+        <h2 className="text-2xl font-bold mb-5">Популярные треки</h2>
         <div className="flex flex-col w-[70%]">
           {artistInfo.topTracks.map((track, index) => (
             <ArtistInfoTrackCard
@@ -77,7 +77,7 @@ export const ArtistInfo = () => {
           ))}
         </div>
       </div>
-      <div className="flex flex-col gap-3 px-3">
+      <div className="flex flex-col gap-3 px-3 mb-10">
         <div className="flex justify-between pl-2 px-3">
           <Link
             to={`/artist/${artistInfo.artist.id}/discography/${selectedFilter}`}

@@ -36,6 +36,12 @@ export const MediaLibraryCard = ({
         PLAYLIST_PLACEHOLDER_URL
       : image;
 
+  const mediaList = {
+    artist: "Исполнитель",
+    playlist: "Плейлист",
+    album: "Альбом",
+  };
+
   return (
     <CustomTooltip
       key={id}
@@ -43,9 +49,13 @@ export const MediaLibraryCard = ({
         <>
           <h1 className="font-bold">{name}</h1>
           <span className="flex gap-1 font-normal text-sm text-gray-400">
-            Плейлист{" "}
-            <p className="font-bold mt-[3px] text-lg leading-none">·</p>
-            {ownerName}
+            {mediaList[type]}{" "}
+            {ownerName && (
+              <>
+                <p className="font-bold mt-[3px] text-lg leading-none">·</p>
+                {ownerName}
+              </>
+            )}
           </span>
         </>
       }
@@ -94,23 +104,27 @@ export const MediaLibraryCard = ({
               >
                 ·
               </span>
-              Плейлист{" "}
-              <span
-                className={`font-bold text-lg leading-none ${
-                  libraryFormat === "compact-list" ? "hidden" : "block"
-                }`}
-              >
-                ·
-              </span>
-              <span
-                className={`${
-                  libraryFormat === "compact-list" ? "hidden" : "block"
-                }`}
-              >
-                {libraryFormat === "grid"
-                  ? truncateText(ownerName || "", 3)
-                  : ownerName}
-              </span>
+              {mediaList[type]}{" "}
+              {ownerName && (
+                <>
+                  <span
+                    className={`font-bold text-lg leading-none ${
+                      libraryFormat === "compact-list" ? "hidden" : "block"
+                    }`}
+                  >
+                    ·
+                  </span>
+                  <span
+                    className={`${
+                      libraryFormat === "compact-list" ? "hidden" : "block"
+                    }`}
+                  >
+                    {libraryFormat === "grid"
+                      ? truncateText(ownerName || "", 3)
+                      : ownerName}
+                  </span>
+                </>
+              )}
             </p>
           </div>
         )}

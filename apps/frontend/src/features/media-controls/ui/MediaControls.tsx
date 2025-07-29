@@ -51,7 +51,7 @@ export const MediaControls = ({
   const { playlists } = useMediaControls();
   return (
     <>
-      <div className="flex items-center pt-7 pb-10 justify-between w-full">
+      <div className="flex items-center py-5 justify-between w-full">
         <div className="flex items-center gap-4">
           {tracks.length > 0 && (
             <CustomTooltip
