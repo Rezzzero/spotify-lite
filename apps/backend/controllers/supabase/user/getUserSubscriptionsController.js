@@ -1,7 +1,7 @@
 import {
-  getUserToArtistSubscriptions,
   getUserToUserSubscriptions,
-} from "#utils/supabaseUtils";
+  getUserToArtistSubscriptions,
+} from "#utils/supabase/user/userUtils";
 
 export const getUserSubscriptionsHandler = async (req, res) => {
   try {

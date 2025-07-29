@@ -1,8 +1,8 @@
+import { signInWithOtp } from "#utils/supabase/auth/authUtils";
 import {
-  getUserToArtistSubscriptions,
   getUserToUserSubscriptions,
-  signInWithOtp,
-} from "#utils/supabaseUtils";
+  getUserToArtistSubscriptions,
+} from "#utils/supabase/user/userUtils";
 
 export const signInWithOtpHandler = async (req, res) => {
   try {

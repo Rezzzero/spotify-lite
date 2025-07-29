@@ -48,6 +48,10 @@ import getUserSubscriptionsRoutes from "./supabase/user/getUserSubscriptions.js"
 import getUserFollowersRoutes from "./supabase/user/getUserFollowers.js";
 import getOpenUserPlaylistsRoutes from "./supabase/user/getOpenUserPlaylists.js";
 
+import getUsersMediaLibraryRoutes from "./supabase/media-library/getUsersMediaLibrary.js";
+
+import addAlbumToUserRoutes from "./supabase/album/addAlbumToUser.js";
+
 export default [
   ["/api/popular-tracks", popularTracksRoutes],
   ["/api/popular-artists", popularArtistsRoutes],
@@ -74,6 +78,7 @@ export default [
   ["/delete-supabase-playlist", deletePlaylistRoutes],
   ["/update-supabase-playlist", updatePlaylistRoutes],
   ["/upload-playlist-image", uploadPlaylistImageRoutes],
+  ["/get-media-library-of-user", getUsersMediaLibraryRoutes],
   ["/get-playlists-of-user", getPlaylistsOfUserRoutes],
   ["/add-track-to-playlist", addTrackRoutes],
   ["/delete-track", deleteTrackRoutes],
@@ -93,4 +98,5 @@ export default [
   ["/get-user-subscriptions", getUserSubscriptionsRoutes],
   ["/get-user-followers", getUserFollowersRoutes],
   ["/get-open-user-playlists", getOpenUserPlaylistsRoutes],
+  ["/add-album-to-user", addAlbumToUserRoutes],
 ];

@@ -1,4 +1,4 @@
-import { getOrUpdateTrack } from "#utils/supabaseUtils";
+import { getOrUpdateTrack } from "#utils/supabase/track/trackUtils";
 
 export const getTrackHandler = async (req, res) => {
   try {

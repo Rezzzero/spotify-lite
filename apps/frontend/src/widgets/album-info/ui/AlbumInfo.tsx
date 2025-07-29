@@ -25,7 +25,6 @@ export const AlbumInfo = () => {
     setFormat,
     setMenuModal,
     menuModalRef,
-    // setChangeFormatModal,
     handleListenPlaylist,
     changeFormatButtonRef,
     menuButtonRef,
@@ -78,9 +77,7 @@ export const AlbumInfo = () => {
           onRemoveFromLibrary={() =>
             handleDeleteFromMediaLibrary(albumData?.album.id as string)
           }
-          onAddToLibrary={() =>
-            handleAddToMediaLibrary(albumData?.album.id as string)
-          }
+          onAddToLibrary={() => handleAddToMediaLibrary()}
           onOpenMenu={(e) => handleOpenMenu(e)}
           onOpenFormatModal={(e) => handleOpenFormatChangeMenu(e)}
         />

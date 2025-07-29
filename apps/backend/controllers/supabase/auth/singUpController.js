@@ -1,4 +1,4 @@
-import { signUp } from "#utils/supabaseUtils";
+import { signUp } from "#utils/supabase/auth/authUtils";
 
 export const signUpHandler = async (req, res) => {
   try {

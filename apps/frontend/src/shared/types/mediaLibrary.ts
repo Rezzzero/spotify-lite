@@ -1,3 +1,5 @@
+import { Image } from "./types";
+
 export interface SupabasePlaylist {
   id: string;
   name: string;
@@ -16,4 +18,13 @@ export interface SupabasePlaylist {
   added_at?: string;
   show_in_profile: boolean;
   type?: string;
+}
+
+export interface SupabaseAlbum {
+  id: string;
+  name: string;
+  images: Image[];
+  owner: {
+    name: string;
+  };
 }

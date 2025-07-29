@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { UserData, UserToUserSubs } from "@shared/types/user";
 import { Artist, Playlist } from "@shared/types/types";
-import { SupabasePlaylist } from "@shared/types/playlist";
+import { SupabasePlaylist } from "@shared/types/mediaLibrary";
 
 export type UserContextType = {
   user: UserData | null;

@@ -1,4 +1,4 @@
-import { subscribeToUser } from "#utils/supabaseUtils";
+import { subscribeToUser } from "#utils/supabase/user/userUtils";
 
 export const subscribeHandler = async (req, res) => {
   try {

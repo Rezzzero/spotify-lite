@@ -1,4 +1,4 @@
-import { updatePlaylist } from "#utils/supabaseUtils";
+import { updatePlaylist } from "#utils/supabase/playlist/playlistUtils";
 
 export const deletePlaylistImageHandler = async (req, res) => {
   try {

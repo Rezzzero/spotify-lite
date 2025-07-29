@@ -1,9 +1,9 @@
 import {
   deletePlaylist,
-  deletePlaylistImage,
-  deleteAllTracksFromPlaylist,
   deletePlaylistFromUser,
-} from "#utils/supabaseUtils";
+  deletePlaylistImage,
+  deleteAllTracksFromPlaylist
+} from "#utils/supabase/playlist/playlistUtils";
 
 export const deletePlaylistHandler = async (req, res) => {
   try {

@@ -1,4 +1,4 @@
-import { getOpenUserPlaylists } from "#utils/supabaseUtils";
+import { getOpenUserPlaylists } from "#utils/supabase/user/userUtils";
 
 export const getOpenUserPlaylistsHandler = async (req, res) => {
   const id = req.params.id;

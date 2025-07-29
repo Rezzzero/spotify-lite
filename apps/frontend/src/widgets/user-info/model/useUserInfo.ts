@@ -6,7 +6,7 @@ import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import { useUserStore } from "@app/store/user/useUser";
 import { API_URL } from "@shared/constants/constants";
 import { USER_PLACEHOLDER_URL } from "@shared/constants/urls";
-import { SupabasePlaylist } from "@shared/types/playlist";
+import { SupabasePlaylist } from "@shared/types/mediaLibrary";
 import { Playlist } from "@shared/types/types";
 import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
 import { openMenuOrModal } from "@shared/lib/utils/openMenuOrModal";

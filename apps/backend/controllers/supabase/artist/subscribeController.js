@@ -1,4 +1,4 @@
-import { subscibeToArtist } from "#utils/supabaseUtils";
+import { subscibeToArtist } from "#utils/supabase/user/userUtils";
 
 export const subscribeHandler = async (req, res) => {
   const artistData = req.body;

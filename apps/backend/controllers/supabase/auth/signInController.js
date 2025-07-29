@@ -1,8 +1,8 @@
+import { signIn } from "#utils/supabase/auth/authUtils";
 import {
-  getUserToArtistSubscriptions,
   getUserToUserSubscriptions,
-  signIn,
-} from "#utils/supabaseUtils";
+  getUserToArtistSubscriptions,
+} from "#utils/supabase/user/userUtils";
 
 export const signInHandler = async (req, res) => {
   try {

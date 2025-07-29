@@ -1,4 +1,4 @@
-import { SupabasePlaylist } from "@shared/types/playlist";
+import { SupabasePlaylist } from "@shared/types/mediaLibrary";
 import { Playlist } from "@shared/types/types";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";

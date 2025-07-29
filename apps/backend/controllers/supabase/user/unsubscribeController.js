@@ -1,4 +1,4 @@
-import { unsubscribeFromUser } from "#utils/supabaseUtils";
+import { unsubscribeFromUser } from "#utils/supabase/user/userUtils";
 
 export const unsubscribeHandler = async (req, res) => {
   const targetId = req.params.id;

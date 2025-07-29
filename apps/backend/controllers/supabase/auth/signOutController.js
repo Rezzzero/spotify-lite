@@ -1,4 +1,4 @@
-import { signOut } from "#utils/supabaseUtils";
+import { signOut } from "#utils/supabase/auth/authUtils";
 
 export const signOutHandler = async (_, res) => {
   try {

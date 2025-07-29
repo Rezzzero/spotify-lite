@@ -2,7 +2,7 @@ import {
   uploadUserImageToSupabase,
   getUserImageUrl,
   updateUserImage,
-} from "#utils/supabaseUtils";
+} from "#utils/supabase/user/userUtils";
 
 export const uploadUserImageHandler = async (req, res) => {
   const { id } = req.params;

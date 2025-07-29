@@ -1,4 +1,7 @@
-import { deleteUserImage, updateUserImage } from "#utils/supabaseUtils";
+import {
+  deleteUserImage,
+  updateUserImage,
+} from "#utils/supabase/user/userUtils";
 
 export const deleteUserImageHandler = async (req, res) => {
   const id = req.params.id;

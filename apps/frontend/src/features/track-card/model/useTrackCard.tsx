@@ -96,6 +96,12 @@ export const useTrackCard = ({
       });
       setIsMenuOpen(false);
       setIsAddToMediaLibraryModalOpen(false);
+      const scrollContainer = document.querySelector(
+        ".page-content"
+      ) as HTMLElement | null;
+      if (scrollContainer) {
+        scrollContainer.style.overflow = "";
+      }
       toast(
         <div className="flex items-center">
           <img
@@ -160,6 +166,12 @@ export const useTrackCard = ({
             prevTracks.filter((track) => track.entry_id !== entryId)
           );
           handleUpdateDuration(trackDuration, false);
+          const scrollContainer = document.querySelector(
+            ".page-content"
+          ) as HTMLElement | null;
+          if (scrollContainer) {
+            scrollContainer.style.overflow = "";
+          }
         }
       } catch (error) {
         console.error("Error deleting track:", error);

@@ -1,8 +1,8 @@
 import {
-  getPlaylistImageUrl,
   updatePlaylist,
+  getPlaylistImageUrl,
   uploadImageToSupabasePlaylists,
-} from "#utils/supabaseUtils";
+} from "#utils/supabase/playlist/playlistUtils";
 
 export const uploadPlaylistImageHandler = async (req, res) => {
   try {

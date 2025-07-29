@@ -1,4 +1,5 @@
-import { addTrackToPlaylist, getOrUpdateTrack } from "#utils/supabaseUtils";
+import { addTrackToPlaylist } from "#utils/supabase/playlist/playlistUtils";
+import { getOrUpdateTrack } from "#utils/supabase/track/trackUtils";
 
 export const addTrackHandler = async (req, res) => {
   try {

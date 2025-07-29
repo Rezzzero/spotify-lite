@@ -1,4 +1,4 @@
-import { getUserFollowers } from "#utils/supabaseUtils";
+import { getUserFollowers } from "#utils/supabase/user/userUtils";
 
 export const getUserFollowersHandler = async (req, res) => {
   const id = req.params.id;

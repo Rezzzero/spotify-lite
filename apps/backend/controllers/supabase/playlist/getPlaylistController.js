@@ -1,8 +1,6 @@
-import {
-  getPlaylist,
-  getUserByAccessToken,
-  getUserById,
-} from "#utils/supabaseUtils";
+import { getUserByAccessToken } from "#utils/supabase/auth/authUtils";
+import { getPlaylist } from "#utils/supabase/playlist/playlistUtils";
+import { getUserById } from "#utils/supabase/user/userUtils";
 
 export const getPlaylistHandler = async (req, res) => {
   try {

@@ -4,7 +4,7 @@ import { UserData, UserToUserSubs } from "@shared/types/user";
 import axios from "axios";
 import { API_URL } from "@shared/constants/constants";
 import { Artist, Playlist } from "@shared/types/types";
-import { SupabasePlaylist } from "@shared/types/playlist";
+import { SupabasePlaylist } from "@shared/types/mediaLibrary";
 
 export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserData | null>(null);

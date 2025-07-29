@@ -19,7 +19,7 @@ interface AlbumDataType {
 
 export const useAlbumInfo = () => {
   const { user } = useUserStore();
-  const { removePlaylistFromUser, addPlaylistToUser } = useMediaLibraryStore();
+  const { removePlaylistFromUser, addAlbum } = useMediaLibraryStore();
   const [albumData, setAlbumData] = useState<AlbumDataType | null>(null);
   const [loading, setLoading] = useState(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -89,10 +89,18 @@ export const useAlbumInfo = () => {
     }
   };
 
-  const handleAddToMediaLibrary = async (id: string) => {
-    if (!user) return;
+  const handleAddToMediaLibrary = async () => {
+    if (!user || !albumData) return;
     try {
-      await addPlaylistToUser(id);
+      const album = {
+        id: albumData.album.id,
+        name: albumData.album.name,
+        images: albumData.album.images,
+        owner: {
+          name: albumData.artist.name,
+        },
+      };
+      await addAlbum(album);
       toast(<p className="font-semibold">Добавлено в медиатеку</p>, {
         style: { width: "220px" },
       });

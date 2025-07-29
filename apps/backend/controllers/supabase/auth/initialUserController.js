@@ -1,8 +1,8 @@
+import { getUserByAccessToken } from "#utils/supabase/auth/authUtils";
 import {
-  getUserByAccessToken,
-  getUserToArtistSubscriptions,
   getUserToUserSubscriptions,
-} from "#utils/supabaseUtils";
+  getUserToArtistSubscriptions,
+} from "#utils/supabase/user/userUtils";
 
 export const initialUserHandler = async (req, res) => {
   try {

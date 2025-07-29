@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ReactNode, useEffect, useState } from "react";
 import { MediaLibraryContext } from "./MediaLibraryContext";
-import { SupabasePlaylist } from "@shared/types/playlist";
+import { SupabaseAlbum, SupabasePlaylist } from "@shared/types/mediaLibrary";
 import { API_URL } from "@shared/constants/constants";
 import { useUserStore } from "../user/useUser";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
@@ -14,6 +14,7 @@ export const MediaLibraryStoreProvider = ({
 }) => {
   const { user, userToArtistsSubs, setUserToArtistsSubs } = useUserStore();
   const [playlists, setPlaylists] = useState<SupabasePlaylist[]>([]);
+  const [albums, setAlbums] = useState<SupabaseAlbum[]>([]);
   const [playlistPreviewImages, setPlaylistPreviewImages] = useState<
     { id: string; previewImage: string }[]
   >([]);
@@ -22,13 +23,14 @@ export const MediaLibraryStoreProvider = ({
       const fetchPlaylists = async (userId: string) => {
         try {
           const response = await axios.post(
-            `${API_URL}/get-playlists-of-user`,
+            `${API_URL}/get-media-library-of-user`,
             {
               userId: userId,
             }
           );
-
-          setPlaylists(response.data);
+          console.log(response.data);
+          setPlaylists(response.data.playlists);
+          setAlbums(response.data.albums);
         } catch (error) {
           console.log(error);
         }
@@ -203,6 +205,19 @@ export const MediaLibraryStoreProvider = ({
     }
   };
 
+  const addAlbum = async (albumData: SupabaseAlbum) => {
+    if (!user) return;
+    try {
+      const { data } = await axios.post(`${API_URL}/add-album-to-user`, {
+        albumData,
+        userId: user?.user.id,
+      });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <MediaLibraryContext.Provider
       value={{
@@ -219,6 +234,8 @@ export const MediaLibraryStoreProvider = ({
         addPlaylistToUser,
         subscribeArtist,
         unsubscribeArtist,
+        albums,
+        addAlbum,
       }}
     >
       {children}
