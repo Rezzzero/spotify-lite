@@ -27,4 +27,6 @@ export interface SupabaseAlbum {
   owner: {
     name: string;
   };
+  added_at?: string;
+  type?: string;
 }

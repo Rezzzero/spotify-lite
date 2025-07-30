@@ -185,7 +185,7 @@ export const MediaLibraryStoreProvider = ({
         `${API_URL}/subscribe-artist`,
         artistData
       );
-      setUserToArtistsSubs([...userToArtistsSubs, response.data[0]]);
+      setUserToArtistsSubs([...userToArtistsSubs, response.data]);
     } catch {
       console.log("Ошибка при попытке подписаться");
     }
@@ -212,7 +212,20 @@ export const MediaLibraryStoreProvider = ({
         albumData,
         userId: user?.user.id,
       });
-      console.log(data);
+      setAlbums([...albums, data]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeAlbum = async (albumdId: string) => {
+    if (!user) return;
+    try {
+      await axios.post(`${API_URL}/remove-album-from-user`, {
+        albumId: albumdId,
+        userId: user?.user.id,
+      });
+      setAlbums(albums.filter((album) => album.id !== albumdId));
     } catch (error) {
       console.log(error);
     }
@@ -236,6 +249,7 @@ export const MediaLibraryStoreProvider = ({
         unsubscribeArtist,
         albums,
         addAlbum,
+        removeAlbum,
       }}
     >
       {children}

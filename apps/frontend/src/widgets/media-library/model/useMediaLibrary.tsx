@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
 import { openMenuOrModal } from "@shared/lib/utils/openMenuOrModal";
 import { closeMenuOrModal } from "@shared/lib/utils/closeMenuOrModal";
+import { SupabaseAlbum, SupabasePlaylist } from "@shared/types/mediaLibrary";
+import { Artist } from "@shared/types/types";
 
 type MediaItemProps = {
   id: string;
@@ -18,10 +20,13 @@ type MediaItemProps = {
   playlistPreviewImages?: { id: string; previewImage: string }[];
   added_at?: string;
 };
-
+type LibraryItem =
+  | SupabaseAlbum
+  | SupabasePlaylist
+  | (Artist & { added_at?: string });
 export const useMediaLibrary = () => {
   const { user, userToArtistsSubs } = useUserStore();
-  const { playlists, addPlaylist, playlistPreviewImages } =
+  const { playlists, addPlaylist, playlistPreviewImages, albums } =
     useMediaLibraryStore();
   const [createPlaylistModal, setCreatePlaylistModal] = useState(false);
   const [LoginPromptModal, setLoginPromptModal] = useState(false);
@@ -63,12 +68,22 @@ export const useMediaLibrary = () => {
     openMenuOrModal(e, setIsFilterModalOpen, setFilterAnchor);
   };
 
-  const mergedLibraryList = [...playlists, ...userToArtistsSubs];
+  function isPlaylist(item: LibraryItem): item is SupabasePlaylist {
+    return item.type === "playlist";
+  }
+
+  function isAlbum(item: LibraryItem): item is SupabaseAlbum {
+    return item.type === "album";
+  }
+
+  const mergedLibraryList: LibraryItem[] = [
+    ...playlists,
+    ...userToArtistsSubs,
+    ...albums,
+  ];
   const normalizeLibraryList: MediaItemProps[] = mergedLibraryList.map(
     (item) => {
-      const isPlaylist = "owner" in item;
-
-      if (isPlaylist) {
+      if (isPlaylist(item)) {
         return {
           image: item.images?.[0]?.url ?? "",
           name: item.name,
@@ -78,6 +93,15 @@ export const useMediaLibrary = () => {
           playlistPreviewImages: playlistPreviewImages.filter(
             (image) => image.id === item.id
           ),
+          added_at: item.added_at,
+        };
+      } else if (isAlbum(item)) {
+        return {
+          image: item.images?.[0]?.url ?? "",
+          name: item.name,
+          id: item.id,
+          ownerName: item?.owner?.name,
+          type: "album",
           added_at: item.added_at,
         };
       } else {
@@ -121,7 +145,7 @@ export const useMediaLibrary = () => {
       default:
         return normalizeLibraryList;
     }
-  }, [playlists, normalizeLibraryList, sortBy]);
+  }, [normalizeLibraryList, sortBy]);
 
   const handleCreatePlaylist = async () => {
     closeMenuOrModal(setCreatePlaylistModal, setCreatePlaylistAnchor);

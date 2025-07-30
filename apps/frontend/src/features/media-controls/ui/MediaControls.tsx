@@ -26,8 +26,8 @@ interface MediaControlsProps {
   onOpenFormatModal?: (e: React.MouseEvent<HTMLElement | null>) => void;
   handleSub?: () => void;
   handleUnsub?: () => void;
-  isArtist?: boolean;
   isSubscribed?: boolean;
+  type: "playlist" | "album" | "artist" | "track";
 }
 export const MediaControls = ({
   isOwner,
@@ -45,10 +45,11 @@ export const MediaControls = ({
   onOpenFormatModal,
   handleSub,
   handleUnsub,
-  isArtist,
+  type,
   isSubscribed,
 }: MediaControlsProps) => {
-  const { playlists } = useMediaControls();
+  const { playlists, albums } = useMediaControls();
+  const currentList = type === "playlist" ? playlists : albums;
   return (
     <>
       <div className="flex items-center py-5 justify-between w-full">
@@ -72,7 +73,7 @@ export const MediaControls = ({
               </button>
             </CustomTooltip>
           )}
-          {isArtist && handleUnsub && handleSub && (
+          {type === "artist" && handleUnsub && handleSub && (
             <button
               type="button"
               onClick={() => {
@@ -90,7 +91,7 @@ export const MediaControls = ({
           {!isOwner &&
             onRemoveFromLibrary &&
             onAddToLibrary &&
-            (playlists.find((p) => p.id === mediaId) ? (
+            (currentList.find((item) => item.id === mediaId) ? (
               <CustomTooltip
                 title={`Удалить из медиатеки`}
                 placement="top"

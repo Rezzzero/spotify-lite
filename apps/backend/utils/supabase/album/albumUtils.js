@@ -44,12 +44,45 @@ export const addAlbumToUser = async (userId, albumId, albumdData) => {
     return albumFromSupabase;
   }
 
-  const { error } = await supabaseAdmin
+  const { error: insertError } = await supabaseAdmin
     .from("user_albums")
     .insert([{ user_id: userId, album_id: albumId }]);
 
-  if (error) {
-    console.error("Ошибка при привязке альбома к пользователю:", error.message);
+  if (insertError) {
+    console.error(
+      "Ошибка при привязке альбома к пользователю:",
+      insertError.message
+    );
     throw new Error("Ошибка при привязке альбома к пользователю");
+  }
+
+  const { data: existingAlbum, error: fetchError } = await supabaseAdmin
+    .from("albums")
+    .select("*")
+    .eq("id", albumId)
+    .single();
+
+  if (fetchError) {
+    console.error(
+      "Ошибка при получении существующего альбома:",
+      fetchError.message
+    );
+    throw new Error("Ошибка при получении существующего альбома");
+  }
+
+  return { ...existingAlbum, type: "album" };
+};
+
+export const deleteAlbumFromUser = async (userId, albumId) => {
+  const { error } = await supabaseAdmin
+    .from("user_albums")
+    .delete()
+    .eq("user_id", userId)
+    .eq("album_id", albumId)
+    .select();
+
+  if (error) {
+    console.error("Ошибка при удалении альбома из базы:", error.message);
+    throw new Error("Ошибка при удалении альбома из базы");
   }
 };

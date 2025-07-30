@@ -111,6 +111,7 @@ export const PlaylistInfo = () => {
           }
           onOpenMenu={(e) => handleOpenMenu(e)}
           onOpenFormatModal={(e) => handleOpenFormatChangeMenu(e)}
+          type="playlist"
         />
         {tracks.length > 0 && (
           <Table

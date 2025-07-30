@@ -1,4 +1,4 @@
-import { getSeveralArtists } from "#utils/spotifyUtils";
+import { getArtist, getSeveralArtists } from "#utils/spotifyUtils";
 import { supabaseAdmin } from "../../../clients/supabase/supabaseClient.js";
 
 export const getPlaylistsOfUser = async (userId) => {
@@ -19,6 +19,7 @@ export const getPlaylistsOfUser = async (userId) => {
       ...item.playlists,
       added_at: item.added_at,
       show_in_profile: item.show_in_profile,
+      type: "playlist",
     };
   });
 };
@@ -151,16 +152,19 @@ export const getOpenUserPlaylists = async (id) => {
 };
 
 export const subscibeToArtist = async (artistData) => {
-  const { data, error } = await supabaseAdmin
+  const { data: insertData, error: insertError } = await supabaseAdmin
     .from("user_artist_subscriptions")
     .insert([artistData])
     .select();
 
-  if (error) {
+  if (insertError) {
     console.error("Ошибка при подписке на артиста:", error.message);
     throw new Error("Ошибка при подписке на артиста");
   }
-  return data;
+
+  const data = await getArtist(artistData.artist_id);
+
+  return { ...data, added_at: insertData[0].added_at };
 };
 
 export const unsubscribeFromArtist = async (artistId, userId) => {
@@ -269,12 +273,15 @@ export const getUserFollowers = async (userId) => {
 export const getUserAlbums = async (userId) => {
   const { data, error } = await supabaseAdmin
     .from("user_albums")
-    .select("albums(*)")
+    .select("added_at, albums(*)")
     .eq("user_id", userId);
 
   if (error) {
     throw new Error("Ошибка при получении альбомов пользователя");
   }
-  console.log(data);
-  return data;
+  return data.map((item) => ({
+    ...item.albums,
+    added_at: item.added_at,
+    type: "album",
+  }));
 };

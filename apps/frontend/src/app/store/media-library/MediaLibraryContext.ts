@@ -31,6 +31,7 @@ interface MediaLibraryContextType {
   unsubscribeArtist: (artistId: string) => Promise<void>;
   albums: SupabaseAlbum[];
   addAlbum: (albumData: SupabaseAlbum) => Promise<void>;
+  removeAlbum: (albumId: string) => Promise<void>;
 }
 
 export const MediaLibraryContext = createContext({} as MediaLibraryContextType);

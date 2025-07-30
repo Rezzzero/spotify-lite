@@ -80,6 +80,7 @@ export const AlbumInfo = () => {
           onAddToLibrary={() => handleAddToMediaLibrary()}
           onOpenMenu={(e) => handleOpenMenu(e)}
           onOpenFormatModal={(e) => handleOpenFormatChangeMenu(e)}
+          type="album"
         />
       </div>
       <Popper open={menuModal} anchorEl={menuAnchor} placement="bottom-start">

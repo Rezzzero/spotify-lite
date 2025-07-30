@@ -56,7 +56,7 @@ export const ArtistInfo = () => {
           handleSub={handleSubscribe}
           handleUnsub={handleUnsubscribe}
           isSubscribed={isSubscribed}
-          isArtist
+          type="artist"
         />
         <Popper open={menuModal} anchorEl={menuAnchor} placement="bottom-start">
           <MediaMenu

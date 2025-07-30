@@ -19,7 +19,7 @@ interface AlbumDataType {
 
 export const useAlbumInfo = () => {
   const { user } = useUserStore();
-  const { removePlaylistFromUser, addAlbum } = useMediaLibraryStore();
+  const { addAlbum, removeAlbum } = useMediaLibraryStore();
   const [albumData, setAlbumData] = useState<AlbumDataType | null>(null);
   const [loading, setLoading] = useState(true);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -80,7 +80,7 @@ export const useAlbumInfo = () => {
   const handleDeleteFromMediaLibrary = async (id: string) => {
     if (!user) return;
     try {
-      await removePlaylistFromUser(id);
+      await removeAlbum(id);
       toast(<p className="font-semibold">Удалено из медиатеки</p>, {
         style: { width: "210px" },
       });

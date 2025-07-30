@@ -57,6 +57,7 @@ export const TrackInfo = () => {
           menuButtonRef={menuButtonRef}
           onPlay={() => handleListenPlaylist()}
           onOpenMenu={(e) => handleOpenMenu(e)}
+          type="track"
         />
         <Popper open={menuModal} anchorEl={menuAnchor} placement="bottom-start">
           <MediaMenu

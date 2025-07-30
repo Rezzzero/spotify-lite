@@ -45,7 +45,6 @@ export const MediaLibrary = () => {
   const selectedFormat = libraryFormatList.find(
     (format) => format.value === libraryFormat
   );
-
   return (
     <div
       className={`flex flex-col bg-[#141414] ${
