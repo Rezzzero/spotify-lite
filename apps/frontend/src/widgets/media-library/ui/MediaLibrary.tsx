@@ -12,7 +12,7 @@ import ClosedMediaLibraryIcon from "@shared/assets/media-library/closed-media-li
 import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
 import { SelectSortFilter } from "@shared/ui/select-sort-filter/SelectSortFilter";
 import { libraryFormatList } from "@shared/constants/constants";
-import { Popper } from "@mui/material";
+import { Popper, Modal, Box } from "@mui/material";
 import { MediaLibraryCard } from "../card/ui/MediaLibraryCard";
 
 export const MediaLibrary = () => {
@@ -40,6 +40,11 @@ export const MediaLibrary = () => {
     createPlaylistAnchor,
     handleOpenFilterMenu,
     filterAnchor,
+    handleOpenContextMenu,
+    miniCreatePlaylistModal,
+    setMiniCreatePlaylistModal,
+    miniCreatePlaylistModalRef,
+    position,
   } = useMediaLibrary();
 
   const selectedFormat = libraryFormatList.find(
@@ -52,6 +57,7 @@ export const MediaLibrary = () => {
           ? `w-[25%] p-2 ${user ? "group/mediaLibrary" : ""}`
           : "w-20 p-1"
       } h-[83vh] rounded-xl pb-8 relative`}
+      onContextMenu={(e) => handleOpenContextMenu(e)}
     >
       <div
         className={`flex ${
@@ -142,7 +148,13 @@ export const MediaLibrary = () => {
               Обзор
             </button>
           </div>
-          <div className="flex flex-col items-start mt-auto gap-3 px-5">
+          <div
+            onContextMenu={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            className="flex flex-col items-start mt-auto gap-3 px-5"
+          >
             <ul className="flex flex-wrap text-[11px] text-[#b3b3b3] gap-3">
               {MediaLibraryLinks.map((link, index) => (
                 <li key={index}>
@@ -309,6 +321,39 @@ export const MediaLibrary = () => {
           />
         </div>
       </Popper>
+      <Modal
+        open={miniCreatePlaylistModal}
+        onClose={() => setMiniCreatePlaylistModal(false)}
+        hideBackdrop
+      >
+        <Box
+          onClick={(e) => e.stopPropagation()}
+          sx={{
+            position: "absolute",
+            top: position.top,
+            left: position.left,
+            bgcolor: "#292929",
+            p: 1,
+            borderRadius: 1,
+            boxShadow: 5,
+            color: "white",
+            outline: "none",
+          }}
+          ref={miniCreatePlaylistModalRef}
+        >
+          <button
+            type="button"
+            onClick={() => {
+              handleCreatePlaylist();
+              setMiniCreatePlaylistModal(false);
+            }}
+            className="flex items-center gap-3 bg-transparent hover:bg-zinc-700 w-full h-full px-3 py-2 rounded-xs"
+          >
+            <AddPlaylistIcon className="w-4 h-4 text-white" />
+            Создать плейлист
+          </button>
+        </Box>
+      </Modal>
     </div>
   );
 };

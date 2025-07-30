@@ -5,6 +5,7 @@ import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { truncateText } from "@shared/lib/format/truncateText";
 import PlayIcon from "@shared/assets/play-icon.svg?react";
 import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
+import { CardMenu } from "../card-menu/ui/CardMenu";
 
 interface MediaLibraryCardProps {
   image: string;
@@ -27,7 +28,14 @@ export const MediaLibraryCard = ({
   libraryFormat,
   playlistPreviewImages,
 }: MediaLibraryCardProps) => {
-  const { currentId } = useMediaLibraryCard();
+  const {
+    currentId,
+    cardMenuOpen,
+    setCardMenuOpen,
+    position,
+    menuRef,
+    handleOpenMenu,
+  } = useMediaLibraryCard();
 
   const mainImage =
     type === "playlist"
@@ -66,6 +74,11 @@ export const MediaLibraryCard = ({
     >
       <Link
         to={`/${type}/${id}`}
+        onContextMenu={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          handleOpenMenu(e);
+        }}
         className={`${
           id === currentId
             ? "bg-zinc-800 hover:bg-zinc-700"
@@ -149,6 +162,14 @@ export const MediaLibraryCard = ({
             </button>
           </div>
         )}
+        <CardMenu
+          type={type}
+          id={id}
+          position={position}
+          isOpen={cardMenuOpen}
+          onClose={() => setCardMenuOpen(false)}
+          ref={menuRef}
+        />
       </Link>
     </CustomTooltip>
   );

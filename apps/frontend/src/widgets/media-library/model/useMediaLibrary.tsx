@@ -43,6 +43,9 @@ export const useMediaLibrary = () => {
   const [createPlaylistAnchor, setCreatePlaylistAnchor] =
     useState<HTMLElement | null>(null);
   const [filterAnchor, setFilterAnchor] = useState<HTMLElement | null>(null);
+  const [miniCreatePlaylistModal, setMiniCreatePlaylistModal] = useState(false);
+  const miniCreatePlaylistModalRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
   useClickOutside({
     refs: [createPlaylistRef, createPlaylistButtonRef],
     handler: () =>
@@ -58,6 +61,11 @@ export const useMediaLibrary = () => {
     refs: [filterModalRef, filterModalButtonRef],
     handler: () => closeMenuOrModal(setIsFilterModalOpen, setFilterAnchor),
     enabled: isFilterModalOpen,
+  });
+  useClickOutside({
+    refs: [miniCreatePlaylistModalRef],
+    handler: () => setMiniCreatePlaylistModal(false),
+    enabled: miniCreatePlaylistModal,
   });
 
   const handleOpenCreatePlaylistMenu = (e: React.MouseEvent<HTMLElement>) => {
@@ -193,6 +201,13 @@ export const useMediaLibrary = () => {
     setSortBy(sort);
   };
 
+  const handleOpenContextMenu = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setPosition({ top: e.clientY, left: e.clientX });
+    setMiniCreatePlaylistModal(true);
+  };
+
   return {
     user,
     createPlaylistModal,
@@ -220,5 +235,10 @@ export const useMediaLibrary = () => {
     handleOpenFilterMenu,
     filterAnchor,
     userToArtistsSubs,
+    handleOpenContextMenu,
+    miniCreatePlaylistModal,
+    setMiniCreatePlaylistModal,
+    miniCreatePlaylistModalRef,
+    position,
   };
 };
