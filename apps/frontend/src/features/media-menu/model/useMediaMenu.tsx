@@ -1,6 +1,7 @@
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 import { useUserStore } from "@app/store/user/useUser";
 import { API_URL } from "@shared/constants/constants";
+import { UserToArtistSubs } from "@shared/types/user";
 import { PlaylistData } from "@widgets/playlist-info/types/types";
 import axios from "axios";
 import React, { useRef, useState } from "react";
@@ -13,19 +14,23 @@ export const useMediaMenu = ({
   setPlaylist,
   isPublic,
   mediaType,
+  propId,
 }: {
   closeMenu: () => void;
   isInProfile?: boolean | undefined;
   setPlaylist?: React.Dispatch<React.SetStateAction<PlaylistData | null>>;
   isPublic?: boolean | undefined;
   mediaType: string;
+  propId?: string | undefined;
 }) => {
-  const { user } = useUserStore();
+  const { user, userToArtistsSubs } = useUserStore();
   const {
     playlists,
     changePublicStatus,
     removePlaylistFromUser,
     addPlaylistToUser,
+    subscribeArtist,
+    unsubscribeArtist,
   } = useMediaLibraryStore();
   const { id } = useParams();
   const [isPlaylistInProfile, setIsPlaylistInProfile] = useState<
@@ -40,10 +45,11 @@ export const useMediaMenu = ({
   const closeShareTimeout = useRef<NodeJS.Timeout | null>(null);
   const closeAddToPlaylistTimout = useRef<NodeJS.Timeout | null>(null);
   const addToMediaLibraryRef = useRef<HTMLDivElement>(null);
+  const currentId = propId ? propId : id;
 
   const handleRemovePlaylistFromMediaLibrary = async () => {
     try {
-      await removePlaylistFromUser(id as string);
+      await removePlaylistFromUser(currentId as string);
       closeMenu();
       toast(<p className="font-semibold">Удалено из медиатеки</p>, {
         style: { width: "210px" },
@@ -55,7 +61,7 @@ export const useMediaMenu = ({
 
   const handleAddPlaylistToMediaLibrary = async () => {
     try {
-      await addPlaylistToUser(id as string);
+      await addPlaylistToUser(currentId as string);
       closeMenu();
       toast(<p className="font-semibold">Добавлено в медиатеку</p>, {
         style: { width: "220px" },
@@ -69,7 +75,7 @@ export const useMediaMenu = ({
     if (setPlaylist) {
       try {
         const response = await axios.patch(
-          `${API_URL}/toggle-playlist-profile-status/${id}`,
+          `${API_URL}/toggle-playlist-profile-status/${currentId}`,
           { status: !isInProfile, userId: user?.user.id }
         );
         setPlaylist((prev) => {
@@ -112,7 +118,10 @@ export const useMediaMenu = ({
   const handleChangePublicStatus = async () => {
     if (setPlaylist) {
       try {
-        const response = await changePublicStatus(id as string, !isPublic);
+        const response = await changePublicStatus(
+          currentId as string,
+          !isPublic
+        );
 
         closeMenu();
         if (response) {
@@ -137,7 +146,7 @@ export const useMediaMenu = ({
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(
-      `${window.location.origin}/${mediaType}/${id}`
+      `${window.location.origin}/${mediaType}/${currentId}`
     );
     closeMenu();
     toast(<p>Ссылка скопирована в буфер обмена</p>, {
@@ -205,10 +214,27 @@ export const useMediaMenu = ({
     );
   };
 
+  const handleSubscribeArtist = async () => {
+    if (!user || !currentId) return;
+    const artistData: UserToArtistSubs = {
+      artist_id: currentId,
+      user_id: user.user.id,
+    };
+    subscribeArtist(artistData);
+    closeMenu();
+  };
+
+  const handleUnsubscribeArtist = async () => {
+    if (!user || !currentId) return;
+    unsubscribeArtist(currentId);
+    closeMenu();
+  };
+
   return {
     playlists,
+    userToArtistsSubs,
     handleRemovePlaylistFromMediaLibrary,
-    id,
+    currentId,
     isPlaylistInProfile,
     handleAddPlaylistToMediaLibrary,
     togglePlaylistInProfileStatus,
@@ -224,5 +250,7 @@ export const useMediaMenu = ({
     isAddToMediaLibraryOpen,
     addToPlaylistAnchor,
     addToMediaLibraryRef,
+    handleSubscribeArtist,
+    handleUnsubscribeArtist,
   };
 };

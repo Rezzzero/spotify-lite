@@ -15,6 +15,7 @@ import { Popper } from "@mui/material";
 import { AddToPlaylistMenu } from "@features/add-to-playlist-menu/ui/AddToPlaylistMenu";
 import { TablesTrack, Track } from "@shared/types/types";
 import { useTrackCard } from "@features/track-card/model/useTrackCard";
+import CrossIcon from "@shared/assets/cross-icon.svg?react";
 
 interface MediaMenuProps {
   menuRef: React.RefObject<HTMLDivElement | null>;
@@ -27,6 +28,7 @@ interface MediaMenuProps {
   openDeleteModal?: () => void;
   mediaType: string;
   track?: Track | TablesTrack;
+  propId?: string;
 }
 
 const buttonClass =
@@ -65,12 +67,14 @@ export const MediaMenu = ({
   openEditMenu,
   openDeleteModal,
   track,
+  propId,
 }: MediaMenuProps) => {
   const {
     playlists,
+    userToArtistsSubs,
     isPlaylistInProfile,
     handleRemovePlaylistFromMediaLibrary,
-    id,
+    currentId,
     handleAddPlaylistToMediaLibrary,
     togglePlaylistInProfileStatus,
     handleChangePublicStatus,
@@ -85,19 +89,26 @@ export const MediaMenu = ({
     isAddToMediaLibraryOpen,
     addToPlaylistAnchor,
     addToMediaLibraryRef,
+    handleSubscribeArtist,
+    handleUnsubscribeArtist,
   } = useMediaMenu({
     closeMenu,
     isInProfile,
     isPublic,
     setPlaylist,
     mediaType,
+    propId,
   });
   const { handleAddTrackToPlaylist } = useTrackCard({ track });
 
-  const isPlaylistInList = playlists.some((playlist) => playlist.id === id);
+  const isPlaylistInList = playlists.some(
+    (playlist) => playlist.id === currentId
+  );
   const canShowProfileButton = isPublic && isPlaylistInList;
 
-  const isPlaylistInLibrary = playlists.some((playlist) => playlist.id === id);
+  const isPlaylistInLibrary = playlists.some(
+    (playlist) => playlist.id === currentId
+  );
   const shouldShowLibraryButtons =
     !isOwner &&
     mediaType !== "artist" &&
@@ -107,6 +118,10 @@ export const MediaMenu = ({
     track && (mediaType === "album" || mediaType === "track");
   const shouldShowSubscibeButton =
     !isOwner && (mediaType === "user" || mediaType === "artist");
+
+  const isSubscribed = userToArtistsSubs.some(
+    (artist) => artist.id === currentId
+  );
 
   const editBtnName = MediaNames[mediaType].edit;
   const copyBtnName = MediaNames[mediaType].copy;
@@ -156,12 +171,20 @@ export const MediaMenu = ({
           <button
             type="button"
             onClick={() => {
-              closeMenu();
+              if (isSubscribed) {
+                handleUnsubscribeArtist();
+              } else {
+                handleSubscribeArtist();
+              }
             }}
             className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
           >
-            <SubscibeIcon className="w-4 h-4" />
-            Подписаться
+            {isSubscribed ? (
+              <CrossIcon className="w-3 h-3 text-green-400" />
+            ) : (
+              <SubscibeIcon className="w-4 h-4" />
+            )}
+            {isSubscribed ? "Отписаться" : "Подписаться"}
           </button>
         )}
         {shouldShowLibraryButtons &&

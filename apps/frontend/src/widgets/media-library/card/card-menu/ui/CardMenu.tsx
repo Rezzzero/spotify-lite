@@ -1,3 +1,4 @@
+import { MediaMenu } from "@features/media-menu/ui/MediaMenu";
 import { Modal, Box } from "@mui/material";
 import React from "react";
 
@@ -21,7 +22,6 @@ export const CardMenu = ({
   return (
     <Modal open={isOpen} onClose={onClose} hideBackdrop>
       <Box
-        ref={ref}
         sx={{
           position: "absolute",
           top: position.top,
@@ -30,9 +30,12 @@ export const CardMenu = ({
           backgroundColor: "#2d2d2e",
         }}
       >
-        {type === "playlist" && <p>Playlist {id}</p>}
-        {type === "album" && <p>Album {id}</p>}
-        {type === "artist" && <p>Artist {id}</p>}
+        <MediaMenu
+          mediaType={type}
+          menuRef={ref}
+          closeMenu={onClose}
+          propId={id}
+        />
       </Box>
     </Modal>
   );
