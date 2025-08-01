@@ -44,7 +44,6 @@ export const useUserInfo = () => {
   const source = getUserSource(id || "");
   const menuModalRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isSubscribed, setIsSubscribed] = useState(false);
   const [userFollowers, setUserFollowers] = useState([]);
   const [openedPlaylists, setOpenedPlaylists] = useState<
     SupabasePlaylist[] | (Playlist & { duration: number })[] | null
@@ -71,11 +70,6 @@ export const useUserInfo = () => {
       const response = await axios.get(endpoint);
       setUserInfo(response.data);
       setUserName(response.data.userName);
-      if (user) {
-        setIsSubscribed(
-          userToUsersSubs.some((user) => user.id === response.data.id)
-        );
-      }
       if (source === "supabase") {
         setUserFollowers(response.data.followers);
         setOpenedPlaylists(response.data.openedPlaylists);
@@ -177,14 +171,12 @@ export const useUserInfo = () => {
       user_id: user.user.id,
       target_user_id: userInfo?.id,
     };
-    subscribeUser(userData);
-    setIsSubscribed(true);
+    await subscribeUser(userData);
   };
 
   const handleUnsubscribe = async () => {
     if (!user || !userInfo) return;
-    unsubscribeUser(userInfo?.id);
-    setIsSubscribed(false);
+    await unsubscribeUser(userInfo?.id);
   };
 
   const isOwner = userInfo?.id === user?.user.id;
@@ -222,7 +214,7 @@ export const useUserInfo = () => {
     menuAnchor,
     handleSubscribe,
     handleUnsubscribe,
-    isSubscribed,
+    userToUsersSubs,
     sortedObject,
     userFollowers,
     openedPlaylists,

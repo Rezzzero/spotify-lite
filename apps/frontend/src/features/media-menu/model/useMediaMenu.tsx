@@ -23,7 +23,7 @@ export const useMediaMenu = ({
   mediaType: string;
   propId?: string | undefined;
 }) => {
-  const { user, userToArtistsSubs } = useUserStore();
+  const { user, userToArtistsSubs, userToUsersSubs } = useUserStore();
   const {
     playlists,
     changePublicStatus,
@@ -233,6 +233,7 @@ export const useMediaMenu = ({
   return {
     playlists,
     userToArtistsSubs,
+    userToUsersSubs,
     handleRemovePlaylistFromMediaLibrary,
     currentId,
     isPlaylistInProfile,

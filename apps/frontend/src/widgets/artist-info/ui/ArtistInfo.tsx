@@ -27,7 +27,6 @@ export const ArtistInfo = () => {
     handleOpenMenu,
     handleSubscribe,
     handleUnsubscribe,
-    isSubscribed,
   } = useArtistInfo();
   if (loading || !artistInfo)
     return (
@@ -55,7 +54,6 @@ export const ArtistInfo = () => {
           onPlay={() => handleListenPlaylist()}
           handleSub={handleSubscribe}
           handleUnsub={handleUnsubscribe}
-          isSubscribed={isSubscribed}
           type="artist"
         />
         <Popper open={menuModal} anchorEl={menuAnchor} placement="bottom-start">
@@ -63,6 +61,8 @@ export const ArtistInfo = () => {
             menuRef={menuModalRef}
             closeMenu={() => setMenuModal(false)}
             mediaType="artist"
+            handleSub={handleSubscribe}
+            handleUnsub={handleUnsubscribe}
           />
         </Popper>
         <h2 className="text-2xl font-bold mb-5">Популярные треки</h2>

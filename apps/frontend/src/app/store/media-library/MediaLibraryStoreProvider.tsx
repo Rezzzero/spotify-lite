@@ -28,7 +28,6 @@ export const MediaLibraryStoreProvider = ({
               userId: userId,
             }
           );
-          console.log(response.data);
           setPlaylists(response.data.playlists);
           setAlbums(response.data.albums);
         } catch (error) {

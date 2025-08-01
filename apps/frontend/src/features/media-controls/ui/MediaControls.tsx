@@ -26,7 +26,6 @@ interface MediaControlsProps {
   onOpenFormatModal?: (e: React.MouseEvent<HTMLElement | null>) => void;
   handleSub?: () => void;
   handleUnsub?: () => void;
-  isSubscribed?: boolean;
   type: "playlist" | "album" | "artist" | "track";
 }
 export const MediaControls = ({
@@ -46,9 +45,8 @@ export const MediaControls = ({
   handleSub,
   handleUnsub,
   type,
-  isSubscribed,
 }: MediaControlsProps) => {
-  const { playlists, albums } = useMediaControls();
+  const { playlists, albums, isSubscribed } = useMediaControls();
   const currentList = type === "playlist" ? playlists : albums;
   return (
     <>

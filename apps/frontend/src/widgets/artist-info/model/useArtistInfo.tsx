@@ -21,7 +21,7 @@ interface ArtistInfoType {
 }
 
 export const useArtistInfo = () => {
-  const { user, userToArtistsSubs } = useUserStore();
+  const { user } = useUserStore();
   const {
     removePlaylistFromUser,
     addPlaylistToUser,
@@ -40,7 +40,6 @@ export const useArtistInfo = () => {
     Album[]
   >([]);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isSubscribed, setIsSubscribed] = useState(false);
   const [menuModal, setMenuModal] = useState(false);
   const [menuAnchor, setMenuAnchorEl] = useState<HTMLElement | null>(null);
   const menuModalRef = useRef<HTMLDivElement>(null);
@@ -65,11 +64,6 @@ export const useArtistInfo = () => {
         setFiltredAlbumsAndSingles(data.albumsAndSingles);
         if (data.artist.images[1].url) {
           setImageUrl(data.artist.images[1].url);
-        }
-        if (user) {
-          setIsSubscribed(
-            userToArtistsSubs.some((artist) => artist.id === data.artist.id)
-          );
         }
         setLoading(false);
       } catch (error) {
@@ -128,13 +122,11 @@ export const useArtistInfo = () => {
       user_id: user.user.id,
     };
     subscribeArtist(artistData);
-    setIsSubscribed(true);
   };
 
   const handleUnsubscribe = async () => {
     if (!user || !artistInfo) return;
     unsubscribeArtist(artistInfo.artist.id);
-    setIsSubscribed(false);
   };
 
   return {
@@ -156,6 +148,5 @@ export const useArtistInfo = () => {
     handleAddPlaylistToMediaLibrary,
     handleSubscribe,
     handleUnsubscribe,
-    isSubscribed,
   };
 };

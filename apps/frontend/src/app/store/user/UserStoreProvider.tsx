@@ -45,6 +45,7 @@ export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
         `${API_URL}/subscribe-user`,
         subscribeData
       );
+
       setUserToUsersSubs([...userToUsersSubs, response.data[0]]);
     } catch {
       setUser(null);
@@ -53,12 +54,11 @@ export const UserStoreProvider = ({ children }: { children: ReactNode }) => {
 
   const unsubscribeUser = async (target_user_id: string) => {
     try {
-      const response = await axios.post(
-        `${API_URL}/unsubscribe-user/${target_user_id}`,
-        { userId: user?.user.id }
-      );
+      await axios.post(`${API_URL}/unsubscribe-user/${target_user_id}`, {
+        userId: user?.user.id,
+      });
       setUserToUsersSubs(
-        userToUsersSubs.filter((user) => user.id !== response.data.id)
+        userToUsersSubs.filter((user) => user.id !== target_user_id)
       );
     } catch {
       setUser(null);

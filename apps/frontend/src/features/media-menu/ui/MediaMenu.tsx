@@ -29,6 +29,8 @@ interface MediaMenuProps {
   mediaType: string;
   track?: Track | TablesTrack;
   propId?: string;
+  handleSub?: () => void;
+  handleUnsub?: () => void;
 }
 
 const buttonClass =
@@ -68,10 +70,13 @@ export const MediaMenu = ({
   openDeleteModal,
   track,
   propId,
+  handleSub,
+  handleUnsub,
 }: MediaMenuProps) => {
   const {
     playlists,
     userToArtistsSubs,
+    userToUsersSubs,
     isPlaylistInProfile,
     handleRemovePlaylistFromMediaLibrary,
     currentId,
@@ -89,8 +94,6 @@ export const MediaMenu = ({
     isAddToMediaLibraryOpen,
     addToPlaylistAnchor,
     addToMediaLibraryRef,
-    handleSubscribeArtist,
-    handleUnsubscribeArtist,
   } = useMediaMenu({
     closeMenu,
     isInProfile,
@@ -106,9 +109,6 @@ export const MediaMenu = ({
   );
   const canShowProfileButton = isPublic && isPlaylistInList;
 
-  const isPlaylistInLibrary = playlists.some(
-    (playlist) => playlist.id === currentId
-  );
   const shouldShowLibraryButtons =
     !isOwner &&
     mediaType !== "artist" &&
@@ -117,11 +117,14 @@ export const MediaMenu = ({
   const shouldShowAddToPlaylist =
     track && (mediaType === "album" || mediaType === "track");
   const shouldShowSubscibeButton =
-    !isOwner && (mediaType === "user" || mediaType === "artist");
+    !isOwner &&
+    (mediaType === "user" || mediaType === "artist") &&
+    handleSub &&
+    handleUnsub;
 
-  const isSubscribed = userToArtistsSubs.some(
-    (artist) => artist.id === currentId
-  );
+  const subList = mediaType === "artist" ? userToArtistsSubs : userToUsersSubs;
+
+  const isSubscribed = subList.some((sub) => sub.id === currentId);
 
   const editBtnName = MediaNames[mediaType].edit;
   const copyBtnName = MediaNames[mediaType].copy;
@@ -172,9 +175,11 @@ export const MediaMenu = ({
             type="button"
             onClick={() => {
               if (isSubscribed) {
-                handleUnsubscribeArtist();
+                handleUnsub();
+                closeMenu();
               } else {
-                handleSubscribeArtist();
+                handleSub();
+                closeMenu();
               }
             }}
             className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
@@ -188,7 +193,7 @@ export const MediaMenu = ({
           </button>
         )}
         {shouldShowLibraryButtons &&
-          (isPlaylistInLibrary ? (
+          (isPlaylistInList ? (
             <button
               type="button"
               onClick={() => handleRemovePlaylistFromMediaLibrary()}

@@ -186,13 +186,19 @@ export const subscribeToUser = async (userData) => {
   const { data, error } = await supabaseAdmin
     .from("user_user_subscriptions")
     .insert([userData])
-    .select();
+    .select("target_user:target_user_id(*), added_at");
 
   if (error) {
     console.error("Ошибка при подписке на пользователя:", error.message);
     throw new Error("Ошибка при подписке на пользователя");
   }
-  return data;
+
+  // Возвращаем форматированный объект
+  return data.map((item) => ({
+    ...item.target_user, // все поля из users
+    added_at: item.added_at, // дата подписки
+    type: "user", // указанный тип
+  }));
 };
 
 export const unsubscribeFromUser = async (userId, targetUserId) => {
@@ -244,6 +250,9 @@ export const getUserToArtistSubscriptions = async (userId) => {
   }
 
   const ids = data.map((item) => item.artist_id);
+  if (ids.length === 0) {
+    return [];
+  }
 
   const artists = await getSeveralArtists(ids);
 
