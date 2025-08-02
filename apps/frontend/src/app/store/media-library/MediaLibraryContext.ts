@@ -30,7 +30,7 @@ interface MediaLibraryContextType {
   subscribeArtist: (artistData: UserToArtistSubs) => Promise<void>;
   unsubscribeArtist: (artistId: string) => Promise<void>;
   albums: SupabaseAlbum[];
-  addAlbum: (albumData: SupabaseAlbum) => Promise<void>;
+  addAlbum: (albumId: string) => Promise<void>;
   removeAlbum: (albumId: string) => Promise<void>;
 }
 

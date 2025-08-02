@@ -79,9 +79,9 @@ export const MediaMenu = ({
     userToArtistsSubs,
     userToUsersSubs,
     isPlaylistInProfile,
-    handleRemovePlaylistFromMediaLibrary,
+    handleAddToMediaLibrary,
+    handleRemoveFromMediaLibrary,
     currentId,
-    handleAddPlaylistToMediaLibrary,
     togglePlaylistInProfileStatus,
     handleChangePublicStatus,
     handleCopyLink,
@@ -196,7 +196,7 @@ export const MediaMenu = ({
           (isItemInList ? (
             <button
               type="button"
-              onClick={() => handleRemovePlaylistFromMediaLibrary()}
+              onClick={() => handleRemoveFromMediaLibrary(mediaType)}
               className={buttonClass}
             >
               <PlaylistInMediaLibraryIcon className="w-4 h-4" />
@@ -205,7 +205,7 @@ export const MediaMenu = ({
           ) : (
             <button
               type="button"
-              onClick={() => handleAddPlaylistToMediaLibrary()}
+              onClick={() => handleAddToMediaLibrary(mediaType)}
               className={buttonClass}
             >
               <AddToMediaLibraryIcon className="w-4 h-4" />

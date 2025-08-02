@@ -222,13 +222,14 @@ export const MediaLibraryStoreProvider = ({
     }
   };
 
-  const addAlbum = async (albumData: SupabaseAlbum) => {
+  const addAlbum = async (albumId: string) => {
     if (!user) return;
     try {
       const { data } = await axios.post(`${API_URL}/add-album-to-user`, {
-        albumData,
+        albumId,
         userId: user?.user.id,
       });
+      console.log(data);
       setAlbums([...albums, data]);
       toast(<p className="font-semibold">Добавлено в медиатеку</p>, {
         style: { width: "220px" },

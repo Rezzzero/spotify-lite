@@ -88,15 +88,7 @@ export const useAlbumInfo = () => {
   const handleAddToMediaLibrary = async () => {
     if (!user || !albumData) return;
     try {
-      const album = {
-        id: albumData.album.id,
-        name: albumData.album.name,
-        images: albumData.album.images,
-        owner: {
-          name: albumData.artist.name,
-        },
-      };
-      await addAlbum(album);
+      await addAlbum(albumData.album.id);
     } catch (error) {
       console.error("Error adding playlist to media library:", error);
     }

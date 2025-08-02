@@ -30,6 +30,8 @@ export const useMediaMenu = ({
     changePublicStatus,
     removePlaylistFromUser,
     addPlaylistToUser,
+    addAlbum,
+    removeAlbum,
     subscribeArtist,
     unsubscribeArtist,
   } = useMediaLibraryStore();
@@ -48,18 +50,27 @@ export const useMediaMenu = ({
   const addToMediaLibraryRef = useRef<HTMLDivElement>(null);
   const currentId = propId ? propId : id;
 
-  const handleRemovePlaylistFromMediaLibrary = async () => {
+  const handleRemoveFromMediaLibrary = async (mediaType: string) => {
     try {
-      await removePlaylistFromUser(currentId as string);
+      if (mediaType === "album") {
+        await removeAlbum(currentId as string);
+      } else {
+        await removePlaylistFromUser(currentId as string);
+      }
       closeMenu();
     } catch (error) {
       console.error("Error removing playlist from media library:", error);
     }
   };
 
-  const handleAddPlaylistToMediaLibrary = async () => {
+  const handleAddToMediaLibrary = async (mediaType: string) => {
+    if (!user) return;
     try {
-      await addPlaylistToUser(currentId as string);
+      if (mediaType === "album") {
+        await addAlbum(currentId as string);
+      } else {
+        await addPlaylistToUser(currentId as string);
+      }
       closeMenu();
     } catch (error) {
       console.error("Error adding playlist to media library:", error);
@@ -224,10 +235,10 @@ export const useMediaMenu = ({
     albums,
     userToArtistsSubs,
     userToUsersSubs,
-    handleRemovePlaylistFromMediaLibrary,
+    handleRemoveFromMediaLibrary,
     currentId,
     isPlaylistInProfile,
-    handleAddPlaylistToMediaLibrary,
+    handleAddToMediaLibrary,
     togglePlaylistInProfileStatus,
     handleChangePublicStatus,
     handleCopyLink,
