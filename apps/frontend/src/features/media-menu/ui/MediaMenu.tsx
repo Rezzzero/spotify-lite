@@ -75,6 +75,7 @@ export const MediaMenu = ({
 }: MediaMenuProps) => {
   const {
     playlists,
+    albums,
     userToArtistsSubs,
     userToUsersSubs,
     isPlaylistInProfile,
@@ -104,10 +105,9 @@ export const MediaMenu = ({
   });
   const { handleAddTrackToPlaylist } = useTrackCard({ track });
 
-  const isPlaylistInList = playlists.some(
-    (playlist) => playlist.id === currentId
-  );
-  const canShowProfileButton = isPublic && isPlaylistInList;
+  const mediaList = mediaType === "playlist" ? playlists : albums;
+  const isItemInList = mediaList.some((item) => item.id === currentId);
+  const canShowProfileButton = isPublic && isItemInList;
 
   const shouldShowLibraryButtons =
     !isOwner &&
@@ -193,7 +193,7 @@ export const MediaMenu = ({
           </button>
         )}
         {shouldShowLibraryButtons &&
-          (isPlaylistInList ? (
+          (isItemInList ? (
             <button
               type="button"
               onClick={() => handleRemovePlaylistFromMediaLibrary()}

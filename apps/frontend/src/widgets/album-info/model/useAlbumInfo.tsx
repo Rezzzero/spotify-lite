@@ -6,7 +6,6 @@ import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import { API_URL } from "@shared/constants/constants";
 import { useUserStore } from "@app/store/user/useUser";
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
-import { toast } from "react-toastify";
 import { openMenuOrModal } from "@shared/lib/utils/openMenuOrModal";
 import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
 import { closeMenuOrModal } from "@shared/lib/utils/closeMenuOrModal";
@@ -81,9 +80,6 @@ export const useAlbumInfo = () => {
     if (!user) return;
     try {
       await removeAlbum(id);
-      toast(<p className="font-semibold">Удалено из медиатеки</p>, {
-        style: { width: "210px" },
-      });
     } catch (error) {
       console.error("Error deleting playlist:", error);
     }
@@ -101,9 +97,6 @@ export const useAlbumInfo = () => {
         },
       };
       await addAlbum(album);
-      toast(<p className="font-semibold">Добавлено в медиатеку</p>, {
-        style: { width: "220px" },
-      });
     } catch (error) {
       console.error("Error adding playlist to media library:", error);
     }

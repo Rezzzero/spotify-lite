@@ -24,9 +24,10 @@ export const createPlaylist = async (playlistData) => {
 };
 
 export const addPlaylistToUser = async (playlistId, userId) => {
-  const { error: errorWithAdd } = await supabaseAdmin
+  const { data: insertedRows, error: errorWithAdd } = await supabaseAdmin
     .from("user_playlists")
-    .insert([{ playlist_id: playlistId, user_id: userId }]);
+    .insert([{ playlist_id: playlistId, user_id: userId }])
+    .select();
 
   const { data: playlist, error: playlistError } = await supabaseAdmin
     .from("playlists")
@@ -47,7 +48,15 @@ export const addPlaylistToUser = async (playlistId, userId) => {
     throw new Error("Ошибка при получении плейлиста");
   }
 
-  return playlist;
+  const addedAt = insertedRows?.[0]?.added_at ?? null;
+  const showInProfile = insertedRows?.[0]?.show_in_profile ?? null;
+
+  return {
+    ...playlist,
+    type: "playlist",
+    added_at: addedAt,
+    show_in_profile: showInProfile,
+  };
 };
 
 export const deletePlaylistFromUser = async (playlistId) => {

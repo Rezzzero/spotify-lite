@@ -7,7 +7,6 @@ import { useGetColors } from "@shared/lib/hooks/useGetColors";
 import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
 import { closeMenuOrModal } from "@shared/lib/utils/closeMenuOrModal";
 import { openMenuOrModal } from "@shared/lib/utils/openMenuOrModal";
-import { toast } from "react-toastify";
 import { useUserStore } from "@app/store/user/useUser";
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 
@@ -22,12 +21,7 @@ interface ArtistInfoType {
 
 export const useArtistInfo = () => {
   const { user } = useUserStore();
-  const {
-    removePlaylistFromUser,
-    addPlaylistToUser,
-    subscribeArtist,
-    unsubscribeArtist,
-  } = useMediaLibraryStore();
+  const { subscribeArtist, unsubscribeArtist } = useMediaLibraryStore();
   const [artistInfo, setArtistInfo] = useState<ArtistInfoType | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -87,30 +81,6 @@ export const useArtistInfo = () => {
     }
   };
 
-  const handleDeletePlaylistFromMediaLibrary = async (id: string) => {
-    if (!user) return;
-    try {
-      await removePlaylistFromUser(id);
-      toast(<p className="font-semibold">Удалено из медиатеки</p>, {
-        style: { width: "210px" },
-      });
-    } catch (error) {
-      console.error("Error deleting playlist:", error);
-    }
-  };
-
-  const handleAddPlaylistToMediaLibrary = async (id: string) => {
-    if (!user) return;
-    try {
-      await addPlaylistToUser(id);
-      toast(<p className="font-semibold">Добавлено в медиатеку</p>, {
-        style: { width: "220px" },
-      });
-    } catch (error) {
-      console.error("Error adding playlist to media library:", error);
-    }
-  };
-
   const handleListenPlaylist = () => {
     setIsPlaying((prev) => !prev);
   };
@@ -144,8 +114,6 @@ export const useArtistInfo = () => {
     menuButtonRef,
     menuAnchor,
     handleOpenMenu,
-    handleDeletePlaylistFromMediaLibrary,
-    handleAddPlaylistToMediaLibrary,
     handleSubscribe,
     handleUnsubscribe,
   };

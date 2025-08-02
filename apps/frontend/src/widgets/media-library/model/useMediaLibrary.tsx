@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { generateId } from "@shared/lib/id/generateId";
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
-import { toast } from "react-toastify";
 import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
 import { openMenuOrModal } from "@shared/lib/utils/openMenuOrModal";
 import { closeMenuOrModal } from "@shared/lib/utils/closeMenuOrModal";
@@ -180,9 +179,6 @@ export const useMediaLibrary = () => {
 
       try {
         await addPlaylist(playlistData);
-        toast(<p className="font-semibold">Добавлено в медиатеку</p>, {
-          style: { width: "220px" },
-        });
       } catch (error) {
         console.log(error);
       }

@@ -6,6 +6,7 @@ import { API_URL } from "@shared/constants/constants";
 import { useUserStore } from "../user/useUser";
 import { PLAYLIST_PLACEHOLDER_URL } from "@shared/constants/urls";
 import { UserToArtistSubs } from "@shared/types/user";
+import { toast } from "react-toastify";
 
 export const MediaLibraryStoreProvider = ({
   children,
@@ -41,11 +42,13 @@ export const MediaLibraryStoreProvider = ({
   const addPlaylist = async (playlistData: SupabasePlaylist) => {
     try {
       await axios.post(`${API_URL}/create-playlist`, playlistData);
+      setPlaylists([...playlists, playlistData]);
+      toast(<p className="font-semibold">Добавлено в медиатеку</p>, {
+        style: { width: "220px" },
+      });
     } catch (error) {
       console.log(error);
     }
-
-    setPlaylists([...playlists, playlistData]);
   };
 
   const removePlaylist = async (playlistId: string) => {
@@ -56,6 +59,9 @@ export const MediaLibraryStoreProvider = ({
         },
       });
       setPlaylists(playlists.filter((playlist) => playlist.id !== playlistId));
+      toast(<p className="font-semibold">Удалено из медиатеки</p>, {
+        style: { width: "210px" },
+      });
     } catch (error) {
       console.log(error);
     }
@@ -67,6 +73,9 @@ export const MediaLibraryStoreProvider = ({
         userId: user?.user.id,
       });
       setPlaylists(playlists.filter((playlist) => playlist.id !== playlistId));
+      toast(<p className="font-semibold">Удалено из медиатеки</p>, {
+        style: { width: "210px" },
+      });
     } catch (error) {
       console.log(error);
     }
@@ -81,6 +90,9 @@ export const MediaLibraryStoreProvider = ({
         }
       );
       setPlaylists([...playlists, response.data]);
+      toast(<p className="font-semibold">Добавлено в медиатеку</p>, {
+        style: { width: "220px" },
+      });
     } catch (error) {
       console.log(error);
     }
@@ -160,6 +172,12 @@ export const MediaLibraryStoreProvider = ({
         return;
       }
       setPlaylists(playlists.map((p) => (p.id === id ? playlistToUpdate : p)));
+      const message = !isPublic
+        ? "Теперь это открытый плейлист"
+        : "Теперь это закрытый плейлист";
+      toast(<p className="font-semibold">{message}</p>, {
+        style: { width: "280px" },
+      });
       return playlistToUpdate;
     } catch (error) {
       console.log(error);
@@ -212,6 +230,9 @@ export const MediaLibraryStoreProvider = ({
         userId: user?.user.id,
       });
       setAlbums([...albums, data]);
+      toast(<p className="font-semibold">Добавлено в медиатеку</p>, {
+        style: { width: "220px" },
+      });
     } catch (error) {
       console.log(error);
     }
@@ -225,6 +246,9 @@ export const MediaLibraryStoreProvider = ({
         userId: user?.user.id,
       });
       setAlbums(albums.filter((album) => album.id !== albumdId));
+      toast(<p className="font-semibold">Удалено из медиатеки</p>, {
+        style: { width: "210px" },
+      });
     } catch (error) {
       console.log(error);
     }

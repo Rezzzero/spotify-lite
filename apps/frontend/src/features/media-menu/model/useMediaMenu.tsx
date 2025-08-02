@@ -26,6 +26,7 @@ export const useMediaMenu = ({
   const { user, userToArtistsSubs, userToUsersSubs } = useUserStore();
   const {
     playlists,
+    albums,
     changePublicStatus,
     removePlaylistFromUser,
     addPlaylistToUser,
@@ -51,9 +52,6 @@ export const useMediaMenu = ({
     try {
       await removePlaylistFromUser(currentId as string);
       closeMenu();
-      toast(<p className="font-semibold">Удалено из медиатеки</p>, {
-        style: { width: "210px" },
-      });
     } catch (error) {
       console.error("Error removing playlist from media library:", error);
     }
@@ -63,9 +61,6 @@ export const useMediaMenu = ({
     try {
       await addPlaylistToUser(currentId as string);
       closeMenu();
-      toast(<p className="font-semibold">Добавлено в медиатеку</p>, {
-        style: { width: "220px" },
-      });
     } catch (error) {
       console.error("Error adding playlist to media library:", error);
     }
@@ -132,12 +127,6 @@ export const useMediaMenu = ({
             imageUrl: response.images[0].url,
           });
         }
-        const message = !isPublic
-          ? "Теперь это открытый плейлист"
-          : "Теперь это закрытый плейлист";
-        toast(<p className="font-semibold">{message}</p>, {
-          style: { width: "280px" },
-        });
       } catch (error) {
         console.error("Error changing public status:", error);
       }
@@ -232,6 +221,7 @@ export const useMediaMenu = ({
 
   return {
     playlists,
+    albums,
     userToArtistsSubs,
     userToUsersSubs,
     handleRemovePlaylistFromMediaLibrary,
