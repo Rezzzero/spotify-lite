@@ -10,7 +10,6 @@ import { MediaControls } from "@features/media-controls/ui/MediaControls";
 import { Table } from "@shared/ui/table/Table";
 import { Box, Modal, Popper } from "@mui/material";
 import { EditPlaylist } from "../edit/ui/EditPlaylist";
-import { DeletePlaylist } from "../delete/ui/DeletePlaylist";
 import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
 import { MediaMenu } from "@features/media-menu/ui/MediaMenu";
 
@@ -42,8 +41,6 @@ export const PlaylistInfo = () => {
     playlistFormat,
     setPlaylistFormat,
     changeFormatButtonRef,
-    deletePlaylistModal,
-    setDeletePlaylistModal,
     tracks,
     setTracks,
     handleUpdateDuration,
@@ -150,13 +147,11 @@ export const PlaylistInfo = () => {
             isPublic={playlistData?.playlist.public}
             closeMenu={() => setMenuModal(false)}
             openEditMenu={() => setEditModal(true)}
-            openDeleteModal={() => {
-              setDeletePlaylistModal(true);
-              setMenuModal(false);
-            }}
             setPlaylist={setPlaylistData}
             isInProfile={playlistData?.playlist.show_in_profile}
             mediaType="playlist"
+            mediaName={playlistData?.playlistName}
+            openedFromMediaLibary={false}
           />
         </Popper>
         <Popper
@@ -188,17 +183,6 @@ export const PlaylistInfo = () => {
               PLAYLIST_PLACEHOLDER_URL
             }
             setPlaylist={setPlaylistData}
-          />
-        </Box>
-      </Modal>
-      <Modal
-        open={deletePlaylistModal}
-        onClose={() => setDeletePlaylistModal(false)}
-      >
-        <Box sx={modalBoxStyle}>
-          <DeletePlaylist
-            playlistName={playlistData?.playlistName}
-            closeModal={() => setDeletePlaylistModal(false)}
           />
         </Box>
       </Modal>

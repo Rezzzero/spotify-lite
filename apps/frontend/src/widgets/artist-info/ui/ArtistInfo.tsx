@@ -61,8 +61,7 @@ export const ArtistInfo = () => {
             menuRef={menuModalRef}
             closeMenu={() => setMenuModal(false)}
             mediaType="artist"
-            handleSub={handleSubscribe}
-            handleUnsub={handleUnsubscribe}
+            openedFromMediaLibary={false}
           />
         </Popper>
         <h2 className="text-2xl font-bold mb-5">Популярные треки</h2>

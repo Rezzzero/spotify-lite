@@ -89,6 +89,7 @@ export const AlbumInfo = () => {
           closeMenu={() => setMenuModal(false)}
           mediaType="album"
           track={albumData.album.tracks.items[0]}
+          openedFromMediaLibary={false}
         />
       </Popper>
       <Popper

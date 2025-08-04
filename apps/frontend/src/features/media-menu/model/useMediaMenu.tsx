@@ -48,6 +48,7 @@ export const useMediaMenu = ({
   const closeShareTimeout = useRef<NodeJS.Timeout | null>(null);
   const closeAddToPlaylistTimout = useRef<NodeJS.Timeout | null>(null);
   const addToMediaLibraryRef = useRef<HTMLDivElement>(null);
+  const [deletePlaylistModal, setDeletePlaylistModal] = useState(false);
   const currentId = propId ? propId : id;
 
   const handleRemoveFromMediaLibrary = async (mediaType: string) => {
@@ -254,5 +255,7 @@ export const useMediaMenu = ({
     addToMediaLibraryRef,
     handleSubscribeArtist,
     handleUnsubscribeArtist,
+    deletePlaylistModal,
+    setDeletePlaylistModal,
   };
 };

@@ -29,7 +29,6 @@ export const usePlaylistInfo = () => {
   const [menuModal, setMenuModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [changeFormatModal, setChangeFormatModal] = useState(false);
-  const [deletePlaylistModal, setDeletePlaylistModal] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const [menuAnchor, setMenuAnchorEl] = useState<HTMLElement | null>(null);
   const [changeFormatAnchor, setChangeFormatAnchor] =
@@ -169,8 +168,6 @@ export const usePlaylistInfo = () => {
     playlistFormat,
     setPlaylistFormat,
     changeFormatButtonRef,
-    deletePlaylistModal,
-    setDeletePlaylistModal,
     setPlaylistData,
     tracks,
     setTracks,

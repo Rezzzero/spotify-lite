@@ -16,6 +16,7 @@ import { AddToPlaylistMenu } from "@features/add-to-playlist-menu/ui/AddToPlayli
 import { TablesTrack, Track } from "@shared/types/types";
 import { useTrackCard } from "@features/track-card/model/useTrackCard";
 import CrossIcon from "@shared/assets/cross-icon.svg?react";
+import { ConfirmDeleteModal } from "@features/confirm-delete-modal/ui/ConfirmDeleteModal";
 
 interface MediaMenuProps {
   menuRef: React.RefObject<HTMLDivElement | null>;
@@ -29,8 +30,8 @@ interface MediaMenuProps {
   mediaType: string;
   track?: Track | TablesTrack;
   propId?: string;
-  handleSub?: () => void;
-  handleUnsub?: () => void;
+  mediaName?: string;
+  openedFromMediaLibary: boolean;
 }
 
 const buttonClass =
@@ -70,8 +71,8 @@ export const MediaMenu = ({
   openDeleteModal,
   track,
   propId,
-  handleSub,
-  handleUnsub,
+  mediaName,
+  openedFromMediaLibary,
 }: MediaMenuProps) => {
   const {
     playlists,
@@ -95,6 +96,10 @@ export const MediaMenu = ({
     isAddToMediaLibraryOpen,
     addToPlaylistAnchor,
     addToMediaLibraryRef,
+    deletePlaylistModal,
+    setDeletePlaylistModal,
+    handleSubscribeArtist,
+    handleUnsubscribeArtist,
   } = useMediaMenu({
     closeMenu,
     isInProfile,
@@ -117,10 +122,7 @@ export const MediaMenu = ({
   const shouldShowAddToPlaylist =
     track && (mediaType === "album" || mediaType === "track");
   const shouldShowSubscibeButton =
-    !isOwner &&
-    (mediaType === "user" || mediaType === "artist") &&
-    handleSub &&
-    handleUnsub;
+    !isOwner && (mediaType === "user" || mediaType === "artist");
 
   const subList = mediaType === "artist" ? userToArtistsSubs : userToUsersSubs;
 
@@ -129,174 +131,196 @@ export const MediaMenu = ({
   const editBtnName = MediaNames[mediaType].edit;
   const copyBtnName = MediaNames[mediaType].copy;
   return (
-    <div ref={menuRef} className=" w-[330px] rounded-sm bg-[#2d2d2e] p-1">
-      {canShowProfileButton && setPlaylist && (
-        <div className="flex flex-col gap-1">
-          <button
-            type="button"
-            onClick={() => togglePlaylistInProfileStatus()}
-            className={buttonClass}
-          >
-            <ProfileIcon className="w-4 h-4" />
-            {isPlaylistInProfile ? "Удалить из профиля" : "Добавить в профиль"}
-          </button>
-        </div>
-      )}
-      <div className="flex flex-col gap-1 border-y border-zinc-600">
-        {isOwner && (
-          <>
-            {openEditMenu && (
+    <>
+      <div ref={menuRef} className=" w-[330px] rounded-sm bg-[#2d2d2e] p-1">
+        {canShowProfileButton && setPlaylist && (
+          <div className="flex flex-col gap-1">
+            <button
+              type="button"
+              onClick={() => togglePlaylistInProfileStatus()}
+              className={buttonClass}
+            >
+              <ProfileIcon className="w-4 h-4" />
+              {isPlaylistInProfile
+                ? "Удалить из профиля"
+                : "Добавить в профиль"}
+            </button>
+          </div>
+        )}
+        <div className="flex flex-col gap-1 border-y border-zinc-600">
+          {isOwner && (
+            <>
+              {openEditMenu && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    closeMenu();
+                    openEditMenu();
+                  }}
+                  className={buttonClass}
+                >
+                  <EditIcon className="w-4 h-4" />
+                  {editBtnName}
+                </button>
+              )}
+              {openDeleteModal && (
+                <button
+                  type="button"
+                  onClick={() => openDeleteModal()}
+                  className={buttonClass}
+                >
+                  <DeleteIcon className="w-4 h-4" />
+                  Удалить
+                </button>
+              )}
+            </>
+          )}
+          {shouldShowSubscibeButton && (
+            <button
+              type="button"
+              onClick={() => {
+                if (isSubscribed) {
+                  if (openedFromMediaLibary) {
+                    setDeletePlaylistModal(true);
+                    closeMenu();
+                  } else {
+                    handleUnsubscribeArtist();
+                  }
+                } else {
+                  handleSubscribeArtist();
+                }
+              }}
+              className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
+            >
+              {isSubscribed ? (
+                <CrossIcon className="w-3 h-3 text-green-400" />
+              ) : (
+                <SubscibeIcon className="w-4 h-4" />
+              )}
+              {isSubscribed ? "Отписаться" : "Подписаться"}
+            </button>
+          )}
+          {shouldShowLibraryButtons &&
+            (isItemInList ? (
               <button
                 type="button"
                 onClick={() => {
-                  closeMenu();
-                  openEditMenu();
+                  if (openedFromMediaLibary) {
+                    setDeletePlaylistModal(true);
+                    closeMenu();
+                  } else {
+                    handleRemoveFromMediaLibrary(mediaType);
+                  }
                 }}
                 className={buttonClass}
               >
-                <EditIcon className="w-4 h-4" />
-                {editBtnName}
+                <PlaylistInMediaLibraryIcon className="w-4 h-4" />
+                Удалить из медиатеки
               </button>
-            )}
-            {openDeleteModal && (
+            ) : (
               <button
                 type="button"
-                onClick={() => openDeleteModal()}
+                onClick={() => handleAddToMediaLibrary(mediaType)}
                 className={buttonClass}
               >
-                <DeleteIcon className="w-4 h-4" />
-                Удалить
+                <AddToMediaLibraryIcon className="w-4 h-4" />
+                Добавить в медиатеку
               </button>
-            )}
-          </>
+            ))}
+        </div>
+        {isOwner && mediaType === "playlist" && (
+          <div className="flex flex-col gap-1 border-b border-zinc-600">
+            <button
+              type="button"
+              onClick={() => handleChangePublicStatus()}
+              className={buttonClass}
+            >
+              {isPublic ? (
+                <ClosePlaylistIcon className="w-4 h-4" />
+              ) : (
+                <OpenPlaylistIcon className="w-4 h-4" />
+              )}
+              {isPublic ? "Закрыть доступ" : "Сделать открытым"}
+            </button>
+          </div>
         )}
-        {shouldShowSubscibeButton && (
+        {shouldShowAddToPlaylist && (
+          <div className="flex flex-col gap-1 border-y border-zinc-600">
+            <button
+              onMouseEnter={(e) => handleAddToPlaylitMouseEnter(e)}
+              onMouseLeave={handleAddToPlaylistMouseLeave}
+              className={buttonClass}
+            >
+              <PlusIcon className="w-4 h-4 mr-2" />
+              Добавить в плейлист
+            </button>
+            <Popper
+              open={isAddToMediaLibraryOpen}
+              anchorEl={addToPlaylistAnchor}
+              placement="right-start"
+              container={menuRef.current}
+            >
+              <AddToPlaylistMenu
+                ref={addToMediaLibraryRef}
+                handleMouseEnter={handleAddToPlaylitMouseEnter}
+                handleMouseLeave={handleAddToPlaylistMouseLeave}
+                handleAddTrackToPlaylist={handleAddTrackToPlaylist}
+                track={track}
+                closeMenu={closeMenu}
+              />
+            </Popper>
+          </div>
+        )}
+        {mediaType === "user" ? (
           <button
             type="button"
-            onClick={() => {
-              if (isSubscribed) {
-                handleUnsub();
-                closeMenu();
-              } else {
-                handleSub();
-                closeMenu();
-              }
-            }}
+            onClick={() => handleCopyLink()}
             className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
           >
-            {isSubscribed ? (
-              <CrossIcon className="w-3 h-3 text-green-400" />
-            ) : (
-              <SubscibeIcon className="w-4 h-4" />
-            )}
-            {isSubscribed ? "Отписаться" : "Подписаться"}
+            <CopyIcon className="w-4 h-4" />
+            {copyBtnName}
           </button>
-        )}
-        {shouldShowLibraryButtons &&
-          (isItemInList ? (
-            <button
-              type="button"
-              onClick={() => handleRemoveFromMediaLibrary(mediaType)}
-              className={buttonClass}
-            >
-              <PlaylistInMediaLibraryIcon className="w-4 h-4" />
-              Удалить из медиатеки
+        ) : (
+          <div
+            onMouseEnter={(e) => handleShareMouseEnter(e)}
+            onMouseLeave={() => handleShareMouseLeave()}
+          >
+            <button type="button" className={buttonClass}>
+              <ShareIcon className="w-4 h-4" />
+              Поделиться
             </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => handleAddToMediaLibrary(mediaType)}
-              className={buttonClass}
+            <Popper
+              open={shareModal}
+              anchorEl={shareAnchor}
+              placement="right"
+              container={menuRef.current}
             >
-              <AddToMediaLibraryIcon className="w-4 h-4" />
-              Добавить в медиатеку
-            </button>
-          ))}
-      </div>
-      {isOwner && mediaType === "playlist" && (
-        <div className="flex flex-col gap-1 border-b border-zinc-600">
-          <button
-            type="button"
-            onClick={() => handleChangePublicStatus()}
-            className={buttonClass}
-          >
-            {isPublic ? (
-              <ClosePlaylistIcon className="w-4 h-4" />
-            ) : (
-              <OpenPlaylistIcon className="w-4 h-4" />
-            )}
-            {isPublic ? "Закрыть доступ" : "Сделать открытым"}
-          </button>
-        </div>
-      )}
-      {shouldShowAddToPlaylist && (
-        <div className="flex flex-col gap-1 border-y border-zinc-600">
-          <button
-            onMouseEnter={(e) => handleAddToPlaylitMouseEnter(e)}
-            onMouseLeave={handleAddToPlaylistMouseLeave}
-            className={buttonClass}
-          >
-            <PlusIcon className="w-4 h-4 mr-2" />
-            Добавить в плейлист
-          </button>
-          <Popper
-            open={isAddToMediaLibraryOpen}
-            anchorEl={addToPlaylistAnchor}
-            placement="right-start"
-            container={menuRef.current}
-          >
-            <AddToPlaylistMenu
-              ref={addToMediaLibraryRef}
-              handleMouseEnter={handleAddToPlaylitMouseEnter}
-              handleMouseLeave={handleAddToPlaylistMouseLeave}
-              handleAddTrackToPlaylist={handleAddTrackToPlaylist}
-              track={track}
-              closeMenu={closeMenu}
-            />
-          </Popper>
-        </div>
-      )}
-      {mediaType === "user" ? (
-        <button
-          type="button"
-          onClick={() => handleCopyLink()}
-          className="flex items-center gap-3 p-2 w-full text-sm hover:bg-zinc-600 rounded-xs"
-        >
-          <CopyIcon className="w-4 h-4" />
-          {copyBtnName}
-        </button>
-      ) : (
-        <div
-          onMouseEnter={(e) => handleShareMouseEnter(e)}
-          onMouseLeave={() => handleShareMouseLeave()}
-        >
-          <button type="button" className={buttonClass}>
-            <ShareIcon className="w-4 h-4" />
-            Поделиться
-          </button>
-          <Popper
-            open={shareModal}
-            anchorEl={shareAnchor}
-            placement="right"
-            container={menuRef.current}
-          >
-            <div
-              ref={shareModalRef}
-              className="bg-[#2d2d2e] rounded-xs p-1 cursor-default"
-            >
-              <button
-                onClick={() => {
-                  handleCopyLink();
-                }}
-                className="flex gap-2 items-center px-3 py-2 hover:bg-zinc-600 rounded-xs"
+              <div
+                ref={shareModalRef}
+                className="bg-[#2d2d2e] rounded-xs p-1 cursor-default"
               >
-                <CopyIcon className="w-4 h-4" />
-                <p className="text-sm">{copyBtnName}</p>
-              </button>
-            </div>
-          </Popper>
-        </div>
-      )}
-    </div>
+                <button
+                  onClick={() => {
+                    handleCopyLink();
+                  }}
+                  className="flex gap-2 items-center px-3 py-2 hover:bg-zinc-600 rounded-xs"
+                >
+                  <CopyIcon className="w-4 h-4" />
+                  <p className="text-sm">{copyBtnName}</p>
+                </button>
+              </div>
+            </Popper>
+          </div>
+        )}
+      </div>
+      <ConfirmDeleteModal
+        name={mediaName}
+        isOpen={deletePlaylistModal}
+        isOwner={isOwner}
+        closeModal={() => setDeletePlaylistModal(false)}
+        id={currentId}
+        type="playlist"
+      />
+    </>
   );
 };

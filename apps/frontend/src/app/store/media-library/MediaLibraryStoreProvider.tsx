@@ -229,7 +229,6 @@ export const MediaLibraryStoreProvider = ({
         albumId,
         userId: user?.user.id,
       });
-      console.log(data);
       setAlbums([...albums, data]);
       toast(<p className="font-semibold">Добавлено в медиатеку</p>, {
         style: { width: "220px" },

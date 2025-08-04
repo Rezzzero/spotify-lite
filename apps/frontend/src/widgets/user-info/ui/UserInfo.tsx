@@ -108,8 +108,7 @@ export const UserInfo = () => {
                 setMenuModal(false);
               }}
               openEditMenu={() => setEditModal(true)}
-              handleSub={handleSubscribe}
-              handleUnsub={handleUnsubscribe}
+              openedFromMediaLibary={false}
             />
           </Popper>
         </div>

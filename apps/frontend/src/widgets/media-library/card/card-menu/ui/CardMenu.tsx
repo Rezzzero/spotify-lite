@@ -35,6 +35,7 @@ export const CardMenu = ({
           menuRef={ref}
           closeMenu={onClose}
           propId={id}
+          openedFromMediaLibary
         />
       </Box>
     </Modal>
