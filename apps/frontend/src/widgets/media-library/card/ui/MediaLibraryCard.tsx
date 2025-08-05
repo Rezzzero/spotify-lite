@@ -6,6 +6,7 @@ import { truncateText } from "@shared/lib/format/truncateText";
 import PlayIcon from "@shared/assets/play-icon.svg?react";
 import SmallPlayIcon from "@shared/assets/small-play-icon.svg?react";
 import { CardMenu } from "../card-menu/ui/CardMenu";
+import { ConfirmDeleteModal } from "@features/confirm-delete-modal/ui/ConfirmDeleteModal";
 
 interface MediaLibraryCardProps {
   image: string;
@@ -16,6 +17,7 @@ interface MediaLibraryCardProps {
   isMediaLibraryOpen: boolean;
   libraryFormat: string;
   playlistPreviewImages?: { id: string; previewImage: string }[];
+  isOwner: boolean;
 }
 
 export const MediaLibraryCard = ({
@@ -27,6 +29,7 @@ export const MediaLibraryCard = ({
   isMediaLibraryOpen,
   libraryFormat,
   playlistPreviewImages,
+  isOwner,
 }: MediaLibraryCardProps) => {
   const {
     currentId,
@@ -35,6 +38,8 @@ export const MediaLibraryCard = ({
     position,
     menuRef,
     handleOpenMenu,
+    confirmDeleteModal,
+    setConfirmDeleteModal,
   } = useMediaLibraryCard();
 
   const mainImage =
@@ -49,7 +54,6 @@ export const MediaLibraryCard = ({
     playlist: "Плейлист",
     album: "Альбом",
   };
-
   return (
     <CustomTooltip
       key={id}
@@ -72,105 +76,116 @@ export const MediaLibraryCard = ({
         isMediaLibraryOpen && libraryFormat !== "compact-grid"
       }
     >
-      <Link
-        to={`/${type}/${id}`}
-        onContextMenu={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          handleOpenMenu(e);
-        }}
-        className={`${
-          id === currentId
-            ? "bg-zinc-800 hover:bg-zinc-700"
-            : "hover:bg-zinc-800"
-        } flex items-center ${
-          !isMediaLibraryOpen ? "justify-center" : "gap-3"
-        } rounded-md transition-colors group/card relative ${
-          libraryFormat === "grid" && "flex-col"
-        } ${libraryFormat === "compact-list" ? "p-1 pl-0" : "p-2"}`}
-      >
-        <img
-          src={mainImage}
-          alt={`${name} image`}
-          className={`${libraryFormat === "compact-list" && "hidden"} ${
-            libraryFormat === "compact-grid" || libraryFormat === "grid"
-              ? "w-full h-25"
-              : "w-12 h-12"
-          } ${type === "artist" ? "rounded-full" : "rounded-md"}`}
-        />
-        {isMediaLibraryOpen && libraryFormat !== "compact-grid" && (
-          <div
-            className={`flex ${
-              libraryFormat === "compact-list"
-                ? "flex-row items-center"
-                : "flex-col"
-            }`}
-          >
-            <h1 className="font-bold text-sm">
-              {libraryFormat === "grid" ? truncateText(name, 11) : name}
-            </h1>
-            <p className="flex gap-1 font-semibold text-sm text-gray-400">
-              <span
-                className={`font-bold text-lg leading-none ${
-                  libraryFormat === "compact-list" ? "block ml-1" : "hidden"
-                }`}
+      <div>
+        <Link
+          to={`/${type}/${id}`}
+          onContextMenu={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            handleOpenMenu(e);
+          }}
+          className={`${
+            id === currentId
+              ? "bg-zinc-800 hover:bg-zinc-700"
+              : "hover:bg-zinc-800"
+          } flex items-center ${
+            !isMediaLibraryOpen ? "justify-center" : "gap-3"
+          } rounded-md transition-colors group/card relative ${
+            libraryFormat === "grid" && "flex-col"
+          } ${libraryFormat === "compact-list" ? "p-1 pl-0" : "p-2"}`}
+        >
+          <img
+            src={mainImage}
+            alt={`${name} image`}
+            className={`${libraryFormat === "compact-list" && "hidden"} ${
+              libraryFormat === "compact-grid" || libraryFormat === "grid"
+                ? "w-full h-25"
+                : "w-12 h-12"
+            } ${type === "artist" ? "rounded-full" : "rounded-md"}`}
+          />
+          {isMediaLibraryOpen && libraryFormat !== "compact-grid" && (
+            <div
+              className={`flex ${
+                libraryFormat === "compact-list"
+                  ? "flex-row items-center"
+                  : "flex-col"
+              }`}
+            >
+              <h1 className="font-bold text-sm">
+                {libraryFormat === "grid" ? truncateText(name, 11) : name}
+              </h1>
+              <p className="flex gap-1 font-semibold text-sm text-gray-400">
+                <span
+                  className={`font-bold text-lg leading-none ${
+                    libraryFormat === "compact-list" ? "block ml-1" : "hidden"
+                  }`}
+                >
+                  ·
+                </span>
+                {mediaList[type]}{" "}
+                {ownerName && (
+                  <>
+                    <span
+                      className={`font-bold text-lg leading-none ${
+                        libraryFormat === "compact-list" ? "hidden" : "block"
+                      }`}
+                    >
+                      ·
+                    </span>
+                    <span
+                      className={`${
+                        libraryFormat === "compact-list" ? "hidden" : "block"
+                      }`}
+                    >
+                      {libraryFormat === "grid"
+                        ? truncateText(ownerName || "", 3)
+                        : ownerName}
+                    </span>
+                  </>
+                )}
+              </p>
+            </div>
+          )}
+          {libraryFormat === "grid" && (
+            <div className="absolute opacity-0 group-hover/playlistCard:opacity-100 top-1/2 -translate-y-1/2 right-3 transition-opacity duration-300 ease-in-out">
+              <button
+                type="button"
+                className="bg-black rounded-full w-10 h-10 hover:scale-104 cursor-pointer"
               >
-                ·
-              </span>
-              {mediaList[type]}{" "}
-              {ownerName && (
-                <>
-                  <span
-                    className={`font-bold text-lg leading-none ${
-                      libraryFormat === "compact-list" ? "hidden" : "block"
-                    }`}
-                  >
-                    ·
-                  </span>
-                  <span
-                    className={`${
-                      libraryFormat === "compact-list" ? "hidden" : "block"
-                    }`}
-                  >
-                    {libraryFormat === "grid"
-                      ? truncateText(ownerName || "", 3)
-                      : ownerName}
-                  </span>
-                </>
-              )}
-            </p>
-          </div>
-        )}
-        {libraryFormat === "grid" && (
-          <div className="absolute opacity-0 group-hover/playlistCard:opacity-100 top-1/2 -translate-y-1/2 right-3 transition-opacity duration-300 ease-in-out">
-            <button
-              type="button"
-              className="bg-black rounded-full w-10 h-10 hover:scale-104 cursor-pointer"
-            >
-              <PlayIcon className="text-green-500 hover:text-green-400 w-full h-full" />
-            </button>
-          </div>
-        )}
-        {libraryFormat === "list" && (
-          <div className="absolute opacity-0 group-hover/playlistCard:opacity-100 top-1/2 -translate-y-1/2 left-2 transition-opacity duration-300 ease-in-out">
-            <div className="bg-black opacity-50 rounded-md w-12 h-12" />
-            <button
-              type="button"
-              className="cursor-pointer z-10 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
-            >
-              <SmallPlayIcon className="w-full h-full" />
-            </button>
-          </div>
-        )}
-        <CardMenu
-          type={type}
+                <PlayIcon className="text-green-500 hover:text-green-400 w-full h-full" />
+              </button>
+            </div>
+          )}
+          {libraryFormat === "list" && (
+            <div className="absolute opacity-0 group-hover/playlistCard:opacity-100 top-1/2 -translate-y-1/2 left-2 transition-opacity duration-300 ease-in-out">
+              <div className="bg-black opacity-50 rounded-md w-12 h-12" />
+              <button
+                type="button"
+                className="cursor-pointer z-10 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
+              >
+                <SmallPlayIcon className="w-full h-full" />
+              </button>
+            </div>
+          )}
+          <CardMenu
+            type={type}
+            id={id}
+            position={position}
+            isOpen={cardMenuOpen}
+            onClose={() => setCardMenuOpen(false)}
+            onOpenDeleteModal={() => setConfirmDeleteModal(true)}
+            ref={menuRef}
+          />
+        </Link>
+        <ConfirmDeleteModal
+          name={name}
+          isOpen={confirmDeleteModal}
+          isOwner={isOwner}
+          closeModal={() => setConfirmDeleteModal(false)}
           id={id}
-          position={position}
-          isOpen={cardMenuOpen}
-          onClose={() => setCardMenuOpen(false)}
-          ref={menuRef}
+          type={type}
         />
-      </Link>
+      </div>
     </CustomTooltip>
   );
 };

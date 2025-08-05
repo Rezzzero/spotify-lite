@@ -7,6 +7,7 @@ export const useMediaLibraryCard = () => {
   const [cardMenuOpen, setCardMenuOpen] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const menuRef = useRef<HTMLDivElement>(null);
+  const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
   useClickOutside({
     refs: [menuRef],
     handler: () => setCardMenuOpen(false),
@@ -27,5 +28,7 @@ export const useMediaLibraryCard = () => {
     position,
     menuRef,
     handleOpenMenu,
+    confirmDeleteModal,
+    setConfirmDeleteModal,
   };
 };

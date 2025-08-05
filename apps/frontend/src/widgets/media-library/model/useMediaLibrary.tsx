@@ -18,6 +18,7 @@ type MediaItemProps = {
   ownerName?: string;
   playlistPreviewImages?: { id: string; previewImage: string }[];
   added_at?: string;
+  isOwner: boolean;
 };
 type LibraryItem =
   | SupabaseAlbum
@@ -101,6 +102,7 @@ export const useMediaLibrary = () => {
             (image) => image.id === item.id
           ),
           added_at: item.added_at,
+          isOwner: item?.owner?.id === user?.user.id,
         };
       } else if (isAlbum(item)) {
         return {
@@ -110,6 +112,7 @@ export const useMediaLibrary = () => {
           ownerName: item?.owner?.name,
           type: "album",
           added_at: item.added_at,
+          isOwner: false,
         };
       } else {
         return {
@@ -118,6 +121,7 @@ export const useMediaLibrary = () => {
           id: item.id,
           type: "artist",
           added_at: item.added_at,
+          isOwner: false,
         };
       }
     }

@@ -48,10 +48,12 @@ export const ConfirmDeleteModal = ({
             <div className="inline-block border-2 border-blue-700 p-[1px] hover:scale-105 rounded-full">
               <button
                 type="button"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   if (type === "playlist") handleRemovePlaylist();
                   if (type === "album") handleRemoveAlbum();
                   if (type === "artist") handleRemoveArtist();
+                  closeModal();
                 }}
                 className="font-bold cursor-pointer bg-green-400 px-4 py-2 rounded-full hover:bg-green-300"
               >

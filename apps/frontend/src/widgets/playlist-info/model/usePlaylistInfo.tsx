@@ -37,6 +37,7 @@ export const usePlaylistInfo = () => {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const changeFormatModalRef = useRef<HTMLDivElement>(null);
   const changeFormatButtonRef = useRef<HTMLButtonElement>(null);
+  const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
   const { imageColors } = useGetColors(playlistData?.imageUrl || null);
   const { id } = useParams();
   const source = id?.startsWith("sp_") ? "supabase" : "spotify";
@@ -181,5 +182,7 @@ export const usePlaylistInfo = () => {
     handleListenPlaylist,
     isPlaying,
     handleAddPlaylistToMediaLibrary,
+    confirmDeleteModal,
+    setConfirmDeleteModal,
   };
 };

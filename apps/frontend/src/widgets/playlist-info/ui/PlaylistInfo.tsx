@@ -12,6 +12,7 @@ import { Box, Modal, Popper } from "@mui/material";
 import { EditPlaylist } from "../edit/ui/EditPlaylist";
 import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
 import { MediaMenu } from "@features/media-menu/ui/MediaMenu";
+import { ConfirmDeleteModal } from "@features/confirm-delete-modal/ui/ConfirmDeleteModal";
 
 const modalBoxStyle = {
   position: "absolute",
@@ -53,6 +54,8 @@ export const PlaylistInfo = () => {
     menuAnchor,
     changeFormatAnchor,
     handleOpenFormatChangeMenu,
+    confirmDeleteModal,
+    setConfirmDeleteModal,
   } = usePlaylistInfo();
 
   if (loading)
@@ -152,6 +155,7 @@ export const PlaylistInfo = () => {
             mediaType="playlist"
             mediaName={playlistData?.playlistName}
             openedFromMediaLibary={false}
+            onOpenDeleteModal={() => setConfirmDeleteModal(true)}
           />
         </Popper>
         <Popper
@@ -186,6 +190,14 @@ export const PlaylistInfo = () => {
           />
         </Box>
       </Modal>
+      <ConfirmDeleteModal
+        name={playlistData?.playlistName}
+        type="playlist"
+        isOpen={confirmDeleteModal}
+        closeModal={() => setConfirmDeleteModal(false)}
+        isOwner={isOwner}
+        id={playlistData?.playlist.id}
+      />
     </div>
   );
 };

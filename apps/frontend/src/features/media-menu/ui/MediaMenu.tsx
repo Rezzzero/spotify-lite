@@ -16,7 +16,6 @@ import { AddToPlaylistMenu } from "@features/add-to-playlist-menu/ui/AddToPlayli
 import { TablesTrack, Track } from "@shared/types/types";
 import { useTrackCard } from "@features/track-card/model/useTrackCard";
 import CrossIcon from "@shared/assets/cross-icon.svg?react";
-import { ConfirmDeleteModal } from "@features/confirm-delete-modal/ui/ConfirmDeleteModal";
 
 interface MediaMenuProps {
   menuRef: React.RefObject<HTMLDivElement | null>;
@@ -26,12 +25,12 @@ interface MediaMenuProps {
   isInProfile?: boolean;
   setPlaylist?: React.Dispatch<React.SetStateAction<PlaylistData | null>>;
   openEditMenu?: () => void;
-  openDeleteModal?: () => void;
   mediaType: string;
   track?: Track | TablesTrack;
   propId?: string;
   mediaName?: string;
   openedFromMediaLibary: boolean;
+  onOpenDeleteModal?: () => void;
 }
 
 const buttonClass =
@@ -68,11 +67,10 @@ export const MediaMenu = ({
   mediaType,
   setPlaylist,
   openEditMenu,
-  openDeleteModal,
   track,
   propId,
-  mediaName,
   openedFromMediaLibary,
+  onOpenDeleteModal,
 }: MediaMenuProps) => {
   const {
     playlists,
@@ -96,8 +94,6 @@ export const MediaMenu = ({
     isAddToMediaLibraryOpen,
     addToPlaylistAnchor,
     addToMediaLibraryRef,
-    deletePlaylistModal,
-    setDeletePlaylistModal,
     handleSubscribeArtist,
     handleUnsubscribeArtist,
   } = useMediaMenu({
@@ -163,10 +159,13 @@ export const MediaMenu = ({
                   {editBtnName}
                 </button>
               )}
-              {openDeleteModal && (
+              {isOwner && onOpenDeleteModal && mediaType === "playlist" && (
                 <button
                   type="button"
-                  onClick={() => openDeleteModal()}
+                  onClick={() => {
+                    onOpenDeleteModal();
+                    closeMenu();
+                  }}
                   className={buttonClass}
                 >
                   <DeleteIcon className="w-4 h-4" />
@@ -178,10 +177,11 @@ export const MediaMenu = ({
           {shouldShowSubscibeButton && (
             <button
               type="button"
-              onClick={() => {
+              onClick={(e) => {
                 if (isSubscribed) {
-                  if (openedFromMediaLibary) {
-                    setDeletePlaylistModal(true);
+                  if (openedFromMediaLibary && onOpenDeleteModal) {
+                    e.stopPropagation();
+                    onOpenDeleteModal();
                     closeMenu();
                   } else {
                     handleUnsubscribeArtist();
@@ -204,9 +204,10 @@ export const MediaMenu = ({
             (isItemInList ? (
               <button
                 type="button"
-                onClick={() => {
-                  if (openedFromMediaLibary) {
-                    setDeletePlaylistModal(true);
+                onClick={(e) => {
+                  if (openedFromMediaLibary && onOpenDeleteModal) {
+                    e.stopPropagation();
+                    onOpenDeleteModal();
                     closeMenu();
                   } else {
                     handleRemoveFromMediaLibrary(mediaType);
@@ -313,14 +314,6 @@ export const MediaMenu = ({
           </div>
         )}
       </div>
-      <ConfirmDeleteModal
-        name={mediaName}
-        isOpen={deletePlaylistModal}
-        isOwner={isOwner}
-        closeModal={() => setDeletePlaylistModal(false)}
-        id={currentId}
-        type="playlist"
-      />
     </>
   );
 };

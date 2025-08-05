@@ -50,6 +50,7 @@ export const MediaLibrary = () => {
   const selectedFormat = libraryFormatList.find(
     (format) => format.value === libraryFormat
   );
+
   return (
     <div
       className={`flex flex-col bg-[#141414] ${
@@ -208,9 +209,14 @@ export const MediaLibrary = () => {
             {sortedItems.map((mediaItem) => (
               <MediaLibraryCard
                 key={mediaItem.id}
-                {...mediaItem}
+                image={mediaItem.image}
+                name={mediaItem.name}
+                id={mediaItem.id}
+                ownerName={mediaItem.ownerName}
+                type={mediaItem.type}
                 libraryFormat={!isMediaLibraryOpen ? "list" : libraryFormat}
                 isMediaLibraryOpen={isMediaLibraryOpen}
+                isOwner={mediaItem.isOwner}
               />
             ))}
           </div>

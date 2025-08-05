@@ -9,6 +9,7 @@ type CardMenuProps = {
   isOpen: boolean;
   ref: React.RefObject<HTMLDivElement | null>;
   onClose: () => void;
+  onOpenDeleteModal: () => void;
 };
 
 export const CardMenu = ({
@@ -18,6 +19,7 @@ export const CardMenu = ({
   isOpen,
   ref,
   onClose,
+  onOpenDeleteModal,
 }: CardMenuProps) => {
   return (
     <Modal open={isOpen} onClose={onClose} hideBackdrop>
@@ -35,6 +37,7 @@ export const CardMenu = ({
           menuRef={ref}
           closeMenu={onClose}
           propId={id}
+          onOpenDeleteModal={onOpenDeleteModal}
           openedFromMediaLibary
         />
       </Box>

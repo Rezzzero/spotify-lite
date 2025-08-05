@@ -65,6 +65,7 @@ export const TrackInfo = () => {
             closeMenu={() => setMenuModal(false)}
             mediaType="track"
             track={trackData.track}
+            openedFromMediaLibary={false}
           />
         </Popper>
         <p className="text-[14px] font-semibold text-zinc-400">
