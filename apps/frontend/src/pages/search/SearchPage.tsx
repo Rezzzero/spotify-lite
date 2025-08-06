@@ -4,9 +4,11 @@ import { Footer } from "@widgets/footer/ui/Footer";
 import { CategoryList } from "@widgets/category-list/ui/CategoryList";
 import { SearchCategoryResults } from "@widgets/search-category-results/ui/SearchCategoryResults";
 import { PageLayout } from "@shared/ui/page-layout/PageLayout";
+import { handleChangeTitle } from "@shared/lib/utils/handleChangeTitle";
 
 const SearchPage = () => {
   const { value, category } = useParams();
+  handleChangeTitle("Spotify Lite — Поиск");
 
   if (!value) {
     return (
@@ -15,7 +17,6 @@ const SearchPage = () => {
       </div>
     );
   }
-
   return (
     <PageLayout isSearchPage={true} isSectionPage={true} category={category}>
       <CategoryList />

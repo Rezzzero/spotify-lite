@@ -8,6 +8,7 @@ import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
 import { MediaControls } from "@features/media-controls/ui/MediaControls";
 import { Popper } from "@mui/material";
 import { MediaMenu } from "@features/media-menu/ui/MediaMenu";
+import { handleChangeTitle } from "@shared/lib/utils/handleChangeTitle";
 
 export const TrackInfo = () => {
   const {
@@ -31,6 +32,10 @@ export const TrackInfo = () => {
         <Loader />
       </div>
     );
+  handleChangeTitle(
+    `${trackData.track.name} - song and lyrics by ${trackData.artist.name} | Spotify Lite`
+  );
+
   const releaseYear = trackData.track.album.release_date.split("-")[0];
 
   return (

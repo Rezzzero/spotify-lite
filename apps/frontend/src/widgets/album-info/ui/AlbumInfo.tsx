@@ -10,6 +10,7 @@ import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
 import { Popper } from "@mui/material";
 import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibraryFormat";
 import { MediaMenu } from "@features/media-menu/ui/MediaMenu";
+import { handleChangeTitle } from "@shared/lib/utils/handleChangeTitle";
 
 export const AlbumInfo = () => {
   const {
@@ -40,6 +41,9 @@ export const AlbumInfo = () => {
         <Loader />
       </div>
     );
+  handleChangeTitle(
+    `${albumData.album.name} - Album by ${albumData.artist.name} | Spotify Lite`
+  );
 
   const sumOfDuration = albumData.album.tracks.items.reduce(
     (acc, track) => acc + track.duration_ms,

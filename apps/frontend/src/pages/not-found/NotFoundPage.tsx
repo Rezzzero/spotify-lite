@@ -1,8 +1,10 @@
 import { Route } from "@shared/constants/constants";
 import { Link } from "react-router-dom";
 import spotifyLogo from "@shared/assets/spotify-green-logo.svg";
+import { handleChangeTitle } from "@shared/lib/utils/handleChangeTitle";
 
 const NotFoundPage = () => {
+  handleChangeTitle("Страница не найдена");
   return (
     <div className="flex flex-col justify-center items-center gap-4 h-screen">
       <img src={spotifyLogo} alt="spotify logo" className="w-15 h-15 mb-5" />

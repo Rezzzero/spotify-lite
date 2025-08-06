@@ -11,6 +11,7 @@ import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibr
 import { SelectSortFilter } from "@shared/ui/select-sort-filter/SelectSortFilter";
 import { Loader } from "@shared/ui/loader/Loader";
 import { AlbumList } from "../album-list/ui/AlbumList";
+import { handleChangeTitle } from "@shared/lib/utils/handleChangeTitle";
 
 export const Discography = ({
   setIsFilterDropDownOpen,
@@ -53,6 +54,9 @@ export const Discography = ({
         <Loader />
       </div>
     );
+  handleChangeTitle(
+    `Spotify Lite - ${discography[0].artists[0].name}: дискография`
+  );
   return (
     <>
       <div className="sticky top-0 left-0 w-full flex flex-col px-5 py-3 bg-[#141414] z-10 text-white">

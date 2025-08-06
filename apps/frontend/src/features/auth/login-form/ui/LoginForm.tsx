@@ -12,6 +12,7 @@ import HidePasswordIcon from "@shared/assets/auth/password-hide-icon.svg?react";
 import { OTPInput } from "@shared/ui/otp-input/OTPInput";
 import { CustomInput } from "@shared/ui/custom-input/CustomInput";
 import { CircularProgress } from "@mui/material";
+import { handleChangeTitle } from "@shared/lib/utils/handleChangeTitle";
 
 export const LoginForm = () => {
   const {
@@ -219,6 +220,7 @@ export const LoginForm = () => {
             onClick={() => {
               setWithPassword(true);
               setVerifyStep(false);
+              handleChangeTitle("Войти - Spotify Lite");
             }}
             className="font-bold hover:scale-105 cursor-pointer"
           >

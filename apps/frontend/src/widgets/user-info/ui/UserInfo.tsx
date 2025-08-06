@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
 import { Box, Modal, Popper } from "@mui/material";
 import { MediaMenu } from "@features/media-menu/ui/MediaMenu";
+import { handleChangeTitle } from "@shared/lib/utils/handleChangeTitle";
 
 const modalBoxStyle = {
   position: "absolute",
@@ -52,7 +53,7 @@ export const UserInfo = () => {
         <Loader />
       </div>
     );
-
+  handleChangeTitle(`Spotify Lite - ${userInfo?.userName}`);
   const mainImage =
     userImagePreview || userInfo?.imageUrl || USER_PLACEHOLDER_URL;
 

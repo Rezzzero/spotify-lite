@@ -13,6 +13,7 @@ import { EditPlaylist } from "../edit/ui/EditPlaylist";
 import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
 import { MediaMenu } from "@features/media-menu/ui/MediaMenu";
 import { ConfirmDeleteModal } from "@features/confirm-delete-modal/ui/ConfirmDeleteModal";
+import { handleChangeTitle } from "@shared/lib/utils/handleChangeTitle";
 
 const modalBoxStyle = {
   position: "absolute",
@@ -64,7 +65,9 @@ export const PlaylistInfo = () => {
         <Loader />
       </div>
     );
-
+  handleChangeTitle(
+    `${playlistData?.playlistName} - playlist by ${playlistData?.playlist.owner?.display_name} | Spotify Lite`
+  );
   const mainImage =
     playlistPreviewImages.find((p) => p.id === playlistData?.playlist.id)
       ?.previewImage ||
