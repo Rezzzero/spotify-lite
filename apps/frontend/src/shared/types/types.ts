@@ -11,21 +11,35 @@ export interface CardItem {
   id?: string;
 }
 
+export interface SpotifyResource {
+  uri: string;
+  href: string;
+  external_urls: {
+    spotify: string;
+  };
+}
+
+export type SpotifyItemType =
+  | "artist"
+  | "track"
+  | "album"
+  | "playlist"
+  | "show"
+  | "episode";
+
+export interface MediaItem {
+  id: string;
+  name: string;
+}
+
 export interface Image {
   url: string;
   width: number;
   height: number;
 }
 
-export interface Artist {
-  external_urls: {
-    spotify: string;
-  };
-  href: string;
-  id: string;
-  name: string;
-  type: "artist";
-  uri: string;
+export interface Artist extends MediaItem, SpotifyResource {
+  type: SpotifyItemType;
   folowers?: {
     total: number;
   };
@@ -33,9 +47,7 @@ export interface Artist {
   genres?: string[];
 }
 
-export interface Playlist {
-  id: string;
-  name: string;
+export interface Playlist extends MediaItem {
   images: Image[];
   description: string;
   owner: {
@@ -48,15 +60,13 @@ export interface Playlist {
   show_in_profile: boolean;
 }
 
-export interface Album {
+export interface Album extends MediaItem {
   album_type: string;
   artists: Artist[];
-  id: string;
   images: Image[];
-  name: string;
   release_date: string;
   total_tracks: number;
-  type: string;
+  type: SpotifyItemType;
   tracks: {
     items: Track[];
     total: number;
@@ -64,52 +74,37 @@ export interface Album {
   label: string;
 }
 
-export interface ShortenedAlbumType {
-  id: string;
-  name: string;
+export interface ShortenedAlbumType extends MediaItem {
   images: Image[];
 }
 
-export interface Track {
+export interface SimplifiedArtist extends SpotifyResource, MediaItem {
+  type: "artist";
+}
+
+export interface Track extends MediaItem {
   album: Album;
   artists: Artist[];
   duration_ms: number;
-  id: string;
-  name: string;
   added_at?: string;
   entry_id?: string;
 }
 
-export interface TablesTrack {
-  name: string;
+export interface TablesTrack extends MediaItem {
   added_at?: string;
-  id: string;
   duration_ms: number;
   entry_id?: string;
   album: ShortenedAlbumType;
-  artists: {
-    id: string;
-    uri: string;
-    href: string;
-    name: string;
-    type: string;
-    external_urls: {
-      spotify: string;
-    };
-  }[];
+  artists: SimplifiedArtist[];
 }
 
-export interface Show {
-  id: string;
-  name: string;
+export interface Show extends MediaItem {
   images: Image[];
   publisher: string;
   description: string;
 }
 
-export interface Episode {
-  id: string;
-  name: string;
+export interface Episode extends MediaItem {
   images: Image[];
   duration_ms: number;
   description: string;
@@ -121,43 +116,22 @@ export interface Release {
   images: Image[];
 }
 
-export interface SearchResults {
-  albums: {
-    items: Album[];
-  };
-  artists: {
-    items: Artist[];
-  };
-  playlists: {
-    items: Playlist[];
-  };
-  tracks: {
-    items: Track[];
-  };
-  shows: {
-    items: Show[];
-  };
-  episodes: {
-    items: Episode[];
-  };
+export interface SearchCategory<T> {
+  items: T[];
 }
 
-export interface TrackToAdd {
-  id: string;
-  name: string;
+export interface SearchResults {
+  albums: SearchCategory<Album>;
+  artists: SearchCategory<Artist>;
+  playlists: SearchCategory<Playlist>;
+  tracks: SearchCategory<Track>;
+  shows: SearchCategory<Show>;
+  episodes: SearchCategory<Episode>;
+}
+
+export interface TrackToAdd extends MediaItem {
   duration_ms: number;
   album: { id: string; name: string; images: Image[] };
-  artists:
-    | Artist[]
-    | {
-        id: string;
-        uri: string;
-        href: string;
-        name: string;
-        type: string;
-        external_urls: {
-          spotify: string;
-        };
-      }[];
+  artists: Artist[] | SimplifiedArtist[];
   mp3_url: string;
 }
