@@ -89,6 +89,7 @@ export const useMediaLibrary = () => {
     ...userToArtistsSubs,
     ...albums,
   ];
+
   const normalizeLibraryList: MediaItemProps[] = mergedLibraryList.map(
     (item) => {
       if (isPlaylist(item)) {
@@ -102,7 +103,7 @@ export const useMediaLibrary = () => {
             (image) => image.id === item.id
           ),
           added_at: item.added_at,
-          isOwner: item?.owner?.id === user?.user.id,
+          isOwner: item?.user_id === user?.user.id,
         };
       } else if (isAlbum(item)) {
         return {

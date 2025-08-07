@@ -6,7 +6,7 @@ export const useConfirmDeleteModal = ({
   isOwner,
   propId,
 }: {
-  isOwner?: boolean;
+  isOwner: boolean;
   propId: string | undefined;
 }) => {
   const {
@@ -17,7 +17,6 @@ export const useConfirmDeleteModal = ({
   } = useMediaLibraryStore();
   const { id } = useParams();
   const navigate = useNavigate();
-
   const handleRemovePlaylist = () => {
     if (!propId) return;
     if (isOwner) {

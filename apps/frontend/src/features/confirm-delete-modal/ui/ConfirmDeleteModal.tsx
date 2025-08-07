@@ -20,7 +20,7 @@ export const ConfirmDeleteModal = ({
   name: string | undefined;
   isOpen: boolean;
   closeModal: () => void;
-  isOwner?: boolean;
+  isOwner: boolean;
   id: string | undefined;
   type: "playlist" | "album" | "artist";
 }) => {

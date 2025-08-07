@@ -59,11 +59,12 @@ export const addPlaylistToUser = async (playlistId, userId) => {
   };
 };
 
-export const deletePlaylistFromUser = async (playlistId) => {
+export const deletePlaylistFromUser = async (playlistId, userId) => {
   const { error } = await supabaseAdmin
     .from("user_playlists")
     .delete()
-    .eq("playlist_id", playlistId);
+    .eq("playlist_id", playlistId)
+    .eq("user_id", userId);
 
   if (error) {
     console.error(

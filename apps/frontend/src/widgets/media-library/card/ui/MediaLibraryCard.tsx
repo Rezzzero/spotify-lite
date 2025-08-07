@@ -175,6 +175,7 @@ export const MediaLibraryCard = ({
             onClose={() => setCardMenuOpen(false)}
             onOpenDeleteModal={() => setConfirmDeleteModal(true)}
             ref={menuRef}
+            isOwner={isOwner}
           />
         </Link>
         <ConfirmDeleteModal
