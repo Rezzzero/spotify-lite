@@ -1,5 +1,6 @@
 import { Modal, Box } from "@mui/material";
 import { useConfirmDeleteModal } from "../model/useConfirmDeleteModal";
+import { APP_NAME } from "@config/app.config";
 
 const modalBoxStyle = {
   position: "absolute",
@@ -7,6 +8,12 @@ const modalBoxStyle = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   outline: 0,
+};
+
+const titles = {
+  playlist: "плейлист",
+  album: "альбом",
+  artist: "исполнителя",
 };
 
 export const ConfirmDeleteModal = ({
@@ -32,12 +39,21 @@ export const ConfirmDeleteModal = ({
   return (
     <Modal open={isOpen} onClose={closeModal}>
       <Box sx={modalBoxStyle}>
-        <div className="flex flex-col gap-3 p-7 bg-white text-black rounded-md">
+        <div className="flex flex-col gap-3 p-8 bg-white text-black rounded-lg">
           <h2 className="font-bold text-2xl">Удалить из медиатеки?</h2>
-          <p className="text-sm max-w-[305px] pr-5">
-            Контент (<b>{name}</b>) будет удален из <b>медиатеки</b>.
+          <p className="text-sm max-w-[370px] pr-5 mb-4">
+            {type === "playlist" && isOwner ? (
+              <span>
+                Контент (<b>{name}</b>) будет удален из <b>медиатеки</b>.
+              </span>
+            ) : (
+              <span>
+                Мы удалим {titles[type]} из <b>твоей медиатеки</b>, но его все
+                ещё можно будет найти в {APP_NAME}
+              </span>
+            )}
           </p>
-          <div className="flex justify-end gap-5 w-full">
+          <div className="flex justify-end gap-10 w-full">
             <button
               type="button"
               onClick={() => closeModal()}
@@ -55,7 +71,7 @@ export const ConfirmDeleteModal = ({
                   if (type === "artist") handleRemoveArtist();
                   closeModal();
                 }}
-                className="font-bold cursor-pointer bg-green-400 px-4 py-2 rounded-full hover:bg-green-300"
+                className="font-bold cursor-pointer bg-green-400 px-8 py-3 rounded-full hover:bg-green-300"
               >
                 Удалить
               </button>

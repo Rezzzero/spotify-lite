@@ -79,6 +79,7 @@ export const usePlaylistInfo = () => {
             withCredentials: true,
           }
         );
+        console.log(response.data);
         setPlaylistData({
           playlist: response.data,
           playlistName: response.data.name,

@@ -23,6 +23,7 @@ import { CustomInput } from "@shared/ui/custom-input/CustomInput";
 import { SelectMonth } from "@shared/ui/month-select/SelectMonth";
 import { CustomCheckbox } from "@shared/ui/custom-checkbox/CustomCheckbox";
 import { Controller } from "react-hook-form";
+import { APP_NAME } from "@config/app.config";
 
 export const RegistrationForm = () => {
   const {
@@ -433,7 +434,7 @@ export const RegistrationForm = () => {
                 checked={adsDisabled}
                 onChange={() => setAdsDisabled(!adsDisabled)}
               />
-              <p>Я не хочу получать рекламные сообщения от Spotify Lite.</p>
+              <p>Я не хочу получать рекламные сообщения от {APP_NAME}.</p>
             </div>
             <div className="flex gap-3 group py-4 pl-4 pr-5 rounded-md bg-zinc-800">
               <CustomCheckbox
@@ -466,7 +467,7 @@ export const RegistrationForm = () => {
                 <Link to={Route.HOME} className="text-green-500 underline">
                   Политику конфиденциальности
                 </Link>{" "}
-                Spotify Lite.
+                {APP_NAME}.
               </p>
             </div>
             {errors.termsOfUse && (

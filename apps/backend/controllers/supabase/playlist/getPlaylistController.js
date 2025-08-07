@@ -9,7 +9,6 @@ export const getPlaylistHandler = async (req, res) => {
     const accessToken = req.cookies.access_token;
     const { playlist, tracks } = await getPlaylist(playlistId, userId);
     const ownerData = await getUserById(playlist.user_id);
-
     let user;
 
     if (!accessToken && playlist.public === false) {
@@ -26,7 +25,6 @@ export const getPlaylistHandler = async (req, res) => {
     ) {
       return res.status(404).json({ error: "Страница не найдена" });
     }
-
     const owner = {
       id: ownerData.id,
       display_name: ownerData.userName,

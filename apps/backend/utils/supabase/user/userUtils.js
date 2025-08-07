@@ -193,11 +193,10 @@ export const subscribeToUser = async (userData) => {
     throw new Error("Ошибка при подписке на пользователя");
   }
 
-  // Возвращаем форматированный объект
   return data.map((item) => ({
-    ...item.target_user, // все поля из users
-    added_at: item.added_at, // дата подписки
-    type: "user", // указанный тип
+    ...item.target_user,
+    added_at: item.added_at,
+    type: "user",
   }));
 };
 

@@ -2,6 +2,7 @@ import { Route } from "@shared/constants/constants";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@app/store/user/useUser";
+import { APP_NAME } from "@config/app.config";
 
 export const AuthPromoBanner = () => {
   const { user } = useUserStore();
@@ -16,7 +17,7 @@ export const AuthPromoBanner = () => {
     >
       <div>
         <h1 className="font-bold text-sm">
-          Предварительный просмотр Spotify Lite
+          Предварительный просмотр {APP_NAME}
         </h1>
         <p>
           Зарегистрируйся, чтобы слушать музыку и подкасты без ограничений.

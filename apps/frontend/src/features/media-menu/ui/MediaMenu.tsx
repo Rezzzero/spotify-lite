@@ -162,7 +162,10 @@ export const MediaMenu = ({
               {isOwner && onOpenDeleteModal && mediaType === "playlist" && (
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={(e) => {
+                    if (openedFromMediaLibary) {
+                      e.stopPropagation();
+                    }
                     onOpenDeleteModal();
                     closeMenu();
                   }}

@@ -3,6 +3,7 @@ import ListIcon from "@shared/assets/drop-down/list-icon.svg?react";
 import GridIcon from "@shared/assets/drop-down/grid-icon.svg?react";
 import CompactListIcon from "@shared/assets/compact-list-icon.svg?react";
 import CompactGridIcon from "@shared/assets/compact-grid-icon.svg?react";
+import { APP_NAME } from "@config/app.config";
 export const API_URL = import.meta.env.VITE_API_URL;
 
 export const Route = {
@@ -139,10 +140,10 @@ export const FooterLinks = {
     ],
   },
   SpotifyLitePlans: {
-    name: "Планы Spotify Lite",
+    name: `Планы ${APP_NAME}`,
     links: [
       {
-        name: "Индивидуальная подписка Spotify Lite Premium",
+        name: `Индивидуальная подписка ${APP_NAME} Premium`,
         path: "#",
       },
       {
@@ -158,7 +159,7 @@ export const FooterLinks = {
         path: "#",
       },
       {
-        name: "Бесплатная версия Spotify Lite",
+        name: `Бесплатная версия ${APP_NAME}`,
         path: "#",
       },
     ],

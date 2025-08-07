@@ -5,10 +5,11 @@ import { CategoryList } from "@widgets/category-list/ui/CategoryList";
 import { SearchCategoryResults } from "@widgets/search-category-results/ui/SearchCategoryResults";
 import { PageLayout } from "@shared/ui/page-layout/PageLayout";
 import { handleChangeTitle } from "@shared/lib/utils/handleChangeTitle";
+import { APP_NAME } from "@config/app.config";
 
 const SearchPage = () => {
   const { value, category } = useParams();
-  handleChangeTitle("Spotify Lite — Поиск");
+  handleChangeTitle(`${APP_NAME} — Поиск`);
 
   if (!value) {
     return (

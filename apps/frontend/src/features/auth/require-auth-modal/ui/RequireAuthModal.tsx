@@ -2,6 +2,7 @@ import { Route } from "@shared/constants/constants";
 import { useRequireAuthModal } from "../model/useRequireAuthModal";
 import { Link } from "react-router-dom";
 import { Modal } from "@mui/material";
+import { APP_NAME } from "@config/app.config";
 
 export const RequireAuthModal = () => {
   const {
@@ -51,7 +52,7 @@ export const RequireAuthModal = () => {
             </div>
             <div className="flex flex-col font-bold items-center text-center">
               <h2 className="text-[30px] max-w-[300px] mb-6">
-                Слушай что угодно в бесплатной версии Spotify Lite
+                Слушай что угодно в бесплатной версии {APP_NAME}
               </h2>
               <Link
                 to={Route.REGISTRATION}

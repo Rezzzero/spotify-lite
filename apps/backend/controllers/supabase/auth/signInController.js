@@ -22,7 +22,7 @@ export const signInHandler = async (req, res) => {
     res.cookie("access_token", data.session.access_token, {
       httpOnly: true,
       secure: false,
-      maxAge: data.session.expires_in * 2000,
+      maxAge: data.session.expires_in * 1000,
       sameSite: "lax",
       path: "/",
     });

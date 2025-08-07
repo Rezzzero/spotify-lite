@@ -7,6 +7,7 @@ import { maskEmail } from "@shared/lib/mask/maskEmail";
 import { API_URL } from "@shared/constants/constants";
 import { ERROR_MESSAGES } from "@shared/constants/errors";
 import { handleChangeTitle } from "@shared/lib/utils/handleChangeTitle";
+import { APP_NAME } from "@config/app.config";
 
 type FormValues = {
   email: string;
@@ -102,7 +103,7 @@ export const useLogin = () => {
     setVerifyStep(true);
     setWithPassword(false);
     setCoveredEmail(maskEmail(emailValue));
-    handleChangeTitle("Spotify Lite");
+    handleChangeTitle(APP_NAME);
     setTimeout(async () => {
       if (withPasswordRef.current) {
         return;

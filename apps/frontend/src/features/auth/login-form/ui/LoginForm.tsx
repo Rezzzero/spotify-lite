@@ -13,6 +13,7 @@ import { OTPInput } from "@shared/ui/otp-input/OTPInput";
 import { CustomInput } from "@shared/ui/custom-input/CustomInput";
 import { CircularProgress } from "@mui/material";
 import { handleChangeTitle } from "@shared/lib/utils/handleChangeTitle";
+import { APP_NAME } from "@config/app.config";
 
 export const LoginForm = () => {
   const {
@@ -43,7 +44,7 @@ export const LoginForm = () => {
       {!verifyStep ? (
         <>
           <img src={spotifyLogo} alt="spotify logo" className="w-10 h-10" />
-          <h1 className="text-3xl font-bold mb-4">Войти в Spotify Lite</h1>
+          <h1 className="text-3xl font-bold mb-4">Войти в {APP_NAME}</h1>
           {signInError.status && (
             <div className="flex w-full items-center gap-2 bg-red-500 text-white px-5 py-3">
               <img
@@ -83,7 +84,7 @@ export const LoginForm = () => {
               placeholder="Электронная почта или имя пользователя"
               register={register("email", {
                 required:
-                  "Адрес электронной почты или имя пользователя не привязаны к учетной записи Spotify Lite",
+                  `Адрес электронной почты или имя пользователя не привязаны к учетной записи ${APP_NAME}`,
                 onChange: () => {
                   createOnChange("email")();
                 },
@@ -171,7 +172,7 @@ export const LoginForm = () => {
               to={Route.REGISTRATION}
               className="text-white underline hover:text-green-400"
             >
-              Регистрация в Spotify Lite
+              Регистрация в {APP_NAME}
             </Link>
           </div>
         </>
@@ -220,7 +221,7 @@ export const LoginForm = () => {
             onClick={() => {
               setWithPassword(true);
               setVerifyStep(false);
-              handleChangeTitle("Войти - Spotify Lite");
+              handleChangeTitle(`Войти - ${APP_NAME}`);
             }}
             className="font-bold hover:scale-105 cursor-pointer"
           >

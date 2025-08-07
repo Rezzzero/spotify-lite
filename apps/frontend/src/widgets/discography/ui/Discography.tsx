@@ -12,6 +12,7 @@ import { SelectSortFilter } from "@shared/ui/select-sort-filter/SelectSortFilter
 import { Loader } from "@shared/ui/loader/Loader";
 import { AlbumList } from "../album-list/ui/AlbumList";
 import { handleChangeTitle } from "@shared/lib/utils/handleChangeTitle";
+import { APP_NAME } from "@config/app.config";
 
 export const Discography = ({
   setIsFilterDropDownOpen,
@@ -55,7 +56,7 @@ export const Discography = ({
       </div>
     );
   handleChangeTitle(
-    `Spotify Lite - ${discography[0].artists[0].name}: дискография`
+    `${APP_NAME} - ${discography[0].artists[0].name}: дискография`
   );
   return (
     <>
