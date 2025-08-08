@@ -16,6 +16,10 @@ export const useEditPlaylist = ({
   playlistDescription: string | undefined;
   setPlaylist: React.Dispatch<React.SetStateAction<PlaylistData | null>>;
 }) => {
+  const [newPlaylistInfo, setNewPlaylistInfo] = useState<{
+    name: string;
+    description: string;
+  }>({ name: playlistName || "", description: playlistDescription || "" });
   const { id } = useParams();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -37,26 +41,21 @@ export const useEditPlaylist = ({
   });
 
   const handleChangePlaylistName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPlaylist(
-      (prev) => ({ ...prev, playlistName: e.target.value } as PlaylistData)
-    );
+    setNewPlaylistInfo((prev) => ({ ...prev, name: e.target.value }));
   };
 
   const handleChangePlaylistDescription = (
     e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    setPlaylist(
-      (prev) =>
-        ({ ...prev, playlistDescription: e.target.value } as PlaylistData)
-    );
+    setNewPlaylistInfo((prev) => ({ ...prev, description: e.target.value }));
   };
 
   const handleSavePlaylist = async () => {
     try {
       const updatedPlaylist = await updatePlaylist({
         id: id as string,
-        name: playlistName as string,
-        description: playlistDescription as string,
+        name: newPlaylistInfo.name,
+        description: newPlaylistInfo.description,
       });
 
       if (imageFile) {
@@ -132,5 +131,7 @@ export const useEditPlaylist = ({
     subModalRef,
     subModalButtonRef,
     handleDeletePlaylistPreviewImage,
+    newPlaylistInfo,
+    setNewPlaylistInfo,
   };
 };

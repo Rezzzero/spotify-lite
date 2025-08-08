@@ -54,7 +54,7 @@ export const UserInfo = () => {
         <Loader />
       </div>
     );
-  handleChangeTitle(`${APP_NAME} - ${userInfo?.userName}`);
+  handleChangeTitle(`${APP_NAME} - ${userInfo?.userName || "user"}`);
   const mainImage =
     userImagePreview || userInfo?.imageUrl || USER_PLACEHOLDER_URL;
 

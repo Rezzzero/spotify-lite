@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { PlaylistData } from "../types/types";
-import { Track } from "@shared/types/types";
+import { TablesTrack } from "@shared/types/types";
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 import { useUserStore } from "@app/store/user/useUser";
 import { useClickOutside } from "@shared/lib/hooks/useClickOutside";
@@ -23,7 +23,7 @@ export const usePlaylistInfo = () => {
   const [loading, setLoading] = useState(false);
   const [openSearch, setOpenSearch] = useState(true);
   const [playlistData, setPlaylistData] = useState<PlaylistData | null>(null);
-  const [tracks, setTracks] = useState<Track[]>([]);
+  const [tracks, setTracks] = useState<TablesTrack[]>([]);
   const [playlistFormat, setPlaylistFormat] = useState("list");
   const [isPlaying, setIsPlaying] = useState(false);
   const [menuModal, setMenuModal] = useState(false);

@@ -4,7 +4,7 @@ import ShowAllIcon from "@shared/assets/arrow-next.svg?react";
 import HideAllIcon from "@shared/assets/arrow-prev.svg?react";
 import { useAddTrackSearch } from "../model/useAddTrackSearch";
 import { PlaylistSearchCard } from "@shared/ui/playlist-search-card/PlaylistSearchCard";
-import { SearchResults, Track } from "@shared/types/types";
+import { SearchResults, TablesTrack } from "@shared/types/types";
 
 const showAllList = [
   {
@@ -24,7 +24,9 @@ export const AddTrackSearch = ({
   handleUpdateDuration,
 }: {
   closeSearch: () => void;
-  setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
+  setTracks: (
+    tracks: TablesTrack[] | ((prevTracks: TablesTrack[]) => TablesTrack[])
+  ) => void;
   handleUpdateDuration: (trackDuration: number, isAdd: boolean) => void;
 }) => {
   const {

@@ -34,6 +34,7 @@ export const EditPlaylist = ({
     subModalRef,
     subModalButtonRef,
     handleDeletePlaylistPreviewImage,
+    newPlaylistInfo,
   } = useEditPlaylist({
     closeModal,
     playlistName,
@@ -100,13 +101,13 @@ export const EditPlaylist = ({
         <div className="flex flex-col gap-2 flex-1 text-sm">
           <input
             type="text"
-            value={playlistName}
+            value={newPlaylistInfo.name}
             onChange={handleChangePlaylistName}
             placeholder="Добавь название"
             className="bg-zinc-600 p-1 rounded-sm outline-none w-full border border-transparent focus:border-zinc-500 focus:bg-zinc-700"
           />
           <textarea
-            value={playlistDescription}
+            value={newPlaylistInfo.description}
             onChange={handleChangePlaylistDescription}
             placeholder="Добавь описание (необязательно)"
             className="bg-zinc-600 p-1 rounded-sm outline-none w-full resize-none h-full border border-transparent focus:border-zinc-500 focus:bg-zinc-700"

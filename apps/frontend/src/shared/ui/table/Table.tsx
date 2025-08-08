@@ -38,7 +38,9 @@ export const Table = ({
   isOwner?: boolean;
   withoutAlbumLink?: boolean;
   withoutArtistLink?: boolean;
-  setTracks?: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
+  setTracks?: (
+    tracks: TablesTrack[] | ((prevTracks: TablesTrack[]) => TablesTrack[])
+  ) => void;
   handleUpdateDuration?: (trackDuration: number, isAdd: boolean) => void;
 }) => {
   const { colSizes, setColSizes } = useTableStore();

@@ -7,7 +7,7 @@ import CompactListIcon from "@shared/assets/compact-list-icon.svg?react";
 import ListIcon from "@shared/assets/drop-down/list-icon.svg?react";
 import { CustomTooltip } from "@shared/ui/tooltip/CustomTooltip";
 import { useMediaControls } from "../model/useMediaControls";
-import { Track } from "@shared/types/types";
+import { TablesTrack, Track } from "@shared/types/types";
 import React from "react";
 
 interface MediaControlsProps {
@@ -16,7 +16,7 @@ interface MediaControlsProps {
   mediaId: string | undefined;
   isPlaying: boolean;
   format?: string;
-  tracks: Track[];
+  tracks: Track[] | TablesTrack[];
   menuButtonRef: React.RefObject<HTMLButtonElement | null>;
   changeFormatButtonRef?: React.RefObject<HTMLButtonElement | null>;
   onPlay: () => void;

@@ -1,7 +1,7 @@
 import { useMediaLibraryStore } from "@app/store/media-library/useMediaLibraryStore";
 import { API_URL } from "@shared/constants/constants";
 import { useDebouncedSearch } from "@shared/lib/hooks/useDebouncedSearch";
-import { SearchResults, Track, Album } from "@shared/types/types";
+import { SearchResults, Track, Album, TablesTrack } from "@shared/types/types";
 import axios from "axios";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -11,7 +11,9 @@ export const useAddTrackSearch = ({
   setTracks,
   handleUpdateDuration,
 }: {
-  setTracks: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
+  setTracks: (
+    tracks: TablesTrack[] | ((prevTracks: TablesTrack[]) => TablesTrack[])
+  ) => void;
   handleUpdateDuration: (trackDuration: number, isAdd: boolean) => void;
 }) => {
   const { playlists } = useMediaLibraryStore();
@@ -50,7 +52,7 @@ export const useAddTrackSearch = ({
       });
 
       const { track, playlistTrack } = response.data;
-      setTracks((prevTracks: Track[]) => [
+      setTracks((prevTracks: TablesTrack[]) => [
         ...prevTracks,
         {
           ...track,

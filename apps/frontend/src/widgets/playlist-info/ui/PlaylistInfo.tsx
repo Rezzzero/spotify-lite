@@ -9,12 +9,12 @@ import { Loader } from "@shared/ui/loader/Loader";
 import { MediaControls } from "@features/media-controls/ui/MediaControls";
 import { Table } from "@shared/ui/table/Table";
 import { Box, Modal, Popper } from "@mui/material";
-import { EditPlaylist } from "../edit/ui/EditPlaylist";
 import { MediaHeader } from "@shared/ui/media-header/MediaHeader";
 import { MediaMenu } from "@features/media-menu/ui/MediaMenu";
 import { ConfirmDeleteModal } from "@features/confirm-delete-modal/ui/ConfirmDeleteModal";
 import { handleChangeTitle } from "@shared/lib/utils/handleChangeTitle";
 import { APP_NAME } from "@config/app.config";
+import { EditPlaylist } from "@features/edit-playlist/ui/EditPlaylist";
 
 const modalBoxStyle = {
   position: "absolute",

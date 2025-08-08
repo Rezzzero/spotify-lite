@@ -22,7 +22,9 @@ export const useTrackCard = ({
 }: {
   album?: Album | ShortenedAlbumType;
   track?: Track | TablesTrack;
-  setTracks?: (tracks: Track[] | ((prevTracks: Track[]) => Track[])) => void;
+  setTracks?: (
+    tracks: TablesTrack[] | ((prevTracks: TablesTrack[]) => TablesTrack[])
+  ) => void;
   handleUpdateDuration?: (trackDuration: number, isAdd: boolean) => void;
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -162,7 +164,7 @@ export const useTrackCard = ({
         });
 
         if (response.status === 200) {
-          setTracks((prevTracks: Track[]) =>
+          setTracks((prevTracks: TablesTrack[]) =>
             prevTracks.filter((track) => track.entry_id !== entryId)
           );
           handleUpdateDuration(trackDuration, false);
