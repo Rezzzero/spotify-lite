@@ -32,15 +32,15 @@ export const MediaLibraryCard = ({
   isOwner,
 }: MediaLibraryCardProps) => {
   const {
-    currentId,
-    cardMenuOpen,
-    setCardMenuOpen,
+    handleCloseMediaMenu,
+    paramId,
+    isOpen,
     position,
     menuRef,
     handleOpenMenu,
     confirmDeleteModal,
     setConfirmDeleteModal,
-  } = useMediaLibraryCard();
+  } = useMediaLibraryCard({ propId: id });
 
   const mainImage =
     type === "playlist"
@@ -85,7 +85,7 @@ export const MediaLibraryCard = ({
             handleOpenMenu(e);
           }}
           className={`${
-            id === currentId
+            id === paramId
               ? "bg-zinc-800 hover:bg-zinc-700"
               : "hover:bg-zinc-800"
           } flex items-center ${
@@ -171,8 +171,8 @@ export const MediaLibraryCard = ({
             type={type}
             id={id}
             position={position}
-            isOpen={cardMenuOpen}
-            onClose={() => setCardMenuOpen(false)}
+            isOpen={isOpen}
+            onClose={() => handleCloseMediaMenu()}
             onOpenDeleteModal={() => setConfirmDeleteModal(true)}
             ref={menuRef}
             isOwner={isOwner}

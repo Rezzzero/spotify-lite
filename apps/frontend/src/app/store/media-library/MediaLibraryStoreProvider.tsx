@@ -19,6 +19,8 @@ export const MediaLibraryStoreProvider = ({
   const [playlistPreviewImages, setPlaylistPreviewImages] = useState<
     { id: string; previewImage: string }[]
   >([]);
+  const [isMediaMenuOpen, setIsMediaMenuOpen] = useState(false);
+  const [currentMenuId, setCurrentMenuId] = useState<string | null>(null);
   useEffect(() => {
     if (user) {
       const fetchPlaylists = async (userId: string) => {
@@ -38,6 +40,16 @@ export const MediaLibraryStoreProvider = ({
       fetchPlaylists(user.user.id);
     }
   }, [user]);
+
+  const handleOpenMediaMenu = (id: string) => {
+    setIsMediaMenuOpen(true);
+    setCurrentMenuId(id);
+  };
+
+  const handleCloseMediaMenu = () => {
+    setIsMediaMenuOpen(false);
+    setCurrentMenuId(null);
+  };
 
   const addPlaylist = async (playlistData: SupabasePlaylist) => {
     try {
@@ -273,6 +285,10 @@ export const MediaLibraryStoreProvider = ({
         albums,
         addAlbum,
         removeAlbum,
+        isMediaMenuOpen,
+        currentMenuId,
+        handleOpenMediaMenu,
+        handleCloseMediaMenu,
       }}
     >
       {children}

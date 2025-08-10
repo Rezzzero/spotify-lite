@@ -32,6 +32,10 @@ interface MediaLibraryContextType {
   albums: SupabaseAlbum[];
   addAlbum: (albumId: string) => Promise<void>;
   removeAlbum: (albumId: string) => Promise<void>;
+  isMediaMenuOpen: boolean;
+  currentMenuId: string | null;
+  handleOpenMediaMenu: (id: string) => void;
+  handleCloseMediaMenu: () => void;
 }
 
 export const MediaLibraryContext = createContext({} as MediaLibraryContextType);
