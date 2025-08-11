@@ -1,12 +1,14 @@
-import { useParams } from "react-router-dom";
 import { useSearchStore } from "../../../app/store/search/useSearchStore";
 import { CardItem, SearchResults } from "@shared/types/types";
 import { useUserStore } from "@app/store/user/useUser";
 
-export const useSearchCategoryResults = () => {
+export const useSearchCategoryResults = ({
+  category,
+}: {
+  category: keyof SearchResults;
+}) => {
   const { user } = useUserStore();
   const { searchResults } = useSearchStore();
-  const { category } = useParams<{ category?: keyof SearchResults }>();
 
   if (!category || !searchResults[category]) {
     return { items: [] };

@@ -4,7 +4,6 @@ import React from "react";
 
 type CardMenuProps = {
   type: string;
-  id: string;
   position: { top: number; left: number };
   isOpen: boolean;
   ref: React.RefObject<HTMLDivElement | null>;
@@ -15,7 +14,6 @@ type CardMenuProps = {
 
 export const CardMenu = ({
   type,
-  id,
   position,
   isOpen,
   ref,
@@ -38,7 +36,6 @@ export const CardMenu = ({
           mediaType={type}
           menuRef={ref}
           closeMenu={onClose}
-          propId={id}
           onOpenDeleteModal={onOpenDeleteModal}
           openedFromMediaLibary
           isOwner={isOwner}

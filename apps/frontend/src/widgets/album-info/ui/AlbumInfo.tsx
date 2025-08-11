@@ -12,6 +12,7 @@ import { SelectLibraryFormat } from "@shared/ui/select-library-format/SelectLibr
 import { MediaMenu } from "@features/media-menu/ui/MediaMenu";
 import { handleChangeTitle } from "@shared/lib/utils/handleChangeTitle";
 import { APP_NAME } from "@config/app.config";
+import { TablesTrack } from "@shared/types/types";
 
 export const AlbumInfo = () => {
   const {
@@ -115,7 +116,7 @@ export const AlbumInfo = () => {
       </Popper>
       <div className="px-7 mb-5">
         <Table
-          tracks={albumData.album.tracks.items}
+          tracks={albumData.album.tracks.items as TablesTrack[]}
           tableKey="withoutAddedAt"
           album={albumData.album}
           withoutAlbumLink={true}

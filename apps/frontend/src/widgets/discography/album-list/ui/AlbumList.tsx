@@ -1,4 +1,4 @@
-import { Album } from "@shared/types/types";
+import { Album, TablesTrack } from "@shared/types/types";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
@@ -87,7 +87,7 @@ export const AlbumList = ({
                 </div>
               </div>
               <Table
-                tracks={album.tracks.items}
+                tracks={album.tracks.items as TablesTrack[]}
                 tableKey="withoutAlbum"
                 album={album}
                 withoutArtistLink={true}

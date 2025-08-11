@@ -19,14 +19,6 @@ export interface SpotifyResource {
   };
 }
 
-export type SpotifyItemType =
-  | "artist"
-  | "track"
-  | "album"
-  | "playlist"
-  | "show"
-  | "episode";
-
 export interface MediaItem {
   id: string;
   name: string;
@@ -39,7 +31,7 @@ export interface Image {
 }
 
 export interface Artist extends MediaItem, SpotifyResource {
-  type: SpotifyItemType;
+  type: "artist";
   folowers?: {
     total: number;
   };
@@ -66,7 +58,7 @@ export interface Album extends MediaItem {
   images: Image[];
   release_date: string;
   total_tracks: number;
-  type: SpotifyItemType;
+  type: "album";
   tracks: {
     items: Track[];
     total: number;

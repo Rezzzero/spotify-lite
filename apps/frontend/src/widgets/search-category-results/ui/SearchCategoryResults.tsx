@@ -1,10 +1,12 @@
-import { CardItem, Track } from "@shared/types/types";
+import { CardItem, SearchResults, Track } from "@shared/types/types";
 import { CardList } from "@shared/ui/card-list/CardList";
 import { useSearchCategoryResults } from "../model/useSearchCategoryResults";
 import { Table } from "@shared/ui/table/Table";
 
-export const SearchCategoryResults = () => {
-  const { items, category } = useSearchCategoryResults();
+export const SearchCategoryResults = ({ category }: { category: string }) => {
+  const { items } = useSearchCategoryResults({
+    category: category as keyof SearchResults,
+  });
 
   if (category === "tracks")
     return (

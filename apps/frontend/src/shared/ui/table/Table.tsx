@@ -1,5 +1,5 @@
 import { formatAddedAt } from "@shared/lib/format/formatAddedAt";
-import { Album, TablesTrack, Track } from "@shared/types/types";
+import { Album, TablesTrack } from "@shared/types/types";
 import ClockIcon from "@shared/assets/clock-icon.svg?react";
 import {
   useReactTable,

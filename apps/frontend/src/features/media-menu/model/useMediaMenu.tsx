@@ -14,14 +14,12 @@ export const useMediaMenu = ({
   setPlaylist,
   isPublic,
   mediaType,
-  propId,
 }: {
   closeMenu: () => void;
   isInProfile?: boolean | undefined;
   setPlaylist?: React.Dispatch<React.SetStateAction<PlaylistData | null>>;
   isPublic?: boolean | undefined;
   mediaType: string;
-  propId?: string | undefined;
 }) => {
   const { user, userToArtistsSubs, userToUsersSubs } = useUserStore();
   const {
@@ -34,6 +32,7 @@ export const useMediaMenu = ({
     removeAlbum,
     subscribeArtist,
     unsubscribeArtist,
+    currentMenuId: storeId,
   } = useMediaLibraryStore();
   const { id } = useParams();
   const [isPlaylistInProfile, setIsPlaylistInProfile] = useState<
@@ -46,10 +45,10 @@ export const useMediaMenu = ({
     useState<HTMLElement | null>(null);
   const shareModalRef = useRef<HTMLDivElement>(null);
   const closeShareTimeout = useRef<NodeJS.Timeout | null>(null);
-  const closeAddToPlaylistTimout = useRef<NodeJS.Timeout | null>(null);
+  const closeAddToPlaylistTimeout = useRef<NodeJS.Timeout | null>(null);
   const addToMediaLibraryRef = useRef<HTMLDivElement>(null);
   const [deletePlaylistModal, setDeletePlaylistModal] = useState(false);
-  const currentId = propId ? propId : id;
+  const currentId = storeId ? storeId : id;
 
   const handleRemoveFromMediaLibrary = async (mediaType: string) => {
     try {
@@ -200,7 +199,7 @@ export const useMediaMenu = ({
   const handleAddToPlaylitMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
     handleMouseEnter(
       e,
-      closeAddToPlaylistTimout,
+      closeAddToPlaylistTimeout,
       setIsAddToMediaLibraryOpen,
       setAddToPlaylistAnchor,
       addToPlaylistAnchor
@@ -209,7 +208,7 @@ export const useMediaMenu = ({
 
   const handleAddToPlaylistMouseLeave = () => {
     handleMouseLeave(
-      closeAddToPlaylistTimout,
+      closeAddToPlaylistTimeout,
       setIsAddToMediaLibraryOpen,
       setAddToPlaylistAnchor
     );

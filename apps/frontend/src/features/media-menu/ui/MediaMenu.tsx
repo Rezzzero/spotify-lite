@@ -27,7 +27,6 @@ interface MediaMenuProps {
   openEditMenu?: () => void;
   mediaType: string;
   track?: Track | TablesTrack;
-  propId?: string;
   mediaName?: string;
   openedFromMediaLibary: boolean;
   onOpenDeleteModal?: () => void;
@@ -68,7 +67,6 @@ export const MediaMenu = ({
   setPlaylist,
   openEditMenu,
   track,
-  propId,
   openedFromMediaLibary,
   onOpenDeleteModal,
 }: MediaMenuProps) => {
@@ -102,7 +100,6 @@ export const MediaMenu = ({
     isPublic,
     setPlaylist,
     mediaType,
-    propId,
   });
   const { handleAddTrackToPlaylist } = useTrackCard({ track });
 

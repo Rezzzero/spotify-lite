@@ -169,7 +169,6 @@ export const MediaLibraryCard = ({
           )}
           <CardMenu
             type={type}
-            id={id}
             position={position}
             isOpen={isOpen}
             onClose={() => handleCloseMediaMenu()}

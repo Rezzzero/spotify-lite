@@ -22,7 +22,7 @@ const SearchPage = () => {
     <PageLayout isSearchPage={true} isSectionPage={true} category={category}>
       <CategoryList />
       {!category && <SearchResults />}
-      {category && <SearchCategoryResults />}
+      {category && <SearchCategoryResults category={category} />}
       <Footer />
     </PageLayout>
   );
