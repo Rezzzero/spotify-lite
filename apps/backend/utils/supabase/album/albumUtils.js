@@ -1,3 +1,4 @@
+import { searchAlbumOrPlaylistSoundCloud } from "#utils/soundCloudUtils";
 import { getAlbum } from "#utils/spotifyUtils";
 import { supabaseAdmin } from "../../../clients/supabase/supabaseClient.js";
 
@@ -85,4 +86,11 @@ export const deleteAlbumFromUser = async (userId, albumId) => {
     console.error("Ошибка при удалении альбома из базы:", error.message);
     throw new Error("Ошибка при удалении альбома из базы");
   }
+};
+
+export const testAddAlbumToSupabase = async (albumId) => {
+  const album = await getAlbum(albumId);
+  const soundcloudResult = await searchAlbumOrPlaylistSoundCloud(album.name);
+
+  return { ...album, soundcloudResult };
 };
