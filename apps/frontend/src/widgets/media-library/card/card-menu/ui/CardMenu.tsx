@@ -1,5 +1,5 @@
 import { MediaMenu } from "@features/media-menu/ui/MediaMenu";
-import { Modal, Box } from "@mui/material";
+import { Popper } from "@mui/material";
 import React from "react";
 
 type CardMenuProps = {
@@ -21,26 +21,29 @@ export const CardMenu = ({
   onOpenDeleteModal,
   isOwner,
 }: CardMenuProps) => {
+  const virtualAnchor = React.useMemo(
+    () => ({
+      getBoundingClientRect: () =>
+        new DOMRect(position.left, position.top, 0, 0),
+    }),
+    [position.left, position.top]
+  );
+
   return (
-    <Modal open={isOpen} onClose={onClose} hideBackdrop>
-      <Box
-        sx={{
-          position: "absolute",
-          top: position.top,
-          left: position.left,
-          color: "white",
-          backgroundColor: "#2d2d2e",
-        }}
-      >
-        <MediaMenu
-          mediaType={type}
-          menuRef={ref}
-          closeMenu={onClose}
-          onOpenDeleteModal={onOpenDeleteModal}
-          openedFromMediaLibary
-          isOwner={isOwner}
-        />
-      </Box>
-    </Modal>
+    <Popper
+      open={isOpen}
+      anchorEl={virtualAnchor}
+      placement="bottom-start"
+      style={{ zIndex: 10 }}
+    >
+      <MediaMenu
+        mediaType={type}
+        menuRef={ref}
+        closeMenu={onClose}
+        onOpenDeleteModal={onOpenDeleteModal}
+        openedFromMediaLibary
+        isOwner={isOwner}
+      />
+    </Popper>
   );
 };

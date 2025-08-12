@@ -71,14 +71,9 @@ export const MediaMenu = ({
   onOpenDeleteModal,
 }: MediaMenuProps) => {
   const {
-    playlists,
-    albums,
-    userToArtistsSubs,
-    userToUsersSubs,
     isPlaylistInProfile,
     handleAddToMediaLibrary,
     handleRemoveFromMediaLibrary,
-    currentId,
     togglePlaylistInProfileStatus,
     handleChangePublicStatus,
     handleCopyLink,
@@ -94,6 +89,9 @@ export const MediaMenu = ({
     addToMediaLibraryRef,
     handleSubscribeArtist,
     handleUnsubscribeArtist,
+    isSubscribed,
+    isItemInList,
+    canShowProfileButton,
   } = useMediaMenu({
     closeMenu,
     isInProfile,
@@ -102,10 +100,6 @@ export const MediaMenu = ({
     mediaType,
   });
   const { handleAddTrackToPlaylist } = useTrackCard({ track });
-
-  const mediaList = mediaType === "playlist" ? playlists : albums;
-  const isItemInList = mediaList.some((item) => item.id === currentId);
-  const canShowProfileButton = isPublic && isItemInList;
 
   const shouldShowLibraryButtons =
     !isOwner &&
@@ -117,11 +111,6 @@ export const MediaMenu = ({
   const shouldShowSubscibeButton =
     !isOwner && (mediaType === "user" || mediaType === "artist");
 
-  const subList = mediaType === "artist" ? userToArtistsSubs : userToUsersSubs;
-
-  const isSubscribed = subList.some((sub) => sub.id === currentId);
-
-  const editBtnName = MediaNames[mediaType].edit;
   const copyBtnName = MediaNames[mediaType].copy;
   return (
     <>
@@ -153,7 +142,7 @@ export const MediaMenu = ({
                   className={buttonClass}
                 >
                   <EditIcon className="w-4 h-4" />
-                  {editBtnName}
+                  {MediaNames[mediaType].edit}
                 </button>
               )}
               {isOwner && onOpenDeleteModal && mediaType === "playlist" && (

@@ -230,6 +230,14 @@ export const useMediaMenu = ({
     closeMenu();
   };
 
+  const mediaList = mediaType === "playlist" ? playlists : albums;
+  const isItemInList = mediaList.some((item) => item.id === currentId);
+
+  const canShowProfileButton = isPublic && isItemInList;
+
+  const subList = mediaType === "artist" ? userToArtistsSubs : userToUsersSubs;
+  const isSubscribed = subList.some((sub) => sub.id === currentId);
+
   return {
     playlists,
     albums,
@@ -256,5 +264,8 @@ export const useMediaMenu = ({
     handleUnsubscribeArtist,
     deletePlaylistModal,
     setDeletePlaylistModal,
+    isSubscribed,
+    isItemInList,
+    canShowProfileButton,
   };
 };
